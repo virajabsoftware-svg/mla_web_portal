@@ -1,0 +1,921 @@
+
+        /* ----- BASE RESET - preserves all original layout & content ----- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Poppins', 'SF Pro Text', system-ui, sans-serif;
+            background: linear-gradient(135deg, #F8F6F2 0%, #EFECE5 100%);
+            min-height: 100vh;
+        }
+        .full_container, .inner_container, #content, .topbar .navbar, .logo_section img, .right_topbar, .icon_info, .user_profile_dd {
+            /* no structural overrides */
+        }
+        #content {
+            transition: margin-left 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            min-height: 100vh;
+        }
+        .inner_container {
+            display: flex;
+        }
+ 
+        /* ----- VARIABLES: Luxury Government Gold Theme ----- */
+        :root {
+            --ivory-white: #F4F4F4;
+            --royal-gold: #F2C45A;
+            --warm-amber: #D08A42;
+            --rich-bronze: #8B5722;
+            --deep-charcoal: #151515;
+            --glass-premium: rgba(244, 244, 244, 0.82);
+            --glass-premium-strong: rgba(244, 244, 244, 0.96);
+            --gold-border-light: rgba(242, 196, 90, 0.35);
+            --shadow-luxury: 0 25px 45px -18px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.02);
+            --gold-gradient-soft: linear-gradient(145deg, #F2C45A, #E0A83A);
+            --sidebar-expanded: 290px;
+            --sidebar-collapsed: 88px;
+        }
+
+        /* ========== SIDEBAR: FLOATING EXECUTIVE GLASS + GOLD ACCENTS ========== */
+        nav#sidebar {
+            background: var(--glass-premium) !important;
+            backdrop-filter: blur(28px) saturate(200%);
+            -webkit-backdrop-filter: blur(28px);
+            border-radius: 28px;
+            margin: 28px 0 28px 28px;
+            width: var(--sidebar-expanded);
+            min-width: var(--sidebar-expanded);
+            transition: all 0.45s cubic-bezier(0.18, 0.85, 0.32, 1.08);
+            box-shadow: var(--shadow-luxury), 0 0 0 1px rgba(242, 196, 90, 0.25);
+            height: calc(100vh - 56px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: sticky;
+            top: 28px;
+            z-index: 1050;
+            border: 1px solid var(--gold-border-light);
+        }
+
+        /* Subtle gold inner glow */
+        nav#sidebar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 28px;
+            pointer-events: none;
+            background: radial-gradient(circle at 30% 10%, rgba(242,196,90,0.06), transparent 70%);
+        }
+
+        /* custom elegant scrollbar */
+        nav#sidebar::-webkit-scrollbar { width: 5px; }
+        nav#sidebar::-webkit-scrollbar-track { background: rgba(139, 87, 34, 0.08); border-radius: 10px; margin: 12px; }
+        nav#sidebar::-webkit-scrollbar-thumb { background: var(--royal-gold); border-radius: 10px; }
+
+        /* Collapsible premium states */
+        nav#sidebar.collapsed-sidebar {
+            width: var(--sidebar-collapsed);
+            min-width: var(--sidebar-collapsed);
+        }
+        nav#sidebar.collapsed-sidebar .sidebar_blog_2 h4,
+        nav#sidebar.collapsed-sidebar .user_info h6,
+        nav#sidebar.collapsed-sidebar .user_info p,
+        nav#sidebar.collapsed-sidebar .sidebar_blog_2 ul li a span,
+        nav#sidebar.collapsed-sidebar .sidebar_blog_2 ul li .collapse span {
+            display: none;
+        }
+        nav#sidebar.collapsed-sidebar .sidebar_blog_2 ul li a i {
+            margin-right: 0;
+            font-size: 1.55rem;
+        }
+        nav#sidebar.collapsed-sidebar .sidebar_blog_2 ul li a {
+            justify-content: center;
+            padding: 14px 0;
+        }
+        nav#sidebar.collapsed-sidebar .user_profle_side {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        /* Logo & Header */
+        .sidebar_blog_1, .sidebar_blog_2 {
+            padding: 1.2rem 1rem;
+        }
+
+        /* User Profile - White-Gold Elegant Card */
+        .sidebar_user_info {
+            background: rgba(255, 255, 245, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            margin: 16px 0 20px 0;
+            padding: 12px 18px;
+            border: 1px solid rgba(242, 196, 90, 0.45);
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .user_profle_side {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .user_img img {
+            width: 52px;
+            border-radius: 50%;
+            border: 2px solid var(--royal-gold);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .user_info h6 {
+            color: var(--deep-charcoal);
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: -0.2px;
+            margin-bottom: 2px;
+        }
+        .user_info p {
+            color: var(--rich-bronze);
+            font-size: 0.72rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .online_animation {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #2ECC71;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 #2ECC71;
+            animation: pulseOnlineGold 2s infinite;
+            margin-right: 6px;
+        }
+        @keyframes pulseOnlineGold {
+            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(46,204,113,0.5);}
+            70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(46,204,113,0);}
+            100% { transform: scale(0.9);}
+        }
+
+        /* navigation typography premium */
+        .sidebar_blog_2 h4 {
+            color: var(--rich-bronze);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            margin: 12px 0 14px 16px;
+            text-transform: uppercase;
+            font-weight: 700;
+            opacity: 0.75;
+        }
+        nav#sidebar ul.components { padding-left: 0; }
+        nav#sidebar ul li {
+            list-style: none;
+            margin: 6px 0;
+            animation: slideGoldReveal 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+            opacity: 0;
+            transform: translateY(14px);
+        }
+        /* Staggered premium loading */
+        nav#sidebar ul li:nth-child(1) { animation-delay: 0.02s; }
+        nav#sidebar ul li:nth-child(2) { animation-delay: 0.05s; }
+        nav#sidebar ul li:nth-child(3) { animation-delay: 0.08s; }
+        nav#sidebar ul li:nth-child(4) { animation-delay: 0.11s; }
+        nav#sidebar ul li:nth-child(5) { animation-delay: 0.14s; }
+        nav#sidebar ul li:nth-child(6) { animation-delay: 0.17s; }
+        nav#sidebar ul li:nth-child(7) { animation-delay: 0.20s; }
+        nav#sidebar ul li:nth-child(8) { animation-delay: 0.23s; }
+        nav#sidebar ul li:nth-child(9) { animation-delay: 0.26s; }
+        nav#sidebar ul li:nth-child(10) { animation-delay: 0.29s; }
+        nav#sidebar ul li:nth-child(11) { animation-delay: 0.32s; }
+        nav#sidebar ul li:nth-child(12) { animation-delay: 0.35s; }
+        nav#sidebar ul li:nth-child(13) { animation-delay: 0.38s; }
+
+        @keyframes slideGoldReveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        nav#sidebar ul li a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 20px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--deep-charcoal);
+            border-radius: 44px;
+            transition: all 0.28s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            background: transparent;
+            text-decoration: none;
+            position: relative;
+        }
+
+        /* Hover: Lift + Gold Glow + Icon Scale */
+        nav#sidebar ul li a:hover {
+            background: linear-gradient(115deg, rgba(242, 196, 90, 0.12), rgba(208, 138, 66, 0.06));
+            transform: translateX(8px) translateY(-2px) scale(1.02);
+            color: var(--warm-amber);
+            box-shadow: 0 6px 16px rgba(139, 87, 34, 0.1);
+        }
+        nav#sidebar ul li a:hover i {
+            transform: scale(1.12);
+            color: var(--royal-gold);
+            filter: drop-shadow(0 0 4px rgba(242,196,90,0.3));
+        }
+        nav#sidebar ul li a i {
+            width: 28px;
+            font-size: 1.25rem;
+            transition: all 0.25s ease;
+            color: var(--rich-bronze);
+        }
+
+        /* ACTIVE MENU: Gold gradient background + Premium Left Active Bar + Glow */
+        nav#sidebar ul li.active > a {
+            background: linear-gradient(95deg, rgba(242, 196, 90, 0.22), rgba(208, 138, 66, 0.1));
+            color: var(--deep-charcoal);
+            font-weight: 600;
+            box-shadow: inset 0 1px 0 rgba(255,255,240,0.5), 0 2px 8px rgba(242,196,90,0.15);
+        }
+        nav#sidebar ul li.active > a i {
+            color: var(--royal-gold);
+            text-shadow: 0 0 2px rgba(242,196,90,0.4);
+        }
+        /* Premium animated left indicator */
+        nav#sidebar ul li.active > a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 20%;
+            height: 60%;
+            width: 4px;
+            background: var(--gold-gradient-soft);
+            border-radius: 6px;
+            animation: goldBarRise 0.35s ease-out;
+            box-shadow: 0 0 8px rgba(242,196,90,0.6);
+        }
+        @keyframes goldBarRise {
+            from { height: 0%; opacity: 0; top: 50%;}
+            to { height: 60%; top: 20%; opacity: 1;}
+        }
+
+        /* Submenu styling */
+        nav#sidebar ul ul {
+            padding-left: 44px;
+        }
+        nav#sidebar ul ul li a {
+            font-size: 0.81rem;
+            padding: 8px 20px;
+            background: transparent;
+        }
+        nav#sidebar ul ul li a:hover {
+            transform: translateX(6px) translateY(-1px);
+        }
+
+        /* Tooltip on collapsed mode - Luxury Gold */
+        nav#sidebar.collapsed-sidebar ul li a {
+            position: relative;
+        }
+        nav#sidebar.collapsed-sidebar ul li a:hover::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 72px;
+            background: rgba(244,244,244,0.98);
+            backdrop-filter: blur(16px);
+            color: var(--deep-charcoal);
+            padding: 8px 16px;
+            border-radius: 36px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+            z-index: 1100;
+            border: 1px solid var(--royal-gold);
+            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.12);
+            letter-spacing: 0.3px;
+        }
+
+        /* ========== TOPBAR: PREMIUM PILL, WHITE-GOLD FLOATING EXECUTIVE ========== */
+        .topbar {
+            position: sticky;
+            top: 28px;
+            z-index: 1030;
+            margin: 0 28px 24px 28px;
+            background: var(--glass-premium-strong);
+            backdrop-filter: blur(28px) saturate(200%);
+            -webkit-backdrop-filter: blur(28px);
+            border-radius: 80px;
+            border: 1px solid rgba(242, 196, 90, 0.4);
+            box-shadow: 0 15px 38px -12px rgba(0, 0, 0, 0.08), 0 1px 0 0 rgba(242,196,90,0.2);
+            transition: all 0.35s ease;
+        }
+        .topbar.scrolled {
+            box-shadow: 0 22px 42px -16px rgba(0, 0, 0, 0.15);
+            background: rgba(244, 244, 244, 0.96);
+            border-color: var(--royal-gold);
+        }
+        .topbar .navbar {
+            padding: 0.5rem 1.8rem;
+            background: transparent !important;
+        }
+
+        /* Glass Search Bar - Gold Focus */
+        .search-gold-exec {
+            background: rgba(255, 255, 250, 0.75);
+            border: 1px solid rgba(139, 87, 34, 0.15);
+            border-radius: 56px;
+            padding: 9px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.28s ease;
+            margin-right: 24px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .search-gold-exec input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--deep-charcoal);
+            font-size: 0.88rem;
+            min-width: 240px;
+            font-weight: 480;
+        }
+        .search-gold-exec input::placeholder {
+            color: #B89A6E;
+            font-weight: 400;
+            letter-spacing: -0.2px;
+        }
+        .search-gold-exec i {
+            color: var(--rich-bronze);
+            font-size: 1.1rem;
+            transition: 0.2s;
+        }
+        .search-gold-exec:focus-within {
+            border-color: var(--royal-gold);
+            box-shadow: 0 0 0 4px rgba(242, 196, 90, 0.2), 0 0 0 1px rgba(242,196,90,0.3);
+            transform: scale(1.01);
+            background: #FFFFFF;
+        }
+        .search-gold-exec:focus-within i {
+            color: var(--royal-gold);
+        }
+
+        /* Live Clock + Date - Gold Crafted */
+        .clock-luxury-gold {
+            background: rgba(255, 255, 250, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 56px;
+            padding: 6px 22px;
+            margin-right: 20px;
+            border: 0.5px solid rgba(242,196,90,0.4);
+            transition: 0.2s;
+            text-align: center;
+        }
+        .clock-time {
+            font-family: 'SF Mono', 'JetBrains Mono', monospace;
+            font-weight: 620;
+            font-size: 0.95rem;
+            color: var(--deep-charcoal);
+            letter-spacing: 0.8px;
+        }
+        .clock-date {
+            font-size: 0.68rem;
+            color: var(--rich-bronze);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        /* Notification Bell - Premium Pulse Gold */
+        .notif-gold-luxury {
+            position: relative;
+            display: inline-block;
+            margin-right: 22px;
+        }
+        .notif-gold-luxury i {
+            font-size: 1.45rem;
+            color: var(--deep-charcoal);
+            opacity: 0.75;
+            transition: 0.22s;
+        }
+        .notif-badge-premium {
+            position: absolute;
+            top: -7px;
+            right: -10px;
+            background: var(--royal-gold);
+            color: var(--deep-charcoal);
+            border-radius: 40px;
+            padding: 0px 7px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            box-shadow: 0 0 0 0 var(--royal-gold);
+            animation: goldPulseRing 1.6s infinite;
+        }
+        @keyframes goldPulseRing {
+            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(242,196,90,0.7);}
+            70% { transform: scale(1.1); box-shadow: 0 0 0 7px rgba(242,196,90,0);}
+            100% { transform: scale(0.9);}
+        }
+        .notif-gold-luxury:hover i {
+            opacity: 1;
+            transform: scale(1.08);
+            color: var(--royal-gold);
+        }
+
+        /* User Profile Dropdown - White Gold Glass */
+        .user_profile_dd .dropdown-toggle {
+            background: rgba(255, 255, 250, 0.75);
+            border-radius: 48px;
+            padding: 6px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 0.5px solid rgba(242,196,90,0.35);
+            transition: 0.25s;
+        }
+        .user_profile_dd .dropdown-toggle:hover {
+            background: white;
+            box-shadow: 0 8px 18px rgba(139,87,34,0.08);
+            border-color: var(--royal-gold);
+        }
+        .dropdown-menu-gold-luxury {
+            background: rgba(244, 244, 244, 0.97);
+            backdrop-filter: blur(24px);
+            border-radius: 28px;
+            border: 1px solid rgba(242,196,90,0.5);
+            box-shadow: 0 24px 40px -16px rgba(0,0,0,0.12);
+            padding: 8px;
+        }
+        .dropdown-menu-gold-luxury .dropdown-item {
+            color: var(--deep-charcoal);
+            border-radius: 20px;
+            margin: 4px 6px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .dropdown-menu-gold-luxury .dropdown-item:hover {
+            background: rgba(242,196,90,0.18);
+            color: var(--warm-amber);
+        }
+
+        /* Sidebar Toggle Premium Gold */
+        .sidebar-toggle-gold-premium {
+            background: rgba(255, 255, 250, 0.8);
+            border: 0.5px solid rgba(242,196,90,0.5);
+            border-radius: 56px;
+            width: 48px;
+            height: 48px;
+            transition: all 0.28s;
+            color: var(--rich-bronze);
+            font-size: 1.3rem;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .sidebar-toggle-gold-premium:hover {
+            background: white;
+            transform: scale(1.04);
+            box-shadow: 0 8px 18px rgba(139,87,34,0.12);
+            color: var(--royal-gold);
+            border-color: var(--royal-gold);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            nav#sidebar {
+                position: fixed;
+                left: -340px;
+                top: 24px;
+                margin: 0;
+                height: calc(100vh - 48px);
+                transition: left 0.35s cubic-bezier(0.2,0.9,0.4,1.2);
+                border-radius: 28px;
+                z-index: 1200;
+            }
+            nav#sidebar.show-mobile {
+                left: 24px;
+            }
+            body.sidebar-mobile-open::before {
+                content: '';
+                position: fixed;
+                inset: 0;
+                background: rgba(21,21,21,0.12);
+                backdrop-filter: blur(4px);
+                z-index: 1150;
+            }
+            .topbar {
+                margin: 16px 20px 20px 20px;
+            }
+            .search-gold-exec input {
+                min-width: 120px;
+            }
+        }
+
+        /* Smooth content transition */
+        #content {
+            animation: fadeInLuxury 0.55s ease-out;
+        }
+        @keyframes fadeInLuxury {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        /* Topbar icons interaction */
+        .right_topbar .icon_info ul li a {
+            transition: 0.2s;
+            display: inline-block;
+        }
+        .right_topbar .icon_info ul li a:hover i {
+            transform: translateY(-2px);
+            color: var(--royal-gold);
+        }
+        .right_topbar .icon_info ul {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+        }
+        .right_topbar .icon_info ul li {
+            margin: 0 4px;
+        }
+    
+        /* ==========================================
+   PERFECT MOBILE RESPONSIVE TOPBAR FIX
+   ========================================== */
+
+@media screen and (max-width: 992px) {
+
+    /* Topbar */
+    .topbar {
+        width: calc(100% - 20px) !important;
+        margin: 10px !important;
+        border-radius: 20px !important;
+        top: 10px !important;
+        overflow: hidden !important;
+    }
+
+    .topbar .navbar {
+        padding: 10px !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+
+    /* Left Section */
+    .left_side {
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Sidebar Toggle */
+    .sidebar-toggle-gold-premium {
+        width: 42px !important;
+        height: 42px !important;
+        margin-right: 10px !important;
+        flex-shrink: 0;
+    }
+
+    /* Search Bar */
+    .search-gold-exec {
+        flex: 1;
+        min-width: 0 !important;
+        width: 100% !important;
+        margin-right: 0 !important;
+        padding: 8px 15px !important;
+    }
+
+    .search-gold-exec input {
+        min-width: 0 !important;
+        width: 100% !important;
+        font-size: 14px;
+    }
+
+    /* Right Section */
+    .right_topbar {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .right_topbar .icon_info {
+        width: 100%;
+    }
+
+    .right_topbar .icon_info ul {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Clock */
+    .clock-luxury-gold {
+        padding: 6px 12px !important;
+        margin-right: 0 !important;
+        min-width: auto !important;
+    }
+
+    .clock-time {
+        font-size: 13px !important;
+    }
+
+    .clock-date {
+        font-size: 10px !important;
+    }
+
+    /* Notification */
+    .notif-gold-luxury {
+        margin-right: 0 !important;
+    }
+
+    .notif-gold-luxury i {
+        font-size: 20px !important;
+    }
+
+    /* Profile */
+    .user_profile_dd .dropdown-toggle {
+        padding: 5px 10px !important;
+        gap: 8px !important;
+    }
+
+    .user_profile_dd img {
+        width: 34px !important;
+        height: 34px !important;
+    }
+
+    .user_profile_dd span,
+    .user_profile_dd p,
+    .user_profile_dd h6 {
+        display: none !important;
+    }
+
+    /* Prevent Overflow */
+    body,
+    html {
+        overflow-x: hidden !important;
+    }
+
+    .container-fluid,
+    .row,
+    .navbar {
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+}
+
+/* ==========================================
+   EXTRA SMALL DEVICES
+   ========================================== */
+
+@media screen and (max-width: 576px) {
+
+    .topbar {
+        border-radius: 18px !important;
+    }
+
+    .search-gold-exec {
+        order: 2;
+        width: 100%;
+    }
+
+    .right_topbar {
+        order: 3;
+        width: 100%;
+    }
+
+    .clock-luxury-gold {
+        display: none !important;
+    }
+
+    .user_profile_dd .dropdown-toggle {
+        padding: 4px 8px !important;
+    }
+
+    .notif-gold-luxury i {
+        font-size: 18px !important;
+    }
+
+    .sidebar-toggle-gold-premium {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}
+/* ==================================================
+   FINAL MOBILE RESPONSIVE FIX
+   ADD AT END OF HEADER.CSS
+================================================== */
+
+@media (max-width:992px){
+
+    html,
+    body{
+        overflow-x:hidden !important;
+        width:100%;
+    }
+
+    .inner_container{
+        display:block !important;
+    }
+
+    /* Sidebar */
+
+    nav#sidebar{
+        position:fixed !important;
+        top:0 !important;
+        left:-300px !important;
+        width:280px !important;
+        min-width:280px !important;
+        height:100vh !important;
+        margin:0 !important;
+        border-radius:0 24px 24px 0 !important;
+        z-index:99999 !important;
+        overflow-y:auto;
+    }
+
+    nav#sidebar.show-mobile{
+        left:0 !important;
+    }
+
+    /* Content */
+
+    #content{
+        width:100% !important;
+        margin-left:0 !important;
+        padding-left:0 !important;
+        min-width:0 !important;
+    }
+
+    /* Topbar */
+
+    .topbar{
+        width:calc(100% - 12px) !important;
+        margin:6px !important;
+        top:6px !important;
+        border-radius:16px !important;
+        z-index:999 !important;
+    }
+
+    .topbar .navbar{
+        display:flex !important;
+        flex-wrap:wrap !important;
+        gap:10px !important;
+        padding:10px !important;
+        align-items:center !important;
+    }
+
+    /* Left Area */
+
+    .left_side{
+        width:100%;
+        display:flex;
+        align-items:center;
+        gap:10px;
+    }
+
+    .sidebar-toggle-gold-premium{
+        width:40px !important;
+        height:40px !important;
+        margin:0 !important;
+        flex-shrink:0;
+    }
+
+    /* Search */
+
+    .search-gold-exec{
+        flex:1;
+        width:100%;
+        min-width:0 !important;
+        margin:0 !important;
+        padding:8px 12px !important;
+    }
+
+    .search-gold-exec input{
+        width:100% !important;
+        min-width:0 !important;
+        font-size:13px !important;
+    }
+
+    /* Right Section */
+
+    .right_topbar{
+        width:100%;
+        display:flex !important;
+        justify-content:space-between !important;
+        align-items:center !important;
+        gap:8px;
+        flex-wrap:nowrap !important;
+    }
+
+    .icon_info{
+        width:100%;
+    }
+
+    .icon_info ul{
+        display:flex !important;
+        justify-content:space-between !important;
+        align-items:center !important;
+        width:100%;
+        padding:0;
+        margin:0;
+        flex-wrap:nowrap !important;
+    }
+
+    .clock-luxury-gold{
+        padding:5px 10px !important;
+        margin:0 !important;
+    }
+
+    .clock-time{
+        font-size:12px !important;
+    }
+
+    .clock-date{
+        font-size:10px !important;
+    }
+
+    .notif-gold-luxury{
+        margin:0 !important;
+    }
+
+    .notif-gold-luxury i{
+        font-size:18px !important;
+    }
+
+    .user_profile_dd{
+        margin-left:auto;
+    }
+
+    .user_profile_dd img{
+        width:34px !important;
+        height:34px !important;
+    }
+
+    .user_profile_dd span,
+    .user_profile_dd p,
+    .user_profile_dd h6{
+        display:none !important;
+    }
+
+    .user_profile_dd .dropdown-toggle{
+        padding:4px 8px !important;
+        gap:5px !important;
+    }
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+    .clock-luxury-gold{
+        display:none !important;
+    }
+
+    .right_topbar{
+        justify-content:flex-end !important;
+    }
+
+    .search-gold-exec{
+        height:42px;
+    }
+
+    .search-gold-exec input{
+        font-size:12px !important;
+    }
+}
+
+/* Small Mobile */
+
+@media (max-width:576px){
+
+    nav#sidebar{
+        width:260px !important;
+        min-width:260px !important;
+    }
+
+    .topbar{
+        width:calc(100% - 8px) !important;
+        margin:4px !important;
+    }
+
+    .topbar .navbar{
+        padding:8px !important;
+    }
+
+    .sidebar-toggle-gold-premium{
+        width:38px !important;
+        height:38px !important;
+    }
+
+    .search-gold-exec{
+        padding:6px 10px !important;
+    }
+
+    .search-gold-exec i{
+        font-size:14px !important;
+    }
+
+    .notif-gold-luxury i{
+        font-size:16px !important;
+    }
+
+    .user_profile_dd img{
+        width:30px !important;
+        height:30px !important;
+    }
+}
