@@ -1176,9 +1176,9 @@
                 </a>
 
                 <nav class="nav-links d-none d-lg-flex">
-                    <a href="Index.html">Home</a>
-                    <a href="MLA.html" class="active">MLAs</a>
-                    <a href="leadership.html">Leaderboard</a>
+                    <a href="<?= base_url('/') ?>">Home</a>
+                    <a href="<?= base_url('mla') ?>" class="active">MLAs</a>
+                    <a href="<?= base_url('leadership') ?>">Leaderboard</a>
                 </nav>
 
                 <div class="header-actions">
@@ -1202,9 +1202,9 @@
             <button class="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body">
-            <a href="Index.html">Home</a>
-            <a href="MLA.html" class="active">MLAs</a>
-            <a href="leadership.html">Leaderboard</a>
+            <a href="<?= base_url('/') ?>">Home</a>
+            <a href="<?= base_url('mla') ?>" class="active">MLAs</a>
+            <a href="<?= base_url('leadership') ?>">Leaderboard</a>
             <a href="#">Report Cards</a>
         </div>
     </div>

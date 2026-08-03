@@ -748,9 +748,9 @@
         </div>
       </a>
       <nav class="nav-links d-none d-lg-flex">
-        <a href="Index.html">Home</a>
-        <a href="MLA.html">MLAs</a>
-        <a href="leadership.html" class="active">Leaderboard</a>
+        <a href="<?= base_url('/') ?>">Home</a>
+        <a href="<?= base_url('mla') ?>">MLAs</a>
+        <a href="<?= base_url('leadership') ?>" class="active">Leaderboard</a>
       </nav>
       <div class="header-actions">
         <button class="theme-btn"><i class="bi bi-moon"></i></button>
@@ -769,9 +769,9 @@
     <button class="btn-close" data-bs-dismiss="offcanvas"></button>
   </div>
   <div class="offcanvas-body" style="padding:20px;">
-    <a href="Index.html">Home</a>
-    <a href="MLA.html">MLAs</a>
-    <a href="leadership.html" class="active">Leaderboard</a>
+    <a href="<?= base_url('/') ?>">Home</a>
+    <a href="<?= base_url('mla') ?>">MLAs</a>
+    <a href="<?= base_url('leadership') ?>" class="active">Leaderboard</a>
   </div>
 </div>
 

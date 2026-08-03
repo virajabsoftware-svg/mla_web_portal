@@ -988,9 +988,9 @@
       </a>
 
       <nav class="nav-links d-none d-lg-flex">
-        <a href="Index.html" class="active">Home</a>
-        <a href="MLA.html" onclick="document.getElementById('allMlasSection').scrollIntoView({behavior:'smooth'})">MLAs</a>
-        <a href="leadership.html" onclick="document.getElementById('topMlaContainer').scrollIntoView({behavior:'smooth'})">Leaderboard</a>
+        <a href="<?= base_url('/') ?>" class="active">Home</a>
+        <a href="<?= base_url('mla') ?>" onclick="document.getElementById('allMlasSection').scrollIntoView({behavior:'smooth'})">MLAs</a>
+        <a href="<?= base_url('leadership') ?>" onclick="document.getElementById('topMlaContainer').scrollIntoView({behavior:'smooth'})">Leaderboard</a>
       </nav>
 
       <div class="header-actions">
@@ -1016,9 +1016,9 @@
     <button class="btn-close" data-bs-dismiss="offcanvas"></button>
   </div>
   <div class="offcanvas-body">
-    <a href="#" class="active">Home</a>
-    <a href="#" onclick="document.getElementById('allMlasSection').scrollIntoView({behavior:'smooth'})">MLAs</a>
-    <a href="#" onclick="document.getElementById('topMlaContainer').scrollIntoView({behavior:'smooth'})">Leaderboard</a>
+    <a href="<?= base_url('/') ?>" class="active">Home</a>
+    <a href="<?= base_url('mla') ?>" onclick="document.getElementById('allMlasSection').scrollIntoView({behavior:'smooth'})">MLAs</a>
+    <a href="<?= base_url('leadership') ?>" onclick="document.getElementById('topMlaContainer').scrollIntoView({behavior:'smooth'})">Leaderboard</a>
   </div>
 </div>
 
