@@ -68,7 +68,7 @@
     .btn-orange {
       background: linear-gradient(135deg, var(--accent), var(--accent-dark));
       border: none;
-      color: #fff;
+      color: #d00f0f;
       padding: 10px 28px;
       border-radius: var(--radius-full);
       font-weight: 600;
@@ -982,7 +982,7 @@
         <img src="https://png.pngtree.com/png-clipart/20250222/original/pngtree-vibrant-watercolor-painting-of-the-ashoka-chakra-indian-flag-emblem-png-image_20495965.png"
              class="logo-img" alt="Maharashtra MLA Watch Logo">
         <div class="logo-content">
-         <div class="logo-title">Leader</div>
+         <div class="logo-title">Leaders</div>
           <div class="logo-subtitle">Tracker</div>
         </div>
       </a>
