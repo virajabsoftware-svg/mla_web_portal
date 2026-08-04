@@ -360,349 +360,150 @@
         }
 
         /* ===================================================== */
-        /* COMPLAINT CARDS - Premium Design */
+        /* MLA TRACKING TABLE - Premium Design */
         /* ===================================================== */
 
-        .complaint_card {
-            position: relative;
+        .mla_tracking_section {
+            margin-top: 40px;
             background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
             border-radius: var(--radius-xl);
-            padding: 25px;
-            overflow: hidden;
+            padding: 30px;
             border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: var(--shadow-md);
             transition: all var(--transition-base);
-            box-shadow: var(--shadow-sm);
-            height: 100%;
-            animation: fadeInUp 0.5s ease backwards;
         }
 
-        .complaint_card:nth-child(1) {
-            animation-delay: 0.05s;
-        }
-
-        .complaint_card:nth-child(2) {
-            animation-delay: 0.1s;
-        }
-
-        .complaint_card:nth-child(3) {
-            animation-delay: 0.15s;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Glow Border Animation */
-        .complaint_card::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, var(--gold), var(--gold-light), var(--gold-dark), var(--gold));
-            border-radius: inherit;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: -1;
-        }
-
-        /* Shine Effect */
-        .complaint_card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(115deg, transparent 10%, rgba(255, 255, 255, 0.25) 40%, transparent 60%);
-            transform: rotate(25deg);
-            transition: transform 0.6s ease;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Hover Effects */
-        .complaint_card:hover {
-            transform: translateY(-8px) rotateX(2deg);
+        .mla_tracking_section:hover {
             box-shadow: var(--shadow-gold);
-            border-color: rgba(212, 175, 55, 0.4);
         }
 
-        .complaint_card:hover::before {
-            opacity: 1;
-            animation: borderPulse 1.5s infinite;
-        }
-
-        .complaint_card:hover::after {
-            opacity: 1;
-            transform: rotate(25deg) translateX(50%);
-        }
-
-        @keyframes borderPulse {
-
-            0%,
-            100% {
-                opacity: 0.4;
-                filter: blur(2px);
-            }
-
-            50% {
-                opacity: 0.8;
-                filter: blur(4px);
-            }
-        }
-
-        /* Top Border Accent */
-        .complaint_card .card-accent {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold-dark));
-        }
-
-        .complaint_top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-
-        .complaint_id {
-            color: #64748B;
-            font-size: 11px;
-            letter-spacing: 1px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .complaint_top h4 {
-            margin-top: 10px;
-            font-size: 20px;
+        .mla_tracking_section .section-title {
             font-family: 'Poppins', sans-serif;
+            font-size: 24px;
             font-weight: 700;
             color: #0F172A;
-        }
-
-        /* Priority Badges */
-        .priority_badge {
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all var(--transition-fast);
-        }
-
-        .priority_badge:hover {
-            transform: scale(1.05);
-        }
-
-        .high_priority {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(239, 68, 68, 0.05));
-            color: var(--danger);
-            border-left: 3px solid var(--danger);
-        }
-
-        .medium_priority {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.05));
-            color: var(--warning);
-            border-left: 3px solid var(--warning);
-        }
-
-        .low_priority {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.05));
-            color: var(--success);
-            border-left: 3px solid var(--success);
-        }
-
-        /* Complaint Info */
-        .complaint_body {
+            margin-bottom: 25px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 12px;
         }
 
-        .complaint_info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed rgba(212, 175, 55, 0.2);
+        .mla_tracking_section .section-title i {
+            color: var(--gold);
         }
 
-        .complaint_info span {
-            color: #64748B;
-            font-weight: 600;
+        .mla_table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        .mla_table thead th {
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: white;
+            padding: 15px 20px;
             font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none;
         }
 
-        .complaint_info strong {
+        .mla_table thead th:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .mla_table thead th:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .mla_table tbody tr {
+            background: rgba(255, 255, 255, 0.8);
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .mla_table tbody tr:hover {
+            transform: scale(1.01);
+            box-shadow: var(--shadow-gold);
+            background: white;
+        }
+
+        .mla_table tbody td {
+            padding: 15px 20px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-left: none;
+            border-right: none;
+            font-size: 14px;
             color: #1E293B;
-            font-weight: 700;
-            font-size: 13px;
         }
 
-        /* Status Badges */
-        .status {
-            padding: 5px 12px;
+        .mla_table tbody td:first-child {
+            border-left: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 12px 0 0 12px;
+        }
+
+        .mla_table tbody td:last-child {
+            border-right: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 0 12px 12px 0;
+        }
+
+        .mla_table tbody tr.active-row {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+            border-color: var(--gold);
+        }
+
+        .mla_stats_badge {
+            display: inline-block;
+            padding: 4px 12px;
             border-radius: 50px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
-            transition: all var(--transition-fast);
         }
 
-        .status:hover {
-            transform: scale(1.05);
-        }
-
-        .pending {
+        .mla_stats_badge.high {
             background: rgba(239, 68, 68, 0.12);
             color: var(--danger);
         }
 
-        .progress_status {
-            background: rgba(59, 130, 246, 0.12);
-            color: var(--info);
+        .mla_stats_badge.medium {
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--warning);
         }
 
-        .resolved {
+        .mla_stats_badge.low {
             background: rgba(16, 185, 129, 0.12);
             color: var(--success);
         }
 
-        /* Progress Bar */
-        .complaint_progress {
-            margin-top: 18px;
-        }
-
-        .progress_label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #64748B;
-            margin-bottom: 8px;
-        }
-
-        .progress {
-            height: 8px;
-            border-radius: 20px;
-            background: var(--beige-dark);
-            overflow: hidden;
-        }
-
-        .progress_custom {
-            background: linear-gradient(90deg, var(--gold), var(--gold-dark));
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 700;
-            transition: width 0.5s ease;
-        }
-
-        /* Footer Buttons */
-        .complaint_footer {
-            display: flex;
-            gap: 12px;
-            margin-top: 22px;
-        }
-
-        .view_btn,
-        .resolve_btn {
-            flex: 1;
-            height: 44px;
+        .expand_btn {
+            background: none;
             border: none;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all var(--transition-base);
+            color: var(--gold);
+            font-size: 18px;
+            transition: all var(--transition-fast);
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
         }
 
-        .view_btn {
-            background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
-            color: var(--info);
+        .expand_btn:hover {
+            transform: scale(1.2);
+            color: var(--gold-dark);
         }
 
-        .view_btn:hover {
-            transform: translateY(-3px);
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: white;
-            box-shadow: var(--shadow-gold);
+        .complaint_sub_row {
+            background: rgba(250, 246, 237, 0.6) !important;
         }
 
-        .resolve_btn {
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: white;
-            box-shadow: var(--shadow-gold);
+        .complaint_sub_row td {
+            padding: 10px 20px 10px 50px !important;
+            font-size: 13px !important;
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.2) !important;
         }
 
-        .resolve_btn:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-gold-lg);
-            filter: brightness(1.05);
-        }
-
-        /* Ripple for buttons */
-        .view_btn:active::after,
-        .resolve_btn:active::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            transform: translate(-50%, -50%);
-            animation: rippleEffect 0.5s ease-out;
-        }
-
-        /* Counter Animation */
-        .counter-number {
-            animation: countPop 0.4s ease-out;
-        }
-
-        @keyframes countPop {
-            0% {
-                transform: scale(0.8);
-                opacity: 0;
-            }
-
-            60% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        /* Floating Animation for Cards */
-        .complaint_card.floating {
-            animation: floatCard 4s ease-in-out infinite;
-        }
-
-        @keyframes floatCard {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-5px);
-            }
+        .complaint_sub_row .sub-complaint-id {
+            font-weight: 700;
+            color: var(--gold-dark);
         }
 
         /* Scrollbar */
@@ -747,6 +548,15 @@
             .stat_card {
                 flex: 1;
             }
+
+            .mla_table {
+                font-size: 12px;
+            }
+
+            .mla_table thead th,
+            .mla_table tbody td {
+                padding: 10px 12px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -771,58 +581,59 @@
                 padding: 20px;
             }
 
-            .complaint_card {
-                padding: 20px;
+            .mla_tracking_section {
+                padding: 15px;
             }
 
-            .complaint_footer {
-                flex-direction: column;
+            .mla_table thead {
+                display: none;
             }
 
-            .view_btn,
-            .resolve_btn {
-                width: 100%;
+            .mla_table tbody tr {
+                display: block;
+                margin-bottom: 15px;
+                border-radius: var(--radius-md);
+                padding: 15px;
+                background: white;
+                box-shadow: var(--shadow-sm);
             }
-        }
 
-        /* Modal Styles for Details */
-        .modal-content {
-            border-radius: var(--radius-xl);
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(18px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
+            .mla_table tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 12px !important;
+                border: none !important;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+                border-radius: 0 !important;
+            }
 
-        .modal-header {
-            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-            border: none;
-            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-        }
+            .mla_table tbody td:last-child {
+                border-bottom: none;
+            }
 
-        .modal-title {
-            color: white;
-            font-weight: 700;
+            .mla_table tbody td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: #64748B;
+                font-size: 12px;
+            }
+
+            .complaint_sub_row td {
+                padding-left: 20px !important;
+            }
         }
 
         .footer {
             background: rgba(255, 255, 255, 0.08) !important;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 20px;
-
             padding: 1rem 2rem !important;
-
             text-align: center;
-
             margin: 2rem 20px 25px 20px !important;
-            /* bottom pasun var */
-
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.12),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15);
-
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.15);
             position: relative;
             overflow: hidden;
         }
@@ -848,7 +659,6 @@
             color: #d4af37 !important;
         }
 
-        /* Footer always content chya khali */
         .container-fluid.cream-container {
             display: flex;
             flex-direction: column;
@@ -859,7 +669,6 @@
             margin-top: auto !important;
         }
 
-        /* Mobile */
         @media (max-width:768px) {
             .footer {
                 margin: 1.5rem 15px 20px 15px !important;
@@ -886,12 +695,11 @@
                         <div class="header_content">
                             <div>
                                 <h1>
-                                    <i class="fas fa-comment-dots me-2"></i> Complaint Management Module
+                                    <i class="fas fa-comment-dots me-2"></i> MLA Complaint Monitoring System
                                 </h1>
 
                                 <p>
-                                    Manage citizen complaints, assign departments, track escalation,
-                                    and monitor resolutions efficiently.
+                                    Track and monitor complaints assigned to each MLA. View performance metrics and complaint details.
                                 </p>
                             </div>
 
@@ -917,14 +725,13 @@
                     <!-- FILTER SECTION -->
                     <div class="complaint_filter_box mt-4">
                         <div class="row">
-                            <div class="col-lg-3 col-md-6 mb-3">
-                                <label><i class="fas fa-search me-1" style="color: var(--gold);"></i> Search
-                                    Complaint</label>
+                            <div class="col-lg-4 col-md-6 mb-3">
+                                <label><i class="fas fa-search me-1" style="color: var(--gold);"></i> Search</label>
                                 <input type="text" class="form-control complaint_input" id="searchInput"
-                                    placeholder="Complaint ID / Voter ID">
+                                    placeholder="Search by MLA / Complaint ID / Voter ID">
                             </div>
 
-                            <div class="col-lg-2 col-md-6 mb-3">
+                            <div class="col-lg-3 col-md-6 mb-3">
                                 <label><i class="fas fa-flag me-1" style="color: var(--gold);"></i> Priority</label>
                                 <select class="form-select complaint_input" id="priorityFilter">
                                     <option value="all">All</option>
@@ -934,9 +741,8 @@
                                 </select>
                             </div>
 
-                            <div class="col-lg-2 col-md-6 mb-3">
-                                <label><i class="fas fa-chart-simple me-1" style="color: var(--gold);"></i>
-                                    Status</label>
+                            <div class="col-lg-3 col-md-6 mb-3">
+                                <label><i class="fas fa-chart-simple me-1" style="color: var(--gold);"></i> Status</label>
                                 <select class="form-select complaint_input" id="statusFilter">
                                     <option value="all">All</option>
                                     <option value="Pending">Pending</option>
@@ -946,52 +752,45 @@
                                 </select>
                             </div>
 
-                            <div class="col-lg-3 col-md-6 mb-3">
-                                <label><i class="fas fa-building me-1" style="color: var(--gold);"></i>
-                                    Department</label>
-                                <select class="form-select complaint_input" id="deptFilter">
-                                    <option value="all">All Departments</option>
-                                    <option value="Water Supply">Water Supply</option>
-                                    <option value="Roads">Roads Department</option>
-                                    <option value="Electricity">Electricity</option>
-                                    <option value="Health">Health</option>
-                                    <option value="Education">Education</option>
-                                </select>
-                            </div>
-
                             <div class="col-lg-2 col-md-12 mb-3 d-flex align-items-end">
                                 <button class="btn complaint_btn w-100" onclick="filterComplaints()">
-                                    <i class="fas fa-filter me-2"></i> Search Complaint
+                                    <i class="fas fa-filter me-2"></i> Filter
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- COMPLAINT CARDS CONTAINER -->
-                    <div class="row mt-4" id="complaintsContainer"></div>
+                    <!-- ===================================================== -->
+                    <!-- MLA TRACKING SECTION -->
+                    <!-- ===================================================== -->
+                    <div class="mla_tracking_section">
+                        <div class="section-title">
+                            <i class="fas fa-users me-2"></i> MLA-wise Complaint Tracker
+                            <span style="font-size: 14px; font-weight: 400; color: #64748B; margin-left: auto;">
+                                <i class="fas fa-info-circle me-1"></i> Click on any MLA to view their complaints
+                            </span>
+                        </div>
 
-                </div>
-
-                <!-- Modal for Complaint Details -->
-                <div class="modal fade" id="complaintModal" tabindex="-1">
-                    <div class="modal-dialog modal-lg modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalTitle"><i class="fas fa-file-alt me-2"></i> Complaint
-                                    Details</h5>
-                                <button type="button" class="btn-close btn-close-white"
-                                    data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body" id="modalBody"></div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="resolveComplaint()"
-                                    style="background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border: none;">Mark
-                                    as Resolved</button>
-                            </div>
+                        <div class="table-responsive">
+                            <table class="mla_table" id="mlaTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 22%;">MLA Name</th>
+                                        <th style="width: 15%;">Constituency</th>
+                                        <th style="width: 9%;">Total</th>
+                                        <th style="width: 9%;">Pending</th>
+                                        <th style="width: 12%;">In Progress</th>
+                                        <th style="width: 9%;">Resolved</th>
+                                        <th style="width: 18%;">Performance</th>
+                                        <th style="width: 6%;">Expand</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mlaTableBody">
+                                    <!-- Dynamic content will be rendered here -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>
 
                 <!-- footer -->
                 <div class="container-fluid">
@@ -1029,7 +828,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Complaint Data
+        // =====================================================
+        // COMPLAINT DATA
+        // =====================================================
         const complaintsData = [
             {
                 id: "CMP1001",
@@ -1120,10 +921,57 @@
                 description: "Frequent power outages affecting daily life.",
                 createdAt: "2025-05-05",
                 resolvedDate: "2025-05-22"
+            },
+            {
+                id: "CMP1180",
+                title: "Drainage Blockage",
+                priority: "High",
+                voterId: "VTR1122",
+                mla: "MLA Rajesh Patil",
+                constituency: "Karad North",
+                department: "Health",
+                status: "Pending",
+                escalation: "Level 1",
+                progress: 30,
+                description: "Severe drainage blockage causing water logging in residential area.",
+                createdAt: "2025-05-19",
+                resolvedDate: null
+            },
+            {
+                id: "CMP1190",
+                title: "Electricity Meter Issue",
+                priority: "Low",
+                voterId: "VTR3345",
+                mla: "MLA Sunil Shinde",
+                constituency: "Satara",
+                department: "Electricity",
+                status: "Resolved",
+                escalation: "Level 0",
+                progress: 100,
+                description: "Faulty electricity meter showing incorrect readings.",
+                createdAt: "2025-05-12",
+                resolvedDate: "2025-05-25"
+            },
+            {
+                id: "CMP1200",
+                title: "Road Safety Measures",
+                priority: "Medium",
+                voterId: "VTR9988",
+                mla: "MLA Meena Tai",
+                constituency: "Mumbai South",
+                department: "Roads Department",
+                status: "In Progress",
+                escalation: "Level 1",
+                progress: 55,
+                description: "Need speed bumps and warning signs on accident-prone road.",
+                createdAt: "2025-05-21",
+                resolvedDate: null
             }
         ];
 
-        // Counter Animation Function
+        // =====================================================
+        // COUNTER ANIMATION
+        // =====================================================
         function animateCounter(elementId, targetValue) {
             const element = document.getElementById(elementId);
             if (!element) return;
@@ -1140,7 +988,9 @@
             }, 20);
         }
 
-        // Update Statistics
+        // =====================================================
+        // UPDATE STATISTICS
+        // =====================================================
         function updateStats() {
             const total = complaintsData.length;
             const pending = complaintsData.filter(c => c.status === "Pending" || c.status === "In Progress").length;
@@ -1151,117 +1001,187 @@
             animateCounter("resolvedComplaint", resolved);
         }
 
-        // Create Complaint Card HTML
-        function createComplaintCard(complaint) {
-            const priorityClass = complaint.priority === "High" ? "high_priority" : (complaint.priority === "Medium" ? "medium_priority" : "low_priority");
-            const statusClass = complaint.status === "Pending" ? "pending" : (complaint.status === "In Progress" ? "progress_status" : "resolved");
+        // =====================================================
+        // RENDER MLA TRACKING TABLE
+        // =====================================================
+        function renderMLATracking(complaints) {
+            const tbody = document.getElementById('mlaTableBody');
+            const dataToUse = complaints || complaintsData;
+            
+            // Group complaints by MLA
+            const mlaMap = new Map();
+            
+            dataToUse.forEach(complaint => {
+                if (!mlaMap.has(complaint.mla)) {
+                    mlaMap.set(complaint.mla, {
+                        mla: complaint.mla,
+                        constituency: complaint.constituency,
+                        complaints: [],
+                        total: 0,
+                        pending: 0,
+                        inProgress: 0,
+                        resolved: 0,
+                        highPriority: 0,
+                        mediumPriority: 0,
+                        lowPriority: 0
+                    });
+                }
+                
+                const mlaData = mlaMap.get(complaint.mla);
+                mlaData.complaints.push(complaint);
+                mlaData.total++;
+                
+                if (complaint.status === "Pending") mlaData.pending++;
+                else if (complaint.status === "In Progress") mlaData.inProgress++;
+                else if (complaint.status === "Resolved") mlaData.resolved++;
+                
+                if (complaint.priority === "High") mlaData.highPriority++;
+                else if (complaint.priority === "Medium") mlaData.mediumPriority++;
+                else if (complaint.priority === "Low") mlaData.lowPriority++;
+            });
 
-            return `
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="complaint_card">
-                    <div class="card-accent"></div>
-                    <div class="complaint_top">
-                        <div>
-                            <span class="complaint_id">
-                                <i class="fas fa-hashtag me-1"></i> Complaint ID : ${complaint.id}
-                            </span>
-                            <h4>
-                                <i class="fas fa-exclamation-triangle me-2" style="color: var(--gold); font-size: 18px;"></i> ${complaint.title}
-                            </h4>
-                        </div>
-                        <span class="priority_badge ${priorityClass}">
-                            ${complaint.priority}
-                        </span>
-                    </div>
-
-                    <div class="complaint_body">
-                        <div class="complaint_info">
-                            <span><i class="fas fa-user me-2"></i> Voter ID</span>
-                            <strong>${complaint.voterId}</strong>
-                        </div>
-                        <div class="complaint_info">
-                            <span><i class="fas fa-user-tie me-2"></i> MLA Assigned</span>
-                            <strong>${complaint.mla}</strong>
-                        </div>
-                        <div class="complaint_info">
-                            <span><i class="fas fa-map-marker-alt me-2"></i> Constituency</span>
-                            <strong>${complaint.constituency}</strong>
-                        </div>
-                        <div class="complaint_info">
-                            <span><i class="fas fa-building me-2"></i> Department</span>
-                            <strong>${complaint.department}</strong>
-                        </div>
-                        <div class="complaint_info">
-                            <span><i class="fas fa-chart-simple me-2"></i> Status</span>
-                            <strong class="status ${statusClass}">
-                                ${complaint.status}
-                            </strong>
-                        </div>
-                        <div class="complaint_info">
-                            <span><i class="fas fa-arrow-up me-2"></i> Escalation</span>
-                            <strong>${complaint.escalation}</strong>
-                        </div>
-                    </div>
-
-                    <div class="complaint_progress mt-3">
-                        <div class="progress_label">
-                            <i class="fas fa-chart-line me-1"></i> Resolution Progress
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar progress_custom" style="width:${complaint.progress}%">
-                                ${complaint.progress}%
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="complaint_footer">
-                        <button class="view_btn" onclick="viewDetails('${complaint.id}')">
-                            <i class="fas fa-eye me-2"></i> View Details
-                        </button>
-                        <button class="resolve_btn" onclick="resolveComplaintById('${complaint.id}')">
-                            <i class="fas fa-check me-2"></i> ${complaint.status === "Resolved" ? "Closed" : "Resolve"}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-        }
-
-        // Render All Complaints
-        function renderComplaints(complaints) {
-            const container = document.getElementById("complaintsContainer");
-            if (!container) return;
-
-            if (complaints.length === 0) {
-                container.innerHTML = `
-                <div class="col-12 text-center p-5">
-                    <i class="fas fa-inbox fa-4x mb-3" style="color: var(--gold);"></i>
-                    <h4>No Complaints Found</h4>
-                    <p class="text-muted">Try adjusting your filter criteria</p>
-                </div>
-            `;
+            if (mlaMap.size === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px; color: #64748B;">
+                            <i class="fas fa-inbox" style="font-size: 36px; display: block; margin-bottom: 15px;"></i>
+                            No complaints found matching your filters
+                        </td>
+                    </tr>
+                `;
                 return;
             }
 
-            let html = "";
-            complaints.forEach(complaint => {
-                html += createComplaintCard(complaint);
+            let html = '';
+            let index = 0;
+            
+            mlaMap.forEach((mlaData) => {
+                const performance = mlaData.total > 0 
+                    ? Math.round((mlaData.resolved / mlaData.total) * 100) 
+                    : 0;
+                
+                let performanceColor = '';
+                if (performance >= 80) performanceColor = 'success';
+                else if (performance >= 50) performanceColor = 'warning';
+                else performanceColor = 'danger';
+                
+                const rowId = `mla-row-${index}`;
+                const subRowId = `mla-sub-${index}`;
+                
+                html += `
+                    <tr id="${rowId}" onclick="toggleMLARow('${rowId}', '${subRowId}')" style="cursor: pointer;">
+                        <td data-label="MLA Name">
+                            <strong style="color: #0F172A;">${mlaData.mla}</strong>
+                        </td>
+                        <td data-label="Constituency">${mlaData.constituency}</td>
+                        <td data-label="Total">
+                            <span class="mla_stats_badge" style="background: rgba(59, 130, 246, 0.12); color: var(--info);">
+                                ${mlaData.total}
+                            </span>
+                        </td>
+                        <td data-label="Pending">
+                            <span class="mla_stats_badge high">${mlaData.pending}</span>
+                        </td>
+                        <td data-label="In Progress">
+                            <span class="mla_stats_badge medium">${mlaData.inProgress}</span>
+                        </td>
+                        <td data-label="Resolved">
+                            <span class="mla_stats_badge low">${mlaData.resolved}</span>
+                        </td>
+                        <td data-label="Performance">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="progress" style="width: 80px; height: 6px;">
+                                    <div class="progress-bar bg-${performanceColor}" 
+                                         style="width: ${performance}%; border-radius: 20px; 
+                                                background: ${performance >= 80 ? 'var(--success)' : performance >= 50 ? 'var(--warning)' : 'var(--danger)'} !important;">
+                                    </div>
+                                </div>
+                                <span style="font-size: 12px; font-weight: 700; color: #1E293B;">${performance}%</span>
+                            </div>
+                        </td>
+                        <td data-label="Expand">
+                            <button class="expand_btn" onclick="event.stopPropagation(); toggleMLARow('${rowId}', '${subRowId}')">
+                                <i class="fas fa-chevron-down" id="${rowId}-icon"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="${subRowId}" style="display: none;" class="complaint_sub_row">
+                        <td colspan="8">
+                            <div style="padding: 5px 0;">
+                                <strong style="color: var(--gold-dark); font-size: 14px;">
+                                    <i class="fas fa-list me-2"></i>Complaints for ${mlaData.mla} (${mlaData.total} complaints)
+                                </strong>
+                                <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">
+                                    ${mlaData.complaints.map(c => `
+                                        <div style="display: flex; justify-content: space-between; align-items: center; 
+                                             padding: 6px 12px; background: rgba(255,255,255,0.7); border-radius: 8px;
+                                             border-left: 3px solid ${c.priority === 'High' ? 'var(--danger)' : c.priority === 'Medium' ? 'var(--warning)' : 'var(--success)'};">
+                                            <div>
+                                                <span class="sub-complaint-id">${c.id}</span>
+                                                <span style="color: #475569; margin-left: 10px;">${c.title}</span>
+                                                <span style="color: #94A3B8; font-size: 11px; margin-left: 10px;">${c.voterId}</span>
+                                            </div>
+                                            <div>
+                                                <span class="status ${c.status === 'Pending' ? 'pending' : c.status === 'In Progress' ? 'progress_status' : 'resolved'}" 
+                                                      style="padding: 3px 10px; border-radius: 50px; font-size: 10px; font-weight: 700;">
+                                                    ${c.status}
+                                                </span>
+                                                <span class="priority_badge ${c.priority === 'High' ? 'high_priority' : c.priority === 'Medium' ? 'medium_priority' : 'low_priority'}" 
+                                                      style="padding: 2px 10px; font-size: 10px; margin-left: 8px; border-radius: 50px;">
+                                                    ${c.priority}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                index++;
             });
-            container.innerHTML = html;
+            
+            tbody.innerHTML = html;
         }
 
-        // Filter Complaints
+        // =====================================================
+        // TOGGLE MLA ROW EXPAND
+        // =====================================================
+        function toggleMLARow(rowId, subRowId) {
+            const subRow = document.getElementById(subRowId);
+            const icon = document.getElementById(`${rowId}-icon`);
+            
+            if (subRow.style.display === 'none') {
+                subRow.style.display = 'table-row';
+                icon.className = 'fas fa-chevron-up';
+                document.getElementById(rowId).classList.add('active-row');
+            } else {
+                subRow.style.display = 'none';
+                icon.className = 'fas fa-chevron-down';
+                document.getElementById(rowId).classList.remove('active-row');
+            }
+        }
+
+        // =====================================================
+        // FILTER COMPLAINTS
+        // =====================================================
         function filterComplaints() {
             const searchTerm = document.getElementById("searchInput").value.toLowerCase();
             const priority = document.getElementById("priorityFilter").value;
             const status = document.getElementById("statusFilter").value;
-            const department = document.getElementById("deptFilter").value;
 
             let filtered = complaintsData.filter(complaint => {
                 let match = true;
 
-                if (searchTerm && !complaint.id.toLowerCase().includes(searchTerm) && !complaint.voterId.toLowerCase().includes(searchTerm)) {
-                    match = false;
+                if (searchTerm) {
+                    const searchFields = [
+                        complaint.id.toLowerCase(),
+                        complaint.voterId.toLowerCase(),
+                        complaint.mla.toLowerCase(),
+                        complaint.title.toLowerCase(),
+                        complaint.constituency.toLowerCase()
+                    ];
+                    match = searchFields.some(field => field.includes(searchTerm));
                 }
                 if (priority !== "all" && complaint.priority !== priority) {
                     match = false;
@@ -1269,91 +1189,38 @@
                 if (status !== "all" && complaint.status !== status) {
                     match = false;
                 }
-                if (department !== "all" && complaint.department !== department) {
-                    match = false;
-                }
 
                 return match;
             });
 
-            renderComplaints(filtered);
-        }
-
-        // View Complaint Details
-        function viewDetails(id) {
-            const complaint = complaintsData.find(c => c.id === id);
-            if (!complaint) return;
-
-            document.getElementById("modalTitle").innerHTML = `<i class="fas fa-file-alt me-2"></i> ${complaint.title} - Complaint Details`;
-            document.getElementById("modalBody").innerHTML = `
-            <div class="row">
-                <div class="col-md-6">
-                    <table class="table table-bordered">
-                        <tr><th style="width:40%">Complaint ID</th><td>${complaint.id}</td></tr>
-                        <tr><th>Title</th><td>${complaint.title}</td></tr>
-                        <tr><th>Priority</th><td><span class="priority_badge ${complaint.priority === "High" ? "high_priority" : (complaint.priority === "Medium" ? "medium_priority" : "low_priority")}">${complaint.priority}</span></td></tr>
-                        <tr><th>Voter ID</th><td>${complaint.voterId}</td></tr>
-                        <tr><th>MLA Assigned</th><td>${complaint.mla}</td></tr>
-                        <tr><th>Constituency</th><td>${complaint.constituency}</td></tr>
-                    </table>
-                </div>
-                <div class="col-md-6">
-                    <table class="table table-bordered">
-                        <tr><th style="width:40%">Department</th><td>${complaint.department}</td></tr>
-                        <tr><th>Status</th><td><span class="status ${complaint.status === "Pending" ? "pending" : (complaint.status === "In Progress" ? "progress_status" : "resolved")}">${complaint.status}</span></td></tr>
-                        <tr><th>Escalation Level</th><td>${complaint.escalation}</td></tr>
-                        <tr><th>Progress</th><td><div class="progress" style="height:10px;"><div class="progress-bar progress_custom" style="width:${complaint.progress}%">${complaint.progress}%</div></div></td></tr>
-                        <tr><th>Created Date</th><td>${complaint.createdAt}</td></tr>
-                        <tr><th>Resolved Date</th><td>${complaint.resolvedDate || "Not Resolved Yet"}</td></tr>
-                    </table>
-                </div>
-            </div>
-            <div class="mt-3 p-3 rounded-3" style="background: rgba(212, 175, 55, 0.08);">
-                <strong><i class="fas fa-file-alt me-2"></i> Description:</strong>
-                <p class="mt-2 mb-0">${complaint.description}</p>
-            </div>
-        `;
-
-            new bootstrap.Modal(document.getElementById("complaintModal")).show();
-        }
-
-        // Resolve Complaint
-        function resolveComplaintById(id) {
-            const complaint = complaintsData.find(c => c.id === id);
-            if (complaint && complaint.status !== "Resolved") {
-                complaint.status = "Resolved";
-                complaint.progress = 100;
-                complaint.resolvedDate = new Date().toISOString().split('T')[0];
-                updateStats();
-                filterComplaints();
-
-                // Show success message
-                alert(`Complaint ${id} has been marked as Resolved!`);
-            } else if (complaint && complaint.status === "Resolved") {
-                alert("This complaint is already resolved.");
-            }
-        }
-
-        // Global function for modal resolve button
-        function resolveComplaint() {
-            const title = document.getElementById("modalTitle").innerHTML;
-            const match = title.match(/CMP\d+/);
-            if (match) {
-                resolveComplaintById(match[0]);
-                bootstrap.Modal.getInstance(document.getElementById("complaintModal")).hide();
-            }
-        }
-
-        // Initialize on page load
-        document.addEventListener("DOMContentLoaded", function () {
+            renderMLATracking(filtered);
             updateStats();
-            renderComplaints(complaintsData);
+        }
 
-            // Add event listeners for real-time filtering
-            document.getElementById("searchInput").addEventListener("keyup", filterComplaints);
-            document.getElementById("priorityFilter").addEventListener("change", filterComplaints);
-            document.getElementById("statusFilter").addEventListener("change", filterComplaints);
-            document.getElementById("deptFilter").addEventListener("change", filterComplaints);
+        // =====================================================
+        // SEARCH INPUT - LIVE SEARCH
+        // =====================================================
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                filterComplaints();
+            }
+        });
+
+        // =====================================================
+        // FILTER CHANGES - AUTO FILTER
+        // =====================================================
+        document.getElementById('priorityFilter').addEventListener('change', filterComplaints);
+        document.getElementById('statusFilter').addEventListener('change', filterComplaints);
+
+        // =====================================================
+        // INITIALIZATION
+        // =====================================================
+        $(document).ready(function() {
+            // Render MLA tracking table
+            renderMLATracking(complaintsData);
+            
+            // Update statistics
+            updateStats();
         });
     </script>
     <script src="header.js"></script>

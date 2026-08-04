@@ -374,195 +374,122 @@
         }
 
         /* ===================================================== */
-        /* TABLE BOX - Premium Glassmorphism */
+        /* MLA SURVEY COUNT TABLE - Premium Design */
         /* ===================================================== */
 
-        .table_box {
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(14px);
+        .mla_survey_section {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(15px);
             border-radius: var(--radius-xl);
             padding: 30px;
-            margin-top: 35px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             box-shadow: var(--shadow-md);
             transition: all var(--transition-base);
         }
 
-        .table_box:hover {
+        .mla_survey_section:hover {
             box-shadow: var(--shadow-gold);
-            border-color: rgba(212, 175, 55, 0.3);
         }
 
-        .table_box h4 {
+        .mla_survey_section .section-title {
+            font-family: 'Poppins', sans-serif;
             font-size: 24px;
-            font-weight: 800;
+            font-weight: 700;
             color: #0F172A;
-            position: relative;
-            display: inline-block;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .table_box h4::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 45px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--gold), var(--gold-light));
-            border-radius: 3px;
+        .mla_survey_section .section-title i {
+            color: var(--gold);
         }
 
-        /* Search Input */
-        #searchInput {
-            border: 1px solid var(--beige-dark);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 12px 20px;
-            min-width: 250px;
-            border-radius: 48px;
-            font-weight: 500;
-            transition: all var(--transition-base);
-        }
-
-        #searchInput:focus {
-            outline: none;
-            background: var(--pure-white);
-            border-color: var(--gold);
-            box-shadow: 0 0 0 4px var(--gold-glow);
-        }
-
-        /* Table Styles */
-        .table {
-            border-collapse: separate;
-            border-spacing: 0 10px;
+        .mla_count_table {
             width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
         }
 
-        .table thead tr {
-            background: transparent;
-        }
-
-        .table th {
-            border: none;
-            padding: 14px 12px;
-            color: #1E293B;
+        .mla_count_table thead th {
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: white;
+            padding: 15px 20px;
             font-size: 13px;
             font-weight: 700;
+            text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-
-        .table tbody tr {
-            background: rgba(255, 255, 255, 0.7);
-            transition: all var(--transition-base);
-            border-radius: var(--radius-md);
-        }
-
-        .table tbody tr:nth-child(even) {
-            background: rgba(250, 246, 237, 0.6);
-        }
-
-        .table tbody tr:hover {
-            transform: translateX(4px);
-            background: rgba(212, 175, 55, 0.08);
-            box-shadow: var(--shadow-gold);
-        }
-
-        .table td {
-            padding: 14px 12px;
             border: none;
-            vertical-align: middle;
-            font-weight: 500;
-            color: #475569;
         }
 
-        /* Survey Status Badges */
-        .survey_status {
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 700;
+        .mla_count_table thead th:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .mla_count_table thead th:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .mla_count_table tbody tr {
+            background: rgba(255, 255, 255, 0.8);
+            transition: all var(--transition-base);
+            cursor: default;
+        }
+
+        .mla_count_table tbody tr:hover {
+            transform: scale(1.01);
+            box-shadow: var(--shadow-gold);
+            background: white;
+        }
+
+        .mla_count_table tbody td {
+            padding: 15px 20px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-left: none;
+            border-right: none;
+            font-size: 14px;
+            color: #1E293B;
+        }
+
+        .mla_count_table tbody td:first-child {
+            border-left: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 12px 0 0 12px;
+        }
+
+        .mla_count_table tbody td:last-child {
+            border-right: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 0 12px 12px 0;
+        }
+
+        .mla_count_badge {
             display: inline-block;
-            transition: all var(--transition-fast);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
+            color: var(--gold-dark);
+            border: 1px solid rgba(212, 175, 55, 0.2);
         }
 
-        .survey_status:hover {
-            transform: scale(1.05);
-        }
-
-        .active_status {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.05));
-            color: #10B981;
-            border-left: 3px solid #10B981;
-        }
-
-        .pending_status {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.05));
-            color: #F59E0B;
-            border-left: 3px solid #F59E0B;
-        }
-
-        .closed_status {
+        .mla_count_badge.high {
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(239, 68, 68, 0.05));
             color: #EF4444;
-            border-left: 3px solid #EF4444;
+            border-color: rgba(239, 68, 68, 0.2);
         }
 
-        /* Action Buttons */
-        .action_btn {
-            width: 36px;
-            height: 36px;
-            border: none;
-            border-radius: var(--radius-sm);
-            color: white;
-            font-size: 13px;
-            margin-right: 5px;
-            transition: all var(--transition-base);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
+        .mla_count_badge.medium {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.05));
+            color: #F59E0B;
+            border-color: rgba(245, 158, 11, 0.2);
         }
 
-        .action_btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: var(--shadow-gold);
-        }
-
-        .action_btn:active::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            transform: translate(-50%, -50%);
-            animation: rippleEffect 0.5s ease-out;
-        }
-
-        @keyframes rippleEffect {
-            0% {
-                width: 0;
-                height: 0;
-                opacity: 0.5;
-            }
-
-            100% {
-                width: 80px;
-                height: 80px;
-                opacity: 0;
-            }
-        }
-
-        .view_btn {
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-        }
-
-        .edit_btn {
-            background: linear-gradient(135deg, #F59E0B, #D97706);
-        }
-
-        .delete_btn {
-            background: linear-gradient(135deg, #EF4444, #DC2626);
+        .mla_count_badge.low {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.05));
+            color: #10B981;
+            border-color: rgba(16, 185, 129, 0.2);
         }
 
         /* ===================================================== */
@@ -667,8 +594,8 @@
 
         /* Fade In Animation */
         .stat_card,
-        .table_box,
-        .analytics_box {
+        .analytics_box,
+        .mla_survey_section {
             animation: fadeInUp 0.5s ease backwards;
         }
 
@@ -720,25 +647,6 @@
             background: var(--gold-dark);
         }
 
-        /* Modal Styles */
-        .modal-content {
-            border-radius: var(--radius-xl);
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(18px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-
-        .modal-header {
-            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-            border: none;
-            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-        }
-
-        .modal-title {
-            color: white;
-            font-weight: 700;
-        }
-
         /* Responsive */
         @media (max-width: 992px) {
             .survey_section {
@@ -783,25 +691,46 @@
                 font-size: 20px;
             }
 
-            .table_box {
-                padding: 20px;
+            .mla_survey_section {
+                padding: 15px;
             }
 
-            .action_btn {
-                width: 32px;
-                height: 32px;
+            .mla_count_table thead {
+                display: none;
+            }
+
+            .mla_count_table tbody tr {
+                display: block;
+                margin-bottom: 15px;
+                border-radius: var(--radius-md);
+                padding: 15px;
+                background: white;
+                box-shadow: var(--shadow-sm);
+            }
+
+            .mla_count_table tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 12px !important;
+                border: none !important;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+                border-radius: 0 !important;
+            }
+
+            .mla_count_table tbody td:last-child {
+                border-bottom: none;
+            }
+
+            .mla_count_table tbody td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: #64748B;
                 font-size: 12px;
             }
 
-            #searchInput {
-                min-width: 100%;
-                margin-top: 15px;
-            }
-
-            .table th,
-            .table td {
-                padding: 10px 8px;
-                font-size: 12px;
+            .analytics_box {
+                padding: 20px !important;
             }
         }
 
@@ -873,91 +802,63 @@
         }
 
         /* ==========================
-   MOBILE RESPONSIVE FIX
-   ========================== */
+           MOBILE RESPONSIVE FIX
+           ========================== */
 
-@media (max-width: 768px) {
+        @media (max-width: 768px) {
 
-    .survey_section{
-        padding:10px !important;
-    }
+            .survey_section{
+                padding:10px !important;
+            }
 
-    .survey_header{
-        padding:20px !important;
-        text-align:center;
-        border-radius:20px;
-    }
+            .survey_header{
+                padding:20px !important;
+                text-align:center;
+                border-radius:20px;
+            }
 
-    .survey_header h2{
-        font-size:22px !important;
-        line-height:1.4;
-    }
+            .survey_header h2{
+                font-size:22px !important;
+                line-height:1.4;
+            }
 
-    .survey_header p{
-        font-size:13px;
-    }
+            .survey_header p{
+                font-size:13px;
+            }
 
-    .header_btn{
-        width:100%;
-        margin-top:15px;
-    }
+            .header_btn{
+                width:100%;
+                margin-top:15px;
+            }
 
-    .stat_card{
-        margin-bottom:15px;
-        padding:20px;
-    }
+            .stat_card{
+                margin-bottom:15px;
+                padding:20px;
+            }
 
-    .stat_card h3{
-        font-size:22px !important;
-    }
+            .stat_card h3{
+                font-size:22px !important;
+            }
 
-    .table_box{
-        padding:15px !important;
-        overflow-x:auto;
-    }
+            .analytics_box{
+                padding:20px !important;
+            }
+        }
 
-    .table{
-        min-width:900px;
-    }
+        @media (max-width: 576px){
 
-    .analytics_box{
-        padding:20px !important;
-    }
+            .survey_header h2{
+                font-size:20px !important;
+            }
 
-    #searchInput{
-        width:100%;
-        min-width:100%;
-    }
+            .survey_header p{
+                font-size:12px;
+            }
 
-    .action_btn{
-        width:30px;
-        height:30px;
-        font-size:11px;
-    }
-}
-
-@media (max-width: 576px){
-
-    .survey_header h2{
-        font-size:20px !important;
-    }
-
-    .survey_header p{
-        font-size:12px;
-    }
-
-    .table th,
-    .table td{
-        white-space:nowrap;
-        font-size:11px;
-        padding:8px;
-    }
-
-    .analytics_box h4,
-    .table_box h4{
-        font-size:18px;
-    }
-}
+            .analytics_box h4{
+                font-size:18px;
+            }
+        }
     </style>
 </head>
 
@@ -1036,33 +937,28 @@
                     </div>
 
                     <!-- ===================================================== -->
-                    <!-- SURVEY TABLE -->
+                    <!-- MLA SURVEY COUNT SECTION - ONLY COUNT, NO DETAILS -->
                     <!-- ===================================================== -->
-
-                    <div class="table_box">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
-                            <h4>
-                                <i class="fa-solid fa-list-check me-2" style="color: var(--gold);"></i> Recent Surveys
-                            </h4>
-                            <input type="text" class="form-control" placeholder="🔍 Search Survey..." id="searchInput">
+                    <div class="mla_survey_section">
+                        <div class="section-title">
+                            <i class="fas fa-user-tie me-2"></i> MLA-wise Survey Count
+                            <span style="font-size: 14px; font-weight: 400; color: #64748B; margin-left: auto;">
+                                <i class="fas fa-chart-bar me-1"></i> Total surveys conducted by each MLA
+                            </span>
                         </div>
 
                         <div class="table-responsive">
-                            <table class="table align-middle">
+                            <table class="mla_count_table" id="mlaCountTable">
                                 <thead>
                                     <tr>
-                                        <th>Survey ID</th>
-                                        <th>Title</th>
-                                        <th>MLA</th>
-                                        <th>Responses</th>
-                                        <th>Sentiment</th>
-                                        <th>Participation</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th style="width: 30%;">MLA Name</th>
+                                        <th style="width: 25%;">Total Surveys</th>
+                                        <th style="width: 25%;">Total Responses</th>
+                                        <th style="width: 20%;">Avg. Participation</th>
                                     </tr>
                                 </thead>
-                                <tbody id="surveyTable">
-                                    <!-- Dynamic content loaded via JavaScript -->
+                                <tbody id="mlaCountBody">
+                                    <!-- Dynamic content will be rendered here -->
                                 </tbody>
                             </table>
                         </div>
@@ -1107,27 +1003,6 @@
 
                 </div>
 
-                <!-- Modal for Survey Details -->
-                <div class="modal fade" id="surveyModal" tabindex="-1">
-                    <div class="modal-dialog modal-lg modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalTitle"><i class="fa-solid fa-file-alt me-2"></i> Survey
-                                    Details</h5>
-                                <button type="button" class="btn-close btn-close-white"
-                                    data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body" id="modalBody"></div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="editSurvey()"
-                                    style="background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border: none;">Edit
-                                    Survey</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- footer -->
                 <div class="container-fluid">
                     <div class="footer">
@@ -1163,17 +1038,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Survey Data
+        // =====================================================
+        // SURVEY DATA
+        // =====================================================
         const surveysData = [
-            { id: "#SR101", title: "Road Development Feedback", mla: "Rahul Patil", responses: 3245, sentiment: "Positive", participation: 82, status: "Active", description: "Feedback survey for road development projects in the constituency." },
-            { id: "#SR102", title: "Water Supply Survey", mla: "Amit Deshmukh", responses: 2100, sentiment: "Neutral", participation: 61, status: "Pending", description: "Assessment of water supply quality and coverage." },
-            { id: "#SR103", title: "Healthcare Facility Review", mla: "Vikas More", responses: 5420, sentiment: "Negative", participation: 47, status: "Closed", description: "Review of healthcare facilities and services." },
-            { id: "#SR104", title: "Education Quality Survey", mla: "Meena Sharma", responses: 1870, sentiment: "Positive", participation: 73, status: "Active", description: "Evaluation of school education quality." },
-            { id: "#SR105", title: "Electricity Supply Feedback", mla: "Sanjay Patil", responses: 2980, sentiment: "Neutral", participation: 68, status: "Active", description: "Feedback on electricity supply and outages." },
-            { id: "#SR106", title: "Sanitation Drive Survey", mla: "Rajesh Kulkarni", responses: 1560, sentiment: "Positive", participation: 55, status: "Pending", description: "Survey on sanitation drive effectiveness." }
+            { id: "#SR101", title: "Road Development Feedback", mla: "MLA Rahul Patil", responses: 3245, sentiment: "Positive", participation: 82, status: "Active", description: "Feedback survey for road development projects in the constituency." },
+            { id: "#SR102", title: "Water Supply Survey", mla: "MLA Amit Deshmukh", responses: 2100, sentiment: "Neutral", participation: 61, status: "Pending", description: "Assessment of water supply quality and coverage." },
+            { id: "#SR103", title: "Healthcare Facility Review", mla: "MLA Vikas More", responses: 5420, sentiment: "Negative", participation: 47, status: "Closed", description: "Review of healthcare facilities and services." },
+            { id: "#SR104", title: "Education Quality Survey", mla: "MLA Meena Sharma", responses: 1870, sentiment: "Positive", participation: 73, status: "Active", description: "Evaluation of school education quality." },
+            { id: "#SR105", title: "Electricity Supply Feedback", mla: "MLA Sanjay Patil", responses: 2980, sentiment: "Neutral", participation: 68, status: "Active", description: "Feedback on electricity supply and outages." },
+            { id: "#SR106", title: "Sanitation Drive Survey", mla: "MLA Rahul Patil", responses: 1560, sentiment: "Positive", participation: 55, status: "Pending", description: "Survey on sanitation drive effectiveness." },
+            { id: "#SR107", title: "Public Transport Survey", mla: "MLA Amit Deshmukh", responses: 4300, sentiment: "Positive", participation: 79, status: "Active", description: "Feedback on public transport services." },
+            { id: "#SR108", title: "Waste Management Review", mla: "MLA Vikas More", responses: 2890, sentiment: "Neutral", participation: 52, status: "Closed", description: "Review of waste management practices." },
+            { id: "#SR109", title: "Digital Literacy Survey", mla: "MLA Meena Sharma", responses: 1450, sentiment: "Positive", participation: 44, status: "Pending", description: "Assessment of digital literacy programs." }
         ];
 
-        // Counter Animation Function
+        // =====================================================
+        // COUNTER ANIMATION
+        // =====================================================
         function animateCounter(elementId, targetValue, suffix = "") {
             const element = document.getElementById(elementId);
             if (!element) return;
@@ -1194,7 +1076,9 @@
             }, 20);
         }
 
-        // Update Statistics
+        // =====================================================
+        // UPDATE STATISTICS
+        // =====================================================
         function updateStats() {
             const totalSurveys = surveysData.length;
             const totalResponses = surveysData.reduce((sum, s) => sum + s.responses, 0);
@@ -1205,155 +1089,115 @@
             animateCounter("responseCount", totalResponses >= 1000 ? (totalResponses / 1000).toFixed(0) + "K" : totalResponses);
             animateCounter("satisfaction", satisfactionRate + "%");
 
-            // Calculate average participation
             const avgParticipation = Math.round(surveysData.reduce((sum, s) => sum + s.participation, 0) / totalSurveys);
             animateCounter("participation", avgParticipation + "%");
         }
 
-        // Render Survey Table
-        function renderSurveyTable(filteredData = null) {
-            const tbody = document.getElementById("surveyTable");
-            const data = filteredData || surveysData;
-
-            if (!tbody) return;
-
-            if (data.length === 0) {
-                tbody.innerHTML = `
-                <tr>
-                    <td colspan="8" class="text-center py-5">
-                        <i class="fa-solid fa-inbox fa-3x mb-3" style="color: var(--gold);"></i>
-                        <h5>No Surveys Found</h5>
-                        <p class="text-muted">Try adjusting your search criteria</p>
-                    </td>
-                </tr>
-            `;
-                return;
-            }
-
-            tbody.innerHTML = data.map(survey => {
-                const statusClass = survey.status === "Active" ? "active_status" : (survey.status === "Pending" ? "pending_status" : "closed_status");
-                const sentimentIcon = survey.sentiment === "Positive" ? "😊" : (survey.sentiment === "Neutral" ? "😐" : "😞");
-
-                return `
-                <tr>
-                    <td><strong>${survey.id}</strong></td>
-                    <td>${survey.title}</td>
-                    <td><i class="fa-solid fa-user-tie me-1" style="color: var(--gold);"></i> ${survey.mla}</td>
-                    <td><i class="fa-solid fa-users me-1"></i> ${survey.responses.toLocaleString()}</td>
-                    <td>${sentimentIcon} ${survey.sentiment}</td>
-                    <td>
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="progress flex-grow-1" style="height: 6px;">
-                                <div class="progress-bar" style="width: ${survey.participation}%; background: linear-gradient(90deg, var(--gold), var(--gold-dark));"></div>
-                            </div>
-                            <span class="small fw-bold">${survey.participation}%</span>
-                        </div>
-                    </td>
-                    <td><span class="survey_status ${statusClass}">${survey.status}</span></td>
-                    <td>
-                        <button class="action_btn view_btn" onclick="viewSurvey('${survey.id}')" title="View Details">
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
-                        <button class="action_btn edit_btn" onclick="editSurveyById('${survey.id}')" title="Edit Survey">
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <button class="action_btn delete_btn" onclick="deleteSurvey('${survey.id}')" title="Delete Survey">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
-            }).join('');
-        }
-
-        // Search/Filter Surveys
-        function filterSurveys() {
-            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-
-            if (!searchTerm) {
-                renderSurveyTable();
-                return;
-            }
-
-            const filtered = surveysData.filter(survey =>
-                survey.id.toLowerCase().includes(searchTerm) ||
-                survey.title.toLowerCase().includes(searchTerm) ||
-                survey.mla.toLowerCase().includes(searchTerm)
-            );
-
-            renderSurveyTable(filtered);
-        }
-
-        // View Survey Details
-        function viewSurvey(id) {
-            const survey = surveysData.find(s => s.id === id);
-            if (!survey) return;
-
-            const statusClass = survey.status === "Active" ? "active_status" : (survey.status === "Pending" ? "pending_status" : "closed_status");
-
-            document.getElementById("modalTitle").innerHTML = `<i class="fa-solid fa-file-alt me-2"></i> ${survey.title} - Survey Details`;
-            document.getElementById("modalBody").innerHTML = `
-            <div class="row">
-                <div class="col-md-6">
-                    <table class="table table-bordered">
-                        <tr><th style="width:40%">Survey ID</th><td>${survey.id}</td></tr>
-                        <tr><th>Title</th><td>${survey.title}</td></tr>
-                        <tr><th>MLA</th><td><i class="fa-solid fa-user-tie me-1"></i> ${survey.mla}</td></tr>
-                        <tr><th>Responses</th><td><i class="fa-solid fa-users me-1"></i> ${survey.responses.toLocaleString()}</td></tr>
-                    </table>
-                </div>
-                <div class="col-md-6">
-                    <table class="table table-bordered">
-                        <tr><th>Sentiment</th><td>${survey.sentiment}</td></tr>
-                        <tr><th>Participation</th><td>${survey.participation}%</td></tr>
-                        <tr><th>Status</th><td><span class="survey_status ${statusClass}">${survey.status}</span></td></tr>
-                    \]
-
-                </div>
-            </div>
-            <div class="mt-3 p-3 rounded-3" style="background: rgba(212, 175, 55, 0.08);">
-                <strong><i class="fa-solid fa-circle-info me-2"></i> Description:</strong>
-                <p class="mt-2 mb-0">${survey.description}</p>
-            </div>
-        `;
-
-            // Store current survey ID for edit
-            window.currentSurveyId = id;
-
-            new bootstrap.Modal(document.getElementById("surveyModal")).show();
-        }
-
-        // Edit Survey
-        function editSurvey() {
-            if (window.currentSurveyId) {
-                editSurveyById(window.currentSurveyId);
-                bootstrap.Modal.getInstance(document.getElementById("surveyModal")).hide();
-            }
-        }
-
-        function editSurveyById(id) {
-            alert(`Edit functionality for survey ${id} would open edit form.\n\nIn production, this would open a modal with editable fields.`);
-        }
-
-        // Delete Survey
-        function deleteSurvey(id) {
-            if (confirm(`Are you sure you want to delete survey ${id}?`)) {
-                const index = surveysData.findIndex(s => s.id === id);
-                if (index !== -1) {
-                    surveysData.splice(index, 1);
-                    updateStats();
-                    filterSurveys();
-                    alert(`Survey ${id} has been deleted successfully!`);
+        // =====================================================
+        // RENDER MLA SURVEY COUNT - ONLY COUNTS, NO DETAILS
+        // =====================================================
+        function renderMLASurveyCount() {
+            const tbody = document.getElementById('mlaCountBody');
+            
+            // Group surveys by MLA - only count, no details
+            const mlaMap = new Map();
+            
+            surveysData.forEach(survey => {
+                if (!mlaMap.has(survey.mla)) {
+                    mlaMap.set(survey.mla, {
+                        mla: survey.mla,
+                        totalSurveys: 0,
+                        totalResponses: 0,
+                        totalParticipation: 0
+                    });
                 }
+                
+                const mlaData = mlaMap.get(survey.mla);
+                mlaData.totalSurveys++;
+                mlaData.totalResponses += survey.responses;
+                mlaData.totalParticipation += survey.participation;
+            });
+
+            if (mlaMap.size === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 40px; color: #64748B;">
+                            <i class="fas fa-inbox" style="font-size: 36px; display: block; margin-bottom: 15px;"></i>
+                            No surveys found
+                        </td>
+                    </tr>
+                `;
+                return;
             }
+
+            // Sort by total surveys (highest first)
+            const sortedMLAs = Array.from(mlaMap.values()).sort((a, b) => b.totalSurveys - a.totalSurveys);
+
+            let html = '';
+            let rank = 1;
+            
+            sortedMLAs.forEach((mlaData) => {
+                const avgParticipation = mlaData.totalSurveys > 0 
+                    ? Math.round(mlaData.totalParticipation / mlaData.totalSurveys) 
+                    : 0;
+                
+                // Determine badge color based on survey count
+                let badgeClass = 'low';
+                if (mlaData.totalSurveys >= 4) badgeClass = 'high';
+                else if (mlaData.totalSurveys >= 2) badgeClass = 'medium';
+                
+                // Rank medal
+                let rankIcon = '';
+                if (rank === 1) rankIcon = '🥇 ';
+                else if (rank === 2) rankIcon = '🥈 ';
+                else if (rank === 3) rankIcon = '🥉 ';
+                
+                html += `
+                    <tr>
+                        <td data-label="MLA Name">
+                            <strong style="color: #0F172A;">
+                                ${rankIcon}${mlaData.mla}
+                            </strong>
+                        </td>
+                        <td data-label="Total Surveys">
+                            <span class="mla_count_badge ${badgeClass}">
+                                ${mlaData.totalSurveys} ${mlaData.totalSurveys === 1 ? 'Survey' : 'Surveys'}
+                            </span>
+                        </td>
+                        <td data-label="Total Responses">
+                            <span style="font-weight: 600; color: #1E293B;">
+                                ${mlaData.totalResponses.toLocaleString()}
+                            </span>
+                        </td>
+                        <td data-label="Avg. Participation">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="progress" style="width: 100px; height: 6px;">
+                                    <div class="progress-bar" 
+                                         style="width: ${avgParticipation}%; border-radius: 20px; 
+                                                background: ${avgParticipation >= 70 ? '#10B981' : avgParticipation >= 50 ? '#F59E0B' : '#EF4444'} !important;">
+                                    </div>
+                                </div>
+                                <span style="font-size: 13px; font-weight: 700; color: #1E293B;">${avgParticipation}%</span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                rank++;
+            });
+            
+            tbody.innerHTML = html;
         }
 
-        // Create New Survey
+        // =====================================================
+        // CREATE NEW SURVEY
+        // =====================================================
         function createNewSurvey() {
             alert(`Create New Survey Form\n\nThis would open a form to create a new survey with fields like:\n- Survey Title\n- MLA Assignment\n- Department\n- Questions\n- Target Audience\n- Start/End Date\n\nIn production, this would open a modal with all necessary fields.`);
         }
 
-        // Animate Progress Bars
+        // =====================================================
+        // ANIMATE PROGRESS BARS
+        // =====================================================
         function animateProgressBars() {
             const bars = document.querySelectorAll('.progress-bar');
             bars.forEach(bar => {
@@ -1365,14 +1209,13 @@
             });
         }
 
-        // Event Listeners
+        // =====================================================
+        // EVENT LISTENERS
+        // =====================================================
         document.addEventListener("DOMContentLoaded", function () {
             updateStats();
-            renderSurveyTable();
+            renderMLASurveyCount();
             animateProgressBars();
-
-            // Search input event
-            document.getElementById("searchInput").addEventListener("keyup", filterSurveys);
         });
     </script>
     <script src="header.js"></script>

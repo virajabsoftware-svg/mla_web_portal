@@ -13,7 +13,8 @@ $routes->get('mla', 'Home::mla');
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
 
     $routes->get('login', 'Auth::login');
-
+    $routes->post('login', 'Auth::loginCheck');
+      
     $routes->get('dashboard', 'Dashboard::index');
 
     $routes->get('mla-management', 'MLAManagement::index');
