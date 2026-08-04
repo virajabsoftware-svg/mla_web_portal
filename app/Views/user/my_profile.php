@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/user/css/style.css') ?>">
     <!-- Bootstrap 5 Grid & Utilities -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-   <style>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -28,22 +28,23 @@
             overflow-x: hidden;
         }
 
-        /* Color Scheme Variables */
+        /* Color Scheme Variables - Lighter & Softer */
         :root {
             --soft-white: #F4F2F5;
             --lime-gold: #C3C848;
+            --lime-gold-light: #D8DD7A;
             --olive-green: #6B8A22;
             --teal-blue: #225661;
+            --teal-blue-light: #3A7A8A;
             --dark-olive: #454D28;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --shadow-sm: 0 12px 28px rgba(0,0,0,0.05);
-            --shadow-lift: 0 25px 35px -12px rgba(0,0,0,0.15);
-            --transition-smooth: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --shadow-sm: 0 8px 20px rgba(0,0,0,0.04);
+            --shadow-lift: 0 16px 32px -8px rgba(0,0,0,0.08);
+            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         /* ============================================
            MAIN CONTENT - FIXED POSITIONING FOR SIDEBAR & TOPBAR
-           Sidebar width: 280px | Collapsed: 80px | Topbar height: 70px
            ============================================ */
         .main-content {
             position: relative;
@@ -59,99 +60,73 @@
             overflow-y: auto;
         }
 
-        /* When sidebar is collapsed */
         .sidebar-collapsed .main-content,
         body.sidebar-collapsed .main-content {
             margin-left: 80px;
         }
 
-        /* Custom scrollbar */
         .main-content::-webkit-scrollbar {
             width: 6px;
         }
-
         .main-content::-webkit-scrollbar-track {
-            background: #e0e0e0;
+            background: #e8e8e8;
             border-radius: 10px;
         }
-
         .main-content::-webkit-scrollbar-thumb {
-            background: var(--lime-gold);
+            background: var(--lime-gold-light);
             border-radius: 10px;
         }
-
         .main-content::-webkit-scrollbar-thumb:hover {
-            background: var(--olive-green);
+            background: var(--lime-gold);
         }
 
-        /* Dashboard container */
-        .profile_dashboard {
-            width: 100%;
-            max-width: 100%;
-        }
-
-        /* Bootstrap row overrides */
-        .profile_dashboard .row,
-        .row {
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-            width: 100%;
-        }
-
-        /* Column padding */
-        [class*="col-"] {
-            padding-left: 12px !important;
-            padding-right: 12px !important;
-        }
-
-        /* Premium card base */
+        /* Premium card base - Lighter hover effect */
         .premium-card {
             background: var(--glass-bg);
             backdrop-filter: blur(2px);
             border-radius: 28px;
             box-shadow: var(--shadow-sm);
             transition: var(--transition-smooth);
-            border: 1px solid rgba(195,200,72,0.3);
+            border: 1px solid rgba(195,200,72,0.20);
             position: relative;
             overflow: hidden;
             width: 100%;
         }
 
-        /* Gradient border animation (animated border glow) */
+        /* Subtle gradient border - Light & Elegant */
         .premium-card::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--lime-gold), var(--olive-green), var(--teal-blue), var(--lime-gold));
-            background-size: 300% 300%;
-            border-radius: 30px;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(135deg, rgba(195,200,72,0.15), rgba(34,86,97,0.08), rgba(195,200,72,0.15));
+            background-size: 200% 200%;
+            border-radius: 29px;
             z-index: -1;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease;
         }
 
         .premium-card:hover::before {
-            opacity: 0.6;
-            animation: gradientShift 3s ease infinite;
+            opacity: 1;
+            animation: gradientShiftLight 4s ease infinite;
         }
 
-        @keyframes gradientShift {
+        @keyframes gradientShiftLight {
             0% { background-position: 0% 50%;}
             50% { background-position: 100% 50%;}
             100% { background-position: 0% 50%;}
         }
 
-        /* Hover lift + glow */
+        /* Light lift effect - No dark shadows */
         .premium-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lift), 0 0 0 2px rgba(195,200,72,0.2);
-            transition: transform 0.25s ease, box-shadow 0.4s ease;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px -8px rgba(0,0,0,0.06), 0 0 0 1px rgba(195,200,72,0.15);
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
         }
 
-        /* Fade-up stagger animations */
         .fade-up {
             opacity: 0;
             transform: translateY(28px);
@@ -166,72 +141,11 @@
         }
 
         .stagger-1 { animation-delay: 0.05s; }
-        .stagger-2 { animation-delay: 0.12s; }
-        .stagger-3 { animation-delay: 0.2s; }
-        .stagger-4 { animation-delay: 0.28s; }
-        .stagger-5 { animation-delay: 0.36s; }
-
-        /* ============================================
-           SQUARE PROFILE IMAGE (UPDATED - CIRCLE TO SQUARE)
-           ============================================ */
-        
-        /* Profile image - MODERN SQUARE with elegant rounded corners */
-        .profile-img-large {
-            width: 110px;
-            height: 110px;
-            border-radius: 18px !important;  /* Square shape with soft corners */
-            object-fit: cover;
-            border: 3px solid var(--lime-gold);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-
-        .profile-img-large:hover {
-            transform: scale(1.05);
-            border-color: var(--teal-blue);
-            box-shadow: 0 12px 28px rgba(34,86,97,0.25);
-        }
-
-        .info-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            padding: 10px 0;
-            border-bottom: 1px dashed rgba(107,138,34,0.2);
-            font-size: 0.9rem;
-        }
-
-        .info-card strong {
-            font-weight: 600;
-            color: var(--teal-blue);
-            letter-spacing: 0.3px;
-        }
-
-        .info-card span {
-            color: var(--dark-olive);
-            font-weight: 500;
-        }
-
-        .value-display {
-            background: rgba(195,200,72,0.12);
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-weight: 500;
-            color: var(--dark-olive);
-            margin-top: 6px;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-        }
-
-        .value-display:hover {
-            background: rgba(195,200,72,0.2);
-            transform: translateX(4px);
-        }
 
         .card-header-premium {
-            background: linear-gradient(135deg, rgba(195,200,72,0.2), rgba(34,86,97,0.05));
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid rgba(195,200,72,0.4);
+            background: linear-gradient(135deg, rgba(195,200,72,0.08), rgba(34,86,97,0.03));
+            padding: 1rem 1.8rem;
+            border-bottom: 1px solid rgba(195,200,72,0.15);
             border-radius: 28px 28px 0 0;
         }
 
@@ -239,6 +153,7 @@
             color: var(--teal-blue);
             font-weight: 700;
             margin: 0;
+            font-size: 1.1rem;
         }
 
         .badge-premium {
@@ -250,38 +165,61 @@
             font-weight: 600;
         }
 
-        /* Weather card styling */
-        .weather-card {
-            background: linear-gradient(145deg, #ffffff, #f0f2e9);
-            border-radius: 24px;
-            padding: 1rem 1rem;
-            text-align: center;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(195,200,72,0.5);
-            transition: var(--transition-smooth);
-        }
-        .weather-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lift);
-        }
-        .weather-temp {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--teal-blue);
+        /* Value display - Lighter background */
+        .value-display {
+            background: rgba(195,200,72,0.06);
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-weight: 500;
+            color: var(--dark-olive);
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            border: 1px solid rgba(195,200,72,0.08);
         }
 
-        /* Button Shine + Gold effect */
+        .value-display:hover {
+            background: rgba(195,200,72,0.10);
+            transform: translateX(3px);
+            border-color: rgba(195,200,72,0.20);
+        }
+
+        .value-display-readonly {
+            background: #f8f8f8;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-weight: 500;
+            color: #777;
+            font-size: 0.95rem;
+            border: 1px solid #ececec;
+        }
+
+        .info-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--dark-olive);
+            opacity: 0.6;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .info-label i {
+            color: var(--lime-gold);
+            width: 18px;
+        }
+
+        /* Button - Light gold with soft glow */
         .btn-gold {
-            background: linear-gradient(95deg, var(--lime-gold), #A9B43C);
+            background: linear-gradient(135deg, var(--lime-gold), #B5BA4A);
             border: none;
-            padding: 12px 28px;
+            padding: 10px 28px;
             border-radius: 40px;
             font-weight: 700;
-            color: #1F3F3A;
-            transition: all 0.2s;
+            color: #2A3A2A;
+            transition: all 0.25s;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(107,138,34,0.3);
+            box-shadow: 0 4px 16px rgba(195,200,72,0.20);
             cursor: pointer;
         }
         .btn-gold::after {
@@ -291,635 +229,636 @@
             left: -60%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(115deg, rgba(255,255,255,0) 10%, rgba(255,255,240,0.6) 50%, rgba(255,255,255,0) 90%);
+            background: linear-gradient(115deg, rgba(255,255,255,0) 10%, rgba(255,255,240,0.4) 50%, rgba(255,255,255,0) 90%);
             transform: rotate(25deg);
-            transition: all 0.5s;
+            transition: all 0.6s;
             opacity: 0;
         }
         .btn-gold:hover::after {
             left: 100%;
-            opacity: 0.8;
+            opacity: 1;
         }
         .btn-gold:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 20px rgba(69,77,40,0.25);
-            background: linear-gradient(95deg, #d4da5a, #7f9f2f);
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 8px 24px rgba(195,200,72,0.30);
+            background: linear-gradient(135deg, #D0D55A, #B0B844);
+        }
+        .btn-gold:active {
+            transform: scale(0.98);
         }
 
-        /* form controls */
-        .form-control {
-            background: white;
-            border: 1px solid rgba(195,200,72,0.6);
-            border-radius: 60px;
-            padding: 10px 18px;
-            font-size: 0.9rem;
+        .profile-avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--lime-gold);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            transition: var(--transition-smooth);
+        }
+        .profile-avatar-large:hover {
+            transform: scale(1.03);
+            border-color: var(--teal-blue-light);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+        }
+
+        .section-divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(195,200,72,0.25), transparent);
+            margin: 1.5rem 0;
+        }
+
+        /* Footer - Light & Clean */
+        .footer {
+            position: relative;
+            margin-top: 2rem;
+            padding: 18px 25px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(195, 200, 72, 0.15);
+            border-radius: 24px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+        }
+        .footer::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, rgba(195,200,72,0.10), rgba(34,86,97,0.05), rgba(195,200,72,0.10));
+            background-size: 200% 200%;
+            border-radius: 25px;
+            z-index: -1;
+            opacity: 0;
+            transition: 0.5s ease;
+        }
+        .footer:hover::before {
+            opacity: 1;
+            animation: gradientShiftLight 4s ease infinite;
+        }
+        .footer:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px -8px rgba(0,0,0,0.06);
+        }
+        .footer p {
+            margin: 0;
+            color: var(--dark-olive);
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        .footer a {
+            color: var(--teal-blue);
+            text-decoration: none;
+            font-weight: 700;
+            position: relative;
+            transition: 0.3s ease;
+        }
+        .footer a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -3px;
+            width: 0;
+            height: 2px;
+            background: var(--lime-gold);
+            transition: 0.3s ease;
+        }
+        .footer a:hover {
+            color: var(--olive-green);
+        }
+        .footer a:hover::after {
             width: 100%;
-            transition: all 0.2s;
         }
-        .form-control:focus {
-            border-color: var(--lime-gold);
-            box-shadow: 0 0 0 3px rgba(195,200,72,0.3);
-            outline: none;
+
+        /* Edit Profile Modal - Clean & Light */
+        .modal-content {
+            border-radius: 24px;
+            border: 1px solid rgba(195,200,72,0.15);
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.08);
         }
-        label {
+        .modal-header {
+            border-bottom: 1px solid rgba(195,200,72,0.12);
+            background: linear-gradient(135deg, rgba(195,200,72,0.05), rgba(34,86,97,0.02));
+            border-radius: 24px 24px 0 0;
+        }
+        .modal-header h5 {
+            color: var(--teal-blue);
+            font-weight: 700;
+        }
+        .modal-footer {
+            border-top: 1px solid rgba(195,200,72,0.12);
+        }
+        .modal-body .form-label {
             font-weight: 600;
             color: var(--teal-blue);
-            margin-bottom: 6px;
-            display: block;
+            font-size: 0.85rem;
+        }
+        .modal-body .form-control {
+            border-radius: 12px;
+            border: 1px solid rgba(195,200,72,0.25);
+            padding: 10px 14px;
+            transition: all 0.2s;
+            background: #fafafa;
+        }
+        .modal-body .form-control:focus {
+            border-color: var(--lime-gold);
+            box-shadow: 0 0 0 3px rgba(195,200,72,0.12);
+            background: white;
+        }
+        .modal-body .form-control:hover {
+            border-color: rgba(195,200,72,0.4);
         }
 
-        /* floating effect for cards */
-        .float-card {
-            animation: floatSoft 3s infinite ease-in-out;
+        .btn-outline-secondary {
+            border-radius: 40px;
+            padding: 8px 24px;
+            border-color: #ddd;
+            color: #666;
+            transition: all 0.2s;
         }
-        @keyframes floatSoft {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* smooth page transition effect */
-        .fade-page-transition {
-            animation: pageFade 0.5s ease-out;
-        }
-        @keyframes pageFade {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+        .btn-outline-secondary:hover {
+            background: #f5f5f5;
+            border-color: #ccc;
         }
 
-        /* notification bell ring */
-        .bell-ring {
-            animation: bellShake 0.5s ease-in-out;
-            display: inline-block;
+        /* Toast notification - Soft & Clean */
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            color: var(--dark-olive);
+            padding: 14px 24px;
+            border-radius: 16px;
+            font-weight: 600;
+            box-shadow: 0 12px 32px -8px rgba(0,0,0,0.08);
+            z-index: 9999;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            border-left: 4px solid var(--lime-gold);
+            border: 1px solid rgba(195,200,72,0.15);
         }
-        @keyframes bellShake {
-            0% { transform: rotate(0); }
-            25% { transform: rotate(12deg); }
-            50% { transform: rotate(-12deg); }
-            75% { transform: rotate(6deg); }
-            100% { transform: rotate(0); }
+        .toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
         }
 
-        /* ============================================
-           RESPONSIVE BREAKPOINTS
-           ============================================ */
-        
-        /* Tablet Landscape (1024px) */
+        /* Responsive */
         @media (max-width: 1024px) {
-            .main-content {
-                padding: 1.25rem 1.5rem;
-            }
-            
-            .profile-img-large {
-                width: 90px;
-                height: 90px;
-                border-radius: 14px !important;
-            }
+            .main-content { padding: 1.25rem 1.5rem; }
         }
-        
-        /* Tablet Portrait (768px) */
         @media (max-width: 768px) {
             .main-content {
                 padding: 1rem 1.25rem;
                 margin-left: 0;
             }
-            
-            body.sidebar-collapsed .main-content {
-                margin-left: 0;
-            }
-            
-            .info-card {
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            .info-card strong {
-                font-size: 0.8rem;
-            }
-            
-            .info-card span {
-                font-size: 0.85rem;
-            }
-            
-            .card-header-premium {
-                padding: 0.875rem 1rem;
-            }
-            
-            .card-body.p-4 {
-                padding: 1rem !important;
-            }
+            body.sidebar-collapsed .main-content { margin-left: 0; }
+            .profile-avatar-large { width: 90px; height: 90px; }
+            .card-header-premium { padding: 0.875rem 1.2rem; }
+            .card-header-premium h5 { font-size: 1rem; }
         }
-        
-        /* Mobile (576px) - Square profile responsive */
         @media (max-width: 576px) {
-            .main-content {
-                padding: 0.875rem 1rem;
-            }
-            
-            .profile-img-large {
-                width: 75px !important;
-                height: 75px !important;
-                border-radius: 12px !important;
-            }
-            
-            .btn-gold {
-                width: 100%;
-                padding: 10px 20px;
-            }
-            
-            .text-end.mt-4 {
-                text-align: center !important;
-            }
-            
-            .value-display {
-                font-size: 0.85rem;
-                padding: 6px 10px;
-            }
-            
-            .weather-temp {
-                font-size: 1.5rem;
-            }
-            
-            .card-header-premium h5 {
-                font-size: 1rem;
-            }
+            .main-content { padding: 0.75rem 0.85rem; }
+            .profile-avatar-large { width: 75px; height: 75px; }
+            .btn-gold { width: 100%; }
+            .value-display { font-size: 0.85rem; padding: 8px 12px; }
+            .info-label { font-size: 0.65rem; }
+            .modal-dialog { margin: 0.5rem; }
         }
-        
-        /* Large Desktop (1920px+) */
         @media (min-width: 1920px) {
-            .main-content {
-                padding: 2rem 2.5rem;
-            }
+            .main-content { padding: 2rem 2.5rem; }
         }
 
-        /* Support for sidebar toggle states */
-        body.sidebar-expanded .main-content {
-            margin-left: 280px;
+        body.sidebar-expanded .main-content { margin-left: 280px; }
+        body.sidebar-collapsed .main-content { margin-left: 80px; }
+
+        /* Profile header gradient - Light & Airy */
+        .profile-header-bg {
+            background: linear-gradient(135deg, rgba(195,200,72,0.06) 0%, rgba(34,86,97,0.04) 100%);
         }
-
-        body.sidebar-collapsed .main-content {
-            margin-left: 80px;
-        }
-        
-        /* ============================================
-           ADDITIONAL ENHANCEMENTS
-           ============================================ */
-        
-        /* Text muted color */
-        .text-muted {
-            color: var(--dark-olive) !important;
-            opacity: 0.8;
-        }
-        
-        /* Hr styling */
-        hr {
-            border: none;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--lime-gold), transparent);
-        }
-        
-        /* Smooth transitions for all interactive elements */
-        .premium-card,
-        .weather-card,
-        .btn-gold,
-        .form-control,
-        .value-display,
-        .profile-img-large {
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        
-        /* Glow effect on focus for form inputs */
-        .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(195,200,72,0.4);
-        }
-        
-        /* Weather card icon animation */
-        .weather-card i {
-            transition: transform 0.3s ease;
-        }
-        
-        .weather-card:hover i {
-            transform: rotate(15deg);
-        }
-
-        .footer {
-    position: relative;
-    margin-top: 2rem;
-    padding: 18px 25px;
-
-    background: var(--glass-bg);
-    backdrop-filter: blur(8px);
-
-    border: 1px solid rgba(195, 200, 72, 0.30);
-    border-radius: 24px;
-
-    box-shadow: var(--shadow-sm);
-
-    text-align: center;
-    overflow: hidden;
-
-    transition: var(--transition-smooth);
-}
-
-/* Animated Border Glow */
-.footer::before {
-    content: "";
-    position: absolute;
-    inset: -2px;
-
-    background: linear-gradient(
-        45deg,
-        var(--lime-gold),
-        var(--olive-green),
-        var(--teal-blue),
-        var(--lime-gold)
-    );
-
-    background-size: 300% 300%;
-    border-radius: 26px;
-
-    z-index: -1;
-    opacity: 0;
-    transition: 0.5s ease;
-}
-
-.footer:hover::before {
-    opacity: 0.6;
-    animation: gradientShift 3s ease infinite;
-}
-
-.footer:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lift);
-}
-
-/* Footer Text */
-.footer p {
-    margin: 0;
-    color: var(--dark-olive);
-    font-size: 0.95rem;
-    font-weight: 500;
-    letter-spacing: 0.3px;
-}
-
-/* Footer Link */
-.footer a {
-    color: var(--teal-blue);
-    text-decoration: none;
-    font-weight: 700;
-    position: relative;
-    transition: 0.3s ease;
-}
-
-.footer a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -3px;
-
-    width: 0;
-    height: 2px;
-
-    background: var(--lime-gold);
-    transition: 0.3s ease;
-}
-
-.footer a:hover {
-    color: var(--olive-green);
-}
-
-.footer a:hover::after {
-    width: 100%;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-    .footer {
-        padding: 15px;
-        border-radius: 18px;
-        margin-top: 1.5rem;
-    }
-
-    .footer p {
-        font-size: 0.85rem;
-        line-height: 1.6;
-    }
-}
     </style>
 </head>
 
 <body>
-   <?php include "common/header.php"?>
+    <?php include "common/header.php"?>
+
+    <!-- ============================================================
+         INNER DASHBOARD CONTENT — my_profile.php
+         Light & Premium Design
+         ============================================================ -->
     <main class="main-content fade-page-transition">
-        <div class="profile_dashboard">
-            <!-- Extra Section: KPI Premium Row with counters + progress bars (fulfilling all animation requirements) -->
-            
 
-            <!-- Row 1: Profile Overview (already exists) -->
-            <div class="row g-4 mb-4">
-                <div class="col-xl-4 col-lg-5 fade-up stagger-1">
-                    <div class="premium-card float-card">
-                        <div class="card-body text-center p-4">
-                            <div style="position: relative;">
-                                <img src="https://mockmind-api.uifaces.co/content/human/218.jpg" class="profile-img-large mb-3"
-                                    alt="Profile" id="profileImage">
-                                <span class="badge-premium" style="position: absolute; bottom: 10px; right: 20px;"><i
-                                        class="fas fa-check-circle"></i></span>
-                            </div>
-                            <h3 class="mb-1" style="color: #225661;">Vedant Patil</h3>
-                            <p class="text-muted mb-3"><i class="fas fa-check-circle" style="color: #6B8A22;"></i>
-                                Verified
-                                Officer</p>
-                            <hr style="background: rgba(195,200,72,0.3);">
-                            <div class="text-start">
-                                <div class="info-card"><strong><i class="fas fa-user me-1"></i> FULL
-                                        NAME</strong><span>Vedant Patil</span></div>
-                                <div class="info-card"><strong><i class="fas fa-phone-alt me-1"></i> MOBILE
-                                        NUMBER</strong><span>+91 9876543210</span></div>
-                                <div class="info-card"><strong><i class="fas fa-envelope me-1"></i> EMAIL
-                                        ADDRESS</strong><span>vedant@gmail.com</span></div>
-                            </div>
+        <div class="premium-card fade-up stagger-1" style="border-radius: 32px;">
+
+            <!-- ============================================================
+                 PROFILE HEADER - Light & Clean
+                 ============================================================ -->
+            <div class="profile-header-bg"
+                 style="padding: 2rem 2rem 1.5rem 2rem;
+                        border-bottom: 1px solid rgba(195,200,72,0.12);">
+
+                <div class="row align-items-center">
+                    <!-- Avatar -->
+                    <div class="col-md-3 col-lg-2 text-center text-md-start mb-3 mb-md-0">
+                        <div style="position: relative; display: inline-block;">
+                            <img src="https://mockmind-api.uifaces.co/content/human/218.jpg"
+                                 alt="Profile Photo"
+                                 class="profile-avatar-large"
+                                 id="profileAvatar">
+                            <button class="btn btn-sm btn-light rounded-circle"
+                                    style="position: absolute; bottom: 4px; right: 4px; width: 34px; height: 34px;
+                                           border: 2px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+                                           background: white; color: var(--teal-blue); font-size: 0.9rem;
+                                           transition: var(--transition-smooth);"
+                                    onclick="document.getElementById('photoUpload').click();">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                            <input type="file" id="photoUpload" accept="image/*" style="display:none;" onchange="updateProfilePhoto(event)">
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-8 col-lg-7 fade-up stagger-2">
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="premium-card">
-                                <div class="card-header-premium">
-                                    <h5><i class="fas fa-map-marker-alt"></i> Constituency Details</h5>
-                                </div>
-                                <div class="card-body p-4">
-                                    <div class="row g-3">
-                                        <div class="col-6"><label>DISTRICT</label>
-                                            <div class="value-display">Satara</div>
-                                        </div>
-                                        <div class="col-6"><label>CONSTITUENCY ID</label>
-                                            <div class="value-display">CON102</div>
-                                        </div>
-                                        <div class="col-12"><label>CONSTITUENCY NAME</label>
-                                            <div class="value-display">Satara North</div>
-                                        </div>
-                                        <div class="col-6"><label>BOOTH ID</label>
-                                            <div class="value-display">BOOTH-45</div>
-                                        </div>
-                                        <div class="col-6"><label>WARD ID</label>
-                                            <div class="value-display">WARD-12</div>
-                                        </div>
-                                        <div class="col-6"><label>LOCALITY NAME</label>
-                                            <div id="localityDisplay" class="value-display">Shivaji Nagar</div>
-                                        </div>
-                                        <div class="col-6"><label>PINCODE</label>
-                                            <div class="value-display">415001</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+                    <!-- Name & Details -->
+                    <div class="col-md-6 col-lg-7 text-center text-md-start">
+                        <h2 class="fw-bold" style="color: var(--teal-blue); letter-spacing: -0.5px;" id="displayFullName">Rahul Patil</h2>
+                        <div class="d-flex flex-wrap align-items-center gap-3 mb-2">
+                            <span style="background: rgba(195,200,72,0.08); padding: 0.3rem 1rem; border-radius: 40px; font-weight: 500; color: var(--dark-olive); font-size: 0.9rem;">
+                                <i class="fas fa-id-card me-1" style="color: var(--lime-gold);"></i> <span id="displayVoterId">MH1234567890</span>
+                            </span>
+                            <span class="badge-premium" style="background: var(--teal-blue); padding: 0.3rem 1rem;">
+                                <i class="fas fa-circle-check me-1"></i> Verified User
+                            </span>
                         </div>
-                        <div class="col-md-6">
-                            <div class="premium-card">
-                                <div class="card-header-premium">
-                                    <h5><i class="fas fa-user-tie"></i> MLA Information <i class="fas fa-bell ms-2"
-                                            id="notificationBell" style="cursor:pointer; color:var(--lime-gold);"></i>
-                                    </h5>
-                                </div>
-                                <div class="card-body p-4">
-                                    <div class="info-card"><strong>ASSIGNED MLA ID</strong><span>MLA501</span></div>
-                                    <div class="info-card"><strong>ASSIGNED MLA NAME</strong><span>John Patil</span>
-                                    </div>
-                                    <div class="info-card"><strong>GPS LOCATION</strong><span>17.6805,74.0183</span>
-                                    </div>
-                                    <div class="info-card"><strong>VERIFICATION STATUS</strong><span
-                                            class="badge-premium"><i class="fas fa-check-circle me-1"></i>
-                                            Verified</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="weather-card mt-4">
-                                <i class="fas fa-sun fa-2x mb-2" style="color: #C3C848;"></i>
-                                <div class="weather-temp" id="temperature">29°C</div>
-                                <div>Mostly sunny</div>
-                                <div class="mt-2"><i class="fas fa-calendar-alt me-1"></i> <span
-                                        id="currentDate"></span>
-                                </div>
-                            </div>
+                        <div class="d-flex flex-wrap gap-3 text-muted" style="font-weight: 500; font-size: 0.95rem; color: var(--dark-olive); opacity: 0.7;">
+                            <span><i class="fas fa-map-pin me-1" style="color: var(--lime-gold);"></i> <span id="displayDistrict">Satara</span></span>
+                            <span><i class="fas fa-landmark me-1" style="color: var(--lime-gold);"></i> <span id="displayConstituency">Karad South</span></span>
                         </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="col-md-3 col-lg-3 text-center text-md-end mt-3 mt-md-0">
+                        <button class="btn-gold" style="padding: 0.6rem 1.8rem; font-size: 0.9rem; min-width: 140px;" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="fas fa-user-edit me-2"></i> Edit Profile
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Row 2: Demographics & System Tracking -->
-            <div class="row g-4 mb-4">
-                <div class="col-md-6 fade-up stagger-3">
-                    <div class="premium-card">
-                        <div class="card-header-premium">
-                            <h5><i class="fas fa-chart-bar"></i> Demographic Information</h5>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="row g-3">
-                                <div class="col-6"><label>AGE</label>
-                                    <div class="value-display" id="ageValue">29 Years</div>
-                                </div>
-                                <div class="col-6"><label>GENDER</label>
-                                    <div class="value-display" id="genderValue">Male</div>
-                                </div>
-                                <div class="col-6"><label>OCCUPATION</label>
-                                    <div class="value-display" id="occupationValue">Software Engineer</div>
-                                </div>
-                                <div class="col-6"><label>EDUCATION</label>
-                                    <div class="value-display" id="educationValue">Graduate</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 fade-up stagger-4">
-                    <div class="premium-card">
-                        <div class="card-header-premium">
-                            <h5><i class="fas fa-microchip"></i> System Tracking Information</h5>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="row g-3">
-                                <div class="col-6"><label>DEVICE ID</label>
-                                    <div class="value-display">DEV-458796</div>
-                                </div>
-                                <div class="col-6"><label>BROWSER</label>
-                                    <div class="value-display">Chrome 138.0</div>
-                                </div>
-                                <div class="col-6"><label>IP ADDRESS</label>
-                                    <div class="value-display">192.168.1.100</div>
-                                </div>
-                                <div class="col-6"><label>LAST LOGIN</label>
-                                    <div class="value-display" id="liveTimestamp">Loading...</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- ============================================================
+                 BODY — All sections in one card
+                 ============================================================ -->
+            <div class="p-4 p-md-5">
 
-            <!-- Edit Profile Section -->
-            <div class="row fade-up stagger-5">
-                <div class="col-12">
-                    <div class="premium-card">
-                        <div class="card-header-premium">
-                            <h5><i class="fas fa-edit"></i> Edit Profile Information</h5>
+                <!-- SECTION 1: Basic Information -->
+                <div class="mb-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-user" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
+                        <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Basic Information</h5>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-id-card"></i> Voter ID</div>
+                            <div class="value-display" id="voterIdValue">MH1234567890</div>
                         </div>
-                        <div class="card-body p-4">
-                            <div class="row g-3">
-                                <div class="col-md-4"><label>Full Name</label><input type="text" class="form-control"
-                                        id="editFullName" value="Vedant Patil"></div>
-                                <div class="col-md-4"><label>Mobile Number</label><input type="text"
-                                        class="form-control" id="editMobile" value="+91 9876543210"></div>
-                                <div class="col-md-4"><label>Email Address</label><input type="email"
-                                        class="form-control" id="editEmail" value="vedant@gmail.com"></div>
-                                <div class="col-md-4"><label>Occupation</label><input type="text" class="form-control"
-                                        id="editOccupation" value="Software Engineer"></div>
-                                <div class="col-md-4"><label>Education</label><input type="text" class="form-control"
-                                        id="editEducation" value="Graduate"></div>
-                                <div class="col-md-4"><label>Locality Name</label><input type="text"
-                                        class="form-control" id="editLocality" value="Shivaji Nagar"></div>
-                            </div>
-                            <div class="text-end mt-4"><button class="btn-gold" id="saveProfileBtn"><i
-                                        class="fas fa-save me-2"></i> Save Changes</button></div>
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-calendar"></i> Date of Birth</div>
+                            <div class="value-display" id="dobValue">15 August 2001</div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-venus-mars"></i> Gender</div>
+                            <div class="value-display" id="genderValue">Male</div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-user"></i> Full Name</div>
+                            <div class="value-display" id="fullNameValue">Rahul Patil</div>
                         </div>
                     </div>
+                </div>
+
+                <hr class="section-divider">
+
+                <!-- SECTION 2: Account Information -->
+                <div class="mb-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-envelope" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
+                        <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Account Information</h5>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="info-label"><i class="fas fa-envelope"></i> Email Address</div>
+                            <div class="value-display" id="emailValue"><i class="fas fa-at me-1" style="color: var(--teal-blue); opacity: 0.6;"></i> rahul@gmail.com</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-label"><i class="fas fa-phone"></i> Mobile Number</div>
+                            <div class="value-display" id="mobileValue"><i class="fas fa-phone-alt me-1" style="color: var(--teal-blue); opacity: 0.6;"></i> 9876543210</div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="section-divider">
+
+                <!-- SECTION 3: Address Information -->
+                <div class="mb-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-map-marker-alt" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
+                        <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Address Information</h5>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-map"></i> State</div>
+                            <div class="value-display" id="stateValue">Maharashtra</div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-location-dot"></i> District</div>
+                            <div class="value-display" id="districtValue">Satara</div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-landmark"></i> Assembly Constituency</div>
+                            <div class="value-display" id="constituencyValue">Karad South</div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-home"></i> Locality / Area</div>
+                            <div class="value-display" id="localityValue">Malkapur</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="info-label"><i class="fas fa-mailbox"></i> Pincode</div>
+                            <div class="value-display" id="pincodeValue">415110</div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="section-divider">
+
+                <!-- SECTION 4: Assigned MLA Information (Read-Only) -->
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-user-tie" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
+                        <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Assigned MLA Information</h5>
+                        <span class="badge ms-2" style="background: rgba(195,200,72,0.10); color: var(--dark-olive); font-weight: 500; border-radius: 40px; padding: 0.2rem 0.9rem; font-size: 0.65rem;">
+                            <i class="fas fa-lock me-1"></i> Read-Only
+                        </span>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-id-card"></i> MLA ID</div>
+                            <div class="value-display-readonly">MLA-178</div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-user-tie"></i> MLA Name</div>
+                            <div class="value-display-readonly">Shri ABC Patil</div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-building"></i> Party</div>
+                            <div class="value-display-readonly">XYZ Party</div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="info-label"><i class="fas fa-landmark"></i> Constituency</div>
+                            <div class="value-display-readonly">Karad South</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="info-label"><i class="fas fa-map-pin"></i> District</div>
+                            <div class="value-display-readonly">Satara</div>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <span class="badge" style="background: rgba(107,138,34,0.06); color: var(--olive-green); padding: 0.5rem 1.2rem; border-radius: 40px; font-weight: 500; font-size: 0.85rem;">
+                                <i class="fas fa-arrow-right me-1"></i> Auto Mapped Based on Constituency
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- end body -->
+        </div><!-- end premium-card -->
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p class="mb-0">
+                &copy; <script>document.write(new Date().getFullYear());</script>
+                MLA Monitoring & Voter Feedback System. All Rights Reserved.
+                Design by
+                <a href="https://absoftwaresolution.co.in/" target="_blank">
+                    AB Software Solution
+                </a>
+            </p>
+        </footer>
+
+    </main>
+
+    <!-- ============================================================
+         EDIT PROFILE MODAL
+         ============================================================ -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-user-edit me-2" style="color: var(--lime-gold);"></i>Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-user me-1" style="color: var(--lime-gold);"></i> Full Name</label>
+                                <input type="text" class="form-control" id="editFullName" value="Rahul Patil">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-id-card me-1" style="color: var(--lime-gold);"></i> Voter ID</label>
+                                <input type="text" class="form-control" id="editVoterId" value="MH1234567890">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-calendar me-1" style="color: var(--lime-gold);"></i> Date of Birth</label>
+                                <input type="text" class="form-control" id="editDob" value="15 August 2001">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-venus-mars me-1" style="color: var(--lime-gold);"></i> Gender</label>
+                                <select class="form-control" id="editGender">
+                                    <option value="Male" selected>Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-envelope me-1" style="color: var(--lime-gold);"></i> Email Address</label>
+                                <input type="email" class="form-control" id="editEmail" value="rahul@gmail.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-phone me-1" style="color: var(--lime-gold);"></i> Mobile Number</label>
+                                <input type="text" class="form-control" id="editMobile" value="9876543210">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-map me-1" style="color: var(--lime-gold);"></i> State</label>
+                                <input type="text" class="form-control" id="editState" value="Maharashtra">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-location-dot me-1" style="color: var(--lime-gold);"></i> District</label>
+                                <input type="text" class="form-control" id="editDistrict" value="Satara">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="fas fa-landmark me-1" style="color: var(--lime-gold);"></i> Assembly Constituency</label>
+                                <input type="text" class="form-control" id="editConstituency" value="Karad South">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-home me-1" style="color: var(--lime-gold);"></i> Locality / Area</label>
+                                <input type="text" class="form-control" id="editLocality" value="Malkapur">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-mailbox me-1" style="color: var(--lime-gold);"></i> Pincode</label>
+                                <input type="text" class="form-control" id="editPincode" value="415110">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-gold" id="saveProfileBtn" style="padding: 8px 32px;">
+                        <i class="fas fa-save me-2"></i> Save Changes
+                    </button>
                 </div>
             </div>
         </div>
-       <footer class="footer">
-        <p class="mb-0">
-            &copy; <script>document.write(new Date().getFullYear());</script>
-            MLA Monitoring & Voter Feedback System. All Rights Reserved.
-            Design by
-            <a href="https://absoftwaresolution.co.in/" target="_blank">
-                AB Software Solution
-            </a>
-        </p>
-    </footer>
-    </main>
+    </div>
 
-    <script src=navbar.js></script>
+    <!-- Toast Notification -->
+    <div class="toast-notification" id="toastNotification">
+        <i class="fas fa-check-circle me-2" style="color: var(--lime-gold);"></i> Profile updated successfully!
+    </div>
+
+    <!-- Bootstrap JS for Modal -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
     <script>
-        // Counter animation + Progress bar animation + chart reveal (simulate)
-        document.addEventListener("DOMContentLoaded", function () {
-            // animate numbers
-            const counters = document.querySelectorAll('.counter-num');
-            const speed = 150;
-            counters.forEach(counter => {
-                const updateCount = () => {
-                    const target = parseInt(counter.getAttribute('data-target'));
-                    const current = parseInt(counter.innerText.replace(/[^0-9]/g, '') || '0');
-                    const increment = Math.ceil(target / 40);
-                    if (current < target) {
-                        let newVal = current + increment;
-                        if (newVal > target) newVal = target;
-                        if (counter.innerText.includes('%')) counter.innerText = newVal + '%';
-                        else if (counter.innerText.includes('k')) counter.innerText = newVal + 'k';
-                        else counter.innerText = newVal;
-                        setTimeout(updateCount, 25);
-                    } else {
-                        if (counter.innerText.includes('%')) counter.innerText = target + '%';
-                        else if (counter.innerText.includes('k')) counter.innerText = target + 'k';
-                        else counter.innerText = target;
-                    }
-                };
-                updateCount();
-            });
+        // ============================================================
+        // EDIT PROFILE FUNCTIONALITY
+        // ============================================================
+        document.addEventListener("DOMContentLoaded", function() {
 
-            // Progress bars animation (from 0 to data-progress)
-            const progBars = document.querySelectorAll('.progress-bar-animated');
-            progBars.forEach(bar => {
-                const targetPercent = bar.getAttribute('data-progress');
-                setTimeout(() => {
-                    bar.style.width = targetPercent + '%';
-                }, 300);
-            });
+            const displayFullName = document.getElementById('displayFullName');
+            const displayVoterId = document.getElementById('displayVoterId');
+            const displayDistrict = document.getElementById('displayDistrict');
+            const displayConstituency = document.getElementById('displayConstituency');
 
-            // Chart reveal effect: simulate chart with simple bar container (add hidden div that reveals)
-            const chartSim = document.createElement('div');
-            chartSim.className = 'chart-reveal mt-3 d-none';
-            // Actually no hard chart but we meet spec: Chart reveal animation added to optional chart (we add a simple mini chart? add just inside kpi: but anyway)
-            // We also fulfill "Chart Reveal Animation" by creating a canvas alternative, but for simplicity we trigger fade-scale on existing KPI area.
-            const kpiGrid = document.querySelector('.kpi-grid');
-            if (kpiGrid) kpiGrid.classList.add('chart-reveal');
+            const fullNameValue = document.getElementById('fullNameValue');
+            const voterIdValue = document.getElementById('voterIdValue');
+            const dobValue = document.getElementById('dobValue');
+            const genderValue = document.getElementById('genderValue');
+            const emailValue = document.getElementById('emailValue');
+            const mobileValue = document.getElementById('mobileValue');
+            const stateValue = document.getElementById('stateValue');
+            const districtValue = document.getElementById('districtValue');
+            const constituencyValue = document.getElementById('constituencyValue');
+            const localityValue = document.getElementById('localityValue');
+            const pincodeValue = document.getElementById('pincodeValue');
 
-            // set live timestamp & current date
-            const updateTimestamp = () => {
-                const now = new Date();
-                document.getElementById('liveTimestamp').innerText = now.toLocaleString();
-                document.getElementById('currentDate').innerText = now.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-            };
-            updateTimestamp();
-            setInterval(updateTimestamp, 1000);
+            const editFullName = document.getElementById('editFullName');
+            const editVoterId = document.getElementById('editVoterId');
+            const editDob = document.getElementById('editDob');
+            const editGender = document.getElementById('editGender');
+            const editEmail = document.getElementById('editEmail');
+            const editMobile = document.getElementById('editMobile');
+            const editState = document.getElementById('editState');
+            const editDistrict = document.getElementById('editDistrict');
+            const editConstituency = document.getElementById('editConstituency');
+            const editLocality = document.getElementById('editLocality');
+            const editPincode = document.getElementById('editPincode');
 
-            // Edit Profile Save
             const saveBtn = document.getElementById('saveProfileBtn');
-            saveBtn.addEventListener('click', () => {
-                const newName = document.getElementById('editFullName').value;
-                const newMobile = document.getElementById('editMobile').value;
-                const newEmail = document.getElementById('editEmail').value;
-                const newOcc = document.getElementById('editOccupation').value;
-                const newEdu = document.getElementById('editEducation').value;
-                const newLoc = document.getElementById('editLocality').value;
-                // update UI
-                document.querySelector('.profile-img-large + h3').innerText = newName;
-                document.querySelectorAll('.info-card')[0].querySelector('span').innerText = newName;
-                document.querySelectorAll('.info-card')[1].querySelector('span').innerText = newMobile;
-                document.querySelectorAll('.info-card')[2].querySelector('span').innerText = newEmail;
-                document.getElementById('occupationValue').innerText = newOcc;
-                document.getElementById('educationValue').innerText = newEdu;
-                document.getElementById('localityDisplay').innerText = newLoc;
-                // optional success feedback
-                const toastMsg = document.createElement('div');
-                toastMsg.innerText = '✅ Profile updated successfully!';
-                toastMsg.style.position = 'fixed'; toastMsg.style.bottom = '20px'; toastMsg.style.right = '20px';
-                toastMsg.style.backgroundColor = '#225661'; toastMsg.style.color = 'white'; toastMsg.style.padding = '12px 20px';
-                toastMsg.style.borderRadius = '40px'; toastMsg.style.zIndex = '999'; toastMsg.style.fontWeight = '600';
-                document.body.appendChild(toastMsg);
-                setTimeout(() => toastMsg.remove(), 2000);
+            const toast = document.getElementById('toastNotification');
+
+            function showToast(message) {
+                toast.innerHTML = '<i class="fas fa-check-circle me-2" style="color: var(--lime-gold);"></i> ' + message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+
+            saveBtn.addEventListener('click', function() {
+                const newName = editFullName.value.trim() || 'Rahul Patil';
+                const newVoterId = editVoterId.value.trim() || 'MH1234567890';
+                const newDob = editDob.value.trim() || '15 August 2001';
+                const newGender = editGender.value;
+                const newEmail = editEmail.value.trim() || 'rahul@gmail.com';
+                const newMobile = editMobile.value.trim() || '9876543210';
+                const newState = editState.value.trim() || 'Maharashtra';
+                const newDistrict = editDistrict.value.trim() || 'Satara';
+                const newConstituency = editConstituency.value.trim() || 'Karad South';
+                const newLocality = editLocality.value.trim() || 'Malkapur';
+                const newPincode = editPincode.value.trim() || '415110';
+
+                displayFullName.textContent = newName;
+                displayVoterId.textContent = newVoterId;
+                displayDistrict.textContent = newDistrict;
+                displayConstituency.textContent = newConstituency;
+
+                fullNameValue.textContent = newName;
+                voterIdValue.textContent = newVoterId;
+                dobValue.textContent = newDob;
+                genderValue.textContent = newGender;
+
+                emailValue.innerHTML = '<i class="fas fa-at me-1" style="color: var(--teal-blue); opacity: 0.6;"></i> ' + newEmail;
+                mobileValue.innerHTML = '<i class="fas fa-phone-alt me-1" style="color: var(--teal-blue); opacity: 0.6;"></i> ' + newMobile;
+
+                stateValue.textContent = newState;
+                districtValue.textContent = newDistrict;
+                constituencyValue.textContent = newConstituency;
+                localityValue.textContent = newLocality;
+                pincodeValue.textContent = newPincode;
+
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+                modal.hide();
+                showToast('Profile updated successfully!');
             });
 
-            // Notification Bell Ring Animation + Glow effect
-            const bell = document.getElementById('notificationBell');
-            bell.addEventListener('click', () => {
-                bell.classList.add('bell-ring');
-                setTimeout(() => bell.classList.remove('bell-ring'), 600);
-                // display alert pulse effect also on MLA card
-                const mlaCard = document.querySelector('.premium-card .card-header-premium');
-                if (mlaCard) mlaCard.style.transition = '0.2s';
+            document.getElementById('editProfileForm').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    saveBtn.click();
+                }
             });
 
-            // Add pulse for critical stat (Total voters card glow pulse)
-            const totalVotersCard = document.querySelector('.kpi-card:first-child');
-            if (totalVotersCard) totalVotersCard.classList.add('pulse-stat');
-
-            // Skeleton loading example: we simulate some cards? but we avoid visual flicker: all data loaded but we add skeleton concept: no needed since all loaded
-            // However we meet requirement: added modern load placeholder? we also cause a fake skeleton on weather card reload?
-            // For completeness: we can add skeleton simulated on system info first load? anyway already fine.
-            // Additional floating effect on all premium cards 
-            document.querySelectorAll('.premium-card').forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    card.style.transition = 'transform 0.2s';
-                });
+            document.getElementById('editProfileModal').addEventListener('show.bs.modal', function() {
+                editFullName.value = fullNameValue.textContent;
+                editVoterId.value = voterIdValue.textContent;
+                editDob.value = dobValue.textContent;
+                editGender.value = genderValue.textContent;
+                let emailText = emailValue.textContent.trim();
+                let mobileText = mobileValue.textContent.trim();
+                editEmail.value = emailText;
+                editMobile.value = mobileText;
+                editState.value = stateValue.textContent;
+                editDistrict.value = districtValue.textContent;
+                editConstituency.value = constituencyValue.textContent;
+                editLocality.value = localityValue.textContent;
+                editPincode.value = pincodeValue.textContent;
             });
 
-            // Glow effect on KPI hover already handled by css
-            // Gradient border card animation already via ::before pseudo
-            // Smooth page transition already: body fade
-            // Also "Floating Analytics Cards": The float-card class applied on profile card and KPI sections have subtle floating animation
-            // We add "float-card" class to KPI cards for subtle floating effect
-            const kpiCards = document.querySelectorAll('.kpi-card');
-            kpiCards.forEach(card => card.classList.add('float-card'));
-
-            // Trend Indicators in KPI (already added small +5.2%)
-
-            // Hover lift effect globally via premium-card hover
-
-            // Additional: show that chart reveal is applied to some block (KPI grid animation)
-            // Also ensure progress bars shimmer effect active
         });
+
+        // ============================================================
+        // PROFILE PHOTO UPLOAD
+        // ============================================================
+        function updateProfilePhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatar = document.getElementById('profileAvatar');
+                    avatar.src = e.target.result;
+                    const toast = document.getElementById('toastNotification');
+                    toast.innerHTML = '<i class="fas fa-check-circle me-2" style="color: var(--lime-gold);"></i> Profile photo updated!';
+                    toast.classList.add('show');
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                    }, 3000);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     </script>
+
 </body>
 
 </html>
