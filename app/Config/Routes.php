@@ -20,7 +20,9 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->get('mla-management', 'MLAManagement::index');
     $routes->get('constituency-management', 'ConstituencyManagement::index');
     $routes->get('complaint-management', 'ComplaintManagement::index');
+    $routes->post('complaint/save', 'Complaint::save');
     $routes->get('survey-management', 'SurveyManagement::index');
+    $routes->get('survey-management/data', 'SurveyManagement::dashboardData');
     $routes->get('media-library', 'MediaLibrary::index');
     $routes->get('feedback-dashboard', 'FeedbackDashboard::index');
     $routes->get('activity-logs', 'ActivityLogs::index');
@@ -38,6 +40,8 @@ $routes->group('user', ['namespace' => 'App\Controllers\User'], function($routes
     $routes->get('assigned-mla', 'AssignedMLA::index');
 
     $routes->get('complaint', 'Complaint::index');
+    $routes->post('complaint/save', 'Complaint::save');
+
 
     $routes->get('feedback', 'Feedback::index');
 

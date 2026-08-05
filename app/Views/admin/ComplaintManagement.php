@@ -705,17 +705,23 @@
 
                             <div class="header_stats">
                                 <div class="stat_card pulse-stat">
-                                    <h2 id="totalComplaint">1250</h2>
+                                    <h2 id="totalComplaint">
+    <?= $statistics['total']; ?>
+</h2>
                                     <span><i class="fas fa-chart-line me-1"></i> Total Complaints</span>
                                 </div>
 
                                 <div class="stat_card">
-                                    <h2 id="pendingComplaint">320</h2>
+                                    <h2 id="pendingComplaint">
+    <?= $statistics['pending']; ?>
+</h2>
                                     <span><i class="fas fa-clock me-1"></i> Pending</span>
                                 </div>
 
                                 <div class="stat_card">
-                                    <h2 id="resolvedComplaint">830</h2>
+                                    <h2 id="resolvedComplaint">
+    <?= $statistics['resolved']; ?>
+</h2>
                                     <span><i class="fas fa-check-circle me-1"></i> Resolved</span>
                                 </div>
                             </div>
@@ -782,12 +788,142 @@
                                         <th style="width: 12%;">In Progress</th>
                                         <th style="width: 9%;">Resolved</th>
                                         <th style="width: 18%;">Performance</th>
-                                        <th style="width: 6%;">Expand</th>
+                                    
                                     </tr>
                                 </thead>
-                                <tbody id="mlaTableBody">
-                                    <!-- Dynamic content will be rendered here -->
-                                </tbody>
+                               <tbody id="mlaTableBody">
+
+<?php if(!empty($mlaComplaints)): ?>
+
+<?php foreach($mlaComplaints as $mla): ?>
+
+<tr>
+
+<td data-label="MLA Name">
+
+<strong style="color:#0F172A;">
+<?= $mla['mla']; ?>
+</strong>
+
+</td>
+
+
+<td data-label="Constituency">
+
+<?= $mla['constituency']; ?>
+
+</td>
+
+
+<td data-label="Total">
+
+<span class="mla_stats_badge"
+style="background:rgba(59,130,246,0.12);color:var(--info);">
+
+<?= $mla['total']; ?>
+
+</span>
+
+</td>
+
+
+<td data-label="Pending">
+
+<span class="mla_stats_badge high">
+
+<?= $mla['pending']; ?>
+
+</span>
+
+</td>
+
+
+<td data-label="In Progress">
+
+<span class="mla_stats_badge medium">
+
+0
+
+</span>
+
+</td>
+
+
+<td data-label="Resolved">
+
+<span class="mla_stats_badge low">
+
+<?= $mla['resolved']; ?>
+
+</span>
+
+</td>
+
+
+<td data-label="Performance">
+
+<?php
+
+$performance = 0;
+
+if($mla['total'] > 0)
+{
+    $performance =
+    round(($mla['resolved']/$mla['total'])*100);
+}
+
+?>
+
+<div class="progress" style="width:80px;height:6px;">
+
+<div class="progress-bar"
+
+style="
+width:<?= $performance ?>%;
+background:var(--success)!important;
+border-radius:20px;
+">
+
+</div>
+
+</div>
+
+
+<span>
+<?= $performance ?>%
+</span>
+
+
+</td>
+
+
+
+
+
+</tr>
+
+
+<?php endforeach; ?>
+
+
+<?php else: ?>
+
+
+<tr>
+
+<td colspan="8" style="text-align:center;">
+
+No complaints found
+
+</td>
+
+</tr>
+
+
+<?php endif; ?>
+
+
+</tbody>
                             </table>
                         </div>
                     </div>
@@ -831,143 +967,143 @@
         // =====================================================
         // COMPLAINT DATA
         // =====================================================
-        const complaintsData = [
-            {
-                id: "CMP1001",
-                title: "Road Damage Issue",
-                priority: "High",
-                voterId: "VTR8899",
-                mla: "MLA Rajesh Patil",
-                constituency: "Karad North",
-                department: "Roads Department",
-                status: "Pending",
-                escalation: "Level 2",
-                progress: 60,
-                description: "Severe road damage near main market causing traffic congestion and accidents.",
-                createdAt: "2025-05-15",
-                resolvedDate: null
-            },
-            {
-                id: "CMP1045",
-                title: "Water Leakage Problem",
-                priority: "Medium",
-                voterId: "VTR4521",
-                mla: "MLA Sunil Shinde",
-                constituency: "Satara",
-                department: "Water Supply",
-                status: "In Progress",
-                escalation: "Level 1",
-                progress: 80,
-                description: "Continuous water leakage from main pipeline wasting significant water.",
-                createdAt: "2025-05-10",
-                resolvedDate: null
-            },
-            {
-                id: "CMP1100",
-                title: "Street Light Failure",
-                priority: "Low",
-                voterId: "VTR9921",
-                mla: "MLA Ashok Pawar",
-                constituency: "Pune",
-                department: "Electricity",
-                status: "Resolved",
-                escalation: "Level 0",
-                progress: 100,
-                description: "Street lights not working for over a week in the colony area.",
-                createdAt: "2025-05-01",
-                resolvedDate: "2025-05-20"
-            },
-            {
-                id: "CMP1125",
-                title: "Garbage Collection Issue",
-                priority: "High",
-                voterId: "VTR3344",
-                mla: "MLA Meena Tai",
-                constituency: "Mumbai South",
-                department: "Health",
-                status: "In Progress",
-                escalation: "Level 1",
-                progress: 45,
-                description: "Irregular garbage collection leading to unhygienic conditions.",
-                createdAt: "2025-05-18",
-                resolvedDate: null
-            },
-            {
-                id: "CMP1150",
-                title: "School Building Repair",
-                priority: "Medium",
-                voterId: "VTR7788",
-                mla: "MLA Anand Rao",
-                constituency: "Nagpur Central",
-                department: "Education",
-                status: "Pending",
-                escalation: "Level 0",
-                progress: 20,
-                description: "School building requires urgent repairs before monsoon.",
-                createdAt: "2025-05-20",
-                resolvedDate: null
-            },
-            {
-                id: "CMP1175",
-                title: "Power Outage Issue",
-                priority: "High",
-                voterId: "VTR5566",
-                mla: "MLA Vijay Kumar",
-                constituency: "Thane",
-                department: "Electricity",
-                status: "Resolved",
-                escalation: "Level 2",
-                progress: 100,
-                description: "Frequent power outages affecting daily life.",
-                createdAt: "2025-05-05",
-                resolvedDate: "2025-05-22"
-            },
-            {
-                id: "CMP1180",
-                title: "Drainage Blockage",
-                priority: "High",
-                voterId: "VTR1122",
-                mla: "MLA Rajesh Patil",
-                constituency: "Karad North",
-                department: "Health",
-                status: "Pending",
-                escalation: "Level 1",
-                progress: 30,
-                description: "Severe drainage blockage causing water logging in residential area.",
-                createdAt: "2025-05-19",
-                resolvedDate: null
-            },
-            {
-                id: "CMP1190",
-                title: "Electricity Meter Issue",
-                priority: "Low",
-                voterId: "VTR3345",
-                mla: "MLA Sunil Shinde",
-                constituency: "Satara",
-                department: "Electricity",
-                status: "Resolved",
-                escalation: "Level 0",
-                progress: 100,
-                description: "Faulty electricity meter showing incorrect readings.",
-                createdAt: "2025-05-12",
-                resolvedDate: "2025-05-25"
-            },
-            {
-                id: "CMP1200",
-                title: "Road Safety Measures",
-                priority: "Medium",
-                voterId: "VTR9988",
-                mla: "MLA Meena Tai",
-                constituency: "Mumbai South",
-                department: "Roads Department",
-                status: "In Progress",
-                escalation: "Level 1",
-                progress: 55,
-                description: "Need speed bumps and warning signs on accident-prone road.",
-                createdAt: "2025-05-21",
-                resolvedDate: null
-            }
-        ];
+        // const complaintsData = [
+        //     {
+        //         id: "CMP1001",
+        //         title: "Road Damage Issue",
+        //         priority: "High",
+        //         voterId: "VTR8899",
+        //         mla: "MLA Rajesh Patil",
+        //         constituency: "Karad North",
+        //         department: "Roads Department",
+        //         status: "Pending",
+        //         escalation: "Level 2",
+        //         progress: 60,
+        //         description: "Severe road damage near main market causing traffic congestion and accidents.",
+        //         createdAt: "2025-05-15",
+        //         resolvedDate: null
+        //     },
+        //     {
+        //         id: "CMP1045",
+        //         title: "Water Leakage Problem",
+        //         priority: "Medium",
+        //         voterId: "VTR4521",
+        //         mla: "MLA Sunil Shinde",
+        //         constituency: "Satara",
+        //         department: "Water Supply",
+        //         status: "In Progress",
+        //         escalation: "Level 1",
+        //         progress: 80,
+        //         description: "Continuous water leakage from main pipeline wasting significant water.",
+        //         createdAt: "2025-05-10",
+        //         resolvedDate: null
+        //     },
+        //     {
+        //         id: "CMP1100",
+        //         title: "Street Light Failure",
+        //         priority: "Low",
+        //         voterId: "VTR9921",
+        //         mla: "MLA Ashok Pawar",
+        //         constituency: "Pune",
+        //         department: "Electricity",
+        //         status: "Resolved",
+        //         escalation: "Level 0",
+        //         progress: 100,
+        //         description: "Street lights not working for over a week in the colony area.",
+        //         createdAt: "2025-05-01",
+        //         resolvedDate: "2025-05-20"
+        //     },
+        //     {
+        //         id: "CMP1125",
+        //         title: "Garbage Collection Issue",
+        //         priority: "High",
+        //         voterId: "VTR3344",
+        //         mla: "MLA Meena Tai",
+        //         constituency: "Mumbai South",
+        //         department: "Health",
+        //         status: "In Progress",
+        //         escalation: "Level 1",
+        //         progress: 45,
+        //         description: "Irregular garbage collection leading to unhygienic conditions.",
+        //         createdAt: "2025-05-18",
+        //         resolvedDate: null
+        //     },
+        //     {
+        //         id: "CMP1150",
+        //         title: "School Building Repair",
+        //         priority: "Medium",
+        //         voterId: "VTR7788",
+        //         mla: "MLA Anand Rao",
+        //         constituency: "Nagpur Central",
+        //         department: "Education",
+        //         status: "Pending",
+        //         escalation: "Level 0",
+        //         progress: 20,
+        //         description: "School building requires urgent repairs before monsoon.",
+        //         createdAt: "2025-05-20",
+        //         resolvedDate: null
+        //     },
+        //     {
+        //         id: "CMP1175",
+        //         title: "Power Outage Issue",
+        //         priority: "High",
+        //         voterId: "VTR5566",
+        //         mla: "MLA Vijay Kumar",
+        //         constituency: "Thane",
+        //         department: "Electricity",
+        //         status: "Resolved",
+        //         escalation: "Level 2",
+        //         progress: 100,
+        //         description: "Frequent power outages affecting daily life.",
+        //         createdAt: "2025-05-05",
+        //         resolvedDate: "2025-05-22"
+        //     },
+        //     {
+        //         id: "CMP1180",
+        //         title: "Drainage Blockage",
+        //         priority: "High",
+        //         voterId: "VTR1122",
+        //         mla: "MLA Rajesh Patil",
+        //         constituency: "Karad North",
+        //         department: "Health",
+        //         status: "Pending",
+        //         escalation: "Level 1",
+        //         progress: 30,
+        //         description: "Severe drainage blockage causing water logging in residential area.",
+        //         createdAt: "2025-05-19",
+        //         resolvedDate: null
+        //     },
+        //     {
+        //         id: "CMP1190",
+        //         title: "Electricity Meter Issue",
+        //         priority: "Low",
+        //         voterId: "VTR3345",
+        //         mla: "MLA Sunil Shinde",
+        //         constituency: "Satara",
+        //         department: "Electricity",
+        //         status: "Resolved",
+        //         escalation: "Level 0",
+        //         progress: 100,
+        //         description: "Faulty electricity meter showing incorrect readings.",
+        //         createdAt: "2025-05-12",
+        //         resolvedDate: "2025-05-25"
+        //     },
+        //     {
+        //         id: "CMP1200",
+        //         title: "Road Safety Measures",
+        //         priority: "Medium",
+        //         voterId: "VTR9988",
+        //         mla: "MLA Meena Tai",
+        //         constituency: "Mumbai South",
+        //         department: "Roads Department",
+        //         status: "In Progress",
+        //         escalation: "Level 1",
+        //         progress: 55,
+        //         description: "Need speed bumps and warning signs on accident-prone road.",
+        //         createdAt: "2025-05-21",
+        //         resolvedDate: null
+        //     }
+        // ];
 
         // =====================================================
         // COUNTER ANIMATION
@@ -1106,7 +1242,7 @@
                         </td>
                     </tr>
                     <tr id="${subRowId}" style="display: none;" class="complaint_sub_row">
-                        <td colspan="8">
+                        <td colspan="7">
                             <div style="padding: 5px 0;">
                                 <strong style="color: var(--gold-dark); font-size: 14px;">
                                     <i class="fas fa-list me-2"></i>Complaints for ${mlaData.mla} (${mlaData.total} complaints)
@@ -1165,47 +1301,73 @@
         // =====================================================
         // FILTER COMPLAINTS
         // =====================================================
-        function filterComplaints() {
-            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-            const priority = document.getElementById("priorityFilter").value;
-            const status = document.getElementById("statusFilter").value;
+       function filterComplaints() {
 
-            let filtered = complaintsData.filter(complaint => {
-                let match = true;
+    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+    const status = document.getElementById("statusFilter").value;
 
-                if (searchTerm) {
-                    const searchFields = [
-                        complaint.id.toLowerCase(),
-                        complaint.voterId.toLowerCase(),
-                        complaint.mla.toLowerCase(),
-                        complaint.title.toLowerCase(),
-                        complaint.constituency.toLowerCase()
-                    ];
-                    match = searchFields.some(field => field.includes(searchTerm));
-                }
-                if (priority !== "all" && complaint.priority !== priority) {
-                    match = false;
-                }
-                if (status !== "all" && complaint.status !== status) {
-                    match = false;
-                }
+    const rows = document.querySelectorAll("#mlaTableBody tr");
 
-                return match;
-            });
+    rows.forEach(row => {
 
-            renderMLATracking(filtered);
-            updateStats();
+        // Skip complaint sub rows
+        if(row.classList.contains("complaint_sub_row")){
+            return;
         }
 
+        const mlaName = row.cells[0]?.innerText.toLowerCase() || "";
+        const constituency = row.cells[1]?.innerText.toLowerCase() || "";
+        const pending = row.cells[3]?.innerText || "";
+        const resolved = row.cells[5]?.innerText || "";
+
+        let show = true;
+
+
+        // Search MLA / Constituency
+        if(searchTerm){
+
+            if(
+                !mlaName.includes(searchTerm) &&
+                !constituency.includes(searchTerm)
+            ){
+                show = false;
+            }
+
+        }
+
+
+        // Status filter
+        if(status !== "all"){
+
+            if(status === "Pending" && pending == "0"){
+                show = false;
+            }
+
+            if(status === "Resolved" && resolved == "0"){
+                show = false;
+            }
+
+        }
+
+
+        if(show){
+            row.style.display = "";
+        }
+        else{
+            row.style.display = "none";
+        }
+
+
+    });
+
+}
         // =====================================================
         // SEARCH INPUT - LIVE SEARCH
         // =====================================================
-        document.getElementById('searchInput').addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                filterComplaints();
-            }
-        });
-
+      document.getElementById('searchInput')
+.addEventListener('keyup', function(){
+    filterComplaints();
+});
         // =====================================================
         // FILTER CHANGES - AUTO FILTER
         // =====================================================
@@ -1215,13 +1377,11 @@
         // =====================================================
         // INITIALIZATION
         // =====================================================
-        $(document).ready(function() {
-            // Render MLA tracking table
-            renderMLATracking(complaintsData);
-            
-            // Update statistics
-            updateStats();
-        });
+       $(document).ready(function() {
+
+    updateStats();
+
+});
     </script>
     <script src="header.js"></script>
 </body>
