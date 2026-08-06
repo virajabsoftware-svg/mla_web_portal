@@ -307,6 +307,33 @@
             transform: scale(1.02);
         }
 
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            margin: 0 2px;
+        }
+
+        .btn-outline-primary {
+            border: 1px solid var(--lime-gold);
+            color: var(--teal-blue);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--lime-gold);
+            color: #1F3F3A;
+        }
+
+        .btn-outline-danger {
+            border: 1px solid #dc3545;
+            color: #dc3545;
+        }
+
+        .btn-outline-danger:hover {
+            background: #dc3545;
+            color: white;
+        }
+
         /* Badge styling */
         .badge {
             padding: 5px 12px;
@@ -323,6 +350,21 @@
         .badge.bg-warning {
             background: var(--lime-gold) !important;
             color: var(--dark-olive);
+        }
+
+        .badge.bg-info {
+            background: var(--teal-blue) !important;
+            color: white;
+        }
+
+        .badge.bg-secondary {
+            background: #6c757d !important;
+            color: white;
+        }
+
+        .badge.bg-danger {
+            background: #dc3545 !important;
+            color: white;
         }
 
         /* Table styling */
@@ -556,10 +598,6 @@
         }
 
         /* Success badge styling */
-        .badge.bg-success {
-            position: relative;
-        }
-
         .badge.bg-success::before {
             content: '✓';
             margin-right: 4px;
@@ -681,6 +719,67 @@
                 line-height: 1.6;
             }
         }
+
+        /* Delete form styling */
+        .delete-form {
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            border-radius: 20px !important;
+            border: 1px solid rgba(195, 200, 72, 0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, rgba(195, 200, 72, 0.2), rgba(34, 86, 97, 0.05));
+            border-bottom: 1px solid rgba(195, 200, 72, 0.4);
+            border-radius: 20px 20px 0 0 !important;
+        }
+
+        .modal-header h5 {
+            color: var(--teal-blue);
+            font-weight: 700;
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(195, 200, 72, 0.3);
+        }
+
+        .detail-row {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(195, 200, 72, 0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--teal-blue);
+            font-size: 0.85rem;
+        }
+
+        .detail-value {
+            color: var(--dark-olive);
+            font-size: 0.95rem;
+            margin-top: 2px;
+        }
+
+        /* Modal form styling */
+        .modal .form-label {
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .modal .form-control,
+        .modal .form-select {
+            font-size: 0.9rem;
+            padding: 8px 12px;
+        }
     </style>
 </head>
 
@@ -699,7 +798,7 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow text-center">
                         <div class="card-body">
-                            <h3>28</h3>
+                            <h3><?= isset($totalFeedback) ? $totalFeedback : 0 ?></h3>
                             <p class="mb-0">Total Feedback</p>
                         </div>
                     </div>
@@ -708,7 +807,7 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow text-center">
                         <div class="card-body">
-                            <h3>18</h3>
+                            <h3><?= isset($reviewed) ? $reviewed : 0 ?></h3>
                             <p class="mb-0">Reviewed</p>
                         </div>
                     </div>
@@ -717,7 +816,7 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow text-center">
                         <div class="card-body">
-                            <h3>07</h3>
+                            <h3><?= isset($underReview) ? $underReview : 0 ?></h3>
                             <p class="mb-0">Under Review</p>
                         </div>
                     </div>
@@ -726,7 +825,7 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow text-center">
                         <div class="card-body">
-                            <h3>03</h3>
+                            <h3><?= isset($resolved) ? $resolved : 0 ?></h3>
                             <p class="mb-0">Resolved</p>
                         </div>
                     </div>
@@ -748,38 +847,56 @@
 
                 <div class="card-body">
 
-                    <form>
+                    <!-- Validation Errors -->
+                    <?php if(session()->getFlashdata('errors')): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php foreach(session()->getFlashdata('errors') as $error): ?>
+                                <div><?= $error ?></div>
+                            <?php endforeach; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <form action="<?= base_url('user/feedback/save'); ?>"
+      method="post"
+      enctype="multipart/form-data">
+
+<?= csrf_field(); ?>
 
                         <div class="row g-3">
 
                             <!-- Feedback ID -->
                             <div class="col-md-3">
                                 <label class="form-label">Feedback ID</label>
-                                <input type="text" class="form-control" value="FDB001245" readonly>
+                                <input type="text" class="form-control" value="FDB001245" readonly name="feedback_id">
                             </div>
 
                             <!-- Voter ID -->
                             <div class="col-md-3">
                                 <label class="form-label">Voter ID</label>
-                                <input type="text" class="form-control" value="VTR10254" readonly>
+                                <input
+type="text"
+name="voter_id"
+class="form-control"
+value="<?= isset($voter_id) ? $voter_id : '' ?>">
                             </div>
 
                             <!-- MLA ID -->
                             <div class="col-md-3">
                                 <label class="form-label">MLA ID</label>
-                                <input type="text" class="form-control" value="MLA501" readonly>
+                                <input type="text" class="form-control" value="MLA501" readonly name="mla_id">
                             </div>
 
                             <!-- Work ID -->
                             <div class="col-md-3">
                                 <label class="form-label">Work ID (Optional)</label>
-                                <input type="text" class="form-control" placeholder="Enter Work ID">
+                                <input type="text" class="form-control" placeholder="Enter Work ID" name="work_id" value="<?= isset($work_id) ? $work_id : '' ?>">
                             </div>
 
                             <!-- District -->
                             <div class="col-md-4">
                                 <label class="form-label">District</label>
-                                <select class="form-select" id="district">
+                                <select class="form-select" id="district" name="district">
                                     <option value="">Select District</option>
                                 </select>
                             </div>
@@ -787,7 +904,7 @@
                             <!-- Constituency -->
                             <div class="col-md-4">
                                 <label class="form-label">Constituency</label>
-                                <select class="form-select" id="constituency">
+                                <select class="form-select" id="constituency" name="constituency">
                                     <option value="">Select Constituency</option>
                                 </select>
                             </div>
@@ -795,47 +912,51 @@
                             <!-- Village -->
                             <div class="col-md-4">
                                 <label class="form-label">Village</label>
-                                <input type="text" class="form-control" placeholder="Enter Village Name">
+                                <input type="text" class="form-control" placeholder="Enter Village Name" name="village" value="<?= isset($village) ? $village : '' ?>">
                             </div>
 
                             <!-- Feedback Category -->
                             <div class="col-md-6">
                                 <label class="form-label">Feedback Category</label>
-                                <select class="form-select">
-                                    <option>Select Category</option>
-                                    <option>MLA Performance</option>
-                                    <option>Road Development</option>
-                                    <option>Water Supply</option>
-                                    <option>Health Services</option>
-                                    <option>Education</option>
-                                    <option>Public Services</option>
-                                    <option>Other</option>
+                                <select class="form-select" name="category">
+                                    <option value="">Select Category</option>
+                                    <option value="MLA Performance">MLA Performance</option>
+                                    <option value="Road Development">Road Development</option>
+                                    <option value="Water Supply">Water Supply</option>
+                                    <option value="Health Services">Health Services</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Public Services">Public Services</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
 
                             <!-- Source -->
                             <div class="col-md-6">
                                 <label class="form-label">Source</label>
-                                <input type="text" class="form-control" value="Web Portal" readonly>
+                                <input type="text" class="form-control" value="Web Portal" readonly name="source">
                             </div>
 
                             <!-- Feedback Description -->
                             <div class="col-12">
                                 <label class="form-label">Feedback Description</label>
-                                <textarea class="form-control" rows="5"
-                                    placeholder="Enter detailed feedback"></textarea>
+                                <textarea
+name="description"
+class="form-control"><?= isset($description) ? $description : '' ?></textarea>
                             </div>
 
                             <!-- Attachments -->
                             <div class="col-md-6">
                                 <label class="form-label">Upload Attachments</label>
-                                <input type="file" class="form-control" multiple>
+                                <input
+type="file"
+name="attachment"
+class="form-control">
                             </div>
 
                             <!-- Auto Date -->
                             <div class="col-md-6">
                                 <label class="form-label">Submission Timestamp</label>
-                                <input type="datetime-local" class="form-control" id="submissionDate" readonly>
+                                <input type="datetime-local" class="form-control" id="submissionDate" readonly name="submitted_at">
                             </div>
 
                             <!-- Buttons -->
@@ -874,92 +995,93 @@
 
                     <div class="table-responsive">
 
-                        <table class="table table-hover align-middle">
+                        <table class="table table-hover align-middle" id="feedbackTable">
 
                             <thead class="table-light">
 
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Feedback ID</th>
                                     <th>Village</th>
                                     <th>Category</th>
-                                    <th>Feedback</th>
-                                    <th>Date & Time</th>
+                                    <th>Description</th>
+                                    <th>Submitted Date</th>
                                     <th>Status</th>
+                                    <th>Attachment</th>
+                                    <th>Action</th>
                                 </tr>
 
                             </thead>
 
-                            <tbody>
-
-                                <tr>
-                                    <td>Vedant Patil</td>
-
-                                    <td>Bavdhan</td>
-
-                                    <td>Road Development</td>
-
-                                    <td>
-                                        Road near main market requires urgent repair.
-                                    </td>
-
-                                    <td>
-                                        01-Jun-2026 <br>
-                                        <small class="text-muted">10:30 AM</small>
-                                    </td>
-
-                                    <td>
-                                        <span class="badge bg-warning">
-                                            Under Review
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Vedant Patil</td>
-
-                                    <td>Wai</td>
-
-                                    <td>Water Supply</td>
-
-                                    <td>
-                                        Water supply is irregular in our area.
-                                    </td>
-
-                                    <td>
-                                        29-May-2026 <br>
-                                        <small class="text-muted">03:45 PM</small>
-                                    </td>
-
-                                    <td>
-                                        <span class="badge bg-success">
-                                            Reviewed
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Vedant Patil</td>
-
-                                    <td>Panchgani</td>
-
-                                    <td>Health Services</td>
-
-                                    <td>
-                                        Need additional medical staff at PHC.
-                                    </td>
-
-                                    <td>
-                                        24-May-2026 <br>
-                                        <small class="text-muted">11:15 AM</small>
-                                    </td>
-
-                                    <td>
-                                        <span class="badge bg-info">
-                                            In Progress
-                                        </span>
-                                    </td>
-                                </tr>
-
+                            <tbody id="feedbackTableBody">
+                                <?php if(isset($feedbacks) && !empty($feedbacks)): ?>
+                                    <?php foreach($feedbacks as $feedback): ?>
+                                        <tr data-id="<?= $feedback['id'] ?>">
+                                            <td><?= esc($feedback['feedback_id']) ?></td>
+                                            <td><?= esc($feedback['village']) ?></td>
+                                            <td><?= esc($feedback['category']) ?></td>
+                                            <td><?= esc(substr($feedback['description'], 0, 50) . (strlen($feedback['description']) > 50 ? '...' : '')) ?></td>
+                                            <td>
+                                                <?= date('d-M-Y', strtotime($feedback['submitted_at'])) ?><br>
+                                                <small class="text-muted"><?= date('h:i A', strtotime($feedback['submitted_at'])) ?></small>
+                                            </td>
+                                            <td>
+                                                <?php 
+                                                    $statusClass = 'bg-secondary';
+                                                    
+                                                    if(strtolower($feedback['status']) == 'pending') {
+                                                        $statusClass = 'bg-warning';
+                                                    } elseif(strtolower($feedback['status']) == 'under review') {
+                                                        $statusClass = 'bg-info';
+                                                    } elseif(strtolower($feedback['status']) == 'reviewed') {
+                                                        $statusClass = 'bg-success';
+                                                    } elseif(strtolower($feedback['status']) == 'resolved') {
+                                                        $statusClass = 'bg-success';
+                                                    } elseif(strtolower($feedback['status']) == 'rejected') {
+                                                        $statusClass = 'bg-danger';
+                                                    }
+                                                ?>
+                                                <span class="badge <?= $statusClass ?>">
+                                                    <?= ucfirst(esc($feedback['status'])) ?>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <?php if(!empty($feedback['attachment'])): ?>
+                                                    <a href="<?= base_url('uploads/feedback/' . $feedback['attachment']) ?>" target="_blank" class="btn btn-sm btn-outline-primary" title="Download Attachment">
+                                                        <i class="fas fa-paperclip"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <span class="text-muted">No file</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-outline-primary view-feedback" 
+                                                    data-id="<?= $feedback['id'] ?>"
+                                                    title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-primary edit-feedback"
+                                                    data-id="<?= $feedback['id'] ?>"
+                                                    title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <form action="<?= base_url('user/feedback/delete/' . $feedback['id']) ?>" method="post" class="delete-form" onsubmit="return confirmDelete(event)">
+                                                    <?= csrf_field() ?>
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="8" class="text-center py-4">
+                                            <div class="alert alert-info mb-0">
+                                                <i class="fas fa-info-circle me-2"></i> No Feedback Found
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
 
                         </table>
@@ -975,9 +1097,397 @@
           <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
         </footer>
     </main>
-    <!-- MAIN DASHBOARD CONTENT -->
-    <script>// Feedback dashboard interactive features
+
+    <!-- ================================= -->
+    <!-- VIEW FEEDBACK MODAL -->
+    <!-- ================================= -->
+    <div class="modal fade" id="viewFeedbackModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-info-circle me-2"></i> Feedback Details
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="viewModalBody">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading feedback details...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================= -->
+    <!-- EDIT FEEDBACK MODAL -->
+    <!-- ================================= -->
+    <div class="modal fade" id="editFeedbackModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-edit me-2"></i> Edit Feedback
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editFeedbackForm" action="<?= base_url('user/feedback/update') ?>" method="post" enctype="multipart/form-data">
+                    <?= csrf_field() ?>
+                    <div class="modal-body">
+                        <div id="editModalContent">
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-2">Loading feedback data...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" id="editModalFooter" style="display:none;">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update Feedback</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Delete confirmation function
+        function confirmDelete(event) {
+            event.preventDefault();
+            
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#C3C848',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit();
+                }
+            });
+            
+            return false;
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
+            // View Feedback Modal
+            const viewModal = new bootstrap.Modal(document.getElementById('viewFeedbackModal'));
+            const viewModalBody = document.getElementById('viewModalBody');
+            
+            document.querySelectorAll('.view-feedback').forEach(button => {
+                button.addEventListener('click', function() {
+                    const feedbackId = this.getAttribute('data-id');
+                    
+                    // Show loading
+                    viewModalBody.innerHTML = `
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading feedback details...</p>
+                        </div>
+                    `;
+                    
+                    viewModal.show();
+                    
+                    // Fetch feedback data via AJAX
+                    fetch('<?= base_url('user/feedback/getFeedbackData') ?>/' + feedbackId)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const f = data.data;
+                                const statusClass = f.status_class || 'bg-secondary';
+                                
+                                viewModalBody.innerHTML = `
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="detail-row">
+                                                    <div class="detail-label">Feedback ID</div>
+                                                    <div class="detail-value">${f.feedback_id || '-'}</div>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <div class="detail-label">Voter ID</div>
+                                                    <div class="detail-value">${f.voter_id || '-'}</div>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <div class="detail-label">MLA ID</div>
+                                                    <div class="detail-value">${f.mla_id || '-'}</div>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <div class="detail-label">Work ID</div>
+                                                    <div class="detail-value">${f.work_id || 'N/A'}</div>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <div class="detail-label">District</div>
+                                                    <div class="detail-value">${f.district || '-'}</div>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <div class="detail-label">Constituency</div>
+                                                    <div class="detail-value">${f.constituency || '-'}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="detail-row">
+                                                    <div class="detail-label">Village</div>
+                                                    <div class="detail-value">${f.village || '-'}</div>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <div class="detail-label">Category</div>
+                                                    <div class="detail-value">${f.category || '-'}</div>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <div class="detail-label">Status</div>
+                                                    <div class="detail-value">
+                                                        <span class="badge ${statusClass}">${f.status || 'Pending'}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <div class="detail-label">Submitted Date</div>
+                                                    <div class="detail-value">${f.submitted_at || '-'}</div>
+                                                </div>
+                                                ${f.attachment ? `
+                                                <div class="detail-row">
+                                                    <div class="detail-label">Attachment</div>
+                                                    <div class="detail-value">
+                                                        <a href="<?= base_url('uploads/feedback/') ?>${f.attachment}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                            <i class="fas fa-download me-1"></i> Download
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                ` : ''}
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-12">
+                                                <div class="detail-row">
+                                                    <div class="detail-label">Description</div>
+                                                    <div class="detail-value">${f.description || '-'}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
+                                viewModalBody.innerHTML = `
+                                    <div class="alert alert-danger">
+                                        <i class="fas fa-exclamation-circle me-2"></i> ${data.message || 'Failed to load feedback data'}
+                                    </div>
+                                `;
+                            }
+                        })
+                        .catch(error => {
+                            viewModalBody.innerHTML = `
+                                <div class="alert alert-danger">
+                                    <i class="fas fa-exclamation-circle me-2"></i> Error loading feedback data
+                                </div>
+                            `;
+                            console.error('Error:', error);
+                        });
+                });
+            });
+
+            // Edit Feedback Modal
+            const editModal = new bootstrap.Modal(document.getElementById('editFeedbackModal'));
+            const editModalContent = document.getElementById('editModalContent');
+            const editModalFooter = document.getElementById('editModalFooter');
+            
+            document.querySelectorAll('.edit-feedback').forEach(button => {
+                button.addEventListener('click', function() {
+                    const feedbackId = this.getAttribute('data-id');
+                    
+                    // Show loading
+                    editModalContent.innerHTML = `
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading feedback data...</p>
+                        </div>
+                    `;
+                    editModalFooter.style.display = 'none';
+                    
+                    editModal.show();
+                    
+                    // Fetch feedback data via AJAX
+                    fetch('<?= base_url('user/feedback/getFeedbackData') ?>/' + feedbackId)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const f = data.data;
+                                
+                                editModalContent.innerHTML = `
+                                    <input type="hidden" name="id" value="${f.id}">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Feedback ID</label>
+                                                    <input type="text" class="form-control" value="${f.feedback_id || ''}" readonly>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Voter ID</label>
+                                                    <input type="text" name="voter_id" class="form-control" value="${f.voter_id || ''}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">MLA ID</label>
+                                                    <input type="text" name="mla_id" class="form-control" value="${f.mla_id || ''}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">District</label>
+                                                    <input type="text" name="district" class="form-control" value="${f.district || ''}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Constituency</label>
+                                                    <input type="text" name="constituency" class="form-control" value="${f.constituency || ''}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Village</label>
+                                                    <input type="text" name="village" class="form-control" value="${f.village || ''}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Category</label>
+                                                    <select name="category" class="form-select" required>
+                                                        <option value="MLA Performance" ${f.category == 'MLA Performance' ? 'selected' : ''}>MLA Performance</option>
+                                                        <option value="Road Development" ${f.category == 'Road Development' ? 'selected' : ''}>Road Development</option>
+                                                        <option value="Water Supply" ${f.category == 'Water Supply' ? 'selected' : ''}>Water Supply</option>
+                                                        <option value="Health Services" ${f.category == 'Health Services' ? 'selected' : ''}>Health Services</option>
+                                                        <option value="Education" ${f.category == 'Education' ? 'selected' : ''}>Education</option>
+                                                        <option value="Public Services" ${f.category == 'Public Services' ? 'selected' : ''}>Public Services</option>
+                                                        <option value="Other" ${f.category == 'Other' ? 'selected' : ''}>Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Status</label>
+                                                    <select name="status" class="form-select" required>
+                                                        <option value="Pending" ${f.status == 'Pending' ? 'selected' : ''}>Pending</option>
+                                                        <option value="Under Review" ${f.status == 'Under Review' ? 'selected' : ''}>Under Review</option>
+                                                        <option value="Reviewed" ${f.status == 'Reviewed' ? 'selected' : ''}>Reviewed</option>
+                                                        <option value="Resolved" ${f.status == 'Resolved' ? 'selected' : ''}>Resolved</option>
+                                                        <option value="Rejected" ${f.status == 'Rejected' ? 'selected' : ''}>Rejected</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Attachment</label>
+                                                    <input type="file" name="attachment" class="form-control">
+                                                    ${f.attachment ? `
+                                                    <small class="text-muted mt-1 d-block">
+                                                        Current: <a href="<?= base_url('uploads/feedback/') ?>${f.attachment}" target="_blank">${f.attachment}</a>
+                                                    </small>
+                                                    ` : ''}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Description</label>
+                                                    <textarea name="description" class="form-control" rows="4" required>${f.description || ''}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                
+                                editModalFooter.style.display = 'flex';
+                            } else {
+                                editModalContent.innerHTML = `
+                                    <div class="alert alert-danger">
+                                        <i class="fas fa-exclamation-circle me-2"></i> ${data.message || 'Failed to load feedback data'}
+                                    </div>
+                                `;
+                            }
+                        })
+                        .catch(error => {
+                            editModalContent.innerHTML = `
+                                <div class="alert alert-danger">
+                                    <i class="fas fa-exclamation-circle me-2"></i> Error loading feedback data
+                                </div>
+                            `;
+                            console.error('Error:', error);
+                        });
+                });
+            });
+
+            // Handle Edit Form Submission via AJAX
+            document.getElementById('editFeedbackForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                
+                Swal.fire({
+                    title: 'Updating...',
+                    text: 'Please wait while we update your feedback.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.close();
+                    
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: data.message || 'Feedback updated successfully!',
+                            confirmButtonColor: '#C3C848',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            // Close modal
+                            bootstrap.Modal.getInstance(document.getElementById('editFeedbackModal')).hide();
+                            // Reload page to refresh data
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message || 'Failed to update feedback',
+                            confirmButtonColor: '#C3C848',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.close();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'An error occurred while updating feedback.',
+                        confirmButtonColor: '#C3C848',
+                        confirmButtonText: 'OK'
+                    });
+                    console.error('Error:', error);
+                });
+            });
+
             // Counter animations for numbers
             const counters = document.querySelectorAll('.feedback_dashboard .row.g-4.mb-4 .card-body h3');
             counters.forEach(counter => {
@@ -994,73 +1504,6 @@
                     }
                 };
                 updateCounter();
-            });
-
-            // Handle form submission
-            const submitBtn = document.querySelector('.btn-primary');
-            if (submitBtn) {
-                submitBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-
-                    // Validate required fields
-                    const category = document.querySelector('.form-select').value;
-                    const description = document.querySelector('textarea').value;
-
-                    if (!category || category === 'Select Category') {
-                        alert('Please select a feedback category.');
-                        return;
-                    }
-
-                    if (!description.trim()) {
-                        alert('Please enter feedback description.');
-                        return;
-                    }
-
-                    // Show success message
-                    alert('Feedback submitted successfully! Your feedback ID will be sent to your registered email.');
-
-                    // Reset form
-                    document.querySelector('textarea').value = '';
-                    document.querySelector('.form-select').selectedIndex = 0;
-                    document.querySelector('input[type="file"]').value = '';
-
-                    // Update summary stats
-                    const totalFeedback = document.querySelector('.feedback_dashboard .row.g-4.mb-4 .card-body h3');
-                    if (totalFeedback) {
-                        const currentTotal = parseInt(totalFeedback.innerText);
-                        totalFeedback.innerText = currentTotal + 1;
-                    }
-
-                    const underReview = document.querySelectorAll('.feedback_dashboard .row.g-4.mb-4 .card-body h3')[2];
-                    if (underReview) {
-                        const currentReview = parseInt(underReview.innerText);
-                        underReview.innerText = currentReview + 1;
-                    }
-                });
-            }
-
-            // Handle reset button
-            const resetBtn = document.querySelector('.btn-secondary');
-            if (resetBtn) {
-                resetBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector('textarea').value = '';
-                    document.querySelector('.form-select').selectedIndex = 0;
-                    document.querySelector('input[type="file"]').value = '';
-                    document.querySelector('input[placeholder="Enter Work ID"]').value = '';
-                    document.querySelector('input[type="datetime-local"]').value = '';
-                });
-            }
-
-            // Add click handler to feedback rows for viewing details
-            const feedbackRows = document.querySelectorAll('.table tbody tr');
-            feedbackRows.forEach(row => {
-                row.addEventListener('click', function () {
-                    const feedbackId = this.cells[0].innerText;
-                    const category = this.cells[1].innerText;
-                    const status = this.cells[2].innerText;
-                    alert(`Feedback ID: ${feedbackId}\nCategory: ${category}\nStatus: ${status}\n\nFull details will be available in the feedback tracking section.`);
-                });
             });
         });
 
@@ -1153,6 +1596,33 @@
         setInterval(updateDateTime, 60000);
 
     </script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <?php if(session()->getFlashdata('success')): ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '<?= session()->getFlashdata('success') ?>',
+            confirmButtonColor: '#C3C848',
+            confirmButtonText: 'OK'
+        });
+    </script>
+    <?php endif; ?>
+
+    <?php if(session()->getFlashdata('error')): ?>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '<?= session()->getFlashdata('error') ?>',
+            confirmButtonColor: '#C3C848',
+            confirmButtonText: 'OK'
+        });
+    </script>
+    <?php endif; ?>
 
     <script src=navbar.js></script>
 </body>
