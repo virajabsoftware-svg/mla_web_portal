@@ -34,6 +34,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 //user
 $routes->group('user', ['namespace' => 'App\Controllers\User'], function($routes) {
     $routes->get('login', 'Auth::login');
+    $routes->post('login/check','Auth::loginCheck');
 
     $routes->get('dashboard', 'Dashboard::index');
 
@@ -54,4 +55,5 @@ $routes->group('user', ['namespace' => 'App\Controllers\User'], function($routes
     $routes->get('notification', 'Notification::index');
 
     $routes->get('survey', 'Survey::index');
+    $routes->post('survey/save', 'Survey::save');
 });

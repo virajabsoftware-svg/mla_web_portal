@@ -10,13 +10,20 @@ class SurveyModel extends Model
     protected $primaryKey = 'id';
 
     protected $allowedFields = [
-        'mla_id',
-        'title',
-        'responses',
-        'sentiment',
-        'participation',
-        'status'
-    ];
+    'survey_code',
+    'title',
+    'survey_category',
+    'description',
+    'mla_id',
+    'constituency',
+    'responses',
+    'sentiment',
+    'participation',
+    'status',
+    'start_date',
+    'end_date',
+    'created_by'
+];
 
 
     // Dashboard statistics
