@@ -44,17 +44,32 @@ $routes->group('user', ['namespace' => 'App\Controllers\User'], function($routes
     $routes->get('complaint', 'Complaint::index');
     $routes->post('complaint/save', 'Complaint::save');
 
+    // =============================================
+    // FEEDBACK ROUTES
+    // =============================================
+    $routes->get('feedback', 'Feedback::index');
+    $routes->post('feedback/save', 'Feedback::save');
+    $routes->get('feedback/getFeedbackData/(:num)', 'Feedback::getFeedbackData/$1');
+    $routes->post('feedback/update', 'Feedback::update');
+    $routes->post('feedback/delete/(:num)', 'Feedback::delete/$1');
 
     // =============================================
-    // FEEDBACK ROUTES - ALL Routes for Feedback Module
+    // MLA RATING ROUTES - UPDATED FOR NEW CONTROLLER
     // =============================================
-    $routes->get('feedback', 'Feedback::index');                          // Display Feedback page
-    $routes->post('feedback/save', 'Feedback::save');                    // Submit new feedback
-    $routes->get('feedback/getFeedbackData/(:num)', 'Feedback::getFeedbackData/$1'); // AJAX - Get feedback data for modals
-    $routes->post('feedback/update', 'Feedback::update');                // Update feedback
-    $routes->post('feedback/delete/(:num)', 'Feedback::delete/$1');      // Delete feedback
-
-    $routes->get('mla-rating', 'MLARating::index');
+    // Main rating page
+    $routes->get('mla-rating', 'MlaRating::index');
+    
+    // Save rating (AJAX endpoint)
+    $routes->post('mla-rating/save', 'MlaRating::save');
+    
+    // List all ratings (admin view)
+    $routes->get('mla-rating/list', 'MlaRating::list');
+    
+    // View specific rating
+    $routes->get('mla-rating/view/(:num)', 'MlaRating::view/$1');
+    
+    // Statistics
+    $routes->get('mla-rating/statistics', 'MlaRating::statistics');
 
     $routes->get('mla-works', 'MLAWorks::index');
 
