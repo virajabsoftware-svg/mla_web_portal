@@ -1154,7 +1154,7 @@ Surveys
 
 <td data-label="Total Responses">
 
-${Number(mla.total_responses ?? 0).toLocaleString()}
+0
 
 </td>
 
@@ -1167,7 +1167,7 @@ ${Number(mla.total_responses ?? 0).toLocaleString()}
 
 <div class="progress-bar"
 
-style="width:${Math.round(mla.avg_participation ?? 0)}%;
+style="width:${0}%;
 background:#d4af37">
 
 </div>
@@ -1235,46 +1235,14 @@ fetch("<?= base_url('admin/survey-management/data') ?>")
 
 .then(data=>{
 
+let stats=data.stats;
 
-    let stats=data.stats;
+animateCounter(
+    "surveyCount",
+    stats.total_surveys
+);
 
-
-
-    animateCounter(
-        "surveyCount",
-        stats.total_surveys
-    );
-
-
-    animateCounter(
-        "responseCount",
-        stats.total_responses
-    );
-
-
-
-    let satisfaction =
-    Math.round(
-        (stats.positive_count / stats.total_surveys)*100
-    );
-
-
-    animateCounter(
-        "satisfaction",
-        satisfaction+"%"
-    );
-
-
-
-    animateCounter(
-        "participation",
-        Math.round(stats.avg_participation)+"%"
-    );
-
-
-
-    renderMLACount(data.mlaCount);
-
+renderMLACount(data.mlaCount);
 
 });
 

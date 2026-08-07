@@ -615,8 +615,9 @@
 
                             <td><?= esc($row['title']) ?></td>
 
-                            <td><?= esc($row['mla_id']) ?></td>
-
+                            <td>
+    <?= esc($row['mla_name'] ?? $row['mla_id'] ?? 'N/A') ?>
+</td>
                             <td><?= esc($row['end_date'] ?? 'N/A') ?></td>
 
                             <td>
@@ -659,13 +660,19 @@
                     </div>
                 </div>
                 <div class="card-body">
+
+                
                     <form id="surveyResponseForm"
-     
+
       method="post">
       <!-- <input type="hidden" name="survey_id" value="1"> -->
        <input type="hidden" 
        name="survey_id" 
        id="surveyIdHidden">
+
+<input type="hidden"
+name="mla_id"
+id="mlaIdHidden">
 
 <input type="hidden"
 name="voter_id"
@@ -1535,6 +1542,8 @@ document.getElementById('surveyResponseForm')
 // Submit data to backend using AJAX
 
 let form = document.getElementById('surveyResponseForm');
+
+document.getElementById('mlaIdHidden').value = 501;
 
 let formData = new FormData(form);
 

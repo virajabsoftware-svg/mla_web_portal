@@ -24,13 +24,20 @@ class Survey extends BaseController
     {
 
         // active surveys
-        $data['activeSurveys'] = $this->db
-            ->table('surveys')
-            ->where('status','Active')
-            ->get()
-            ->getResultArray();
+        // $data['activeSurveys'] = $this->db
+        //     ->table('surveys')
+        //     ->where('status','Active')
+        //     ->get()
+        //     ->getResultArray();
 
-
+       $data['mlaSurveyCount'] = $this->db
+    ->table('survey_responses sr')
+    ->select('m.mla_name, m.mla_code, COUNT(sr.id) as total_surveys')
+    ->join('mlas m', 'm.mla_code = sr.mla_id', 'left')
+    ->groupBy(['m.mla_code', 'm.mla_name'])
+    ->orderBy('total_surveys', 'DESC')
+    ->get()
+    ->getResultArray();
 
         // history
         $data['responses'] = $this->surveyModel->getHistory();
@@ -85,6 +92,7 @@ class Survey extends BaseController
             'submitted_at'=>date('Y-m-d H:i:s')
 
         ];
+        
 
 
 

@@ -24,7 +24,7 @@ class SurveyManagement extends BaseController
 
         $stats = $model->getSurveyStats();
 
-        $mlaCount = $model->getMLAWiseSurveyCount();
+       $mlaCount = $model->getMLAResponseWiseCount();
 
 
 

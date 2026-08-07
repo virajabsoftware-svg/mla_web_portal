@@ -27,18 +27,14 @@ class SurveyModel extends Model
 
 
     // Dashboard statistics
-
-    public function getSurveyStats()
-    {
-        return $this->db->query("
-            SELECT 
-                COUNT(*) as total_surveys,
-                SUM(responses) as total_responses,
-                AVG(participation) as avg_participation,
-                SUM(sentiment='Positive') as positive_count
-            FROM surveys
-        ")->getRow();
-    }
+public function getSurveyStats()
+{
+    return $this->db->query("
+        SELECT 
+            COUNT(*) as total_surveys
+        FROM survey_responses
+    ")->getRow();
+}
 
 
 
@@ -57,7 +53,7 @@ class SurveyModel extends Model
             FROM mlas m
 
             LEFT JOIN surveys s
-            ON s.mla_id = m.id
+            ON sr.mla_id = m.mla_code
 
             GROUP BY m.id,m.mla_name
 
@@ -66,4 +62,22 @@ class SurveyModel extends Model
         ")->getResultArray();
     }
 
+  public function getMLAResponseWiseCount()
+{
+    return $this->db->query("
+        SELECT
+            m.mla_name,
+            COUNT(sr.id) AS total_surveys
+
+        FROM survey_responses sr
+
+        LEFT JOIN mlas m
+        ON sr.mla_id = m.mla_code
+
+        GROUP BY m.mla_code, m.mla_name
+
+        ORDER BY total_surveys DESC
+
+    ")->getResultArray();
+}
 }
