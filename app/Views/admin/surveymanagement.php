@@ -1041,17 +1041,17 @@
         // =====================================================
         // SURVEY DATA
         // =====================================================
-        const surveysData = [
-            { id: "#SR101", title: "Road Development Feedback", mla: "MLA Rahul Patil", responses: 3245, sentiment: "Positive", participation: 82, status: "Active", description: "Feedback survey for road development projects in the constituency." },
-            { id: "#SR102", title: "Water Supply Survey", mla: "MLA Amit Deshmukh", responses: 2100, sentiment: "Neutral", participation: 61, status: "Pending", description: "Assessment of water supply quality and coverage." },
-            { id: "#SR103", title: "Healthcare Facility Review", mla: "MLA Vikas More", responses: 5420, sentiment: "Negative", participation: 47, status: "Closed", description: "Review of healthcare facilities and services." },
-            { id: "#SR104", title: "Education Quality Survey", mla: "MLA Meena Sharma", responses: 1870, sentiment: "Positive", participation: 73, status: "Active", description: "Evaluation of school education quality." },
-            { id: "#SR105", title: "Electricity Supply Feedback", mla: "MLA Sanjay Patil", responses: 2980, sentiment: "Neutral", participation: 68, status: "Active", description: "Feedback on electricity supply and outages." },
-            { id: "#SR106", title: "Sanitation Drive Survey", mla: "MLA Rahul Patil", responses: 1560, sentiment: "Positive", participation: 55, status: "Pending", description: "Survey on sanitation drive effectiveness." },
-            { id: "#SR107", title: "Public Transport Survey", mla: "MLA Amit Deshmukh", responses: 4300, sentiment: "Positive", participation: 79, status: "Active", description: "Feedback on public transport services." },
-            { id: "#SR108", title: "Waste Management Review", mla: "MLA Vikas More", responses: 2890, sentiment: "Neutral", participation: 52, status: "Closed", description: "Review of waste management practices." },
-            { id: "#SR109", title: "Digital Literacy Survey", mla: "MLA Meena Sharma", responses: 1450, sentiment: "Positive", participation: 44, status: "Pending", description: "Assessment of digital literacy programs." }
-        ];
+        // const surveysData = [
+        //     { id: "#SR101", title: "Road Development Feedback", mla: "MLA Rahul Patil", responses: 3245, sentiment: "Positive", participation: 82, status: "Active", description: "Feedback survey for road development projects in the constituency." },
+        //     { id: "#SR102", title: "Water Supply Survey", mla: "MLA Amit Deshmukh", responses: 2100, sentiment: "Neutral", participation: 61, status: "Pending", description: "Assessment of water supply quality and coverage." },
+        //     { id: "#SR103", title: "Healthcare Facility Review", mla: "MLA Vikas More", responses: 5420, sentiment: "Negative", participation: 47, status: "Closed", description: "Review of healthcare facilities and services." },
+        //     { id: "#SR104", title: "Education Quality Survey", mla: "MLA Meena Sharma", responses: 1870, sentiment: "Positive", participation: 73, status: "Active", description: "Evaluation of school education quality." },
+        //     { id: "#SR105", title: "Electricity Supply Feedback", mla: "MLA Sanjay Patil", responses: 2980, sentiment: "Neutral", participation: 68, status: "Active", description: "Feedback on electricity supply and outages." },
+        //     { id: "#SR106", title: "Sanitation Drive Survey", mla: "MLA Rahul Patil", responses: 1560, sentiment: "Positive", participation: 55, status: "Pending", description: "Survey on sanitation drive effectiveness." },
+        //     { id: "#SR107", title: "Public Transport Survey", mla: "MLA Amit Deshmukh", responses: 4300, sentiment: "Positive", participation: 79, status: "Active", description: "Feedback on public transport services." },
+        //     { id: "#SR108", title: "Waste Management Review", mla: "MLA Vikas More", responses: 2890, sentiment: "Neutral", participation: 52, status: "Closed", description: "Review of waste management practices." },
+        //     { id: "#SR109", title: "Digital Literacy Survey", mla: "MLA Meena Sharma", responses: 1450, sentiment: "Positive", participation: 44, status: "Pending", description: "Assessment of digital literacy programs." }
+        // ];
 
         // =====================================================
         // COUNTER ANIMATION
@@ -1096,98 +1096,104 @@
         // =====================================================
         // RENDER MLA SURVEY COUNT - ONLY COUNTS, NO DETAILS
         // =====================================================
-        function renderMLASurveyCount() {
-            const tbody = document.getElementById('mlaCountBody');
-            
-            // Group surveys by MLA - only count, no details
-            const mlaMap = new Map();
-            
-            surveysData.forEach(survey => {
-                if (!mlaMap.has(survey.mla)) {
-                    mlaMap.set(survey.mla, {
-                        mla: survey.mla,
-                        totalSurveys: 0,
-                        totalResponses: 0,
-                        totalParticipation: 0
-                    });
-                }
-                
-                const mlaData = mlaMap.get(survey.mla);
-                mlaData.totalSurveys++;
-                mlaData.totalResponses += survey.responses;
-                mlaData.totalParticipation += survey.participation;
-            });
+        function renderMLACount(data)
+{
 
-            if (mlaMap.size === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="4" style="text-align: center; padding: 40px; color: #64748B;">
-                            <i class="fas fa-inbox" style="font-size: 36px; display: block; margin-bottom: 15px;"></i>
-                            No surveys found
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
+let tbody=document.getElementById("mlaCountBody");
 
-            // Sort by total surveys (highest first)
-            const sortedMLAs = Array.from(mlaMap.values()).sort((a, b) => b.totalSurveys - a.totalSurveys);
 
-            let html = '';
-            let rank = 1;
-            
-            sortedMLAs.forEach((mlaData) => {
-                const avgParticipation = mlaData.totalSurveys > 0 
-                    ? Math.round(mlaData.totalParticipation / mlaData.totalSurveys) 
-                    : 0;
-                
-                // Determine badge color based on survey count
-                let badgeClass = 'low';
-                if (mlaData.totalSurveys >= 4) badgeClass = 'high';
-                else if (mlaData.totalSurveys >= 2) badgeClass = 'medium';
-                
-                // Rank medal
-                let rankIcon = '';
-                if (rank === 1) rankIcon = '🥇 ';
-                else if (rank === 2) rankIcon = '🥈 ';
-                else if (rank === 3) rankIcon = '🥉 ';
-                
-                html += `
-                    <tr>
-                        <td data-label="MLA Name">
-                            <strong style="color: #0F172A;">
-                                ${rankIcon}${mlaData.mla}
-                            </strong>
-                        </td>
-                        <td data-label="Total Surveys">
-                            <span class="mla_count_badge ${badgeClass}">
-                                ${mlaData.totalSurveys} ${mlaData.totalSurveys === 1 ? 'Survey' : 'Surveys'}
-                            </span>
-                        </td>
-                        <td data-label="Total Responses">
-                            <span style="font-weight: 600; color: #1E293B;">
-                                ${mlaData.totalResponses.toLocaleString()}
-                            </span>
-                        </td>
-                        <td data-label="Avg. Participation">
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="progress" style="width: 100px; height: 6px;">
-                                    <div class="progress-bar" 
-                                         style="width: ${avgParticipation}%; border-radius: 20px; 
-                                                background: ${avgParticipation >= 70 ? '#10B981' : avgParticipation >= 50 ? '#F59E0B' : '#EF4444'} !important;">
-                                    </div>
-                                </div>
-                                <span style="font-size: 13px; font-weight: 700; color: #1E293B;">${avgParticipation}%</span>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                rank++;
-            });
-            
-            tbody.innerHTML = html;
-        }
+let html="";
 
+
+data.forEach((mla,index)=>{
+
+
+let badge="low";
+
+
+if(mla.total_surveys>=5)
+{
+    badge="high";
+}
+else if(mla.total_surveys>=2)
+{
+    badge="medium";
+}
+
+
+
+html+=`
+
+<tr>
+
+<td data-label="MLA Name">
+
+<strong>
+
+${index+1}. ${mla.mla_name}
+
+</strong>
+
+</td>
+
+
+
+<td data-label="Total Surveys">
+
+<span class="mla_count_badge ${badge}">
+
+${mla.total_surveys}
+
+Surveys
+
+</span>
+
+</td>
+
+
+
+<td data-label="Total Responses">
+
+${Number(mla.total_responses ?? 0).toLocaleString()}
+
+</td>
+
+
+
+<td data-label="Avg Participation">
+
+
+<div class="progress" style="width:100px;height:6px">
+
+<div class="progress-bar"
+
+style="width:${Math.round(mla.avg_participation ?? 0)}%;
+background:#d4af37">
+
+</div>
+
+</div>
+
+
+${Math.round(mla.avg_participation ?? 0)}%
+
+
+</td>
+
+
+
+</tr>
+
+
+`;
+
+});
+
+
+tbody.innerHTML=html;
+
+
+}
         // =====================================================
         // CREATE NEW SURVEY
         // =====================================================
@@ -1212,11 +1218,67 @@
         // =====================================================
         // EVENT LISTENERS
         // =====================================================
-        document.addEventListener("DOMContentLoaded", function () {
-            updateStats();
-            renderMLASurveyCount();
-            animateProgressBars();
-        });
+     document.addEventListener("DOMContentLoaded", function(){
+
+    loadSurveyDashboard();
+
+});
+
+
+
+function loadSurveyDashboard()
+{
+
+fetch("<?= base_url('admin/survey-management/data') ?>")
+
+.then(response=>response.json())
+
+.then(data=>{
+
+
+    let stats=data.stats;
+
+
+
+    animateCounter(
+        "surveyCount",
+        stats.total_surveys
+    );
+
+
+    animateCounter(
+        "responseCount",
+        stats.total_responses
+    );
+
+
+
+    let satisfaction =
+    Math.round(
+        (stats.positive_count / stats.total_surveys)*100
+    );
+
+
+    animateCounter(
+        "satisfaction",
+        satisfaction+"%"
+    );
+
+
+
+    animateCounter(
+        "participation",
+        Math.round(stats.avg_participation)+"%"
+    );
+
+
+
+    renderMLACount(data.mlaCount);
+
+
+});
+
+}
     </script>
     <script src="header.js"></script>
 </body>

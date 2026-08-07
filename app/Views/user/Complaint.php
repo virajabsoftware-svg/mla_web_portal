@@ -741,7 +741,7 @@
                         Complaint</h5>
                 </div>
                 <div class="card-body">
-                    <form id="complaintForm">
+                    <form id="complaintForm" method="post" action="<?= site_url('user/complaint/save') ?>">
                         <div class="row g-3">
                             <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-upc-scan"></i> Complaint ID</label>
@@ -755,12 +755,12 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-building"></i> Assigned MLA ID</label>
-                                <input type="text" class="form-control bg-light" id="mlaIdField" value="MLA501"
+                                <input type="text" class="form-control bg-light" id="mlaIdField" name="mla" value="MLA501"
                                     readonly>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-flag-fill"></i> Priority</label>
-                                <select class="form-select" id="prioritySelect">
+                                <select class="form-select" id="prioritySelect" name="priority">
                                     <option value="Low">Low</option>
                                     <option value="Medium" selected>Medium</option>
                                     <option value="High">High</option>
@@ -770,13 +770,13 @@
 
                             <div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-card-heading"></i> Complaint Title</label>
-                                <input type="text" class="form-control" id="complaintTitle"
+                                <input type="text" class="form-control" id="complaintTitle" name="title"
                                     placeholder="Enter complaint title" required>
                             </div>
 
                             <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-geo-alt-fill"></i> District</label>
-                                <select class="form-select" id="districtSelect" required>
+                                <select class="form-select" id="districtSelect"  name="district" required>
                                     <option value="">Select District</option>
                                     <option>Satara</option>
                                     <option>Pune</option>
@@ -788,7 +788,7 @@
 
                             <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-pin-map-fill"></i> Constituency</label>
-                                <select class="form-select" id="constituencySelect" required>
+                                <select class="form-select" id="constituencySelect" name="constituency" required>
                                     <option value="">Select Constituency</option>
                                     <option>Wai</option>
                                     <option>Karad</option>
@@ -801,12 +801,14 @@
                             <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-house-heart"></i> Village</label>
                                 <input type="text" class="form-control" id="villageInput"
+                                 name="village"
                                     placeholder="Enter Village Name" required>
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-geo-alt"></i> Location / Landmark</label>
                                 <input type="text" class="form-control" id="locationInput"
+                                  name="location"
                                     placeholder="Complaint Location / Landmark" required>
                             </div>
 
@@ -819,7 +821,7 @@
                             <div class="col-12">
                                 <label class="form-label"><i class="bi bi-chat-text-fill"></i> Complaint
                                     Description</label>
-                                <textarea class="form-control" id="complaintDesc" rows="4"
+                                <textarea class="form-control" id="complaintDesc"  name="description" rows="4"
                                     placeholder="Describe your issue in detail..." required></textarea>
                             </div>
 
@@ -876,30 +878,39 @@
                                     <th>Resolution Date</th>
                                 </tr>
                             </thead>
-                            <tbody id="complaintHistoryBody">
-                                <tr data-complaint-id="CMP001188" data-title="Water Leakage" data-status="Resolved">
-                                    <td>CMP001188</td>
-                                    <td>Water Leakage</td>
-                                    <td>Satara</td>
-                                    <td><span class="badge bg-success badge-status">Resolved</span></td>
-                                    <td>28-May-2026</td>
-                                </tr>
-                                <tr data-complaint-id="CMP001150" data-title="Street Light Issue"
-                                    data-status="Resolved">
-                                    <td>CMP001150</td>
-                                    <td>Street Light Issue</td>
-                                    <td>Wai</td>
-                                    <td><span class="badge bg-success badge-status">Resolved</span></td>
-                                    <td>12-May-2026</td>
-                                </tr>
-                                <tr data-complaint-id="CMP001200" data-title="Drainage Blockage" data-status="Pending">
-                                    <td>CMP001200</td>
-                                    <td>Drainage Blockage</td>
-                                    <td>Karad</td>
-                                    <td><span class="badge bg-warning badge-status">Pending</span></td>
-                                    <td>-</td>
-                                </tr>
-                            </tbody>
+                           <tbody id="complaintHistoryBody">
+
+<?php if(!empty($complaints)): ?>
+
+<?php foreach($complaints as $complaint): ?>
+
+<tr>
+    <td><?= $complaint['id']; ?></td>
+    <td><?= $complaint['title']; ?></td>
+    <td><?= $complaint['constituency']; ?></td>
+    <td>
+        <span class="badge bg-warning">
+            <?= $complaint['status']; ?>
+        </span>
+    </td>
+    <td>
+        <?= $complaint['created_at']; ?>
+    </td>
+</tr>
+
+<?php endforeach; ?>
+
+<?php else: ?>
+
+<tr>
+    <td colspan="5" class="text-center">
+        No complaints found
+    </td>
+</tr>
+
+<?php endif; ?>
+
+</tbody>
                         </table>
                     </div>
                 </div>
@@ -990,11 +1001,11 @@
         setInterval(updateDateTime, 60000);
 
         // Complaint storage & dynamic counters
-        let complaintsHistory = [
-            { id: "CMP001188", title: "Water Leakage", location: "Satara", status: "Resolved", resolutionDate: "28-May-2026", priority: "Medium" },
-            { id: "CMP001150", title: "Street Light Issue", location: "Wai", status: "Resolved", resolutionDate: "12-May-2026", priority: "High" },
-            { id: "CMP001200", title: "Drainage Blockage", location: "Karad", status: "Pending", resolutionDate: "-", priority: "Critical" }
-        ];
+        // let complaintsHistory = [
+        //     { id: "CMP001188", title: "Water Leakage", location: "Satara", status: "Resolved", resolutionDate: "28-May-2026", priority: "Medium" },
+        //     { id: "CMP001150", title: "Street Light Issue", location: "Wai", status: "Resolved", resolutionDate: "12-May-2026", priority: "High" },
+        //     { id: "CMP001200", title: "Drainage Blockage", location: "Karad", status: "Pending", resolutionDate: "-", priority: "Critical" }
+        // ];
 
         // Helper: Update summary numbers
         function updateSummaryStats() {
@@ -1046,7 +1057,7 @@
         // Handle complaint submission
         const complaintForm = document.getElementById('complaintForm');
         complaintForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+            // e.preventDefault();
 
             // Validate fields
             const title = document.getElementById('complaintTitle').value.trim();
@@ -1082,8 +1093,8 @@
             complaintsHistory.unshift(newComplaint);
 
             // Update UI
-            renderComplaintHistory();
-            updateSummaryStats();
+            // renderComplaintHistory();
+            // updateSummaryStats();
 
             // Show success
             alert(`✅ Complaint registered successfully!\nComplaint ID: ${newId}\n\nYou will receive updates on your registered mobile number.`);
@@ -1150,9 +1161,9 @@
             });
         }
 
-        renderComplaintHistory();
-        updateSummaryStats();
-        setTimeout(animateCounters, 200);
+        // renderComplaintHistory();
+        // updateSummaryStats();
+        // setTimeout(animateCounters, 200);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src=navbar.js></script>

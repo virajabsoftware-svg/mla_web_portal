@@ -523,6 +523,22 @@
 <?php include "common/header.php"?>
 
     <main class="main-content fade-page-transition">
+        <?php if(session()->getFlashdata('success')): ?>
+
+<div class="alert alert-success">
+    <?= session()->getFlashdata('success'); ?>
+</div>
+
+<?php endif; ?>
+
+
+<?php if(session()->getFlashdata('error')): ?>
+
+<div class="alert alert-danger">
+    <?= session()->getFlashdata('error'); ?>
+</div>
+
+<?php endif; ?>
         <div class="container-fluid survey_dashboard px-3 px-lg-4">
 
             <!-- STATISTICS ROW -->
@@ -565,51 +581,69 @@
                 </div>
             </div>
 
-            <!-- ACTIVE SURVEYS TABLE -->
-            <div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
-                <div class="card-header bg-white border-0 pt-4 pb-0">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-clipboard-data-fill me-2 text-primary"></i> Active
-                        Constituency Surveys</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Survey ID</th>
-                                    <th>Survey Title</th>
-                                    <th>MLA</th>
-                                    <th>Deadline</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="fw-semibold">SUR001</td>
-                                    <td>Road Development Survey</td>
-                                    <td>MLA501</td>
-                                    <td>15-Jun-2026</td>
-                                    <td><span class="badge bg-success rounded-pill px-3">Active</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">SUR002</td>
-                                    <td>Water Supply Feedback</td>
-                                    <td>MLA501</td>
-                                    <td>20-Jun-2026</td>
-                                    <td><span class="badge bg-success rounded-pill px-3">Active</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">SUR003</td>
-                                    <td>Drainage & Sanitation</td>
-                                    <td>MLA501</td>
-                                    <td>25-Jun-2026</td>
-                                    <td><span class="badge bg-success rounded-pill px-3">Active</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+           <!-- ACTIVE SURVEYS TABLE -->
+<div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
+    <div class="card-header bg-white border-0 pt-4 pb-0">
+        <h5 class="mb-0 fw-bold">
+            <i class="bi bi-clipboard-data-fill me-2 text-primary"></i>
+            Active Constituency Surveys
+        </h5>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Survey ID</th>
+                        <th>Survey Title</th>
+                        <th>MLA</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                <?php if (!empty($activeSurveys)): ?>
+
+                    <?php foreach ($activeSurveys as $row): ?>
+
+                        <tr>
+                            <td><?= esc($row['id']) ?></td>
+
+                            <td><?= esc($row['title']) ?></td>
+
+                            <td><?= esc($row['mla_id']) ?></td>
+
+                            <td><?= esc($row['end_date'] ?? 'N/A') ?></td>
+
+                            <td>
+                                <span class="badge bg-success">
+                                    <?= esc($row['status']) ?>
+                                </span>
+                            </td>
+                        </tr>
+
+                    <?php endforeach; ?>
+
+                <?php else: ?>
+
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">
+                            No Active Surveys Found
+                        </td>
+                    </tr>
+
+                <?php endif; ?>
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
 
             <!-- STEPPER SURVEY FORM -->
             <div class="card border-0 shadow-lg dashboard-card mb-4 fade-up" id="responseFormCard">
@@ -625,11 +659,28 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form id="surveyResponseForm">
+                    <form id="surveyResponseForm"
+     
+      method="post">
+      <!-- <input type="hidden" name="survey_id" value="1"> -->
+       <input type="hidden" 
+       name="survey_id" 
+       id="surveyIdHidden">
+
+<input type="hidden"
+name="voter_id"
+value="<?= session()->get('voter_id'); ?>">
+
+
+<input type="hidden"
+name="mla_id"
+value="<?= session()->get('mla_id'); ?>">
                         <div class="row g-3 mb-4">
                             <div class="col-md-3"><label class="form-label fw-semibold"><i class="bi bi-upc-scan"></i>
-                                    Survey ID</label><input type="text" class="form-control bg-light" id="surveyIdField"
-                                    value="SUR001" readonly></div>
+                                    Survey ID</label><input type="text"
+class="form-control"
+id="surveyIdField"
+readonly></div>
                             <div class="col-md-3"><label class="form-label fw-semibold"><i
                                         class="bi bi-person-badge"></i> Voter ID</label><input type="text"
                                     class="form-control bg-light" id="voterIdField" value="VTR10254" readonly></div>
@@ -644,6 +695,7 @@
                         <div class="row g-3 mb-4">
                             <div class="col-md-3"><label class="form-label fw-semibold"><i
                                         class="bi bi-geo-alt-fill"></i> District</label><select class="form-select"
+                                        name="district"
                                     id="districtSelect" required>
                                     <option value="">Select District</option>
                                     <option>Satara</option>
@@ -654,6 +706,7 @@
                                 </select></div>
                             <div class="col-md-3"><label class="form-label fw-semibold"><i
                                         class="bi bi-pin-map-fill"></i> Constituency</label><select class="form-select"
+                                        name="constituency"
                                     id="constituencySelect" required>
                                     <option value="">Select Constituency</option>
                                     <option>Wai</option>
@@ -664,10 +717,11 @@
                                 </select></div>
                             <div class="col-md-3"><label class="form-label fw-semibold"><i
                                         class="bi bi-house-heart"></i> Village / Town</label><input type="text"
-                                    class="form-control" id="villageInput" placeholder="Enter Village Name" required>
+                                    class="form-control" name="village" id="villageInput" placeholder="Enter Village Name" required>
                             </div>
                             <div class="col-md-3"><label class="form-label fw-semibold"><i class="bi bi-file-text"></i>
-                                    Survey Category</label><select class="form-select" id="surveyTypeSelect" required>
+                                    Survey Category</label><select class="form-select" name="survey_category" id="surveyTypeSelect" required>
+                                        <!-- <input type="hidden" name="survey_id" id="surveyIdHidden"> -->
                                     <option value="">Select Survey Type</option>
                                     <option value="Election Survey">Election Survey</option>
                                     <option value="Road Development Survey">Road Development Survey</option>
@@ -697,47 +751,132 @@
                         </div>
 
                         <div class="text-end mt-4" id="submitBtnWrapper" style="display: none;">
-                            <button type="submit" class="btn btn-submit-modern px-5 py-2 rounded-pill shadow-sm"><i
-                                    class="bi bi-check-circle me-2"></i> Submit Response</button>
+                            <button type="submit" 
+        id="submitBtn"
+        class="btn btn-submit-modern px-5 py-2 rounded-pill shadow-sm">
+    <i class="bi bi-check-circle me-2"></i> Submit Response
+</button>
                         </div>
                     </form>
                 </div>
             </div>
 
             <!-- SURVEY HISTORY -->
-            <div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
-                <div class="card-header bg-white border-0 pt-4">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2 text-secondary"></i> Survey History</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Survey ID</th>
-                                    <th>Survey Title</th>
-                                    <th>Selected Answer</th>
-                                    <th>Submission Date</th>
-                                </tr>
-                            </thead>
-                            <tbody id="historyTableBody">
-                                <tr>
-                                    <td>SUR001</td>
-                                    <td>Road Development</td>
-                                    <td>Excellent</td>
-                                    <td>02-Jun-2026</td>
-                                </tr>
-                                <tr>
-                                    <td>SUR009</td>
-                                    <td>Water Supply</td>
-                                    <td>Good</td>
-                                    <td>25-May-2026</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+<div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
+
+    <div class="card-header bg-white border-0 pt-4">
+        <h5 class="mb-0 fw-bold">
+            <i class="bi bi-clock-history me-2 text-secondary"></i>
+            Survey History
+        </h5>
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Survey ID</th>
+                        <th>Survey Title</th>
+                        <th>Selected Answer</th>
+                        <th>Submission Date</th>
+                    </tr>
+                </thead>
+
+
+                <tbody id="historyTableBody">
+
+
+                <?php if (!empty($responses)): ?>
+
+
+                    <?php foreach ($responses as $row): ?>
+
+                    <tr>
+
+                        <td>
+                            <?= esc($row['survey_id']) ?>
+                        </td>
+
+
+                        <td>
+                            <?= esc($row['survey_title'] ?? 'N/A') ?>
+                        </td>
+
+
+                        <td>
+
+                            <?php
+                            $answers = json_decode($row['answers'], true);
+                            ?>
+
+
+                            <?php if (is_array($answers) && !empty($answers)): ?>
+
+                                <ul class="mb-0 ps-3">
+
+                                <?php foreach ($answers as $ans): ?>
+
+                                    <li>
+                                        <?= esc($ans) ?>
+                                    </li>
+
+                                <?php endforeach; ?>
+
+                                </ul>
+
+
+                            <?php else: ?>
+
+                                <span class="text-muted">
+                                    No answers found
+                                </span>
+
+                            <?php endif; ?>
+
+
+                        </td>
+
+
+                        <td>
+                            <?= esc($row['submitted_at']) ?>
+                        </td>
+
+
+                    </tr>
+
+
+                    <?php endforeach; ?>
+
+
+                <?php else: ?>
+
+
+                    <tr>
+
+                        <td colspan="4" class="text-center text-muted">
+                            No Survey History Found
+                        </td>
+
+                    </tr>
+
+
+                <?php endif; ?>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 
             <!-- MLA ANALYTICS -->
             <div class="card border-0 shadow-sm dashboard-card fade-up">
@@ -986,10 +1125,7 @@
         let answersArray = [];
 
         // Storage & analytics globals
-        let surveyHistory = [
-            { surveyId: "SUR001", surveyTitle: "Road Development", selectedAnswer: "Excellent | Rating: 8/10", submissionDate: "02-Jun-2026" },
-            { surveyId: "SUR009", surveyTitle: "Water Supply", selectedAnswer: "Good | Rating: 7/10", submissionDate: "25-May-2026" }
-        ];
+       let surveyHistory = <?= json_encode($responses); ?>;
         let ratingValues = [8, 7];
         let positiveFlags = [true, true];
 
@@ -1005,6 +1141,21 @@
         const totalStepsSpan = document.getElementById('totalSteps');
         const timestampField = document.getElementById('submissionTimestamp');
         const surveyTypeSelect = document.getElementById('surveyTypeSelect');
+        const surveyMap = {
+    "Election Survey": 2,
+    "Road Development Survey": 3,
+    "Water Supply Survey": 4,
+    "Drainage Survey": 5,
+    "Street Light Survey": 6,
+    "Sanitation Survey": 7,
+    "Health Survey": 8,
+    "Agriculture Survey": 9,
+    "Education Survey": 10,
+    "Employment Survey": 11,
+    "Smart Village Survey": 12,
+    "MLA Performance Survey": 13,
+    "Infrastructure Survey": 14
+};
 
         // Helper: timestamp
         function setCurrentTimestamp() {
@@ -1150,20 +1301,73 @@
 
         // Refresh history table & update analytics
         function refreshHistoryUI() {
-            const tbody = document.getElementById('historyTableBody');
-            if (!tbody) return;
-            if (surveyHistory.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center">No records</td></tr>';
-                return;
-            }
-            tbody.innerHTML = '';
-            surveyHistory.slice().reverse().forEach(item => {
-                tbody.innerHTML += `<tr><td>${escapeHtml(item.surveyId)}</td><td>${escapeHtml(item.surveyTitle)}</td><td>${escapeHtml(item.selectedAnswer)}</td><td>${escapeHtml(item.submissionDate)}</td></tr>`;
-            });
+
+    const tbody = document.getElementById('historyTableBody');
+
+    if(!tbody) return;
+
+    tbody.innerHTML = "";
+
+    if(surveyHistory.length === 0)
+    {
+        tbody.innerHTML = `
+        <tr>
+            <td colspan="4" class="text-center text-muted">
+                No Survey History Found
+            </td>
+        </tr>`;
+        return;
+    }
+
+
+    surveyHistory.forEach(row => {
+
+        let answers = [];
+
+        try{
+            answers = JSON.parse(row.answers);
         }
+        catch(e){}
+
+
+        tbody.innerHTML += `
+        <tr>
+
+            <td>
+                ${row.survey_id}
+            </td>
+
+            <td>
+                ${row.survey_title ?? 'N/A'}
+            </td>
+
+
+            <td>
+
+            <ul class="mb-0 ps-3">
+
+            ${
+                answers.map(a=>`<li>${a}</li>`).join('')
+            }
+
+            </ul>
+
+            </td>
+
+
+            <td>
+                ${row.submitted_at}
+            </td>
+
+
+        </tr>`;
+
+    });
+
+}
 
         function updateAnalytics() {
-            const total = surveyHistory.length;
+           const total = <?= isset($responses) ? count($responses) : 0 ?>;
             const totalResponsesElem = document.getElementById('totalResponsesAnalytics');
             if (totalResponsesElem) totalResponsesElem.innerText = total.toLocaleString();
             const participatedElem = document.getElementById('participatedCount');
@@ -1215,13 +1419,50 @@
                 renderCurrentQuestion();
             }
         }
+     surveyTypeSelect.addEventListener('change',function(){
 
-        // Handle category change
-        surveyTypeSelect.addEventListener('change', function() {
-            const category = this.value;
-            loadCategory(category);
-        });
+let category=this.value;
 
+let id=surveyMap[category] || '';
+
+document.getElementById('surveyIdHidden').value=id;
+
+document.getElementById('surveyIdField').value=id;
+
+
+loadCategory(category);
+
+});
+//       surveyTypeSelect.addEventListener('change', function() {
+
+//     const category = this.value;
+
+//     loadCategory(category);
+
+
+//     const surveyMap = {
+
+//         "Election Survey": 1,
+//         "Road Development Survey": 2,
+//         "Water Supply Survey": 3,
+//         "Drainage Survey": 4,
+//         "Street Light Survey": 5,
+//         "Sanitation Survey": 6,
+//         "Health Survey": 7,
+//         "Agriculture Survey": 8,
+//         "Education Survey": 9,
+//         "Employment Survey": 10,
+//         "Smart Village Survey": 11,
+//         "MLA Performance Survey": 12,
+//         "Infrastructure Survey": 13
+
+//     };
+
+
+//     document.getElementById('surveyIdHidden').value =
+//         surveyMap[category] || '';
+
+// });
         // Submit final response
         function handleFormSubmit(e) {
             e.preventDefault();
@@ -1263,37 +1504,97 @@
             const surveyId = document.getElementById('surveyIdField').value;
             const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, '-');
 
-            surveyHistory.push({
-                surveyId: surveyId,
-                surveyTitle: surveyTitle,
-                selectedAnswer: summaryAns,
-                submissionDate: today
-            });
 
-            refreshHistoryUI();
-            updateAnalytics();
+          let oldAnswer = document.getElementById('answersField');
 
-            // Reset form for fresh submission
-            answersArray = new Array(currentQuestions.length).fill("");
-            currentQIndex = 0;
-            document.getElementById('districtSelect').value = "";
-            document.getElementById('constituencySelect').value = "";
-            document.getElementById('villageInput').value = "";
-            renderCurrentQuestion();
-            setCurrentTimestamp();
-            alert("✅ सर्वेक्षण यशस्वीरित्या जमा झाले! धन्यवाद.\nSurvey submitted successfully!");
-        }
+if(oldAnswer){
+    oldAnswer.remove();
+}
+
+let answerField = document.createElement("input");
+
+answerField.type = "hidden";
+answerField.name = "answers";
+answerField.id = "answersField";
+answerField.value = JSON.stringify(answersArray);
+
+document.getElementById('surveyResponseForm')
+.appendChild(answerField);
+
+//             surveyHistory.push({
+//                 surveyId: surveyId,
+//                 surveyTitle: surveyTitle,
+//                 selectedAnswer: summaryAns,
+//                 submissionDate: today
+//             });
+// refreshHistoryUI();
+// updateAnalytics();
+
+// Submit data to backend
+// e.target.submit();
+// Submit data to backend using AJAX
+
+let form = document.getElementById('surveyResponseForm');
+
+let formData = new FormData(form);
+
+
+fetch("<?= base_url('user/survey/save') ?>", {
+
+    method:"POST",
+    body:formData
+
+})
+.then(response => response.json())
+
+.then(data => {
+
+    if(data.status)
+    {
+        alert(data.message);
+
+        // same page reload
+        window.location.href="<?= base_url('user/survey') ?>";
+    }
+    else
+    {
+        alert(data.message);
+    }
+
+})
+.catch(error => {
+
+    console.log(error);
+    alert("Something went wrong");
+
+});
+}
 
         // Event listeners
-        prevBtn.addEventListener('click', prevQuestion);
-        nextBtn.addEventListener('click', nextQuestion);
-        document.getElementById('surveyResponseForm').addEventListener('submit', handleFormSubmit);
+prevBtn.addEventListener('click', prevQuestion);
+nextBtn.addEventListener('click', nextQuestion);
+document.getElementById('surveyResponseForm')
+.addEventListener('submit', handleFormSubmit);
 
-        // Initialize
-        loadCategory('');
-        refreshHistoryUI();
-        updateAnalytics();
 
+// Prevent accidental Enter form submit
+document.getElementById('surveyResponseForm')
+.addEventListener('keydown', function(e){
+
+    if(e.key === "Enter" && e.target.tagName !== "TEXTAREA"){
+
+        e.preventDefault();
+
+        return false;
+    }
+
+});
+
+
+// Initialize
+loadCategory('');
+refreshHistoryUI();
+updateAnalytics();
         console.log('✅ Dynamic Survey Module loaded. Total categories:', Object.keys(QUESTIONS_BY_CATEGORY).length);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

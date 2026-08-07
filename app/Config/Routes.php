@@ -20,7 +20,9 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->get('mla-management', 'MLAManagement::index');
     $routes->get('constituency-management', 'ConstituencyManagement::index');
     $routes->get('complaint-management', 'ComplaintManagement::index');
+    $routes->post('complaint/save', 'Complaint::save');
     $routes->get('survey-management', 'SurveyManagement::index');
+    $routes->get('survey-management/data', 'SurveyManagement::dashboardData');
     $routes->get('media-library', 'MediaLibrary::index');
     $routes->get('feedback-dashboard', 'FeedbackDashboard::index');
     $routes->get('activity-logs', 'ActivityLogs::index');
@@ -33,12 +35,15 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 $routes->group('user', ['namespace' => 'App\Controllers\User'], function($routes) {
 
     $routes->get('login', 'Auth::login');
+    $routes->post('login/check','Auth::loginCheck');
 
     $routes->get('dashboard', 'Dashboard::index');
 
     $routes->get('assigned-mla', 'AssignedMLA::index');
 
     $routes->get('complaint', 'Complaint::index');
+    $routes->post('complaint/save', 'Complaint::save');
+
 
     // =============================================
     // FEEDBACK ROUTES - ALL Routes for Feedback Module
@@ -58,4 +63,5 @@ $routes->group('user', ['namespace' => 'App\Controllers\User'], function($routes
     $routes->get('notification', 'Notification::index');
 
     $routes->get('survey', 'Survey::index');
+    $routes->post('survey/save', 'Survey::save');
 });
