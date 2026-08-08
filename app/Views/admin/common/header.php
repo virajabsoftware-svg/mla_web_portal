@@ -24,6 +24,13 @@
                     <?php
                     // Define admin menu items with URL segments for active detection
                     $adminMenuItems = [
+                        'dashboard' => [
+    'url' => base_url('admin/dashboard'),
+    'icon' => 'fa fa-dashboard',
+    'label' => 'Dashboard',
+    'tooltip' => 'Dashboard',
+    'segments' => ['dashboard']
+],
                         'mla-management' => [
                             'url' => base_url('admin/mla-management'),
                             'icon' => 'fa fa-users',
