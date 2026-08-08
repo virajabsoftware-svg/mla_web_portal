@@ -4,58 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>MLA Monitoring System</title>
-    <!-- Existing CSS dependencies (preserved) -->
+    <title>Constituency Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <!-- jQuery and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="header.css" />
-    <!-- bootstrap css -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-
-    <!-- responsive css -->
-   
-    <!-- color css -->
-    <link rel="stylesheet" href="css/colors.css" />
-    <!-- select bootstrap -->
-    <link rel="stylesheet" href="css/bootstrap-select.css" />
-    <!-- scrollbar css -->
-   
-    <!-- calendar file css -->
-    <link rel="stylesheet" href="js/semantic.min.css" />
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Leaflet.js for Maps -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <!-- Google Fonts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js">
+    </script>
+    <link rel="stylesheet" href="<?= base_url('assets/admin/css/header.css') ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
-
-        <link rel="stylesheet" href="<?= base_url('assets/admin/css/header.css') ?>">
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap"
+    rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-
-
-      /* Inner Dashboard Down */
-.container-fluid.mt-4 {
-    margin-top: 70px !important;
-}
-        /* ===================================================== */
-        /* PREMIUM CONSTITUENCY DASHBOARD - White + Beige + Gold Theme
-           All Animations: Hover Lift, 3D, Glow Border, Shine, Pulse
-           ===================================================== */
+        .cream-container {
+            padding-top: 50px !important;
+        }
 
         :root {
             --pure-white: #ffffff;
@@ -67,477 +34,646 @@
             --gold: #d4af37;
             --gold-dark: #b8960c;
             --gold-glow: rgba(212, 175, 55, 0.35);
-            --success: #10B981;
-            --warning: #F59E0B;
-            --danger: #EF4444;
-            --info: #3B82F6;
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.08);
             --shadow-gold: 0 12px 30px rgba(212, 175, 55, 0.2);
             --shadow-gold-lg: 0 20px 40px rgba(212, 175, 55, 0.25);
             --radius-sm: 12px;
-            --radius-md: 16px;
+            --radius-md: 18px;
             --radius-lg: 20px;
             --radius-xl: 24px;
+            --radius-xxl: 32px;
             --transition-fast: 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             --transition-base: 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
 
-        body {
-            background: linear-gradient(135deg, var(--cream) 0%, var(--beige-light) 50%, var(--beige) 100%);
-            font-family: 'Playfair Display', 'Georgia', serif;
-            color: #1E293B;
-            min-height: 100vh;
-        }
-
-        /* ===================================================== */
-        /* DASHBOARD CARDS - Premium Glassmorphism */
-        /* ===================================================== */
-
-        .dashboard-card {
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(12px);
-            border-radius: var(--radius-xl);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: var(--shadow-md);
-            transition: all var(--transition-base);
-            overflow: hidden;
-            cursor: pointer;
-            height: 100%;
-        }
-
-        .dashboard-card::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, var(--gold), var(--gold-light), var(--gold-dark), var(--gold));
-            border-radius: inherit;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: -1;
-        }
-
-        .dashboard-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(115deg, transparent 10%, rgba(255, 255, 255, 0.25) 40%, transparent 60%);
-            transform: rotate(25deg);
-            transition: transform 0.6s ease;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .dashboard-card:hover {
-            transform: translateY(-8px) rotateX(2deg);
-            box-shadow: var(--shadow-gold);
-            border-color: rgba(212, 175, 55, 0.3);
-        }
-
-        .dashboard-card:hover::before {
-            opacity: 1;
-            animation: borderPulse 1.5s infinite;
-        }
-
-        .dashboard-card:hover::after {
-            opacity: 1;
-            transform: rotate(25deg) translateX(50%);
-        }
-
-        @keyframes borderPulse {
-
-            0%,
-            100% {
-                opacity: 0.4;
-                filter: blur(2px);
-            }
-
-            50% {
-                opacity: 0.8;
-                filter: blur(4px);
-            }
-        }
-
-        .dashboard-card .card-body {
-            padding: 25px 20px;
-            position: relative;
-        }
-
-        .dashboard-card h6 {
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--gold-dark);
-            margin-bottom: 12px;
-        }
-
-        .dashboard-card h2 {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 0;
-            font-family: 'Space Grotesk', monospace;
-            background: linear-gradient(135deg, #0F172A, var(--gold-dark));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* ===================================================== */
-        /* CARDS - Glassmorphism */
-        /* ===================================================== */
-
-        .card {
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(12px);
-            border-radius: var(--radius-xl);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: var(--shadow-md);
-            transition: all var(--transition-base);
-            margin-bottom: 0;
-        }
-
-        .card:hover {
-            box-shadow: var(--shadow-gold);
-            border-color: rgba(212, 175, 55, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .card-header {
-            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-            color: white;
-            font-weight: 700;
-            font-family: 'Poppins', sans-serif;
-            border: none;
-            padding: 15px 20px;
-            border-radius: var(--radius-xl) var(--radius-xl) 0 0 !important;
-        }
-
-        .card-header h4,
-        .card-header h5,
-        .card-header h6 {
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, var(--beige-light) 0%, var(--cream) 100%);
+            font-family: 'Playfair Display', 'Georgia', serif;
+            color: #2c2418;
+            padding-bottom: 3rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1e8db;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #b37b2e, var(--gold-dark), #d4af37, #e8c97a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        .badge-cream-gold {
+            background: var(--beige-dark);
+            color: #7a5a2a;
             font-weight: 600;
+            border-left: 4px solid var(--gold);
+            box-shadow: var(--shadow-sm);
         }
 
-        .card-body {
-            padding: 22px;
+        .filter-astro {
+            background: rgba(255, 252, 242, 0.96);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius-xxl);
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            box-shadow: var(--shadow-gold);
+            transition: var(--transition-base);
         }
 
-        /* Form Controls */
+        .filter-astro:hover {
+            box-shadow: var(--shadow-gold-lg);
+            border-color: var(--gold);
+        }
+
+        .filter-astro label {
+            color: #8b6946;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
         .form-control,
         .form-select {
-            border: 1px solid var(--beige-dark);
-            border-radius: 48px;
+            background: var(--pure-white) !important;
+            border: 1px solid #e9dfcf;
+            border-radius: var(--radius-md);
             padding: 10px 16px;
-            transition: all var(--transition-base);
-            background: var(--pure-white);
+            font-weight: 500;
+            transition: var(--transition-fast);
         }
 
         .form-control:focus,
         .form-select:focus {
             border-color: var(--gold);
-            box-shadow: 0 0 0 3px var(--gold-glow);
-            transform: translateY(-1px);
-            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
         }
 
-        /* Table Styles */
-        .table {
-            margin-bottom: 0;
-            border-collapse: separate;
-            border-spacing: 0 6px;
-        }
-
-        .table thead th {
+        .btn-warm-gold {
+            background: linear-gradient(115deg, #d4af37, #b8860b);
             border: none;
-            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-            color: white;
-            padding: 12px;
-            font-weight: 600;
-            font-size: 13px;
+            font-weight: 700;
+            padding: 10px 28px;
+            border-radius: 60px;
+            box-shadow: var(--shadow-gold);
+            transition: var(--transition-fast);
+            color: #2c1f0f;
         }
 
-        .table tbody tr {
-            transition: all var(--transition-fast);
-        }
-
-        .table tbody tr:nth-child(even) td {
-            background-color: rgba(250, 246, 237, 0.5);
-        }
-
-        .table tbody tr:nth-child(odd) td {
-            background-color: rgba(255, 255, 255, 0.7);
-        }
-
-        .table tbody tr:hover td {
-            background: linear-gradient(90deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
-            transform: translateX(4px);
-        }
-
-        .table td {
-            padding: 12px;
-            border: none;
-            vertical-align: middle;
-            font-size: 13px;
-        }
-
-        /* Button Styles */
-        .btn-sm {
-            border-radius: 40px;
-            padding: 5px 12px;
-            margin: 2px;
-            font-size: 11px;
-            font-weight: 600;
-            transition: all var(--transition-fast);
-        }
-
-        .btn-sm:hover {
+        .btn-warm-gold:hover {
             transform: translateY(-2px);
-            filter: brightness(1.05);
+            background: linear-gradient(115deg, #e0bc4a, #c9951a);
+            box-shadow: 0 12px 22px rgba(180, 130, 30, 0.3);
         }
 
-        .btn-info {
-            background: linear-gradient(135deg, #0EA5E9, #0284C7);
-            border: none;
-            color: white;
+        .btn-outline-cream {
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: #8b6946;
+            font-weight: 600;
+            border-radius: 60px;
+            padding: 10px 24px;
         }
 
-        .btn-warning {
-            background: linear-gradient(135deg, #F59E0B, #D97706);
-            border: none;
-            color: white;
+        .btn-outline-cream:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
         }
 
-        .btn-success {
-            background: linear-gradient(135deg, #10B981, #059669);
-            border: none;
-            color: white;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            border: none;
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #EF4444, #DC2626);
-            border: none;
-            color: white;
-        }
-
-        /* Timeline */
-        .timeline {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .timeline li {
-            padding: 12px 0 12px 20px;
-            border-left: 3px solid var(--gold);
-            margin-bottom: 10px;
-            transition: all var(--transition-fast);
-            position: relative;
-        }
-
-        .timeline li::before {
-            content: '';
-            position: absolute;
-            left: -7px;
-            top: 18px;
-            width: 11px;
-            height: 11px;
-            background: var(--gold);
-            border-radius: 50%;
-            border: 2px solid var(--pure-white);
-        }
-
-        .timeline li:hover {
-            transform: translateX(6px);
-            border-left-color: var(--gold-dark);
-        }
-
-        /* Progress Bar for Health Score */
-        .progress {
-            height: 8px;
-            border-radius: 20px;
-            background: var(--beige-dark);
+        /* ================================================================
+                   CONSTITUENCY CARD DESIGN — adapted from MLA cards
+                   ================================================================ */
+        .constituency-card {
+            background: var(--pure-white);
+            border-radius: var(--radius-xl);
             overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            height: 100%;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid #f3ecd9;
+            position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
-        .progress-bar {
-            border-radius: 20px;
+        .constituency-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-gold-lg);
+            border-color: var(--gold-light);
+        }
+
+        .constituency-card .card-header {
+            position: relative;
+            padding: 20px 22px 0 22px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            background: #faf1e2;
+            min-height: 90px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            transition: background 0.3s ease;
+        }
+
+        .constituency-card .card-header .rank-badge {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: radial-gradient(circle at 30% 20%, #f5e7c8, #c9a03d);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10), 0 0 0 2px #fff3e0, 0 0 0 4px rgba(212, 175, 55, 0.20);
+            transition: all 0.3s ease;
+        }
+
+        .constituency-card:hover .rank-badge {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14), 0 0 0 2px #fff3e0, 0 0 0 5px rgba(212, 175, 55, 0.28);
+        }
+
+        .rank-badge .rank-number {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #2c2418;
+        }
+
+        .rank-badge .rank-label {
+            font-size: 0.5rem;
+            font-weight: 600;
+            color: #5a442a;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            margin-top: -2px;
+        }
+
+        .constituency-card .location-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10), 0 0 0 2px rgba(255, 255, 255, 0.9), 0 0 0 3px rgba(212, 175, 55, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--gold-dark);
+            transition: all 0.3s ease;
+        }
+
+        .constituency-card:hover .location-icon {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14), 0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 0 4px rgba(212, 175, 55, 0.28);
+        }
+
+        .constituency-card .card-body {
+            padding: 18px 22px 22px 22px;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .constituency-card .constituency-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2c1f0f;
+            margin-bottom: 4px;
+            letter-spacing: -0.2px;
+        }
+
+        .constituency-card .district-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 16px 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: #f5ede1;
+            color: #b47c2e;
+            border: 1px solid #e8d8c4;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+            margin: 0 auto 10px auto;
+        }
+
+        .constituency-card:hover .district-chip {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .constituency-card .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin: 10px 0 12px 0;
+        }
+
+        .constituency-card .stat-item {
+            background: var(--beige-light);
+            border-radius: var(--radius-sm);
+            padding: 8px 4px;
+            text-align: center;
+        }
+
+        .constituency-card .stat-item .stat-number {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #2c1f0f;
+        }
+
+        .constituency-card .stat-item .stat-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #7a5f3a;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .constituency-card .development-score {
+            margin: 8px 0 12px 0;
+        }
+
+        .constituency-card .development-score .score-value {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .constituency-card .development-score .score-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #7a5f3a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .constituency-card .progress {
+            height: 6px;
+            border-radius: 10px;
+            background: var(--beige-dark);
+            margin-top: 4px;
+        }
+
+        .constituency-card .progress .progress-bar {
+            border-radius: 10px;
             background: linear-gradient(90deg, var(--gold), var(--gold-dark));
         }
 
-        /* Canvas Charts */
-        canvas {
-            max-height: 250px;
-            width: 100%;
-        }
-
-        /* Map Container */
-        #map {
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--beige);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--gold);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gold-dark);
-        }
-
-        /* Fade In Animation */
-        .dashboard-card,
-        .card {
-            animation: fadeInUp 0.5s ease backwards;
-        }
-
-        .dashboard-card:nth-child(1) {
-            animation-delay: 0.02s;
-        }
-
-        .dashboard-card:nth-child(2) {
-            animation-delay: 0.04s;
-        }
-
-        .dashboard-card:nth-child(3) {
-            animation-delay: 0.06s;
-        }
-
-        .dashboard-card:nth-child(4) {
-            animation-delay: 0.08s;
-        }
-
-        .dashboard-card:nth-child(5) {
-            animation-delay: 0.1s;
-        }
-
-        .dashboard-card:nth-child(6) {
-            animation-delay: 0.12s;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Floating Animation */
-        .floating {
-            animation: floatCard 4s ease-in-out infinite;
-        }
-
-        @keyframes floatCard {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-6px);
-            }
-        }
-
-        /* Counter Animation */
-        .counter-number {
-            animation: countPop 0.4s ease-out;
+        .constituency-card .status-active {
             display: inline-block;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            margin-top: 4px;
         }
 
-        @keyframes countPop {
-            0% {
-                transform: scale(0.8);
-                opacity: 0;
-            }
+        /* ================================================================
+                   STATISTICS BOXES
+                   ================================================================ */
+        .stat-box {
+            background: var(--pure-white);
+            border-radius: var(--radius-xl);
+            padding: 22px 20px;
+            text-align: center;
+            border: 1px solid #f3ecd9;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+            height: 100%;
+        }
 
-            60% {
-                transform: scale(1.1);
-            }
+        .stat-box:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-gold);
+            border-color: var(--gold-light);
+        }
 
-            100% {
-                transform: scale(1);
-                opacity: 1;
+        .stat-box .stat-icon {
+            font-size: 2rem;
+            color: var(--gold-dark);
+            margin-bottom: 8px;
+        }
+
+        .stat-box .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2c1f0f, var(--gold-dark));
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .stat-box .stat-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #7a5f3a;
+            margin-top: 4px;
+        }
+
+        /* ================================================================
+                   PREMIUM TABLE STYLES (cream/gold theme)
+                   ================================================================ */
+        .premium-table-wrapper {
+            background: var(--pure-white);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem 1rem 0.5rem 1rem;
+            border: 1px solid #f3ecd9;
+            box-shadow: var(--shadow-md);
+            overflow-x: auto;
+        }
+
+        .premium-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            min-width: 700px;
+        }
+
+        .premium-table thead th {
+            background: linear-gradient(135deg, #faf3e6, #f5ede1);
+            color: #7a5f3a;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 14px 16px;
+            border: none;
+            border-bottom: 2px solid var(--gold-light);
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .premium-table thead th:first-child {
+            border-radius: 16px 0 0 16px;
+        }
+
+        .premium-table thead th:last-child {
+            border-radius: 0 16px 16px 0;
+        }
+
+        .premium-table tbody tr {
+            background: rgba(255, 252, 245, 0.7);
+            transition: all 0.2s ease;
+            border-radius: 12px;
+        }
+
+        .premium-table tbody tr:hover {
+            background: #fffcf0;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.08);
+        }
+
+        .premium-table tbody td {
+            padding: 12px 16px;
+            border: none;
+            border-bottom: 1px solid #f1e8db;
+            vertical-align: middle;
+            font-size: 0.9rem;
+            color: #2c2418;
+        }
+
+        .premium-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .premium-table tbody td:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .premium-table tbody td:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .status-active {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .status-inactive {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            background: #fce4ec;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .action-btn-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: none;
+            transition: all 0.2s ease;
+            background: var(--beige);
+            color: #5a442a;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .action-btn i {
+            font-size: 0.7rem;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .action-btn.view-btn {
+            background: #f5ede1;
+            color: #7a5f3a;
+        }
+
+        .action-btn.view-btn:hover {
+            background: #e8dccc;
+        }
+
+        .action-btn.edit-btn {
+            background: #f5ede1;
+            color: #7a5f3a;
+        }
+
+        .action-btn.edit-btn:hover {
+            background: #e8dccc;
+        }
+
+        .action-btn.delete-btn {
+            background: #f5ede1;
+            color: #9e6b6b;
+        }
+
+        .action-btn.delete-btn:hover {
+            background: #fce4e4;
+            color: #c62828;
+        }
+
+        /* ================================================================
+                   MODAL
+                   ================================================================ */
+        .modal-cream .modal-content {
+            background: var(--pure-white);
+            border-radius: var(--radius-xxl);
+            border: 1px solid var(--gold-light);
+            box-shadow: var(--shadow-gold-lg);
+        }
+
+        .modal-cream .modal-header {
+            border-bottom: 2px solid #d4af37;
+            border-radius: 28px 28px 0 0;
+            background: rgba(212, 175, 55, 0.05);
+            padding: 1.25rem 1.75rem;
+        }
+
+        .modal-cream .modal-title {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 1.7rem;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #b8860b, #d4af37, #f5e6a3);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-cream .modal-title i {
+            background: none;
+            color: #d4af37;
+            font-size: 1.6rem;
+            margin-right: 12px;
+            text-shadow: none;
+        }
+
+        .modal-cream .btn-close {
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+            transition: all 0.2s ease;
+            opacity: 0.7;
+        }
+
+        .modal-cream .btn-close:hover {
+            opacity: 1;
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 4px #d4af37);
+        }
+
+        .modal-cream .modal-body {
+            padding: 2rem 2rem 2rem 2rem;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            color: #2c2418;
+            background: transparent;
+        }
+
+        .modal-cream .modal-footer {
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(245, 235, 210, 0.4);
+            border-radius: 0 0 28px 28px;
+            padding: 1rem 1.75rem;
+        }
+
+        .modal.fade .modal-dialog {
+            transform: scale(0.96) translateY(-10px);
+            transition: transform 0.25s ease-out, opacity 0.2s;
+        }
+
+        .modal.show .modal-dialog {
+            transform: scale(1) translateY(0);
+        }
+
+        @media (max-width: 576px) {
+            .modal-cream .modal-body {
+                padding: 1.25rem;
+            }
+            .modal-cream .modal-title {
+                font-size: 1.3rem;
             }
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .dashboard-card .card-body {
-                padding: 18px 15px;
-            }
-
-            .dashboard-card h2 {
-                font-size: 24px;
-            }
-
-            .card-body {
-                padding: 18px;
-            }
-
-            .btn-sm {
-                padding: 4px 8px;
-                font-size: 10px;
-                margin: 2px;
-            }
-
-            .table th,
-            .table td {
-                padding: 8px;
-                font-size: 11px;
-            }
+        /* Read-only fields for view modal */
+        .view-field-readonly {
+            background: #faf6ed !important;
+            color: #4a3f32;
+            cursor: default;
+            border-color: #e9dfcf;
         }
 
-        /* ========== TRANSPARENT FLOATING FOOTER ========== */
+        .view-field-readonly:focus {
+            box-shadow: none !important;
+            border-color: #e9dfcf !important;
+        }
 
+        /* ================================================================
+                   FOOTER
+                   ================================================================ */
         .footer {
             background: rgba(255, 255, 255, 0.08) !important;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 20px;
-
             padding: 1rem 2rem !important;
-
             text-align: center;
-
             margin: 2rem 20px 25px 20px !important;
-            /* bottom pasun var */
-
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.12),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15);
-
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.15);
             position: relative;
             overflow: hidden;
         }
@@ -563,7 +699,6 @@
             color: #d4af37 !important;
         }
 
-        /* Footer always content chya khali */
         .container-fluid.cream-container {
             display: flex;
             flex-direction: column;
@@ -574,591 +709,1042 @@
             margin-top: auto !important;
         }
 
-        /* Mobile */
         @media (max-width:768px) {
             .footer {
                 margin: 1.5rem 15px 20px 15px !important;
                 padding: 0.9rem 1rem !important;
             }
-
             .footer p {
                 font-size: 0.8rem;
             }
         }
-        
+
+        @media (max-width: 576px) {
+            .stat-grid {
+                grid-template-columns: 1fr 1fr !important;
+            }
+        }
     </style>
 </head>
 
 <body class="inner_page widgets">
-   <?php include "common/header.php"?>  
-                <!-- EXISTING CONTENT AREA (COMPLETELY PRESERVED - NO MODIFICATIONS) -->
-                <div class="container-fluid mt-4">
+    <?php include "common/header.php"?>
 
-                    <!-- ====================================== -->
-                    <!-- 1. SUMMARY KPI CARDS -->
-                    <!-- ====================================== -->
-                    <div class="row g-4">
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card dashboard-card pulse-card">
-                                <div class="card-body">
-                                    <h6><i class="fa-solid fa-map-marker-alt me-1"></i> Total Constituencies</h6>
-                                    <h2 id="totalConstituencies">288</h2>
-                                </div>
-                            </div>
-                        </div>
+    <div class="container-fluid mt-4 px-3 px-lg-5 cream-container">
+        <!-- ============================================================ -->
+        <!-- HERO SECTION -->
+        <!-- ============================================================ -->
+        <div class="text-center mb-4">
+            <span class="badge badge-cream-gold px-4 py-2 rounded-pill"><i class="fas fa-map-location-dot me-2"></i> CONSTITUENCY MANAGEMENT</span>
+            <h1 class="display-5 fw-bold mt-3 gold-gradient-text"><i class="fas fa-map-marked-alt me-3"></i> Constituency Management</h1>
+            <div class="gold-divider"></div>
+            <p class="text-muted mt-2" style="color:#9b7c54 !important;">Manage Maharashtra Assembly Constituencies, development status and constituency-level information</p>
+        </div>
 
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card dashboard-card">
-                                <div class="card-body">
-                                    <h6><i class="fa-solid fa-user-tie me-1"></i> Assigned MLAs</h6>
-                                    <h2 id="assignedMlas">288</h2>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card dashboard-card">
-                                <div class="card-body">
-                                    <h6><i class="fa-solid fa-users me-1"></i> Total Voters</h6>
-                                    <h2 id="totalVoters">9.2 Cr</h2>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card dashboard-card">
-                                <div class="card-body">
-                                    <h6><i class="fa-solid fa-check-circle me-1"></i> Total Booths</h6>
-                                    <h2 id="totalBooths">98,500</h2>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card dashboard-card">
-                                <div class="card-body">
-                                    <h6><i class="fa-solid fa-layer-group me-1"></i> Total Wards</h6>
-                                    <h2 id="totalWards">32,450</h2>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card dashboard-card">
-                                <div class="card-body">
-                                    <h6><i class="fa-solid fa-chart-line me-1"></i> Active Constituencies</h6>
-                                    <h2 id="activeConstituencies">288</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ====================================== -->
-                    <!-- SEARCH & FILTER -->
-                    <!-- ====================================== -->
-                    <div class="card mt-5">
-                        <div class="card-body">
-                            <h4 class="mb-4"><i class="fa-solid fa-filter me-2" style="color: var(--gold);"></i> Search
-                                & Filter Constituencies</h4>
-                            <div class="row g-3">
-                                <div class="col-md-2">
-                                    <select class="form-select" id="stateFilter">
-                                        <option value="">All States</option>
-                                        <option value="Maharashtra">Maharashtra</option>
-                                        <option value="Gujarat">Gujarat</option>
-                                        <option value="Karnataka">Karnataka</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <select class="form-select" id="districtFilter">
-                                        <option value="">All Districts</option>
-                                        <option value="Satara">Satara</option>
-                                        <option value="Pune">Pune</option>
-                                        <option value="Mumbai">Mumbai</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <select class="form-select" id="constituencyFilter">
-                                        <option value="">All Constituencies</option>
-                                        <option value="Karad North">Karad North</option>
-                                        <option value="Satara">Satara</option>
-                                        <option value="Patan">Patan</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <select class="form-select" id="mlaFilter">
-                                        <option value="">All MLAs</option>
-                                        <option value="MLA A">MLA A</option>
-                                        <option value="MLA B">MLA B</option>
-                                        <option value="MLA C">MLA C</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <select class="form-select" id="statusFilter">
-                                        <option value="">All Status</option>
-                                        <option value="Active">Active</option>
-                                        <option value="Inactive">Inactive</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="text" class="form-control" id="searchInput"
-                                        placeholder="🔍 Search Constituency">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ====================================== -->
-                    <!-- DISTRICT WISE CHART -->
-                    <!-- ====================================== -->
-                    <div class="row mt-5">
-                        <div class="col-lg-8">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa-solid fa-chart-column me-2"></i> District-wise Constituencies
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="districtChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa-solid fa-chart-pie me-2"></i> MLA Assignment Status
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="assignmentChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ====================================== -->
-                    <!-- VOTER ANALYTICS -->
-                    <!-- ====================================== -->
-                    <div class="row mt-5">
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa-solid fa-chart-bar me-2"></i> Top Voter Count Constituencies
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="voterChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa-solid fa-heartbeat me-2"></i> Constituency Health Score
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table" id="healthScoreTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>Constituency</th>
-                                                    <th>Health Score</th>
-                                                    <th>Progress</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="healthScoreBody">
-                                                <!-- Dynamic content -->
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ====================================== -->
-                    <!-- BOOTH & WARD ANALYTICS -->
-                    <!-- ====================================== -->
-                    <div class="row mt-5">
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa-solid fa-chart-line me-2"></i> Booth Analytics
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="boothChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa-solid fa-chart-line me-2"></i> Ward Analytics
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="wardChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ====================================== -->
-                    <!-- PERFORMANCE OVERVIEW -->
-                    <!-- ====================================== -->
-                    <div class="card mt-5">
-                        <div class="card-header">
-                            <i class="fa-solid fa-chart-simple me-2"></i> Constituency Performance Overview
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="performanceTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Constituency</th>
-                                            <th>MLA</th>
-                                            <th>Rating</th>
-                                            <th>Complaints</th>
-                                            <th>Surveys</th>
-                                            <th>Resolution Rate</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="performanceBody">
-                                        <!-- Dynamic content -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ====================================== -->
-                    <!-- GEO MAP -->
-                    <!-- ====================================== -->
-                    <div class="card mt-5">
-                        <div class="card-header">
-                            <i class="fa-solid fa-map me-2"></i> Constituency Geo Mapping
-                        </div>
-                        <div class="card-body">
-                            <div id="map" style="height:450px; width:100%; border-radius:15px;"></div>
-                        </div>
-                    </div>
-
-                    <!-- ====================================== -->
-                    <!-- RECENT ACTIVITIES -->
-                    <!-- ====================================== -->
-                    <div class="card mt-5">
-                        <div class="card-header">
-                            <i class="fa-solid fa-clock me-2"></i> Recent Activities
-                        </div>
-                        <div class="card-body">
-                            <ul class="timeline" id="recentActivities">
-                                <li><i class="fa-solid fa-pen me-2"></i> Karad North Boundary Updated - 10 mins ago</li>
-                                <li><i class="fa-solid fa-user-check me-2"></i> MLA Assigned to Satara Constituency - 1
-                                    hour ago</li>
-                                <li><i class="fa-solid fa-plus me-2"></i> New Ward Added to Pune District - 2 hours ago
-                                </li>
-                                <li><i class="fa-solid fa-chart-line me-2"></i> Voter Registration Drive Completed - 3
-                                    hours ago</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- ====================================== -->
-                    <!-- CONSTITUENCY MANAGEMENT TABLE -->
-                    <!-- ====================================== -->
-                    <div class="card mt-5 mb-5">
-                        <div class="card-header">
-                            <i class="fa-solid fa-table-list me-2"></i> Constituency Management
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover table-bordered" id="managementTable">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Constituency</th>
-                                            <th>District</th>
-                                            <th>MLA</th>
-                                            <th>Voters</th>
-                                            <th>Booths</th>
-                                            <th>Wards</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="managementBody">
-                                        <!-- Dynamic content -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
+        <!-- ============================================================ -->
+        <!-- STATISTICS BOXES -->
+        <!-- ============================================================ -->
+        <div class="row g-4 mb-5">
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-city"></i></div>
+                    <div class="stat-number">36</div>
+                    <div class="stat-label">Total Districts</div>
                 </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-map-pin"></i></div>
+                    <div class="stat-number">288</div>
+                    <div class="stat-label">Total Constituencies</div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-number">215</div>
+                    <div class="stat-label">Developed Constituencies</div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-play-circle"></i></div>
+                    <div class="stat-number">288</div>
+                    <div class="stat-label">Active Constituencies</div>
+                </div>
+            </div>
+        </div>
 
-                <!-- footer -->
-                <div class="container-fluid">
-                    <div class="footer">
-                        <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
+        <!-- ============================================================ -->
+        <!-- TOP 3 DEVELOPED CONSTITUENCIES -->
+        <!-- ============================================================ -->
+        <div class="text-center mb-4">
+            <h2 class="gold-gradient-text fs-2 fw-bold"><i class="fas fa-trophy me-2"></i> Top 3 Developed Constituencies</h2>
+            <p class="text-muted" style="color:#9b7c54 !important;">Leading constituencies in development performance</p>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <!-- Constituency 1: Kopri-Pachpakhadi -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="constituency-card">
+                    <div class="card-header" style="background: #FFF8E1;">
+                        <div class="location-icon">
+                            <i class="fas fa-map-location-dot"></i>
+                        </div>
+                        <div class="rank-badge">
+                            <span class="rank-number">1</span>
+                            <span class="rank-label">Rank</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="constituency-name">Kopri-Pachpakhadi</div>
+                        <div class="district-chip">
+                            <i class="fas fa-city me-1"></i> Thane
+                        </div>
+                        <div class="development-score">
+                            <div class="score-value">96%</div>
+                            <div class="score-label">Development Score</div>
+                            <div class="progress"><div class="progress-bar" style="width:96%"></div></div>
+                        </div>
+                        <div class="stat-grid">
+                            <div class="stat-item">
+                                <div class="stat-number">28</div>
+                                <div class="stat-label">Villages</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">42</div>
+                                <div class="stat-label">Booths</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">100%</div>
+                                <div class="stat-label">Coverage</div>
+                            </div>
+                        </div>
+                        <span class="status-active">Active</span>
                     </div>
                 </div>
             </div>
-            <!-- end dashboard inner -->
+
+            <!-- Constituency 2: Nagpur South West -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="constituency-card">
+                    <div class="card-header" style="background: #FFF4E8;">
+                        <div class="location-icon">
+                            <i class="fas fa-map-location-dot"></i>
+                        </div>
+                        <div class="rank-badge">
+                            <span class="rank-number">2</span>
+                            <span class="rank-label">Rank</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="constituency-name">Nagpur South West</div>
+                        <div class="district-chip">
+                            <i class="fas fa-city me-1"></i> Nagpur
+                        </div>
+                        <div class="development-score">
+                            <div class="score-value">94%</div>
+                            <div class="score-label">Development Score</div>
+                            <div class="progress"><div class="progress-bar" style="width:94%"></div></div>
+                        </div>
+                        <div class="stat-grid">
+                            <div class="stat-item">
+                                <div class="stat-number">31</div>
+                                <div class="stat-label">Villages</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">48</div>
+                                <div class="stat-label">Booths</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">100%</div>
+                                <div class="stat-label">Coverage</div>
+                            </div>
+                        </div>
+                        <span class="status-active">Active</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Constituency 3: Karad South -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="constituency-card">
+                    <div class="card-header" style="background: #FFF4E8;">
+                        <div class="location-icon">
+                            <i class="fas fa-map-location-dot"></i>
+                        </div>
+                        <div class="rank-badge">
+                            <span class="rank-number">3</span>
+                            <span class="rank-label">Rank</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="constituency-name">Karad South</div>
+                        <div class="district-chip">
+                            <i class="fas fa-city me-1"></i> Satara
+                        </div>
+                        <div class="development-score">
+                            <div class="score-value">92%</div>
+                            <div class="score-label">Development Score</div>
+                            <div class="progress"><div class="progress-bar" style="width:92%"></div></div>
+                        </div>
+                        <div class="stat-grid">
+                            <div class="stat-item">
+                                <div class="stat-number">35</div>
+                                <div class="stat-label">Villages</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">51</div>
+                                <div class="stat-label">Booths</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">100%</div>
+                                <div class="stat-label">Coverage</div>
+                            </div>
+                        </div>
+                        <span class="status-active">Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- FILTER SECTION - CONSTITUENCY COMMAND CENTER -->
+        <!-- ============================================================ -->
+        <div class="filter-astro p-4 shadow-lg mt-2">
+            <h3 class="mb-4 fw-semibold" style="color:#876b42;"><i class="fas fa-map-location-dot me-2" style="color: var(--gold-dark);"></i> Constituency Command Center</h3>
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label><i class="fas fa-flag me-1"></i> State</label>
+                    <select class="form-select">
+                        <option value="">All States</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label><i class="fas fa-city me-1"></i> District</label>
+                    <select class="form-select">
+                        <option value="">All Districts</option>
+                        <option value="Thane">Thane</option>
+                        <option value="Nagpur">Nagpur</option>
+                        <option value="Satara">Satara</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Mumbai">Mumbai</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label><i class="fas fa-map-pin me-1"></i> Constituency</label>
+                    <input type="text" class="form-control" placeholder="Search constituency">
+                </div>
+                <div class="col-md-2">
+                    <label><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                    <input type="text" class="form-control" placeholder="Search code">
+                </div>
+                <div class="col-md-2">
+                    <label><i class="fas fa-toggle-on me-1"></i> Status</label>
+                    <select class="form-select">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label><i class="fas fa-sort-amount-down me-1"></i> Sort By</label>
+                    <select class="form-select">
+                        <option value="asc">A → Z</option>
+                        <option value="desc">Z → A</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-4 d-flex gap-3 flex-wrap">
+                <button class="btn btn-warm-gold px-4 fw-bold" onclick="alert('Deploy Filters clicked (static)');"><i class="fas fa-filter me-2"></i>Deploy Filters</button>
+                <button class="btn btn-outline-cream px-4" onclick="alert('Reset clicked (static)');"><i class="fas fa-sync-alt me-2"></i>Reset</button>
+                <button class="btn btn-warm-gold px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#addConstituencyModal"><i class="fas fa-plus me-2"></i>Add Constituency</button>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- CONSTITUENCY DIRECTORY TABLE -->
+        <!-- ============================================================ -->
+        <div class="mt-5">
+            <h2 class="gold-gradient-text fs-2 fw-bold"><i class="fas fa-table me-2"></i> Constituency Directory</h2>
+            <div class="premium-table-wrapper mt-3">
+                <table class="premium-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Constituency</th>
+                            <th>District</th>
+                            <th>State</th>
+                            <th>Code</th>
+                            <th>Villages</th>
+                            <th>Booths</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><strong>Kopri-Pachpakhadi</strong></td>
+                            <td>Thane</td>
+                            <td>Maharashtra</td>
+                            <td>MH-TH-001</td>
+                            <td>28</td>
+                            <td>42</td>
+                            <td><span class="status-active">Active</span></td>
+                            <td>
+                                <div class="action-btn-group">
+                                    <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewConstituencyModal1"><i class="fas fa-eye"></i> View</button>
+                                    <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editConstituencyModal1"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="action-btn delete-btn" onclick="if(confirm('Delete this constituency?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>Nagpur South West</strong></td>
+                            <td>Nagpur</td>
+                            <td>Maharashtra</td>
+                            <td>MH-NG-001</td>
+                            <td>31</td>
+                            <td>48</td>
+                            <td><span class="status-active">Active</span></td>
+                            <td>
+                                <div class="action-btn-group">
+                                    <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewConstituencyModal2"><i class="fas fa-eye"></i> View</button>
+                                    <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editConstituencyModal2"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="action-btn delete-btn" onclick="if(confirm('Delete this constituency?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><strong>Karad South</strong></td>
+                            <td>Satara</td>
+                            <td>Maharashtra</td>
+                            <td>MH-ST-001</td>
+                            <td>35</td>
+                            <td>51</td>
+                            <td><span class="status-active">Active</span></td>
+                            <td>
+                                <div class="action-btn-group">
+                                    <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewConstituencyModal3"><i class="fas fa-eye"></i> View</button>
+                                    <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editConstituencyModal3"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="action-btn delete-btn" onclick="if(confirm('Delete this constituency?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><strong>Pune Central</strong></td>
+                            <td>Pune</td>
+                            <td>Maharashtra</td>
+                            <td>MH-PN-001</td>
+                            <td>22</td>
+                            <td>38</td>
+                            <td><span class="status-active">Active</span></td>
+                            <td>
+                                <div class="action-btn-group">
+                                    <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewConstituencyModal4"><i class="fas fa-eye"></i> View</button>
+                                    <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editConstituencyModal4"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="action-btn delete-btn" onclick="if(confirm('Delete this constituency?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><strong>Mumbai South</strong></td>
+                            <td>Mumbai</td>
+                            <td>Maharashtra</td>
+                            <td>MH-MB-001</td>
+                            <td>18</td>
+                            <td>55</td>
+                            <td><span class="status-active">Active</span></td>
+                            <td>
+                                <div class="action-btn-group">
+                                    <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewConstituencyModal5"><i class="fas fa-eye"></i> View</button>
+                                    <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editConstituencyModal5"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="action-btn delete-btn" onclick="if(confirm('Delete this constituency?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- FOOTER -->
+        <!-- ============================================================ -->
+        <div class="footer">
+            <p>&copy; 2026 Leader Tracker. All rights reserved.</p>
         </div>
     </div>
+
+    <!-- ============================================================ -->
+    <!-- VIEW CONSTITUENCY MODALS (read-only, form-style) -->
+    <!-- ============================================================ -->
+    <!-- View Modal 1: Kopri-Pachpakhadi -->
+    <div class="modal fade modal-cream" id="viewConstituencyModal1" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content modal-cream">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>Constituency Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-12 text-center mb-3">
+                                <i class="fas fa-map-location-dot" style="font-size:4rem;color:var(--gold-dark);"></i>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name</label>
+                                <input type="text" class="form-control view-field-readonly" value="Kopri-Pachpakhadi" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
+                                <input type="text" class="form-control view-field-readonly" value="Thane" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State</label>
+                                <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                                <input type="text" class="form-control view-field-readonly" value="MH-TH-001" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
+                                <input type="text" class="form-control view-field-readonly" value="28" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
+                                <input type="text" class="form-control view-field-readonly" value="42" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-chart-line me-1"></i> Development Score</label>
+                                <input type="text" class="form-control view-field-readonly" value="96%" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
+                                <input type="text" class="form-control view-field-readonly" value="Active" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="header.js"></script>
-    <!-- jQuery -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <!-- wow animation -->
-    <script src="js/animate.js"></script>
-    <!-- select country -->
-    <script src="js/bootstrap-select.js"></script>
-    <!-- owl carousel -->
-    <script src="js/owl.carousel.js"></script>
-    <!-- chart js -->
-    <script src="js/Chart.min.js"></script>
-    <script src="js/Chart.bundle.min.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/analyser.js"></script>
-   
-    <!-- custom js -->
-    <script src="js/custom.js"></script>
-    <!-- calendar file css -->
-    <script src="js/semantic.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-        // Chart instances
-        let districtChart, assignmentChart, voterChart, boothChart, wardChart;
-        let map;
+    <!-- View Modal 2: Nagpur South West -->
+    <div class="modal fade modal-cream" id="viewConstituencyModal2" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content modal-cream">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>Constituency Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-12 text-center mb-3">
+                                <i class="fas fa-map-location-dot" style="font-size:4rem;color:var(--gold-dark);"></i>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name</label>
+                                <input type="text" class="form-control view-field-readonly" value="Nagpur South West" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
+                                <input type="text" class="form-control view-field-readonly" value="Nagpur" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State</label>
+                                <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                                <input type="text" class="form-control view-field-readonly" value="MH-NG-001" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
+                                <input type="text" class="form-control view-field-readonly" value="31" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
+                                <input type="text" class="form-control view-field-readonly" value="48" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-chart-line me-1"></i> Development Score</label>
+                                <input type="text" class="form-control view-field-readonly" value="94%" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
+                                <input type="text" class="form-control view-field-readonly" value="Active" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // Counter Animation Function
-        function animateCounter(elementId, targetValue, suffix = "") {
-            const element = document.getElementById(elementId);
-            if (!element) return;
+    <!-- View Modal 3: Karad South -->
+    <div class="modal fade modal-cream" id="viewConstituencyModal3" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content modal-cream">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>Constituency Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-12 text-center mb-3">
+                                <i class="fas fa-map-location-dot" style="font-size:4rem;color:var(--gold-dark);"></i>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name</label>
+                                <input type="text" class="form-control view-field-readonly" value="Karad South" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
+                                <input type="text" class="form-control view-field-readonly" value="Satara" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State</label>
+                                <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                                <input type="text" class="form-control view-field-readonly" value="MH-ST-001" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
+                                <input type="text" class="form-control view-field-readonly" value="35" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
+                                <input type="text" class="form-control view-field-readonly" value="51" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-chart-line me-1"></i> Development Score</label>
+                                <input type="text" class="form-control view-field-readonly" value="92%" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
+                                <input type="text" class="form-control view-field-readonly" value="Active" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            let current = 0;
-            const numericValue = typeof targetValue === 'string' ? parseFloat(targetValue) : targetValue;
-            const increment = numericValue / 50;
+    <!-- View Modal 4: Pune Central -->
+    <div class="modal fade modal-cream" id="viewConstituencyModal4" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content modal-cream">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>Constituency Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-12 text-center mb-3">
+                                <i class="fas fa-map-location-dot" style="font-size:4rem;color:var(--gold-dark);"></i>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name</label>
+                                <input type="text" class="form-control view-field-readonly" value="Pune Central" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
+                                <input type="text" class="form-control view-field-readonly" value="Pune" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State</label>
+                                <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                                <input type="text" class="form-control view-field-readonly" value="MH-PN-001" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
+                                <input type="text" class="form-control view-field-readonly" value="22" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
+                                <input type="text" class="form-control view-field-readonly" value="38" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-chart-line me-1"></i> Development Score</label>
+                                <input type="text" class="form-control view-field-readonly" value="88%" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
+                                <input type="text" class="form-control view-field-readonly" value="Active" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= numericValue) {
-                    element.textContent = targetValue + suffix;
-                    clearInterval(timer);
-                } else {
-                    if (suffix === "Cr") {
-                        element.textContent = current.toFixed(1) + suffix;
-                    } else {
-                        element.textContent = Math.floor(current) + suffix;
-                    }
-                }
-            }, 20);
-        }
+    <!-- View Modal 5: Mumbai South -->
+    <div class="modal fade modal-cream" id="viewConstituencyModal5" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content modal-cream">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>Constituency Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-12 text-center mb-3">
+                                <i class="fas fa-map-location-dot" style="font-size:4rem;color:var(--gold-dark);"></i>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name</label>
+                                <input type="text" class="form-control view-field-readonly" value="Mumbai South" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
+                                <input type="text" class="form-control view-field-readonly" value="Mumbai" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State</label>
+                                <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                                <input type="text" class="form-control view-field-readonly" value="MH-MB-001" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
+                                <input type="text" class="form-control view-field-readonly" value="18" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
+                                <input type="text" class="form-control view-field-readonly" value="55" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-chart-line me-1"></i> Development Score</label>
+                                <input type="text" class="form-control view-field-readonly" value="85%" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
+                                <input type="text" class="form-control view-field-readonly" value="Active" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // Initialize counters
-        function initCounters() {
-            animateCounter("totalConstituencies", 288);
-            animateCounter("assignedMlas", 288);
-            animateCounter("totalVoters", 9.2, " Cr");
-            animateCounter("totalBooths", 98500);
-            animateCounter("totalWards", 32450);
-            animateCounter("activeConstituencies", 288);
-        }
+    <!-- ============================================================ -->
+    <!-- ADD CONSTITUENCY MODAL -->
+    <!-- ============================================================ -->
+    <div class="modal fade modal-cream" id="addConstituencyModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content modal-cream">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-map-location-dot me-2"></i>Add Constituency</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addConstituencyForm" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="">Select State</option>
+                                    <option value="Maharashtra">Maharashtra</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="">Select District</option>
+                                    <option value="Thane">Thane</option>
+                                    <option value="Nagpur">Nagpur</option>
+                                    <option value="Satara">Satara</option>
+                                    <option value="Pune">Pune</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="Enter constituency name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                                <input type="text" class="form-control" placeholder="Enter constituency code">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
+                                <input type="number" class="form-control" placeholder="Enter number of villages">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
+                                <input type="number" class="form-control" placeholder="Enter number of booths">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
+                                <select class="form-select">
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Add Constituency clicked (static)');">Save Constituency</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // Initialize all charts
-        function initCharts() {
-            // District Chart (Bar)
-            const districtCtx = document.getElementById('districtChart').getContext('2d');
-            districtChart = new Chart(districtCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Satara', 'Pune', 'Mumbai', 'Nagpur', 'Nashik', 'Kolhapur'],
-                    datasets: [{
-                        label: 'Constituencies',
-                        data: [12, 18, 24, 14, 16, 10],
-                        backgroundColor: '#d4af37',
-                        borderRadius: 8
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
-            });
+    <!-- ============================================================ -->
+    <!-- EDIT CONSTITUENCY MODALS (editable, same layout) -->
+    <!-- ============================================================ -->
+    <!-- Edit Modal 1: Kopri-Pachpakhadi -->
+    <div class="modal fade modal-cream" id="editConstituencyModal1" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content modal-cream">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit Constituency</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editConstituencyForm1" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="Maharashtra" selected>Maharashtra</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="Thane" selected>Thane</option>
+                                    <option value="Nagpur">Nagpur</option>
+                                    <option value="Satara">Satara</option>
+                                    <option value="Pune">Pune</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="Kopri-Pachpakhadi" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                                <input type="text" class="form-control" value="MH-TH-001">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
+                                <input type="number" class="form-control" value="28">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
+                                <input type="number" class="form-control" value="42">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
+                                <select class="form-select">
+                                    <option value="Active" selected>Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit Constituency clicked (static)');">Update Constituency</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            // Assignment Chart (Doughnut)
-            const assignCtx = document.getElementById('assignmentChart').getContext('2d');
-            assignmentChart = new Chart(assignCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Assigned', 'Vacant', 'Pending Review'],
-                    datasets: [{ data: [275, 8, 5], backgroundColor: ['#d4af37', '#10B981', '#F59E0B'], borderWidth: 0 }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' } } }
-            });
+    <!-- Edit Modal 2: Nagpur South West -->
+    <div class="modal fade modal-cream" id="editConstituencyModal2" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content modal-cream">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit Constituency</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editConstituencyForm2" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="Maharashtra" selected>Maharashtra</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="Nagpur" selected>Nagpur</option>
+                                    <option value="Thane">Thane</option>
+                                    <option value="Satara">Satara</option>
+                                    <option value="Pune">Pune</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="Nagpur South West" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                                <input type="text" class="form-control" value="MH-NG-001">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
+                                <input type="number" class="form-control" value="31">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
+                                <input type="number" class="form-control" value="48">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
+                                <select class="form-select">
+                                    <option value="Active" selected>Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit Constituency clicked (static)');">Update Constituency</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            // Voter Chart (Bar)
-            const voterCtx = document.getElementById('voterChart').getContext('2d');
-            voterChart = new Chart(voterCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Mumbai South', 'Thane', 'Pune Central', 'Nagpur West', 'Nashik East'],
-                    datasets: [{ label: 'Voters (Lakhs)', data: [5.2, 4.8, 4.5, 4.2, 3.9], backgroundColor: '#d4af37', borderRadius: 8 }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
-            });
+    <!-- Edit Modal 3: Karad South -->
+    <div class="modal fade modal-cream" id="editConstituencyModal3" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content modal-cream">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit Constituency</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editConstituencyForm3" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="Maharashtra" selected>Maharashtra</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="Satara" selected>Satara</option>
+                                    <option value="Thane">Thane</option>
+                                    <option value="Nagpur">Nagpur</option>
+                                    <option value="Pune">Pune</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="Karad South" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                                <input type="text" class="form-control" value="MH-ST-001">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
+                                <input type="number" class="form-control" value="35">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
+                                <input type="number" class="form-control" value="51">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
+                                <select class="form-select">
+                                    <option value="Active" selected>Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit Constituency clicked (static)');">Update Constituency</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            // Booth Chart (Line)
-            const boothCtx = document.getElementById('boothChart').getContext('2d');
-            boothChart = new Chart(boothCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Satara', 'Pune', 'Mumbai', 'Nagpur', 'Nashik'],
-                    datasets: [{ label: 'Booths', data: [520, 680, 850, 620, 580], borderColor: '#d4af37', backgroundColor: 'rgba(212, 175, 55, 0.1)', fill: true, tension: 0.4 }]
-                },
-                options: { responsive: true, maintainAspectRatio: true }
-            });
+    <!-- Edit Modal 4: Pune Central -->
+    <div class="modal fade modal-cream" id="editConstituencyModal4" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content modal-cream">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit Constituency</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editConstituencyForm4" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="Maharashtra" selected>Maharashtra</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="Pune" selected>Pune</option>
+                                    <option value="Thane">Thane</option>
+                                    <option value="Nagpur">Nagpur</option>
+                                    <option value="Satara">Satara</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="Pune Central" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                                <input type="text" class="form-control" value="MH-PN-001">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
+                                <input type="number" class="form-control" value="22">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
+                                <input type="number" class="form-control" value="38">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
+                                <select class="form-select">
+                                    <option value="Active" selected>Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit Constituency clicked (static)');">Update Constituency</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            // Ward Chart (Line)
-            const wardCtx = document.getElementById('wardChart').getContext('2d');
-            wardChart = new Chart(wardCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Satara', 'Pune', 'Mumbai', 'Nagpur', 'Nashik'],
-                    datasets: [{ label: 'Wards', data: [185, 245, 310, 210, 195], borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 }]
-                },
-                options: { responsive: true, maintainAspectRatio: true }
-            });
-        }
+    <!-- Edit Modal 5: Mumbai South -->
+    <div class="modal fade modal-cream" id="editConstituencyModal5" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content modal-cream">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit Constituency</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editConstituencyForm5" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="Maharashtra" selected>Maharashtra</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
+                                <select class="form-select" required>
+                                    <option value="Mumbai" selected>Mumbai</option>
+                                    <option value="Thane">Thane</option>
+                                    <option value="Nagpur">Nagpur</option>
+                                    <option value="Satara">Satara</option>
+                                    <option value="Pune">Pune</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="Mumbai South" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
+                                <input type="text" class="form-control" value="MH-MB-001">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
+                                <input type="number" class="form-control" value="18">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
+                                <input type="number" class="form-control" value="55">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
+                                <select class="form-select">
+                                    <option value="Active" selected>Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit Constituency clicked (static)');">Update Constituency</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // Populate Health Score Table
-        function populateHealthScore() {
-            const scores = [
-                { name: "Karad North", score: 92 },
-                { name: "Satara", score: 88 },
-                { name: "Patan", score: 85 },
-                { name: "Pune Central", score: 90 },
-                { name: "Mumbai South", score: 87 }
-            ];
-
-            document.getElementById("healthScoreBody").innerHTML = scores.map(s => `
-            <tr>
-                <td><i class="fa-solid fa-map-pin me-2" style="color: var(--gold);"></i> ${s.name}</td>
-                <td style="font-weight: 700;">${s.score}%</td>
-                <td style="width: 40%;"><div class="progress"><div class="progress-bar" style="width: ${s.score}%"></div></div></td>
-            </tr>
-        `).join('');
-        }
-
-        // Populate Performance Table
-        function populatePerformance() {
-            const performances = [
-                { constituency: "Karad North", mla: "MLA A", rating: 4.7, complaints: 120, surveys: 850, resolution: 92 },
-                { constituency: "Satara", mla: "MLA B", rating: 4.5, complaints: 98, surveys: 720, resolution: 88 },
-                { constituency: "Patan", mla: "MLA C", rating: 4.3, complaints: 145, surveys: 650, resolution: 85 },
-                { constituency: "Pune Central", mla: "MLA D", rating: 4.8, complaints: 85, surveys: 920, resolution: 94 },
-                { constituency: "Mumbai South", mla: "MLA E", rating: 4.6, complaints: 110, surveys: 780, resolution: 90 }
-            ];
-
-            document.getElementById("performanceBody").innerHTML = performances.map(p => `
-            <tr>
-                <td>${p.constituency}</td>
-                <td><i class="fa-solid fa-user-tie me-1"></i> ${p.mla}</td>
-                <td><span class="badge" style="background: var(--gold); color: white;">${p.rating} ⭐</span></td>
-                <td>${p.complaints}</td>
-                <td>${p.surveys}</td>
-                <td><div class="progress" style="width: 80px;"><div class="progress-bar" style="width: ${p.resolution}%"></div></div> ${p.resolution}%</td>
-            </tr>
-        `).join('');
-        }
-
-        // Populate Management Table
-        function populateManagementTable() {
-            const constituencies = [
-                { id: 1, name: "Karad North", district: "Satara", mla: "MLA A", voters: "3,25,000", booths: 420, wards: 135 },
-                { id: 2, name: "Satara", district: "Satara", mla: "MLA B", voters: "2,80,000", booths: 380, wards: 120 },
-                { id: 3, name: "Patan", district: "Satara", mla: "MLA C", voters: "2,45,000", booths: 340, wards: 108 },
-                { id: 4, name: "Pune Central", district: "Pune", mla: "MLA D", voters: "3,50,000", booths: 450, wards: 145 },
-                { id: 5, name: "Mumbai South", district: "Mumbai", mla: "MLA E", voters: "4,20,000", booths: 520, wards: 168 }
-            ];
-
-            document.getElementById("managementBody").innerHTML = constituencies.map(c => `
-            <tr>
-                <td>${c.id}</td>
-                <td>${c.name}</td><td>${c.district}</td><td>${c.mla}</td><td>${c.voters}</td><td>${c.booths}</td><td>${c.wards}</td>
-                <td>
-                    <button class="btn btn-info btn-sm" onclick="viewConstituency(${c.id})"><i class="fa-solid fa-eye"></i></button>
-                    <button class="btn btn-warning btn-sm" onclick="editConstituency(${c.id})"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn btn-success btn-sm" onclick="viewMap(${c.id})"><i class="fa-solid fa-map"></i></button>
-                    <button class="btn btn-primary btn-sm" onclick="viewAnalytics(${c.id})"><i class="fa-solid fa-chart-line"></i></button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteConstituency(${c.id})"><i class="fa-solid fa-trash"></i></button>
-                </td>
-            </tr>
-        `).join('');
-        }
-
-        // Initialize Map
-        function initMap() {
-            map = L.map('map').setView([19.0760, 72.8777], 7);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors'
-            }).addTo(map);
-
-            // Add markers for constituencies
-            const constituencies = [
-                { name: "Karad North", lat: 17.2899, lng: 74.1819 },
-                { name: "Satara", lat: 17.6919, lng: 74.0000 },
-                { name: "Pune", lat: 18.5204, lng: 73.8567 },
-                { name: "Mumbai", lat: 19.0760, lng: 72.8777 },
-                { name: "Nagpur", lat: 21.1458, lng: 79.0882 }
-            ];
-
-            constituencies.forEach(c => {
-                const marker = L.marker([c.lat, c.lng]).addTo(map);
-                marker.bindPopup(`<b>${c.name} Constituency</b><br>Click for details`);
-            });
-        }
-
-        // Action Functions
-        function viewConstituency(id) { alert(`View details for Constituency ID: ${id}`); }
-        function editConstituency(id) { alert(`Edit Constituency ID: ${id}`); }
-        function viewMap(id) { alert(`Open map for Constituency ID: ${id}`); }
-        function viewAnalytics(id) { alert(`View analytics for Constituency ID: ${id}`); }
-        function deleteConstituency(id) { if (confirm(`Delete Constituency ID: ${id}?`)) alert(`Constituency ${id} deleted`); }
-
-        // Add card click handlers
-        function addCardHandlers() {
-            const cards = document.querySelectorAll('.dashboard-card');
-            cards.forEach(card => {
-                card.addEventListener('click', () => {
-                    const title = card.querySelector('h6')?.innerText || 'Card';
-                    const value = card.querySelector('h2')?.innerText || '';
-                    alert(`${title}\nCurrent Value: ${value}`);
-                });
-            });
-        }
-
-        // Initialize everything
-        document.addEventListener("DOMContentLoaded", function () {
-            initCharts();
-            populateHealthScore();
-            populatePerformance();
-            populateManagementTable();
-            initCounters();
-            initMap();
-            addCardHandlers();
-
-            // Add floating class to first card
-            document.querySelector('.dashboard-card')?.classList.add('floating');
-
-            // Add search functionality
-            document.getElementById('searchInput')?.addEventListener('keyup', function (e) {
-                const searchTerm = e.target.value.toLowerCase();
-                const rows = document.querySelectorAll('#managementBody tr');
-                rows.forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    row.style.display = text.includes(searchTerm) ? '' : 'none';
-                });
-            });
-        });
+    <!-- ============================================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
     </script>
-
+    <script src="header.js">
+    </script>
 </body>
 
 </html>
