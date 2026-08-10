@@ -223,3 +223,286 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<!-- ============================================================ -->
+<!-- GLOBAL SEARCH - COMPLETE WEBSITE SEARCH -->
+<!-- ============================================================ -->
+<script>
+$(document).ready(function() {
+    console.log('=== SEARCH SCRIPT LOADED ===');
+    
+    var searchInput = document.getElementById('globalSearch');
+    if (!searchInput) {
+        console.error('Search input not found!');
+        return;
+    }
+
+    // Check if admin page
+    var isAdminPage = window.location.pathname.indexOf('/admin/') !== -1;
+    console.log('Is admin page:', isAdminPage);
+    
+    if (!isAdminPage) {
+        console.log('Not admin page - disabling search');
+        searchInput.placeholder = 'Search...';
+        searchInput.disabled = true;
+        searchInput.style.opacity = '0.6';
+        searchInput.style.cursor = 'not-allowed';
+        return;
+    }
+
+    console.log('Admin page detected - enabling search');
+
+    // Build dropdown
+    var searchContainer = $(searchInput).closest('.search-gold-exec');
+    if (searchContainer.length === 0) {
+        console.error('Search container not found!');
+        return;
+    }
+
+    searchContainer.css('position', 'relative');
+    $('#globalSearchDropdown').remove();
+
+    var dropdown = $('<div>', {
+        id: 'globalSearchDropdown',
+        css: {
+            display: 'none',
+            position: 'absolute',
+            top: '100%',
+            left: '0',
+            width: '100%',
+            maxWidth: '650px',
+            maxHeight: '450px',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            background: '#ffffff',
+            border: '1px solid #d1d5db',
+            borderRadius: '12px',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+            zIndex: '99999',
+            marginTop: '10px',
+            padding: '8px 0'
+        }
+    });
+    
+    searchContainer.append(dropdown);
+    console.log('Dropdown created');
+
+    var searchTimeout = null;
+    var currentQuery = '';
+
+    function renderLoading() {
+        dropdown.html(`
+            <div style="padding: 30px 20px; text-align: center; color: #6b7280;">
+                <i class="fa fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+                Searching website content...
+            </div>
+        `);
+        dropdown.show();
+    }
+
+    function renderNoResults(query) {
+        dropdown.html(`
+            <div style="padding: 30px 20px; text-align: center; color: #6b7280;">
+                <i class="fa fa-search" style="font-size: 32px; margin-bottom: 10px; display: block; color: #d1d5db;"></i>
+                No results found for "<strong>${escapeHtml(query)}</strong>"
+                <div style="font-size: 13px; margin-top: 8px; color: #9ca3af;">
+                    Try searching for pages, MLA names, constituencies, or complaints
+                </div>
+            </div>
+        `);
+        dropdown.show();
+    }
+
+    function renderError(message) {
+        dropdown.html(`
+            <div style="padding: 30px 20px; text-align: center; color: #dc2626;">
+                <i class="fa fa-exclamation-circle" style="font-size: 32px; margin-bottom: 10px; display: block;"></i>
+                ${escapeHtml(message)}
+                <div style="font-size: 13px; margin-top: 8px; color: #9ca3af;">
+                    Please try again later
+                </div>
+            </div>
+        `);
+        dropdown.show();
+    }
+
+    function renderResults(results) {
+        if (results.length === 0) {
+            renderNoResults(currentQuery);
+            return;
+        }
+
+        // Group by type
+        var pages = results.filter(r => r.type === 'page');
+        var databases = results.filter(r => r.type === 'database');
+
+        var html = '';
+
+        // Pages section
+        if (pages.length > 0) {
+            html += `
+                <div style="padding: 8px 20px; font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; 
+                            border-bottom: 1px solid #f0f0f0; font-weight: 600; background: #f8faff;">
+                    📄 Pages (${pages.length})
+                </div>
+            `;
+            pages.forEach(function(result) {
+                html += createResultItem(result);
+            });
+        }
+
+        // Database section
+        if (databases.length > 0) {
+            html += `
+                <div style="padding: 8px 20px; font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; 
+                            border-bottom: 1px solid #f0f0f0; font-weight: 600; background: #f8faff; margin-top: 4px;">
+                    📊 Database Records (${databases.length})
+                </div>
+            `;
+            databases.forEach(function(result) {
+                html += createResultItem(result);
+            });
+        }
+
+        dropdown.html(html);
+        dropdown.show();
+
+        // Click handler
+        $('.search-result-item').off('click').on('click', function() {
+            var url = $(this).data('url');
+            if (url) {
+                window.location.href = url;
+            }
+        });
+
+        // Hover effect
+        $('.search-result-item').off('mouseenter').on('mouseenter', function() {
+            $('.search-result-item').css('background', 'transparent');
+            $(this).css('background', '#eef3ff');
+        });
+    }
+
+    function createResultItem(result) {
+        var icon = result.icon || 'fa-link';
+        var desc = result.description || '';
+        var module = result.module || '';
+        
+        return `
+            <div class="search-result-item" data-url="${escapeHtml(result.url)}" 
+                 style="padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #f5f5f5; 
+                        display: flex; align-items: flex-start; transition: background 0.15s;">
+                <i class="fa ${icon}" style="color: #4f46e5; font-size: 16px; width: 28px; margin-right: 12px; margin-top: 2px;"></i>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-weight: 500; color: #1f2937; font-size: 14px;">${escapeHtml(result.title)}</div>
+                    ${desc ? `<div style="color: #6b7280; font-size: 13px; margin-top: 3px; line-height: 1.4;">${desc}</div>` : ''}
+                    ${module ? `<div style="color: #9ca3af; font-size: 11px; margin-top: 4px;">
+                        <i class="fa fa-folder-open-o"></i> ${escapeHtml(module)}
+                    </div>` : ''}
+                </div>
+                <i class="fa fa-chevron-right" style="color: #d1d5db; font-size: 12px; margin-left: 12px; margin-top: 4px;"></i>
+            </div>
+        `;
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function performSearch(query) {
+        currentQuery = query.trim();
+        
+        if (currentQuery.length < 2) {
+            dropdown.hide();
+            return;
+        }
+
+        renderLoading();
+
+        var searchUrl = '<?= base_url('admin/search') ?>';
+        var url = searchUrl + '?q=' + encodeURIComponent(currentQuery);
+        
+        console.log('Searching for:', currentQuery);
+        console.log('Search URL:', url);
+        
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            timeout: 15000,
+            success: function(data) {
+                console.log('Search response:', data);
+                if (data.status && data.results) {
+                    renderResults(data.results);
+                } else if (data.message) {
+                    renderError(data.message);
+                } else {
+                    renderNoResults(currentQuery);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error - Status:', status);
+                console.error('AJAX Error - Error:', error);
+                console.error('AJAX Error - Response:', xhr.responseText);
+                console.error('AJAX Error - Status Code:', xhr.status);
+                
+                var errorMsg = 'Unable to load search results.';
+                if (xhr.status === 403) {
+                    errorMsg = 'Unauthorized. Please login as admin.';
+                } else if (xhr.status === 404) {
+                    errorMsg = 'Search endpoint not found.';
+                } else if (xhr.status === 500) {
+                    errorMsg = 'Server error. Please check logs.';
+                }
+                renderError(errorMsg);
+            }
+        });
+    }
+
+    // Input handler with debounce
+    $(searchInput).off('input').on('input', function() {
+        var query = $(this).val();
+        
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+
+        if (query.trim() === '') {
+            dropdown.hide();
+            return;
+        }
+
+        searchTimeout = setTimeout(function() {
+            performSearch(query);
+        }, 400);
+    });
+
+    // Focus handler
+    $(searchInput).off('focus').on('focus', function() {
+        var val = $(this).val();
+        if (val.trim().length >= 2) {
+            performSearch(val);
+        }
+    });
+
+    // Escape key
+    $(searchInput).off('keydown').on('keydown', function(e) {
+        if (e.key === 'Escape') {
+            $('#globalSearchDropdown').hide();
+            $(this).blur();
+        }
+    });
+
+    // Outside click
+    $(document).off('click.search').on('click.search', function(e) {
+        var searchContainer = $('.search-gold-exec');
+        if (searchContainer.length > 0 && !searchContainer[0].contains(e.target)) {
+            $('#globalSearchDropdown').hide();
+        }
+    });
+
+    console.log('=== SEARCH SCRIPT READY ===');
+    console.log('Try searching for: Districts, MLA, Rating, Complaint, Feedback');
+});
+</script>
