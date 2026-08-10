@@ -579,7 +579,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+<script>
     // ========== SIDEBAR TOGGLE ==========
     const sidebar = document.getElementById('auraSidebar');
     const toggleBtn = document.getElementById('sidebarToggleBtn');
@@ -604,747 +604,616 @@
       document.body.classList.remove('sidebar-mobile-open');
     });
 
-    // ========== SURVEY ENGINE WITH CORRECT RATING LOGIC ==========
-    const surveyQuestions = [
-      // Q1: Positive question - solution of problems
-      { id:1, text:"आमदार नागरिकांच्या समस्या सोडवतात का?", type:"select", options:["हो","अंशतः","नाही"], name:"q1_solve", 
-        getRating: function(val) {
-          if(val === "हो") return 5;
-          if(val === "अंशतः") return 3;
-          return 1;
-        }
-      },
-      // Q2: Positive question - accessibility
-      { id:2, text:"सामान्य नागरिकांना सहज भेट देतात का?", type:"select", options:["हो","अंशतः","नाही"], name:"q1_meeting",
-        getRating: function(val) {
-          if(val === "हो") return 5;
-          if(val === "अंशतः") return 3;
-          return 1;
-        }
-      },
-      // Q3: Range - problem solving rating (1-10)
-      { id:3, text:"प्रश्न सोडवण्याबाबत रेटिंग (1-10)", type:"range", min:1, max:10, name:"q1_rating",
-        getRating: function(val) {
-          const num = parseInt(val);
-          if(isNaN(num)) return 0;
-          if(num >= 9) return 5;
-          if(num >= 7) return 4;
-          if(num >= 5) return 3;
-          if(num >= 3) return 2;
-          return 1;
-        }
-      },
-      // Q4: Textarea - no rating
-      { id:4, text:"आमदार निधी कोणत्या कामासाठी वापरला गेला?", type:"textarea", placeholder:"रस्ते, पूल, शाळा, पाणीपुरवठा...", name:"q2_fund_works",
-        getRating: function() { return 0; }
-      },
-      // Q5: Checkbox - promises fulfilled (each positive selection adds points)
-      { id:5, text:"कोणती वचने पूर्ण झाली? (एकाधिक निवडा)", type:"checkbox_group", options:["Tree plantation","Environment protection","Pothole-free roads","Beach cleanup"], name:"q3_promises",
-        getRating: function(val) {
-          if(!val || !Array.isArray(val) || val.length === 0) return 0;
-          const maxScore = 5;
-          const perSelection = maxScore / this.options.length;
-          return Math.min(maxScore, val.length * perSelection);
-        }
-      },
-      // Q6: Positive question - voter needs asked
-      { id:6, text:"मतदार म्हणून तुमची गरज विचारली गेली का?", type:"select", options:["हो","अंशतः","नाही"], name:"q4_need_asked",
-        getRating: function(val) {
-          if(val === "हो") return 5;
-          if(val === "अंशतः") return 3;
-          return 1;
-        }
-      },
-      // Q7: Direct rating - infrastructure
-      { id:7, text:"पायाभूत सुविधा रेटिंग (1-5)", type:"select", options:["1","2","3","4","5"], name:"rating_infra",
-        getRating: function(val) {
-          return parseInt(val) || 0;
-        }
-      },
-      // Q8: Direct rating - roads
-      { id:8, text:"रस्ते रेटिंग (1-5)", type:"select", options:["1","2","3","4","5"], name:"rating_roads",
-        getRating: function(val) {
-          return parseInt(val) || 0;
-        }
-      },
-      // Q9: Direct rating - sanitation
-      { id:9, text:"स्वच्छता रेटिंग (1-5)", type:"select", options:["1","2","3","4","5"], name:"rating_sanitation",
-        getRating: function(val) {
-          return parseInt(val) || 0;
-        }
-      },
-      // Q10: Direct rating - environment
-      { id:10, text:"पर्यावरण रेटिंग (1-5)", type:"select", options:["1","2","3","4","5"], name:"rating_environment",
-        getRating: function(val) {
-          return parseInt(val) || 0;
-        }
-      },
-      // Q11: Textarea - no rating
-      { id:11, text:"तुमच्या भागात कोणती कामे झाली?", type:"textarea", placeholder:"रस्ते, नाली, पाणी, स्ट्रीट लाईट", name:"q6_local_works",
-        getRating: function() { return 0; }
-      },
-      // Q12: Positive question - works match needs
-      { id:12, text:"ही कामे भागाच्या गरजांशी जुळतात का?", type:"select", options:["हो","अंशतः","नाही"], name:"q7_match_needs",
-        getRating: function(val) {
-          if(val === "हो") return 5;
-          if(val === "अंशतः") return 3;
-          return 1;
-        }
-      },
-      // Q13: Range - fund usage rating
-      { id:13, text:"आमदार निधी वापर रेटिंग (1-10)", type:"range", min:1, max:10, name:"q8_fund_rating",
-        getRating: function(val) {
-          const num = parseInt(val);
-          if(isNaN(num)) return 0;
-          if(num >= 9) return 5;
-          if(num >= 7) return 4;
-          if(num >= 5) return 3;
-          if(num >= 3) return 2;
-          return 1;
-        }
-      },
-      // Q14: Text - optional name
-      { id:14, text:"तुमचे नाव (ऐच्छिक)", type:"text", placeholder:"तुमचे नाव", name:"optional_name",
-        getRating: function() { return 0; }
-      },
-      // Q15: Text - optional constituency
-      { id:15, text:"मतदारसंघ (ऐच्छिक)", type:"text", placeholder:"मतदारसंघ", name:"optional_constituency",
-        getRating: function() { return 0; }
-      },
-      // Q16: Positive question - transparency
-      { id:16, text:"निधी वापर पारदर्शक आहे का?", type:"select", options:["हो","अंशतः","नाही"], name:"q10_transparent",
-        getRating: function(val) {
-          if(val === "हो") return 5;
-          if(val === "अंशतः") return 3;
-          return 1;
-        }
-      },
-      // Q17: Textarea - no rating
-      { id:17, text:"भ्रष्टाचार / पारदर्शकता मत", type:"textarea", placeholder:"तुमचे मत लिहा", name:"q11_corruption_view",
-        getRating: function() { return 0; }
-      },
-      // Q18: Textarea - no rating
-      { id:18, text:"आमदाराने काय चांगले केले?", type:"textarea", placeholder:"रस्ते, पूल, शाळा, स्वच्छता", name:"q12_good_work",
-        getRating: function() { return 0; }
-      },
-      // Q19: Textarea - no rating
-      { id:19, text:"कुठे सुधारणा हवी?", type:"textarea", placeholder:"पाणी समस्या, वाहतूक, रस्ते", name:"q13_improvements",
-        getRating: function() { return 0; }
-      },
-      // Q20: Textarea - no rating
-      { id:20, text:"इतर टिप्पणी", type:"textarea", placeholder:"तुमचा सल्ला / निरीक्षण", name:"q14_other_comments",
-        getRating: function() { return 0; }
-      },
-      // Q21: Negative question - party change (negative = lower rating)
-      { id:21, text:"आमदाराने पक्ष बदलला का?", type:"select", options:["हो","नाही"], name:"q15_party_change",
-        getRating: function(val) {
-          if(val === "हो") return 1;  // Party change is negative for voters
-          if(val === "नाही") return 5; // Stable is positive
-          return 0;
-        }
-      },
-      // Q22: Positive question - development impact
-      { id:22, text:"विकासावर परिणाम", type:"select", options:["सकारात्मक","नकारात्मक","काही फरक नाही"], name:"q16_impact",
-        getRating: function(val) {
-          if(val === "सकारात्मक") return 5;
-          if(val === "काही फरक नाही") return 3;
-          if(val === "नकारात्मक") return 1;
-          return 0;
-        }
-      },
-      // Q23: Positive question - improvements
-      { id:23, text:"रस्ते, पाणी, ड्रेनेज, स्वच्छता सुधारली का?", type:"select", options:["हो","अंशतः","नाही"], name:"q17_improved",
-        getRating: function(val) {
-          if(val === "हो") return 5;
-          if(val === "अंशतः") return 3;
-          return 1;
-        }
-      },
-      // Q24: Textarea - no rating (reason for happy/unhappy)
-      { id:24, text:"तुम्ही खूश किंवा नाराज का आहात? (कारण)", type:"textarea", placeholder:"तुमचा अभिप्राय लिहा", name:"q18_happy_reason", rows:4,
-        getRating: function() { return 0; }
-      }
-    ];
-
+    // ========== LOAD QUESTIONS FROM DATABASE ==========
+    let surveyQuestions = [];
     let formDataStore = {};
     let savedReportData = null;
     let reportModalInstance = null;
     const container = document.getElementById('questionsContainer');
     const submitBtn = document.getElementById('submitBtn');
 
+    // Fetch questions from server
+    async function loadQuestions() {
+        try {
+            const response = await fetch('/mla_web_portal/public/user/mla-rating/get-questions');
+            const data = await response.json();
+            if (data.success) {
+                surveyQuestions = data.questions;
+                renderAllQuestions();
+            } else {
+                console.error('Failed to load questions:', data.message);
+                container.innerHTML = '<div class="alert alert-danger">Failed to load questions. Please refresh the page.</div>';
+            }
+        } catch (error) {
+            console.error('Error loading questions:', error);
+            container.innerHTML = '<div class="alert alert-danger">Network error. Please check your connection.</div>';
+        }
+    }
+
     function renderAllQuestions() {
-      container.innerHTML = '';
-      surveyQuestions.forEach((q, idx) => {
-        const block = document.createElement('div');
-        block.className = 'question-block';
-        const num = document.createElement('span');
-        num.className = 'q-number';
-        num.innerText = `प्रश्न ${idx+1}`;
-        block.appendChild(num);
-        const p = document.createElement('p');
-        p.innerText = q.text;
-        block.appendChild(p);
-
-        let inputEl = null;
-        if (q.type === 'select') {
-          const sel = document.createElement('select');
-          sel.className = 'form-select';
-          sel.name = q.name;
-          const def = document.createElement('option');
-          def.value = ''; def.innerText = '-- निवडा --';
-          sel.appendChild(def);
-          q.options.forEach(opt => {
-            const o = document.createElement('option');
-            o.value = opt; o.innerText = opt;
-            sel.appendChild(o);
-          });
-          inputEl = sel; block.appendChild(sel);
-        }
-        else if (q.type === 'textarea') {
-          const ta = document.createElement('textarea');
-          ta.className = 'form-control';
-          ta.rows = q.rows || 3;
-          ta.placeholder = q.placeholder || '';
-          ta.name = q.name;
-          inputEl = ta; block.appendChild(ta);
-        }
-        else if (q.type === 'range') {
-          const wrap = document.createElement('div');
-          const range = document.createElement('input');
-          range.type = 'range';
-          range.className = 'form-range';
-          range.min = q.min || 1; range.max = q.max || 10;
-          range.name = q.name;
-          const valSpan = document.createElement('div');
-          valSpan.className = 'mt-1 small text-secondary';
-          const id = `rangeVal_${q.name}`;
-          valSpan.id = id;
-          valSpan.innerText = range.value;
-          range.addEventListener('input', function(e) {
-            document.getElementById(id).innerText = e.target.value;
-            saveAllData();
-          });
-          wrap.appendChild(range); wrap.appendChild(valSpan);
-          inputEl = range; block.appendChild(wrap);
-        }
-        else if (q.type === 'checkbox_group') {
-          const div = document.createElement('div');
-          q.options.forEach(opt => {
-            const checkDiv = document.createElement('div');
-            checkDiv.className = 'form-check';
-            const cb = document.createElement('input');
-            cb.type = 'checkbox';
-            cb.className = 'form-check-input';
-            cb.name = q.name;
-            cb.value = opt;
-            const lbl = document.createElement('label');
-            lbl.className = 'form-check-label';
-            lbl.innerText = opt;
-            checkDiv.appendChild(cb);
-            checkDiv.appendChild(lbl);
-            div.appendChild(checkDiv);
-          });
-          inputEl = div; block.appendChild(div);
-        }
-        else if (q.type === 'text') {
-          const inp = document.createElement('input');
-          inp.type = 'text';
-          inp.className = 'form-control';
-          inp.placeholder = q.placeholder || '';
-          inp.name = q.name;
-          inputEl = inp; block.appendChild(inp);
+        container.innerHTML = '';
+        if (surveyQuestions.length === 0) {
+            container.innerHTML = '<div class="alert alert-info">No questions available.</div>';
+            return;
         }
 
-        if (inputEl) {
-          if (q.type === 'checkbox_group') {
-            inputEl.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', saveAllData));
-          } else {
-            inputEl.addEventListener('change', saveAllData);
-            inputEl.addEventListener('input', saveAllData);
-          }
-        }
-        container.appendChild(block);
+        surveyQuestions.forEach((q, idx) => {
+            const block = document.createElement('div');
+            block.className = 'question-block';
+            const num = document.createElement('span');
+            num.className = 'q-number';
+            num.innerText = `प्रश्न ${idx+1}`;
+            block.appendChild(num);
+            const p = document.createElement('p');
+            p.innerText = q.text;
+            block.appendChild(p);
 
-        // restore
-        if (formDataStore[q.name] !== undefined) {
-          if (q.type === 'checkbox_group') {
-            const saved = formDataStore[q.name] || [];
-            inputEl.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-              cb.checked = saved.includes(cb.value);
-            });
-          } else if (q.type === 'range') {
-            inputEl.value = formDataStore[q.name];
-            const sp = document.getElementById(`rangeVal_${q.name}`);
-            if (sp) sp.innerText = formDataStore[q.name];
-          } else {
-            inputEl.value = formDataStore[q.name];
-          }
-        }
-      });
+            let inputEl = null;
+            if (q.type === 'select' && q.options) {
+                const sel = document.createElement('select');
+                sel.className = 'form-select';
+                sel.name = q.name;
+                const def = document.createElement('option');
+                def.value = ''; 
+                def.innerText = '-- निवडा --';
+                sel.appendChild(def);
+                q.options.forEach((opt, i) => {
+                    const o = document.createElement('option');
+                    o.value = opt;
+                    o.innerText = opt;
+                    o.dataset.rating = q.ratings && q.ratings[i] ? q.ratings[i] : 0;
+                    sel.appendChild(o);
+                });
+                inputEl = sel;
+                block.appendChild(sel);
+            } else if (q.type === 'textarea') {
+                const ta = document.createElement('textarea');
+                ta.className = 'form-control';
+                ta.rows = q.rows || 3;
+                ta.placeholder = q.placeholder || '';
+                ta.name = q.name;
+                inputEl = ta;
+                block.appendChild(ta);
+            } else if (q.type === 'range') {
+                const wrap = document.createElement('div');
+                const range = document.createElement('input');
+                range.type = 'range';
+                range.className = 'form-range';
+                range.min = q.min || 1;
+                range.max = q.max || 10;
+                range.name = q.name;
+                const valSpan = document.createElement('div');
+                valSpan.className = 'mt-1 small text-secondary';
+                const id = `rangeVal_${q.name}`;
+                valSpan.id = id;
+                valSpan.innerText = range.value;
+                range.addEventListener('input', function(e) {
+                    document.getElementById(id).innerText = e.target.value;
+                    saveAllData();
+                });
+                wrap.appendChild(range);
+                wrap.appendChild(valSpan);
+                inputEl = range;
+                block.appendChild(wrap);
+            } else if (q.type === 'checkbox_group' && q.options) {
+                const div = document.createElement('div');
+                q.options.forEach((opt, i) => {
+                    const checkDiv = document.createElement('div');
+                    checkDiv.className = 'form-check';
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.className = 'form-check-input';
+                    cb.name = q.name;
+                    cb.value = opt;
+                    cb.dataset.rating = q.ratings && q.ratings[i] ? q.ratings[i] : 0;
+                    const lbl = document.createElement('label');
+                    lbl.className = 'form-check-label';
+                    lbl.innerText = opt;
+                    checkDiv.appendChild(cb);
+                    checkDiv.appendChild(lbl);
+                    div.appendChild(checkDiv);
+                });
+                inputEl = div;
+                block.appendChild(div);
+            } else if (q.type === 'text') {
+                const inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'form-control';
+                inp.placeholder = q.placeholder || '';
+                inp.name = q.name;
+                inputEl = inp;
+                block.appendChild(inp);
+            }
+
+            if (inputEl) {
+                if (q.type === 'checkbox_group') {
+                    inputEl.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', saveAllData));
+                } else {
+                    inputEl.addEventListener('change', saveAllData);
+                    inputEl.addEventListener('input', saveAllData);
+                }
+            }
+            container.appendChild(block);
+
+            // Restore saved data
+            if (formDataStore[q.name] !== undefined) {
+                if (q.type === 'checkbox_group') {
+                    const saved = formDataStore[q.name] || [];
+                    inputEl.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                        cb.checked = saved.includes(cb.value);
+                    });
+                } else if (q.type === 'range') {
+                    inputEl.value = formDataStore[q.name];
+                    const sp = document.getElementById(`rangeVal_${q.name}`);
+                    if (sp) sp.innerText = formDataStore[q.name];
+                } else {
+                    inputEl.value = formDataStore[q.name];
+                }
+            }
+        });
     }
 
     function saveAllData() {
-      document.querySelectorAll('.question-block').forEach((block, idx) => {
-        const q = surveyQuestions[idx];
-        if (!q) return;
-        if (q.type === 'checkbox_group') {
-          const cbs = block.querySelectorAll('input[type="checkbox"]');
-          const checked = [];
-          cbs.forEach(cb => { if (cb.checked) checked.push(cb.value); });
-          formDataStore[q.name] = checked;
-        } else {
-          const inp = block.querySelector('input, select, textarea');
-          if (inp) formDataStore[q.name] = inp.value;
-        }
-      });
-    }
-
-    // ========== CORRECTED RATING COMPUTATION ==========
-    function computeFullRating() {
-      let totalEarned = 0;
-      let totalMax = 0;
-      let sectionDetails = [];
-      
-      surveyQuestions.forEach((q, idx) => {
-        let val = formDataStore[q.name];
-        if (val === undefined || val === '' || (Array.isArray(val) && val.length === 0)) return;
-        
-        let questionRating = 0;
-        
-        // Use the question's own getRating function
-        if (typeof q.getRating === 'function') {
-          questionRating = q.getRating(val);
-        }
-        
-        // Clamp rating between 0 and 5
-        questionRating = Math.max(0, Math.min(5, questionRating));
-        
-        // Only count questions that have a rating > 0
-        if (questionRating > 0) {
-          totalEarned += questionRating;
-          totalMax += 5;
-          
-          sectionDetails.push({
-            qNum: idx+1,
-            questionId: q.id,
-            text: q.text,
-            answer: val,
-            rating: questionRating
-          });
-        } else {
-          // For questions with rating 0 (text fields, etc), we don't include them in the average
-          // but we still want to show them in the report if they have answers
-          if (val && (typeof val === 'string' && val.trim() !== '' || Array.isArray(val) && val.length > 0)) {
-            sectionDetails.push({
-              qNum: idx+1,
-              questionId: q.id,
-              text: q.text,
-              answer: val,
-              rating: 0,
-              skipped: true
-            });
-          }
-        }
-      });
-      
-      const overallStars = totalMax > 0 ? (totalEarned / totalMax) * 5 : 0;
-      return { 
-        overallStars: Math.min(5, Math.max(0, overallStars)), 
-        sectionDetails,
-        totalEarned,
-        totalMax
-      };
-    }
-
-    function showReportInModal(data) {
-      const { overallStars, sectionDetails } = data;
-      let starHtml = '';
-      const full = Math.floor(overallStars);
-      const partial = overallStars - full;
-      for (let i=0; i<5; i++) {
-        starHtml += (i < full || (i === full && partial >= 0.25)) ? '★' : '☆';
-      }
-      let remark = overallStars >= 4 ? '🌟 उत्कृष्ट कामगिरी' :
-                  overallStars >= 3 ? '👍 चांगली कामगिरी' :
-                  overallStars >= 2 ? '📈 सुधारणेची आवश्यकता' : '⚠️ असमाधानकारक';
-      
-      let html = `
-        <div class="text-center mb-4">
-          <div class="report-stars">${starHtml}</div>
-          <h4 class="fw-bold mt-2 text-primary">${overallStars.toFixed(1)} / 5.0</h4>
-          <p class="text-secondary">${remark}</p>
-          <div class="alert alert-light p-2 rounded-4"><i class="fas fa-info-circle text-primary me-1"></i>सर्व प्रश्नांच्या सकारात्मक उत्तरांवर आधारित रेटिंग</div>
-        </div>
-        <div class="fw-bold mb-2"><i class="fas fa-list-ul me-1 text-primary"></i> प्रश्ननिहाय विश्लेषण</div>
-      `;
-      
-      if (sectionDetails.length === 0) {
-        html += `<p class="text-secondary">कृपया किमान काही प्रश्नांची उत्तरे द्या.</p>`;
-      } else {
-        sectionDetails.forEach(s => {
-          let starSec = '';
-          const filled = Math.floor(s.rating || 0);
-          const partialStar = (s.rating || 0) - filled;
-          for (let i=0; i<5; i++) {
-            if (i < filled) {
-              starSec += '★';
-            } else if (i === filled && partialStar >= 0.3) {
-              starSec += '★';
+        document.querySelectorAll('.question-block').forEach((block, idx) => {
+            const q = surveyQuestions[idx];
+            if (!q) return;
+            if (q.type === 'checkbox_group') {
+                const cbs = block.querySelectorAll('input[type="checkbox"]');
+                const checked = [];
+                cbs.forEach(cb => { if (cb.checked) checked.push(cb.value); });
+                formDataStore[q.name] = checked;
             } else {
-              starSec += '☆';
+                const inp = block.querySelector('input, select, textarea');
+                if (inp) formDataStore[q.name] = inp.value;
             }
-          }
-          html += `
-            <div class="report-section-item">
-              <div class="flex-grow-1 me-2">
-                <div class="small">${s.qNum}. ${s.text}</div>
-                <div class="report-answer small">उत्तर: ${Array.isArray(s.answer) ? s.answer.join(', ') : (s.answer || '--')}</div>
-                ${s.skipped ? '<span class="text-secondary small">(या प्रश्नाचे रेटिंग मोजले जात नाही)</span>' : `<span class="question-rating-badge">रेटिंग: ${(s.rating || 0).toFixed(2)} / 5.00</span>`}
-              </div>
-              ${s.skipped ? '<span class="text-secondary small">—</span>' : `<span class="stars-small">${starSec}</span>`}
-            </div>
-          `;
         });
-      }
-      
-      // Add respondent info if available
-      const name = formDataStore['optional_name'] || '';
-      const constituency = formDataStore['optional_constituency'] || '';
-      if (name || constituency) {
-        html += `
-          <div class="mt-3 pt-2 border-top">
-            <small class="text-secondary">
-              <i class="fas fa-user me-1"></i>${name || 'नाव नाही'} 
-              ${constituency ? '| <i class="fas fa-map-marker-alt me-1"></i>' + constituency : ''}
-            </small>
-          </div>
+    }
+
+    // ========== RATING COMPUTATION ==========
+    function computeFullRating() {
+        let totalEarned = 0;
+        let totalMax = 0;
+        let sectionDetails = [];
+        
+        surveyQuestions.forEach((q, idx) => {
+            let val = formDataStore[q.name];
+            if (val === undefined || val === '' || (Array.isArray(val) && val.length === 0)) return;
+            
+            let questionRating = 0;
+            
+            if (q.getRating && typeof q.getRating === 'function') {
+                questionRating = q.getRating(val);
+            } else if (q.type === 'select' && q.ratings) {
+                const selectedIndex = q.options ? q.options.indexOf(val) : -1;
+                if (selectedIndex >= 0 && q.ratings[selectedIndex] !== undefined) {
+                    questionRating = parseFloat(q.ratings[selectedIndex]) || 0;
+                }
+            }
+            
+            questionRating = Math.max(0, Math.min(5, questionRating));
+            
+            if (questionRating > 0) {
+                totalEarned += questionRating;
+                totalMax += 5;
+                
+                sectionDetails.push({
+                    qNum: idx+1,
+                    questionId: q.id || idx+1,
+                    text: q.text,
+                    answer: val,
+                    rating: questionRating
+                });
+            } else if (val && (typeof val === 'string' && val.trim() !== '' || Array.isArray(val) && val.length > 0)) {
+                sectionDetails.push({
+                    qNum: idx+1,
+                    questionId: q.id || idx+1,
+                    text: q.text,
+                    answer: val,
+                    rating: 0,
+                    skipped: true
+                });
+            }
+        });
+        
+        const overallStars = totalMax > 0 ? (totalEarned / totalMax) * 5 : 0;
+        return {
+            overallStars: Math.min(5, Math.max(0, overallStars)),
+            sectionDetails,
+            totalEarned,
+            totalMax
+        };
+    }
+
+    // ========== SHOW REPORT ==========
+    function showReportInModal(data) {
+        const { overallStars, sectionDetails } = data;
+        let starHtml = '';
+        const full = Math.floor(overallStars);
+        const partial = overallStars - full;
+        for (let i=0; i<5; i++) {
+            starHtml += (i < full || (i === full && partial >= 0.25)) ? '★' : '☆';
+        }
+        let remark = overallStars >= 4 ? '🌟 उत्कृष्ट कामगिरी' :
+                    overallStars >= 3 ? '👍 चांगली कामगिरी' :
+                    overallStars >= 2 ? '📈 सुधारणेची आवश्यकता' : '⚠️ असमाधानकारक';
+        
+        let html = `
+            <div class="text-center mb-4">
+                <div class="report-stars">${starHtml}</div>
+                <h4 class="fw-bold mt-2 text-primary">${overallStars.toFixed(1)} / 5.0</h4>
+                <p class="text-secondary">${remark}</p>
+                <div class="alert alert-light p-2 rounded-4"><i class="fas fa-info-circle text-primary me-1"></i>सर्व प्रश्नांच्या सकारात्मक उत्तरांवर आधारित रेटिंग</div>
+            </div>
+            <div class="fw-bold mb-2"><i class="fas fa-list-ul me-1 text-primary"></i> प्रश्ननिहाय विश्लेषण</div>
         `;
-      }
-      
-      document.getElementById('reportModalBody').innerHTML = html;
-      
-      if (!reportModalInstance) {
-        reportModalInstance = new bootstrap.Modal(document.getElementById('reportModal'));
-      }
-      reportModalInstance.show();
+        
+        if (sectionDetails.length === 0) {
+            html += `<p class="text-secondary">कृपया किमान काही प्रश्नांची उत्तरे द्या.</p>`;
+        } else {
+            sectionDetails.forEach(s => {
+                let starSec = '';
+                const filled = Math.floor(s.rating || 0);
+                const partialStar = (s.rating || 0) - filled;
+                for (let i=0; i<5; i++) {
+                    if (i < filled) {
+                        starSec += '★';
+                    } else if (i === filled && partialStar >= 0.3) {
+                        starSec += '★';
+                    } else {
+                        starSec += '☆';
+                    }
+                }
+                html += `
+                    <div class="report-section-item">
+                        <div class="flex-grow-1 me-2">
+                            <div class="small">${s.qNum}. ${s.text}</div>
+                            <div class="report-answer small">उत्तर: ${Array.isArray(s.answer) ? s.answer.join(', ') : (s.answer || '--')}</div>
+                            ${s.skipped ? '<span class="text-secondary small">(या प्रश्नाचे रेटिंग मोजले जात नाही)</span>' : `<span class="question-rating-badge">रेटिंग: ${(s.rating || 0).toFixed(2)} / 5.00</span>`}
+                        </div>
+                        ${s.skipped ? '<span class="text-secondary small">—</span>' : `<span class="stars-small">${starSec}</span>`}
+                    </div>
+                `;
+            });
+        }
+        
+        const name = formDataStore['optional_name'] || '';
+        const constituency = formDataStore['optional_constituency'] || '';
+        if (name || constituency) {
+            html += `
+                <div class="mt-3 pt-2 border-top">
+                    <small class="text-secondary">
+                        <i class="fas fa-user me-1"></i>${name || 'नाव नाही'} 
+                        ${constituency ? '| <i class="fas fa-map-marker-alt me-1"></i>' + constituency : ''}
+                    </small>
+                </div>
+            `;
+        }
+        
+        document.getElementById('reportModalBody').innerHTML = html;
+        
+        if (!reportModalInstance) {
+            reportModalInstance = new bootstrap.Modal(document.getElementById('reportModal'));
+        }
+        reportModalInstance.show();
     }
 
     // ========== SUBMIT SURVEY ==========
     async function onSubmitSurvey() {
-      saveAllData();
-      
-      let answered = 0;
-      surveyQuestions.forEach(q => {
-        const val = formDataStore[q.name];
-        if (val !== undefined && val !== '' && !(Array.isArray(val) && val.length === 0)) answered++;
-      });
-      
-      if (answered < 3) {
-        alert('कृपया किमान 3-4 प्रश्नांची उत्तरे द्या.');
-        return;
-      }
-
-      submitBtn.classList.add('btn-loading');
-      submitBtn.disabled = true;
-
-      try {
-        const ratingResult = computeFullRating();
-        const questions = ratingResult.sectionDetails
-          .filter(s => !s.skipped && s.rating > 0)
-          .map(s => ({
-            question_id: s.questionId,
-            question: s.text,
-            answer: s.answer,
-            rating: parseFloat(s.rating.toFixed(2))
-          }));
-
-        const payload = {
-          respondent_name: formDataStore['optional_name'] || '',
-          constituency: formDataStore['optional_constituency'] || '',
-          questions: questions,
-          overall_rating: parseFloat(ratingResult.overallStars.toFixed(2))
-        };
-
-        const saveUrl = '<?= base_url("user/mla-rating/save") ?>';
-
-        const response = await fetch(saveUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-
-        submitBtn.classList.remove('btn-loading');
-        submitBtn.disabled = false;
-
-        if (result.success) {
-          savedReportData = {
-            ...ratingResult,
-            questions: questions,
-            respondent_name: payload.respondent_name,
-            constituency: payload.constituency,
-            submitted_at: result.data?.submitted_at || new Date().toISOString()
-          };
-          
-          showReportInModal(savedReportData);
-        } else {
-          alert('त्रुटी: ' + (result.message || 'सर्वेक्षण सबमिट करण्यात अयशस्वी. कृपया पुन्हा प्रयत्न करा.'));
-        }
-      } catch (error) {
-        submitBtn.classList.remove('btn-loading');
-        submitBtn.disabled = false;
+        saveAllData();
         
-        console.error('Submission error:', error);
-        alert('नेटवर्क त्रुटी. कृपया आपले इंटरनेट कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.');
-      }
+        let answered = 0;
+        surveyQuestions.forEach(q => {
+            const val = formDataStore[q.name];
+            if (val !== undefined && val !== '' && !(Array.isArray(val) && val.length === 0)) answered++;
+        });
+        
+        if (answered < 3) {
+            alert('कृपया किमान 3-4 प्रश्नांची उत्तरे द्या.');
+            return;
+        }
+
+        submitBtn.classList.add('btn-loading');
+        submitBtn.disabled = true;
+
+        try {
+            const ratingResult = computeFullRating();
+            const questions = ratingResult.sectionDetails
+                .filter(s => !s.skipped && s.rating > 0)
+                .map(s => ({
+                    question_id: s.questionId,
+                    question: s.text,
+                    answer: s.answer,
+                    rating: parseFloat(s.rating.toFixed(2))
+                }));
+
+            const payload = {
+                respondent_name: formDataStore['optional_name'] || '',
+                constituency: formDataStore['optional_constituency'] || '',
+                questions: questions,
+                overall_rating: parseFloat(ratingResult.overallStars.toFixed(2))
+            };
+
+            const saveUrl = '/mla_web_portal/public/user/mla-rating/save';
+
+            const response = await fetch(saveUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            submitBtn.classList.remove('btn-loading');
+            submitBtn.disabled = false;
+
+            if (result.success) {
+                savedReportData = {
+                    ...ratingResult,
+                    questions: questions,
+                    respondent_name: payload.respondent_name,
+                    constituency: payload.constituency,
+                    submitted_at: result.data?.submitted_at || new Date().toISOString()
+                };
+                
+                showReportInModal(savedReportData);
+            } else {
+                alert('त्रुटी: ' + (result.message || 'सर्वेक्षण सबमिट करण्यात अयशस्वी. कृपया पुन्हा प्रयत्न करा.'));
+            }
+        } catch (error) {
+            submitBtn.classList.remove('btn-loading');
+            submitBtn.disabled = false;
+            
+            console.error('Submission error:', error);
+            alert('नेटवर्क त्रुटी. कृपया आपले इंटरनेट कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.');
+        }
     }
 
     // ========== PDF GENERATION ==========
     function downloadPDF() {
-      if (!savedReportData) {
-        alert('प्रथम सर्वेक्षण सबमिट करा.');
-        return;
-      }
+        if (!savedReportData) {
+            alert('प्रथम सर्वेक्षण सबमिट करा.');
+            return;
+        }
 
-      try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'mm', 'a4');
-        
-        doc.setFont('helvetica');
-        doc.setFontSize(20);
-        doc.setTextColor('#225661');
-        
-        doc.text('MLA Performance Report', 20, 30);
-        
-        doc.setFontSize(12);
-        doc.setTextColor('#454D28');
-        doc.text('महाराष्ट्र नागरिक सर्वेक्षण', 20, 40);
-        
-        doc.setFontSize(10);
-        doc.setTextColor('#666');
-        const dateStr = new Date().toLocaleString('mr-IN');
-        doc.text('तारीख: ' + dateStr, 20, 48);
-        
-        doc.setDrawColor('#C3C848');
-        doc.line(20, 52, 190, 52);
-        
-        doc.setFontSize(16);
-        doc.setTextColor('#225661');
-        doc.text('एकूण रेटिंग', 20, 62);
-        
-        doc.setFontSize(24);
-        doc.setTextColor('#C3C848');
-        doc.text(savedReportData.overallStars.toFixed(1) + ' / 5.0', 20, 74);
-        
-        doc.setFontSize(14);
-        let stars = '';
-        const full = Math.floor(savedReportData.overallStars);
-        for (let i=0; i<5; i++) {
-          stars += i < full ? '★' : '☆';
+        try {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            
+            doc.setFont('helvetica');
+            doc.setFontSize(20);
+            doc.setTextColor('#225661');
+            
+            doc.text('MLA Performance Report', 20, 30);
+            
+            doc.setFontSize(12);
+            doc.setTextColor('#454D28');
+            doc.text('महाराष्ट्र नागरिक सर्वेक्षण', 20, 40);
+            
+            doc.setFontSize(10);
+            doc.setTextColor('#666');
+            const dateStr = new Date().toLocaleString('mr-IN');
+            doc.text('तारीख: ' + dateStr, 20, 48);
+            
+            doc.setDrawColor('#C3C848');
+            doc.line(20, 52, 190, 52);
+            
+            doc.setFontSize(16);
+            doc.setTextColor('#225661');
+            doc.text('एकूण रेटिंग', 20, 62);
+            
+            doc.setFontSize(24);
+            doc.setTextColor('#C3C848');
+            doc.text(savedReportData.overallStars.toFixed(1) + ' / 5.0', 20, 74);
+            
+            doc.setFontSize(14);
+            let stars = '';
+            const full = Math.floor(savedReportData.overallStars);
+            for (let i=0; i<5; i++) {
+                stars += i < full ? '★' : '☆';
+            }
+            doc.text(stars, 20, 86);
+            
+            let remark = savedReportData.overallStars >= 4 ? '🌟 उत्कृष्ट कामगिरी' :
+                         savedReportData.overallStars >= 3 ? '👍 चांगली कामगिरी' :
+                         savedReportData.overallStars >= 2 ? '📈 सुधारणेची आवश्यकता' : '⚠️ असमाधानकारक';
+            doc.setFontSize(12);
+            doc.setTextColor('#454D28');
+            doc.text(remark, 20, 96);
+            
+            let yPos = 108;
+            if (savedReportData.respondent_name) {
+                doc.setFontSize(10);
+                doc.setTextColor('#666');
+                doc.text('नाव: ' + savedReportData.respondent_name, 20, yPos);
+                yPos += 6;
+            }
+            if (savedReportData.constituency) {
+                doc.setFontSize(10);
+                doc.text('मतदारसंघ: ' + savedReportData.constituency, 20, yPos);
+                yPos += 6;
+            }
+            
+            doc.setDrawColor('#C3C848');
+            doc.line(20, yPos + 4, 190, yPos + 4);
+            yPos += 12;
+            
+            doc.setFontSize(14);
+            doc.setTextColor('#225661');
+            doc.text('प्रश्ननिहाय विश्लेषण', 20, yPos);
+            yPos += 8;
+            
+            doc.setFontSize(9);
+            doc.setTextColor('#333');
+            
+            savedReportData.sectionDetails.forEach((s, index) => {
+                if (yPos > 250) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                
+                const qText = (index+1) + '. ' + s.text;
+                const qTextLines = doc.splitTextToSize(qText, 140);
+                doc.text(qTextLines, 20, yPos);
+                yPos += (qTextLines.length * 5);
+                
+                const answerText = 'उत्तर: ' + (Array.isArray(s.answer) ? s.answer.join(', ') : (s.answer || '--'));
+                doc.setFont('helvetica', 'italic');
+                doc.text(doc.splitTextToSize(answerText, 150), 25, yPos);
+                yPos += 5;
+                doc.setFont('helvetica', 'normal');
+                
+                if (!s.skipped && s.rating > 0) {
+                    doc.text('रेटिंग: ' + (s.rating || 0).toFixed(2) + ' / 5.00', 25, yPos);
+                } else {
+                    doc.text('(या प्रश्नाचे रेटिंग मोजले जात नाही)', 25, yPos);
+                }
+                yPos += 8;
+                
+                if (index < savedReportData.sectionDetails.length - 1) {
+                    doc.setDrawColor('#eee');
+                    doc.line(20, yPos - 2, 190, yPos - 2);
+                }
+            });
+            
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor('#999');
+                doc.text('Generated by GovTrack Aura - ' + dateStr, 20, 285);
+                doc.text('पृष्ठ ' + i + '/' + pageCount, 180, 285);
+            }
+            
+            doc.save('MLA_Rating_Report_' + new Date().toISOString().slice(0,10) + '.pdf');
+        } catch (error) {
+            console.error('PDF generation error:', error);
+            alert('PDF तयार करण्यात त्रुटी. कृपया पुन्हा प्रयत्न करा.');
         }
-        doc.text(stars, 20, 86);
-        
-        let remark = savedReportData.overallStars >= 4 ? '🌟 उत्कृष्ट कामगिरी' :
-                     savedReportData.overallStars >= 3 ? '👍 चांगली कामगिरी' :
-                     savedReportData.overallStars >= 2 ? '📈 सुधारणेची आवश्यकता' : '⚠️ असमाधानकारक';
-        doc.setFontSize(12);
-        doc.setTextColor('#454D28');
-        doc.text(remark, 20, 96);
-        
-        let yPos = 108;
-        if (savedReportData.respondent_name) {
-          doc.setFontSize(10);
-          doc.setTextColor('#666');
-          doc.text('नाव: ' + savedReportData.respondent_name, 20, yPos);
-          yPos += 6;
-        }
-        if (savedReportData.constituency) {
-          doc.setFontSize(10);
-          doc.text('मतदारसंघ: ' + savedReportData.constituency, 20, yPos);
-          yPos += 6;
-        }
-        
-        doc.setDrawColor('#C3C848');
-        doc.line(20, yPos + 4, 190, yPos + 4);
-        yPos += 12;
-        
-        doc.setFontSize(14);
-        doc.setTextColor('#225661');
-        doc.text('प्रश्ननिहाय विश्लेषण', 20, yPos);
-        yPos += 8;
-        
-        doc.setFontSize(9);
-        doc.setTextColor('#333');
-        
-        savedReportData.sectionDetails.forEach((s, index) => {
-          if (yPos > 250) {
-            doc.addPage();
-            yPos = 20;
-          }
-          
-          const qText = (index+1) + '. ' + s.text;
-          const qTextLines = doc.splitTextToSize(qText, 140);
-          doc.text(qTextLines, 20, yPos);
-          yPos += (qTextLines.length * 5);
-          
-          const answerText = 'उत्तर: ' + (Array.isArray(s.answer) ? s.answer.join(', ') : (s.answer || '--'));
-          doc.setFont('helvetica', 'italic');
-          doc.text(doc.splitTextToSize(answerText, 150), 25, yPos);
-          yPos += 5;
-          doc.setFont('helvetica', 'normal');
-          
-          if (!s.skipped && s.rating > 0) {
-            doc.text('रेटिंग: ' + (s.rating || 0).toFixed(2) + ' / 5.00', 25, yPos);
-          } else {
-            doc.text('(या प्रश्नाचे रेटिंग मोजले जात नाही)', 25, yPos);
-          }
-          yPos += 8;
-          
-          if (index < savedReportData.sectionDetails.length - 1) {
-            doc.setDrawColor('#eee');
-            doc.line(20, yPos - 2, 190, yPos - 2);
-          }
-        });
-        
-        const pageCount = doc.internal.getNumberOfPages();
-        for (let i = 1; i <= pageCount; i++) {
-          doc.setPage(i);
-          doc.setFontSize(8);
-          doc.setTextColor('#999');
-          doc.text('Generated by GovTrack Aura - ' + dateStr, 20, 285);
-          doc.text('पृष्ठ ' + i + '/' + pageCount, 180, 285);
-        }
-        
-        doc.save('MLA_Rating_Report_' + new Date().toISOString().slice(0,10) + '.pdf');
-      } catch (error) {
-        console.error('PDF generation error:', error);
-        alert('PDF तयार करण्यात त्रुटी. कृपया पुन्हा प्रयत्न करा.');
-      }
     }
 
     // ========== SHARE REPORT ==========
     function shareReport() {
-      if (!savedReportData) {
-        alert('प्रथम सर्वेक्षण सबमिट करा.');
-        return;
-      }
-
-      const rating = savedReportData.overallStars.toFixed(1);
-      let shareText = `🌟 MLA कामगिरी रिपोर्ट\n\n`;
-      shareText += `📊 एकूण रेटिंग: ${rating} / 5.0\n`;
-      
-      let stars = '';
-      const full = Math.floor(savedReportData.overallStars);
-      for (let i=0; i<5; i++) {
-        stars += i < full ? '★' : '☆';
-      }
-      shareText += `${stars}\n\n`;
-      
-      let remark = savedReportData.overallStars >= 4 ? '🌟 उत्कृष्ट कामगिरी' :
-                   savedReportData.overallStars >= 3 ? '👍 चांगली कामगिरी' :
-                   savedReportData.overallStars >= 2 ? '📈 सुधारणेची आवश्यकता' : '⚠️ असमाधानकारक';
-      shareText += `${remark}\n\n`;
-      
-      shareText += '📋 प्रश्ननिहाय रेटिंग:\n';
-      savedReportData.sectionDetails.forEach(s => {
-        if (!s.skipped && s.rating > 0) {
-          const starStr = '★'.repeat(Math.floor(s.rating)) + '☆'.repeat(5 - Math.floor(s.rating));
-          shareText += `Q${s.qNum}: ${starStr} (${(s.rating || 0).toFixed(1)}/5)\n`;
+        if (!savedReportData) {
+            alert('प्रथम सर्वेक्षण सबमिट करा.');
+            return;
         }
-      });
-      
-      shareText += `\n📅 ${new Date().toLocaleString()}`;
-      shareText += '\n\nGovTrack Aura द्वारे सर्वेक्षण रिपोर्ट.';
 
-      if (navigator.share) {
-        navigator.share({
-          title: 'MLA कामगिरी रिपोर्ट',
-          text: shareText
-        }).catch(err => {
-          if (err.name !== 'AbortError') {
-            console.log('Share cancelled or error:', err);
-            fallbackShare(shareText);
-          }
+        const rating = savedReportData.overallStars.toFixed(1);
+        let shareText = `🌟 MLA कामगिरी रिपोर्ट\n\n`;
+        shareText += `📊 एकूण रेटिंग: ${rating} / 5.0\n`;
+        
+        let stars = '';
+        const full = Math.floor(savedReportData.overallStars);
+        for (let i=0; i<5; i++) {
+            stars += i < full ? '★' : '☆';
+        }
+        shareText += `${stars}\n\n`;
+        
+        let remark = savedReportData.overallStars >= 4 ? '🌟 उत्कृष्ट कामगिरी' :
+                     savedReportData.overallStars >= 3 ? '👍 चांगली कामगिरी' :
+                     savedReportData.overallStars >= 2 ? '📈 सुधारणेची आवश्यकता' : '⚠️ असमाधानकारक';
+        shareText += `${remark}\n\n`;
+        
+        shareText += '📋 प्रश्ननिहाय रेटिंग:\n';
+        savedReportData.sectionDetails.forEach(s => {
+            if (!s.skipped && s.rating > 0) {
+                const starStr = '★'.repeat(Math.floor(s.rating)) + '☆'.repeat(5 - Math.floor(s.rating));
+                shareText += `Q${s.qNum}: ${starStr} (${(s.rating || 0).toFixed(1)}/5)\n`;
+            }
         });
-      } else {
-        fallbackShare(shareText);
-      }
+        
+        shareText += `\n📅 ${new Date().toLocaleString()}`;
+        shareText += '\n\nGovTrack Aura द्वारे सर्वेक्षण रिपोर्ट.';
+
+        if (navigator.share) {
+            navigator.share({
+                title: 'MLA कामगिरी रिपोर्ट',
+                text: shareText
+            }).catch(err => {
+                if (err.name !== 'AbortError') {
+                    console.log('Share cancelled or error:', err);
+                    fallbackShare(shareText);
+                }
+            });
+        } else {
+            fallbackShare(shareText);
+        }
     }
 
     function fallbackShare(text) {
-      const shareOptions = confirm(
-        'शेअर करण्याचा पर्याय निवडा:\n\n' +
-        'OK - क्लिपबोर्डवर कॉपी करा\n' +
-        'Cancel - रद्द करा'
-      );
-      
-      if (shareOptions) {
-        navigator.clipboard.writeText(text).then(() => {
-          alert('रिपोर्ट कॉपी झाला! आता तुम्ही WhatsApp, Facebook, किंवा इतर apps मध्ये पेस्ट करू शकता.');
-        }).catch(() => {
-          prompt('खालील टेक्स्ट कॉपी करा आणि शेअर करा:', text);
-        });
-      }
+        const shareOptions = confirm(
+            'शेअर करण्याचा पर्याय निवडा:\n\n' +
+            'OK - क्लिपबोर्डवर कॉपी करा\n' +
+            'Cancel - रद्द करा'
+        );
+        
+        if (shareOptions) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('रिपोर्ट कॉपी झाला! आता तुम्ही WhatsApp, Facebook, किंवा इतर apps मध्ये पेस्ट करू शकता.');
+            }).catch(() => {
+                prompt('खालील टेक्स्ट कॉपी करा आणि शेअर करा:', text);
+            });
+        }
     }
 
     // ========== RESET SURVEY ==========
     function resetSurvey() {
-      if (confirm('सर्व उत्तरे रीसेट करायची आहेत का? ही क्रिया उलटवता येत नाही.')) {
-        formDataStore = {};
-        savedReportData = null;
-        
-        document.querySelectorAll('.question-block').forEach((block, idx) => {
-          const q = surveyQuestions[idx];
-          if (!q) return;
-          
-          if (q.type === 'checkbox_group') {
-            block.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-              cb.checked = false;
+        if (confirm('सर्व उत्तरे रीसेट करायची आहेत का? ही क्रिया उलटवता येत नाही.')) {
+            formDataStore = {};
+            savedReportData = null;
+            
+            document.querySelectorAll('.question-block').forEach((block, idx) => {
+                const q = surveyQuestions[idx];
+                if (!q) return;
+                
+                if (q.type === 'checkbox_group') {
+                    block.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                        cb.checked = false;
+                    });
+                } else if (q.type === 'range') {
+                    const range = block.querySelector('input[type="range"]');
+                    if (range) {
+                        range.value = q.min || 1;
+                        const valSpan = block.querySelector('.text-secondary');
+                        if (valSpan) valSpan.innerText = range.value;
+                    }
+                } else {
+                    const inp = block.querySelector('input, select, textarea');
+                    if (inp) {
+                        if (inp.tagName === 'SELECT') {
+                            inp.selectedIndex = 0;
+                        } else {
+                            inp.value = '';
+                        }
+                    }
+                }
             });
-          } else if (q.type === 'range') {
-            const range = block.querySelector('input[type="range"]');
-            if (range) {
-              range.value = q.min || 1;
-              const valSpan = block.querySelector('.text-secondary');
-              if (valSpan) valSpan.innerText = range.value;
+            
+            if (reportModalInstance) {
+                reportModalInstance.hide();
             }
-          } else {
-            const inp = block.querySelector('input, select, textarea');
-            if (inp) {
-              if (inp.tagName === 'SELECT') {
-                inp.selectedIndex = 0;
-              } else {
-                inp.value = '';
-              }
-            }
-          }
-        });
-        
-        if (reportModalInstance) {
-          reportModalInstance.hide();
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
     }
 
     // ========== EVENT LISTENERS ==========
     submitBtn.addEventListener('click', onSubmitSurvey);
 
     // ========== INITIALIZE ==========
-    renderAllQuestions();
+    // Load questions from database
+    loadQuestions();
 
     // ========== KEYBOARD SHORTCUTS ==========
     document.addEventListener('keydown', function(e) {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        e.preventDefault();
-        onSubmitSurvey();
-      }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            onSubmitSurvey();
+        }
     });
-  </script>
+</script>
 </body>
 </html>

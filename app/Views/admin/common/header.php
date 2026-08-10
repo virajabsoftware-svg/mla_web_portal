@@ -31,6 +31,13 @@
     'tooltip' => 'Dashboard',
     'segments' => ['dashboard']
 ],
+ 'constituency-management' => [
+                            'url' => base_url('admin/constituency-management'),
+                            'icon' => 'fa fa-map-marker',
+                            'label' => 'Constituency Management',
+                            'tooltip' => 'Constituency',
+                            'segments' => ['constituency-management', 'constituency']
+                        ],
                         'mla-management' => [
                             'url' => base_url('admin/mla-management'),
                             'icon' => 'fa fa-users',
@@ -38,13 +45,7 @@
                             'tooltip' => 'MLA Management',
                             'segments' => ['mla-management', 'mla']
                         ],
-                        'constituency-management' => [
-                            'url' => base_url('admin/constituency-management'),
-                            'icon' => 'fa fa-map-marker',
-                            'label' => 'Constituency Management',
-                            'tooltip' => 'Constituency',
-                            'segments' => ['constituency-management', 'constituency']
-                        ],
+                       
                         'complaint-management' => [
                             'url' => base_url('admin/complaint-management'),
                             'icon' => 'fa fa-exclamation-circle',
@@ -86,7 +87,16 @@
                             'label' => 'Voter Management',
                             'tooltip' => 'Voters',
                             'segments' => ['voter-management', 'voter']
-                        ]
+                        ],
+                        'rating-question' => [
+    'url' => base_url('admin/ratingquestion'),
+    'icon' => 'fa fa-star',
+    'label' => 'Rating Questions',
+    'tooltip' => 'Rating Questions',
+    'segments' => ['rating-question', 'ratingquestion']
+]
+
+                        
                     ];
 
                     // Get current URI segments

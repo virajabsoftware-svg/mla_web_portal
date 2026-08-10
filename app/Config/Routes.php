@@ -1,4 +1,3 @@
-
 <?php
 
 use CodeIgniter\Router\RouteCollection;
@@ -44,6 +43,34 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->get('voter-management', 'VoterManagement::index');
 
     $routes->get('notification-center', 'NotificationCenter::index');
+    $routes->get('ratingquestion', 'RatingQuestionController::index');
+    
+
+    // =================================================
+    // MLA RATING QUESTION MANAGEMENT
+    // =================================================
+    
+    // Route set 1: Using the new controller name
+    $routes->get('ratingquestion', 'RatingQuestionController::index');
+    $routes->get('ratingquestion/create', 'RatingQuestionController::create');
+    $routes->post('ratingquestion/store', 'RatingQuestionController::store');
+    $routes->get('ratingquestion/edit/(:num)', 'RatingQuestionController::edit/$1');
+    $routes->post('ratingquestion/update/(:num)', 'RatingQuestionController::update/$1');
+    $routes->get('ratingquestion/delete/(:num)', 'RatingQuestionController::delete/$1');
+    $routes->get('ratingquestion/view/(:num)', 'RatingQuestionController::view/$1');
+    $routes->get('ratingquestion/toggle-status/(:num)', 'RatingQuestionController::toggleStatus/$1');
+    $routes->post('ratingquestion/update-order', 'RatingQuestionController::updateOrder');
+
+    // Route set 2: Also support the old URL format for backward compatibility
+    $routes->get('manageratingquestion', 'RatingQuestionController::index');
+    $routes->get('manageratingquestion/create', 'RatingQuestionController::create');
+    $routes->post('manageratingquestion/store', 'RatingQuestionController::store');
+    $routes->get('manageratingquestion/edit/(:num)', 'RatingQuestionController::edit/$1');
+    $routes->post('manageratingquestion/update/(:num)', 'RatingQuestionController::update/$1');
+    $routes->get('manageratingquestion/delete/(:num)', 'RatingQuestionController::delete/$1');
+    $routes->get('manageratingquestion/view/(:num)', 'RatingQuestionController::view/$1');
+    $routes->get('manageratingquestion/toggle-status/(:num)', 'RatingQuestionController::toggleStatus/$1');
+    $routes->post('manageratingquestion/update-order', 'RatingQuestionController::updateOrder');
 });
 
 
@@ -118,6 +145,9 @@ $routes->group('user', ['namespace' => 'App\Controllers\User'], function ($route
 
     $routes->get('mla-rating', 'MlaRating::index');
 
+    // Route to fetch questions for frontend
+    $routes->get('mla-rating/get-questions', 'MlaRating::getQuestions');
+
     $routes->post(
         'mla-rating/save',
         'MlaRating::save'
@@ -168,4 +198,3 @@ $routes->group('user', ['namespace' => 'App\Controllers\User'], function ($route
     $routes->post('survey/save', 'Survey::save');
 
 });
-

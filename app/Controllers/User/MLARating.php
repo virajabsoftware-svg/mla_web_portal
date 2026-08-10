@@ -26,6 +26,58 @@ class MlaRating extends BaseController
     }
 
     /**
+     * Get questions for frontend
+     * This method fetches questions from the database for the frontend
+     */
+    public function getQuestions()
+    {
+        $model = new \App\Models\Admin\RatingQuestionModel();
+        $questions = $model->getQuestionsForFrontend();
+        
+        // Add getRating function to each question
+        foreach ($questions as &$q) {
+            if ($q['type'] === 'select') {
+                $q['getRating'] = function($val) use ($q) {
+                    if (!isset($q['options']) || !isset($q['ratings'])) return 0;
+                    $index = array_search($val, $q['options']);
+                    if ($index === false) return 0;
+                    return isset($q['ratings'][$index]) ? floatval($q['ratings'][$index]) : 0;
+                };
+            } elseif ($q['type'] === 'range') {
+                $q['getRating'] = function($val) use ($q) {
+                    $num = intval($val);
+                    $min = intval($q['min'] ?? 1);
+                    $max = intval($q['max'] ?? 10);
+                    $range = $max - $min;
+                    if ($range <= 0) return 0;
+                    $scaled = (($num - $min) / $range) * 4 + 1;
+                    return round($scaled, 1);
+                };
+            } elseif ($q['type'] === 'checkbox_group') {
+                $q['getRating'] = function($val) use ($q) {
+                    if (!is_array($val) || empty($val)) return 0;
+                    if (!isset($q['options']) || !isset($q['ratings'])) return 0;
+                    $total = 0;
+                    foreach ($val as $selected) {
+                        $index = array_search($selected, $q['options']);
+                        if ($index !== false && isset($q['ratings'][$index])) {
+                            $total += floatval($q['ratings'][$index]);
+                        }
+                    }
+                    return min(5, $total);
+                };
+            } else {
+                $q['getRating'] = function() { return 0; };
+            }
+        }
+        
+        return $this->response->setJSON([
+            'success' => true,
+            'questions' => $questions
+        ]);
+    }
+
+    /**
      * Save MLA rating submission
      * Works with both POST and AJAX
      */
