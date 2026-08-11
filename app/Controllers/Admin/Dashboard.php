@@ -3,26 +3,27 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Models\Admin\DashboardModel;
 
 class Dashboard extends BaseController
 {
     public function index()
     {
-        // You can fetch data from your models here
-        // Example: $data['total_mla'] = $this->model->countMla();
-        
-        // Sample data - replace with actual database queries
+        $model = new DashboardModel();
+
+        // Get dynamic dashboard statistics
+        $stats = $model->getDashboardStats();
+
         $data = [
-            'title' => 'Admin Dashboard',
-            'total_mla' => 288,
-            'total_voters' => 125480,
-            'total_constituency' => 288,
-            'total_complaint' => 1248,
-            'total_surveys' => 86,
-            'total_feedback' => 3485
+            'title' => 'Dashboard',
+
+            // Dynamic values
+            'total_voters'     => $stats['total_voters'],
+            'total_complaints' => $stats['total_complaints'],
+            'total_feedback'   => $stats['total_feedback'],
+            'total_surveys'    => $stats['total_surveys'],
         ];
-        
-        // Load the view
+
         return view('admin/dashboard', $data);
     }
 }

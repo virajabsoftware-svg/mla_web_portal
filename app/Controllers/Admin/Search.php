@@ -8,7 +8,7 @@ class Search extends BaseController
 {
     public function index()
     {
-        // Enable error reporting
+        // Enable error reporting for debugging
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
 
@@ -16,18 +16,21 @@ class Search extends BaseController
         $this->response->setHeader('Content-Type', 'application/json');
         $this->response->setHeader('Access-Control-Allow-Origin', '*');
 
-        // Get query
+        // Debug: Log the request
         $query = $this->request->getGet('q');
         log_message('debug', 'Search called with query: ' . $query);
 
-        // Check admin login - TEMPORARILY BYPASSED FOR TESTING
-        $isAdmin = true; // Remove this after testing
-        // $isAdmin = session()->get('admin_logged_in');
+        // Check admin login
+        $isAdmin = session()->get('admin_logged_in');
+        log_message('debug', 'Admin logged in: ' . ($isAdmin ? 'Yes' : 'No'));
+
+        // TEMPORARY: BYPASS AUTH FOR TESTING - REMOVE THIS AFTER TESTING
+        $isAdmin = true;
 
         if (!$isAdmin) {
             return $this->response->setJSON([
                 'status' => false,
-                'message' => 'Unauthorized access'
+                'message' => 'Unauthorized access. Please login as admin.'
             ])->setStatusCode(403);
         }
 
@@ -41,7 +44,10 @@ class Search extends BaseController
         }
 
         try {
-            $results = $this->searchAllContent($query);
+            // Get results from all sources
+            $results = $this->searchAll($query);
+            
+            // Limit results
             $results = array_slice($results, 0, 30);
 
             return $this->response->setJSON([
@@ -52,6 +58,8 @@ class Search extends BaseController
 
         } catch (\Exception $e) {
             log_message('error', 'Search error: ' . $e->getMessage());
+            log_message('error', 'Search error trace: ' . $e->getTraceAsString());
+            
             return $this->response->setJSON([
                 'status' => false,
                 'message' => 'Search error: ' . $e->getMessage()
@@ -59,45 +67,31 @@ class Search extends BaseController
         }
     }
 
-    private function searchAllContent($query)
+    private function searchAll($query)
     {
         $results = [];
         $queryLower = strtolower($query);
 
-        // =============================================
-        // 1. SEARCH ALL STATIC PAGES
-        // =============================================
-        $allPages = $this->getAllPages();
-        
-        foreach ($allPages as $page) {
-            // Search in title
-            $titleLower = strtolower($page['title']);
-            $contentLower = strtolower($page['content']);
-            
-            if (strpos($titleLower, $queryLower) !== false || 
-                strpos($contentLower, $queryLower) !== false) {
-                
-                // Find the snippet where the query appears
-                $snippet = $this->getSnippet($page['content'], $query);
-                
+        // 1. Search Static Pages
+        $staticPages = $this->getStaticPages();
+        foreach ($staticPages as $page) {
+            $content = strtolower($page['title'] . ' ' . $page['content']);
+            if (strpos($content, $queryLower) !== false) {
                 $results[] = [
                     'type' => 'page',
                     'title' => $page['title'],
-                    'description' => $snippet ?: 'Found in page content',
+                    'description' => $this->getSnippet($page['content'], $query),
                     'url' => $page['url'],
                     'icon' => $page['icon'] ?? 'fa-file-text-o',
-                    'module' => 'Page',
-                    'match' => 'static'
+                    'module' => 'Pages'
                 ];
             }
         }
 
-        // =============================================
-        // 2. SEARCH DATABASE TABLES
-        // =============================================
+        // 2. Search Database Tables
         $db = db_connect();
 
-        // Search MLA
+        // Search MLA table
         if ($db->tableExists('mla')) {
             try {
                 $builder = $db->table('mla');
@@ -110,8 +104,7 @@ class Search extends BaseController
                 
                 foreach ($records as $record) {
                     $title = $record['mla_name'] ?? 'MLA Record';
-                    $desc = 'Constituency: ' . ($record['constituency'] ?? 'N/A') . 
-                            ' | District: ' . ($record['district'] ?? 'N/A');
+                    $desc = 'Constituency: ' . ($record['constituency'] ?? 'N/A');
                     $results[] = [
                         'type' => 'database',
                         'title' => $title,
@@ -126,7 +119,7 @@ class Search extends BaseController
             }
         }
 
-        // Search Constituency
+        // Search Constituency table
         if ($db->tableExists('constituencies')) {
             try {
                 $builder = $db->table('constituencies');
@@ -153,7 +146,7 @@ class Search extends BaseController
             }
         }
 
-        // Search Complaints
+        // Search Complaints table
         if ($db->tableExists('complaints')) {
             try {
                 $builder = $db->table('complaints');
@@ -166,6 +159,7 @@ class Search extends BaseController
                 
                 foreach ($records as $record) {
                     $title = $record['title'] ?? 'Complaint #' . ($record['id'] ?? '');
+                    $desc = 'Category: ' . ($record['category'] ?? 'N/A');
                     $results[] = [
                         'type' => 'database',
                         'title' => $title,
@@ -180,7 +174,7 @@ class Search extends BaseController
             }
         }
 
-        // Search Feedback
+        // Search Feedback table
         if ($db->tableExists('feedback')) {
             try {
                 $builder = $db->table('feedback');
@@ -207,7 +201,7 @@ class Search extends BaseController
             }
         }
 
-        // Search Rating Questions
+        // Search Rating Questions table
         if ($db->tableExists('rating_questions')) {
             try {
                 $builder = $db->table('rating_questions');
@@ -218,10 +212,11 @@ class Search extends BaseController
                 
                 foreach ($records as $record) {
                     $title = $record['question'] ?? 'Rating Question';
+                    $desc = 'Category: ' . ($record['category'] ?? 'General');
                     $results[] = [
                         'type' => 'database',
                         'title' => $title,
-                        'description' => $this->getSnippet($record['question'] ?? '', $query),
+                        'description' => $this->getSnippet($desc, $query),
                         'url' => base_url('admin/ratingquestion'),
                         'icon' => 'fa-star',
                         'module' => 'Rating Questions'
@@ -232,190 +227,46 @@ class Search extends BaseController
             }
         }
 
-        // Remove duplicates
-        $uniqueResults = [];
-        $seen = [];
-        foreach ($results as $result) {
-            $key = $result['title'] . '|' . $result['type'];
-            if (!isset($seen[$key])) {
-                $seen[$key] = true;
-                $uniqueResults[] = $result;
-            }
-        }
-
-        return $uniqueResults;
+        return $results;
     }
 
-    private function getAllPages()
+    private function getStaticPages()
     {
-        // =============================================
-        // COMPLETE LIST OF ALL PAGES ON THE WEBSITE
-        // ADD ALL YOUR PAGES HERE
-        // =============================================
         return [
-            // Home Page
-            [
-                'title' => 'Home',
-                'content' => 'Welcome to MLA Web Portal. Home page with information about MLAs, constituencies, and public services. Districts, constituencies, and MLA information available.',
-                'url' => base_url('/'),
-                'icon' => 'fa-home'
-            ],
-            
-            // Leadership Page
             [
                 'title' => 'Leadership',
-                'content' => 'Leadership information, MLA performance rankings, evaluation, and leaderboard. Details about district leadership and constituency representatives.',
+                'content' => 'Leadership and MLA performance information, rankings, and evaluation',
                 'url' => base_url('leadership'),
                 'icon' => 'fa-trophy'
             ],
-            
-            // MLA Page
             [
                 'title' => 'MLA Information',
-                'content' => 'Know Your MLA - Complete information about elected representatives. MLA details, contact information, constituency, development work, and public services. District and constituency information.',
+                'content' => 'Know Your MLA - Complete information about elected representatives, their work, and constituency details',
                 'url' => base_url('mla'),
                 'icon' => 'fa-user-circle'
             ],
-            
-            // User Dashboard
-            [
-                'title' => 'User Dashboard',
-                'content' => 'User dashboard with MLA rating, complaints, feedback, and surveys. Rate your MLA and provide feedback on their performance.',
-                'url' => base_url('user/dashboard'),
-                'icon' => 'fa-dashboard'
-            ],
-            
-            // MLA Rating
             [
                 'title' => 'MLA Rating',
-                'content' => 'Rate your MLA on various parameters including development work, accessibility, and public service delivery. District-wise and constituency-wise ratings.',
+                'content' => 'Rate your MLA on various parameters including development work, accessibility, and public service delivery',
                 'url' => base_url('user/mla-rating'),
                 'icon' => 'fa-star'
             ],
-            
-            // Complaint
             [
                 'title' => 'Report Complaint',
-                'content' => 'File complaints about local issues, infrastructure problems, and public services. Categories include roads, water supply, electricity, and sanitation. District and constituency-specific complaints.',
+                'content' => 'File complaints about local issues, infrastructure problems, and public services',
                 'url' => base_url('user/complaint'),
                 'icon' => 'fa-exclamation-triangle'
             ],
-            
-            // Feedback
             [
                 'title' => 'Submit Feedback',
-                'content' => 'Share feedback about MLA performance, public services, and community development. Feedback on roads, infrastructure, health, education, and women safety.',
+                'content' => 'Share feedback about MLA performance, public services, and community development',
                 'url' => base_url('user/feedback'),
                 'icon' => 'fa-comment-o'
-            ],
-            
-            // MLA Works
-            [
-                'title' => 'MLA Works',
-                'content' => 'View development works and projects by your MLA. Infrastructure projects, road development, water supply, and public works in your constituency and district.',
-                'url' => base_url('user/mla-works'),
-                'icon' => 'fa-building'
-            ],
-            
-            // Surveys
-            [
-                'title' => 'Surveys',
-                'content' => 'Participate in surveys and public opinion polls. Surveys about MLA performance, development works, and public services. District and constituency surveys.',
-                'url' => base_url('user/survey'),
-                'icon' => 'fa-bar-chart'
-            ],
-            
-            // Admin Dashboard
-            [
-                'title' => 'Admin Dashboard',
-                'content' => 'Admin dashboard with overview of MLA management, constituency management, complaints, feedback, surveys, and voter management. Districts and constituencies management.',
-                'url' => base_url('admin/dashboard'),
-                'icon' => 'fa-dashboard'
-            ],
-            
-            // MLA Management (Admin)
-            [
-                'title' => 'MLA Management',
-                'content' => 'Manage MLA information including name, constituency, district, party, and designation. Add, edit, and delete MLA records. Manage district and constituency information.',
-                'url' => base_url('admin/mla-management'),
-                'icon' => 'fa-users'
-            ],
-            
-            // Constituency Management (Admin)
-            [
-                'title' => 'Constituency Management',
-                'content' => 'Manage constituency details including constituency name, district, region, and description. Manage districts and constituencies mapping.',
-                'url' => base_url('admin/constituency-management'),
-                'icon' => 'fa-map-marker'
-            ],
-            
-            // Complaint Management (Admin)
-            [
-                'title' => 'Complaint Management',
-                'content' => 'Manage complaints filed by citizens. View and update complaint status, category, location, and constituency. Manage road, water, electricity, and sanitation complaints.',
-                'url' => base_url('admin/complaint-management'),
-                'icon' => 'fa-exclamation-circle'
-            ],
-            
-            // Feedback Dashboard (Admin)
-            [
-                'title' => 'Feedback Dashboard',
-                'content' => 'View and manage feedback from voters. Feedback categories include roads, infrastructure, health, education, and women safety. District and constituency feedback.',
-                'url' => base_url('admin/feedback-dashboard'),
-                'icon' => 'fa-comments'
-            ],
-            
-            // Survey Management (Admin)
-            [
-                'title' => 'Survey Management',
-                'content' => 'Manage surveys and view responses. Survey categories, questions, and responses. District and constituency surveys.',
-                'url' => base_url('admin/survey-management'),
-                'icon' => 'fa-bar-chart'
-            ],
-            
-            // Voter Management (Admin)
-            [
-                'title' => 'Voter Management',
-                'content' => 'Manage voter information including name, village, constituency, district, and voter ID. Voter records management.',
-                'url' => base_url('admin/voter-management'),
-                'icon' => 'fa-user'
-            ],
-            
-            // Rating Questions (Admin)
-            [
-                'title' => 'Rating Questions',
-                'content' => 'Manage MLA rating questions. Rating questions about development, accessibility, public service, infrastructure, health, education, and women safety.',
-                'url' => base_url('admin/ratingquestion'),
-                'icon' => 'fa-star'
-            ],
-            
-            // Notification Center (Admin)
-            [
-                'title' => 'Notification Center',
-                'content' => 'View and manage notifications for users and admins. Notification about MLA rating, complaints, feedback, and surveys.',
-                'url' => base_url('admin/notification-center'),
-                'icon' => 'fa-bell'
-            ],
-            
-            // Activity Logs (Admin)
-            [
-                'title' => 'Activity Logs',
-                'content' => 'View system activity logs including user actions, admin actions, and system events. Activity tracking for MLA management, constituency management, and user actions.',
-                'url' => base_url('admin/activity-logs'),
-                'icon' => 'fa-history'
-            ],
-            
-            // Media Library (Admin)
-            [
-                'title' => 'Media Library',
-                'content' => 'Manage media files including images, videos, and documents. Media for MLA profiles, constituency photos, and public works.',
-                'url' => base_url('admin/media-library'),
-                'icon' => 'fa-picture-o'
             ]
         ];
     }
 
-    private function getSnippet($text, $query, $length = 120)
+    private function getSnippet($text, $query, $length = 100)
     {
         if (empty($text)) {
             return '';
@@ -426,12 +277,11 @@ class Search extends BaseController
         $pos = stripos($text, $query);
         
         if ($pos === false) {
-            // If query not found in this text, return first few characters
             return substr($text, 0, $length) . '...';
         }
 
-        $start = max(0, $pos - 50);
-        $end = min(strlen($text), $pos + strlen($query) + 50);
+        $start = max(0, $pos - 40);
+        $end = min(strlen($text), $pos + strlen($query) + 40);
         
         $snippet = substr($text, $start, $end - $start);
         
@@ -441,9 +291,6 @@ class Search extends BaseController
         if ($end < strlen($text)) {
             $snippet = $snippet . '...';
         }
-
-        // Highlight the query
-        $snippet = str_ireplace($query, '<strong>' . $query . '</strong>', $snippet);
 
         return $snippet;
     }

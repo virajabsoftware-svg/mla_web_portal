@@ -24,7 +24,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->get('login', 'Auth::login');
     $routes->post('login', 'Auth::loginCheck');
 
-    $routes->get('dashboard', 'Dashboard::index');
+     $routes->get('dashboard', 'Dashboard::index');
     
     $routes->get('mla-management', 'MLAManagement::index');
     $routes->get('constituency-management', 'ConstituencyManagement::index');
