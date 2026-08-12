@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Entities\RatingQuestion $question
+ * @var array $question
  * @var int $maxQuestionNo
  */
 ?>
@@ -14,40 +14,17 @@
     <!-- ============================================================
     REFERENCE HEADER DEPENDENCIES
     ============================================================ -->
-    <!-- Font Awesome 4.7 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- Bootstrap 4.0.0 CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-    <!-- jQuery 3.6.0 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- Popper.js 1.12.9 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-
-    <!-- Bootstrap 4.0.0 JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-    <!-- Header CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/admin/css/header.css') ?>">
-
-    <!-- Font Awesome 6.0.0-beta3 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- Google Fonts: Inter + Playfair Display -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap 5.3.0-alpha1 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- ============================================================
-    PAGE-SPECIFIC CSS — WIDE DASHBOARD LAYOUT (DOES NOT TOUCH HEADER/SIDEBAR)
-    ============================================================ -->
     <style>
-        /* ============================================================
-           CSS VARIABLES — EXACTLY FROM REFERENCE CODE
-           ============================================================ */
         :root {
             --pure-white: #ffffff;
             --cream: #fef8f0;
@@ -70,12 +47,9 @@
             --radius-xxl: 32px;
             --transition-fast: 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             --transition-base: 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            --sidebar-width: 260px; /* Match your actual sidebar width from header.css */
+            --sidebar-width: 260px;
         }
 
-        /* ============================================================
-           GLOBAL RESET & BODY — MERGED FROM REFERENCE
-           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -90,9 +64,6 @@
             overflow-x: hidden;
         }
 
-        /* ============================================================
-           SCROLLBAR STYLING — FROM REFERENCE
-           ============================================================ */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -111,10 +82,6 @@
             background: var(--gold);
         }
 
-        /* ============================================================
-           PAGE-SPECIFIC LAYOUT - WIDE DASHBOARD
-           Uses the actual sidebar width from header.css
-           ============================================================ */
         .rating-question-page {
             margin-left: var(--sidebar-width, 260px);
             padding: 15px 20px 0 20px;
@@ -124,7 +91,6 @@
             max-width: none;
         }
 
-        /* Override container-fluid to use full width with minimal padding */
         .rating-question-page .container-fluid.cream-container {
             padding: 0 !important;
             margin: 0 !important;
@@ -133,9 +99,6 @@
             flex: 0 0 100% !important;
         }
 
-        /* ============================================================
-           PREMIUM CARD - FULL WIDTH
-           ============================================================ */
         .premium-card {
             background: var(--pure-white);
             border-radius: var(--radius-xl);
@@ -161,7 +124,6 @@
             border-radius: var(--radius-xl) var(--radius-xl) 0 0;
         }
 
-        .premium-card .card-header h1,
         .premium-card .card-header h5 {
             font-family: 'Playfair Display', 'Georgia', serif;
             color: #2c1f0f;
@@ -172,16 +134,10 @@
             background: rgba(255, 252, 245, 0.5);
         }
 
-        /* ============================================================
-           HERO SECTION - CENTERED BUT NOT NARROW
-           ============================================================ */
         .rating-question-page .text-center {
             padding: 0 10px;
         }
 
-        /* ============================================================
-           BUTTONS — FROM REFERENCE
-           ============================================================ */
         .btn-warm-gold {
             background: linear-gradient(115deg, #d4af37, #b8860b);
             border: none;
@@ -218,9 +174,6 @@
             color: #8b6946;
         }
 
-        /* ============================================================
-           FORM ELEMENTS — FROM REFERENCE
-           ============================================================ */
         .form-control,
         .form-select {
             background: var(--pure-white) !important;
@@ -251,9 +204,6 @@
             color: #b8860b !important;
         }
 
-        /* ============================================================
-           ALERTS — FROM REFERENCE
-           ============================================================ */
         .alert-premium-danger {
             background: var(--beige-light);
             border: 1px solid #f5d0d0;
@@ -274,9 +224,6 @@
             padding: 2px 0;
         }
 
-        /* ============================================================
-           SUB-CARDS FOR FIELD GROUPS — FROM REFERENCE
-           ============================================================ */
         .sub-card {
             background: rgba(255, 252, 245, 0.7);
             border: 1px solid #f3ecd9;
@@ -309,9 +256,6 @@
             padding: 1.25rem;
         }
 
-        /* ============================================================
-           OPTION ROWS
-           ============================================================ */
         .option-row .btn-danger {
             background: #f5e1e1;
             border: none;
@@ -346,10 +290,6 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
             color: #5e3e1a;
-        }
-
-        .btn-primary i {
-            font-size: 0.8rem;
         }
 
         .btn-secondary {
@@ -389,9 +329,6 @@
             color: #2c1f0f;
         }
 
-        /* ============================================================
-           FOOTER — FROM REFERENCE
-           ============================================================ */
         .footer {
             background: rgba(255, 255, 255, 0.08) !important;
             backdrop-filter: blur(20px);
@@ -425,28 +362,16 @@
             color: #d4af37 !important;
         }
 
-        /* ============================================================
-           OVERRIDE ANY NARROW BOOTSTRAP CONTAINER RULES
-           ============================================================ */
         .container,
-        .container-fluid,
-        .container-lg,
-        .container-md,
-        .container-sm,
-        .container-xl,
-        .container-xxl {
+        .container-fluid {
             max-width: 100% !important;
         }
 
-        /* ============================================================
-           RESPONSIVE — Tablet and Mobile
-           ============================================================ */
         @media (max-width: 992px) {
             .rating-question-page {
                 margin-left: 0;
                 padding: 12px 15px 0 15px;
             }
-
             .premium-card .card-body {
                 padding: 1.25rem;
             }
@@ -457,19 +382,15 @@
                 padding: 10px 12px 0 12px;
                 margin-left: 0;
             }
-
             .premium-card .card-header {
                 padding: 1rem 1.25rem;
             }
-
             .premium-card .card-header h1 {
                 font-size: 1.5rem;
             }
-
             .premium-card .card-body {
                 padding: 1rem;
             }
-
             .btn-warm-gold,
             .btn-outline-cream,
             .btn-success,
@@ -477,21 +398,17 @@
                 padding: 8px 18px;
                 font-size: 0.85rem;
             }
-
             .footer {
                 margin: 1.5rem 0 20px 0 !important;
                 padding: 0.9rem 1rem !important;
             }
-
             .footer p {
                 font-size: 0.8rem;
             }
-
             .badge-cream-gold {
                 font-size: 0.75rem;
                 padding: 0.3rem 1rem;
             }
-
             .option-row .col-md-4 {
                 margin-top: 8px;
             }
@@ -501,11 +418,9 @@
             .rating-question-page {
                 padding: 8px 8px 0 8px;
             }
-
             .premium-card .card-header h1 {
                 font-size: 1.2rem;
             }
-
             .btn-warm-gold,
             .btn-outline-cream,
             .btn-success,
@@ -513,25 +428,19 @@
                 padding: 6px 14px;
                 font-size: 0.75rem;
             }
-
             .form-control,
             .form-select {
                 font-size: 0.9rem;
                 padding: 8px 12px;
             }
-
             .premium-card .card-body {
                 padding: 0.75rem;
             }
-
             .sub-card .card-body {
                 padding: 0.75rem;
             }
         }
 
-        /* ============================================================
-           GOLD GRADIENT TEXT — FROM REFERENCE
-           ============================================================ */
         .gold-gradient-text {
             background: linear-gradient(135deg, #b37b2e, var(--gold-dark), #d4af37, #e8c97a);
             background-clip: text;
@@ -540,9 +449,6 @@
             font-weight: 800;
         }
 
-        /* ============================================================
-           BADGE CREAM GOLD — FROM REFERENCE
-           ============================================================ */
         .badge-cream-gold {
             background: var(--beige-dark);
             color: #7a5a2a;
@@ -554,9 +460,6 @@
             font-size: 0.85rem;
         }
 
-        /* ============================================================
-           GOLD DIVIDER — FROM REFERENCE
-           ============================================================ */
         .gold-divider {
             width: 80px;
             height: 3px;
@@ -565,21 +468,14 @@
             border-radius: 4px;
         }
 
-        /* ============================================================
-           BACK BUTTON SPACING
-           ============================================================ */
         .rating-question-page .mb-4 {
             margin-bottom: 1.5rem !important;
         }
 
-        /* ============================================================
-           ACTION BUTTONS - FULL WIDTH ON MOBILE
-           ============================================================ */
         @media (max-width: 576px) {
             .rating-question-page .d-flex.gap-3 {
                 gap: 0.5rem !important;
             }
-
             .rating-question-page .d-flex.gap-3 .btn {
                 flex: 1;
                 text-align: center;
@@ -589,9 +485,6 @@
             }
         }
 
-        /* ============================================================
-           EXTRA WIDTH FIXES - ENSURE MAXIMUM HORIZONTAL SPACE
-           ============================================================ */
         .rating-question-page .row {
             margin-left: 0;
             margin-right: 0;
@@ -607,13 +500,11 @@
             padding-right: 10px;
         }
 
-        /* Make sure the card body uses full width */
         .premium-card .card-body {
             width: 100%;
             max-width: none;
         }
 
-        /* Option rows full width */
         .option-row .col-md-5,
         .option-row .col-md-3,
         .option-row .col-md-4 {
@@ -635,7 +526,6 @@
             }
         }
 
-        /* Full width form groups inside sub-cards */
         .sub-card .card-body .row {
             margin-left: 0;
             margin-right: 0;
@@ -646,7 +536,6 @@
             padding-right: 10px;
         }
 
-        /* Fix for any lingering narrow containers */
         .cream-container {
             width: 100% !important;
             max-width: 100% !important;
@@ -654,64 +543,39 @@
             margin: 0 !important;
         }
 
-        /* Ensure the main wrapper uses full width */
         .rating-question-page .container-fluid {
             padding: 0 !important;
         }
 
-        /* Force body to have no extra margins that could affect layout */
         body {
             margin: 0 !important;
             padding: 0 !important;
         }
 
-        /* Ensure the page wrapper doesn't add extra margins */
         .page-wrapper {
             margin: 0 !important;
             padding: 0 !important;
         }
 
-        /* Make sure any parent containers are full width */
-        .main-content,
-        #main-content,
-        .content-area {
-            width: 100% !important;
-            max-width: 100% !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-
-        /* Override any Bootstrap container max-width */
         .container-fluid {
             padding-left: 0 !important;
             padding-right: 0 !important;
         }
 
-        /* Fix for common dashboard wrappers that might restrict width */
-        [class*="wrapper"],
-        [class*="content"],
-        [class*="main"] {
-            max-width: 100% !important;
-        }
-
-        /* Ensure card uses full width within its container */
         .card {
             width: 100% !important;
             max-width: 100% !important;
         }
 
-        /* Make sure form elements use full width */
         form {
             width: 100% !important;
             max-width: 100% !important;
         }
 
-        /* Fix for any hidden overflow issues */
         .rating-question-page {
             overflow-x: hidden;
         }
 
-        /* Ensure the card and its children use full width */
         .premium-card .card-body form,
         .premium-card .card-body form .row,
         .premium-card .card-body form .sub-card {
@@ -719,7 +583,6 @@
             max-width: 100% !important;
         }
 
-        /* Keep the premium card properly aligned */
         .premium-card {
             display: block;
             clear: both;
@@ -727,12 +590,8 @@
     </style>
 </head>
 <body>
-<!-- HEADER (kept exactly as is) -->
 <?php include "common/header.php"; ?>
 
-<!-- ============================================================
-     WIDE DASHBOARD CONTENT - Positioned after the existing sidebar
-     ============================================================ -->
 <div class="rating-question-page">
     <div class="container-fluid cream-container">
         <!-- Hero Section -->
@@ -751,7 +610,7 @@
 
         <!-- Back Button -->
         <div class="mb-4">
-            <a href="<?= base_url('admin/manageratingquestion') ?>" class="btn btn-secondary">
+            <a href="<?= base_url('admin/ratingquestion') ?>" class="btn btn-secondary">
                 <i class="fas fa-arrow-left me-2"></i>Back to List
             </a>
         </div>
@@ -769,174 +628,217 @@
             </div>
         <?php endif; ?>
 
-        <!-- Main Card - FULL WIDTH -->
+        <?php if (session()->getFlashdata('error')): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <?= session()->getFlashdata('error') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('success')): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <?= session()->getFlashdata('success') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
+        <!-- Main Card -->
         <div class="premium-card">
             <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-<?= isset($question) ? 'edit' : 'plus' ?> me-2" style="color: var(--gold-dark);"></i> Question Details</h5>
             </div>
             <div class="card-body">
-                <form action="<?= isset($question) ? base_url('admin/manageratingquestion/update/' . $question['id']) : base_url('admin/manageratingquestion/store') ?>" method="POST">
-                    <?= csrf_field() ?>
 
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <label for="question_no" class="form-label">Question Number <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="question_no" name="question_no"
-                                       value="<?= old('question_no', $question['question_no'] ?? $maxQuestionNo ?? 1) ?>" required>
-                            </div>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="mb-3">
-                                <label for="question" class="form-label">Question Text <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="question" name="question"
-                                       value="<?= old('question', $question['question'] ?? '') ?>" required>
-                            </div>
+            <?php 
+                // Determine if we're editing or creating
+                $isEdit = isset($question) && isset($question['id']) && $question['id'] > 0;
+                
+                // Build the form action URL - CRITICAL FIX
+                if ($isEdit) {
+                    $formAction = base_url('admin/ratingquestion/update/' . $question['id']);
+                } else {
+                    $formAction = base_url('admin/ratingquestion/store');
+                }
+            ?>
+
+            <!-- 
+                CRITICAL: The form MUST have:
+                1. method="post" 
+                2. action with the correct update URL
+                3. csrf_field() for security
+            -->
+            <form method="post" action="<?= $formAction ?>" id="ratingQuestionForm">
+                <?= csrf_field() ?>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="question_no" class="form-label">Question Number <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="question_no" name="question_no"
+                                   value="<?= old('question_no', isset($question['question_no']) ? $question['question_no'] : ($maxQuestionNo ?? 1)) ?>" required>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="question_type" class="form-label">Question Type <span class="text-danger">*</span></label>
-                                <select class="form-select" id="question_type" name="question_type" required>
-                                    <option value="">Select Type...</option>
-                                    <option value="select" <?= old('question_type', $question['question_type'] ?? '') == 'select' ? 'selected' : '' ?>>Select / Dropdown</option>
-                                    <option value="range" <?= old('question_type', $question['question_type'] ?? '') == 'range' ? 'selected' : '' ?>>Range Slider</option>
-                                    <option value="checkbox_group" <?= old('question_type', $question['question_type'] ?? '') == 'checkbox_group' ? 'selected' : '' ?>>Checkbox Group</option>
-                                    <option value="textarea" <?= old('question_type', $question['question_type'] ?? '') == 'textarea' ? 'selected' : '' ?>>Textarea</option>
-                                    <option value="text" <?= old('question_type', $question['question_type'] ?? '') == 'text' ? 'selected' : '' ?>>Text Input</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="status" class="form-label">Status</label>
-                                <select class="form-select" id="status" name="status">
-                                    <option value="1" <?= old('status', $question['status'] ?? 1) == 1 ? 'selected' : '' ?>>Active</option>
-                                    <option value="0" <?= old('status', $question['status'] ?? 1) == 0 ? 'selected' : '' ?>>Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="sort_order" class="form-label">Sort Order</label>
-                                <input type="number" class="form-control" id="sort_order" name="sort_order"
-                                       value="<?= old('sort_order', $question['sort_order'] ?? 0) ?>">
-                            </div>
+                    <div class="col-md-9">
+                        <div class="mb-3">
+                            <label for="question" class="form-label">Question Text <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="question" name="question"
+                                   value="<?= old('question', isset($question['question']) ? $question['question'] : '') ?>" required>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Select / Checkbox Fields -->
-                    <div id="selectFields" style="display: none;">
-                        <div class="sub-card mt-3">
-                            <div class="card-header">
-                                <h6 class="mb-0"><i class="fas fa-list me-2" style="color: var(--gold-dark);"></i>Options & Ratings</h6>
-                            </div>
-                            <div class="card-body">
-                                <div id="optionsContainer">
-                                    <?php
-                                    $options = old('options', isset($question['options']) ? $question['options'] : ['', '']);
-                                    $ratings = old('option_ratings', isset($question['option_ratings']) ? $question['option_ratings'] : ['', '']);
-                                    if (!is_array($options)) $options = [];
-                                    if (!is_array($ratings)) $ratings = [];
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="question_type" class="form-label">Question Type <span class="text-danger">*</span></label>
+                            <select class="form-select" id="question_type" name="question_type" required>
+                                <option value="">Select Type...</option>
+                                <option value="select" <?= old('question_type', isset($question['question_type']) ? $question['question_type'] : '') == 'select' ? 'selected' : '' ?>>Select / Dropdown</option>
+                                <option value="range" <?= old('question_type', isset($question['question_type']) ? $question['question_type'] : '') == 'range' ? 'selected' : '' ?>>Range Slider</option>
+                                <option value="checkbox_group" <?= old('question_type', isset($question['question_type']) ? $question['question_type'] : '') == 'checkbox_group' ? 'selected' : '' ?>>Checkbox Group</option>
+                                <option value="textarea" <?= old('question_type', isset($question['question_type']) ? $question['question_type'] : '') == 'textarea' ? 'selected' : '' ?>>Textarea</option>
+                                <option value="text" <?= old('question_type', isset($question['question_type']) ? $question['question_type'] : '') == 'text' ? 'selected' : '' ?>>Text Input</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="1" <?= old('status', isset($question['status']) ? $question['status'] : 1) == 1 ? 'selected' : '' ?>>Active</option>
+                                <option value="0" <?= old('status', isset($question['status']) ? $question['status'] : 1) == 0 ? 'selected' : '' ?>>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="sort_order" class="form-label">Sort Order</label>
+                            <input type="number" class="form-control" id="sort_order" name="sort_order"
+                                   value="<?= old('sort_order', isset($question['sort_order']) ? $question['sort_order'] : 0) ?>">
+                        </div>
+                    </div>
+                </div>
 
-                                    while (count($options) < 2) {
-                                        $options[] = '';
-                                        $ratings[] = '';
-                                    }
-                                    ?>
-                                    <?php foreach ($options as $index => $opt): ?>
-                                        <div class="row mb-2 option-row">
-                                            <div class="col-md-5">
-                                                <input type="text" class="form-control" name="options[]"
-                                                       placeholder="Option <?= $index + 1 ?>" value="<?= esc($opt) ?>" required>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="number" class="form-control" name="option_ratings[]"
-                                                       placeholder="Rating (0-5)" value="<?= esc($ratings[$index] ?? '') ?>"
-                                                       min="0" max="5" step="0.1" required>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <?php if (count($options) > 2): ?>
-                                                    <button type="button" class="btn btn-danger btn-sm remove-option">
-                                                        <i class="fas fa-times"></i> Remove
-                                                    </button>
-                                                <?php endif; ?>
-                                            </div>
+                <!-- Select / Checkbox Fields -->
+                <div id="selectFields" style="display: <?= (isset($question['question_type']) && ($question['question_type'] == 'select' || $question['question_type'] == 'checkbox_group')) ? 'block' : 'none' ?>;">
+                    <div class="sub-card mt-3">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="fas fa-list me-2" style="color: var(--gold-dark);"></i>Options & Ratings</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="optionsContainer"
+                            
+                            
+                            >
+                                <?php
+                                $options = old('options', isset($question['options']) && is_array($question['options']) ? $question['options'] : ['', '']);
+                                $ratings = old('option_ratings', isset($question['option_ratings']) && is_array($question['option_ratings']) ? $question['option_ratings'] : ['', '']);
+                                
+                                if (!is_array($options)) $options = [];
+                                if (!is_array($ratings)) $ratings = [];
+
+                                while (count($options) < 2) {
+                                    $options[] = '';
+                                    $ratings[] = '';
+                                }
+                                ?>
+                                <?php foreach ($options as $index => $opt): ?>
+                                    <div class="row mb-2 option-row">
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control" name="options[]"
+                                                   placeholder="Option <?= $index + 1 ?>" value="<?= esc($opt) ?>" required>
                                         </div>
-                                    <?php endforeach; ?>
+                                        <div class="col-md-3">
+                                            <input type="number" class="form-control" name="option_ratings[]"
+                                                   placeholder="Rating (0-5)" value="<?= esc($ratings[$index] ?? '') ?>"
+                                                   min="0" max="5" step="0.1" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <?php if (count($options) > 2): ?>
+                                                <button type="button" class="btn btn-danger btn-sm remove-option">
+                                                    <i class="fas fa-times"></i> Remove
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm" id="addOptionBtn">
+                                <i class="fas fa-plus me-1"></i>Add Option
+                            </button>
+                            <small class="text-muted d-block mt-2" style="font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; color: #7a5f3a !important;">
+                                <i class="fas fa-info-circle me-1"></i>Define each option and its corresponding rating value (0-5).
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Range Fields -->
+                <div id="rangeFields" style="display: <?= (isset($question['question_type']) && $question['question_type'] == 'range') ? 'block' : 'none' ?>;">
+                    <div class="sub-card mt-3">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="fas fa-sliders-h me-2" style="color: var(--gold-dark);"></i>Range Settings</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="min_value" class="form-label">Minimum Value <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="min_value" name="min_value"
+                                               value="<?= old('min_value', isset($question['min_value']) ? $question['min_value'] : 1) ?>" required>
+                                    </div>
                                 </div>
-                                <button type="button" class="btn btn-primary btn-sm" id="addOptionBtn">
-                                    <i class="fas fa-plus me-1"></i>Add Option
-                                </button>
-                                <small class="text-muted d-block mt-2" style="font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; color: #7a5f3a !important;">
-                                    <i class="fas fa-info-circle me-1"></i>Define each option and its corresponding rating value (0-5).
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="max_value" class="form-label">Maximum Value <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="max_value" name="max_value"
+                                               value="<?= old('max_value', isset($question['max_value']) ? $question['max_value'] : 10) ?>" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Fields -->
+                <div id="textFields" style="display: <?= (isset($question['question_type']) && ($question['question_type'] == 'textarea' || $question['question_type'] == 'text')) ? 'block' : 'none' ?>;">
+                    <div class="sub-card mt-3">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="fas fa-font me-2" style="color: var(--gold-dark);"></i>Text Settings</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="placeholder" class="form-label">Placeholder Text</label>
+                                <input type="text" class="form-control" id="placeholder" name="placeholder"
+                                       value="<?= old('placeholder', isset($question['placeholder']) ? $question['placeholder'] : '') ?>">
+                            </div>
+                            <div class="mb-3">
+                                <label for="rows" class="form-label">Number of Rows</label>
+                                <input type="number" class="form-control" id="rows" name="rows"
+                                       value="<?= old('rows', isset($question['rows']) ? $question['rows'] : 3) ?>" min="1">
+                                <small class="text-muted" style="font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; color: #7a5f3a !important;">
+                                    <i class="fas fa-info-circle me-1"></i>Only for Textarea type
                                 </small>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Range Fields -->
-                    <div id="rangeFields" style="display: none;">
-                        <div class="sub-card mt-3">
-                            <div class="card-header">
-                                <h6 class="mb-0"><i class="fas fa-sliders-h me-2" style="color: var(--gold-dark);"></i>Range Settings</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="min_value" class="form-label">Minimum Value <span class="text-danger">*</span></label>
-                                            <input type="number" class="form-control" id="min_value" name="min_value"
-                                                   value="<?= old('min_value', $question['min_value'] ?? 1) ?>" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="max_value" class="form-label">Maximum Value <span class="text-danger">*</span></label>
-                                            <input type="number" class="form-control" id="max_value" name="max_value"
-                                                   value="<?= old('max_value', $question['max_value'] ?? 10) ?>" required>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Submit Buttons - CRITICAL: type="submit" must be present -->
+                <div class="mt-4 d-flex gap-3 flex-wrap">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-2"></i>
+                        <?= $isEdit ? 'Update Question' : 'Save Question' ?>
+                    </button>
 
-                    <!-- Text Fields -->
-                    <div id="textFields" style="display: none;">
-                        <div class="sub-card mt-3">
-                            <div class="card-header">
-                                <h6 class="mb-0"><i class="fas fa-font me-2" style="color: var(--gold-dark);"></i>Text Settings</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label for="placeholder" class="form-label">Placeholder Text</label>
-                                    <input type="text" class="form-control" id="placeholder" name="placeholder"
-                                           value="<?= old('placeholder', $question['placeholder'] ?? '') ?>">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="rows" class="form-label">Number of Rows</label>
-                                    <input type="number" class="form-control" id="rows" name="rows"
-                                           value="<?= old('rows', $question['rows'] ?? 3) ?>" min="1">
-                                    <small class="text-muted" style="font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; color: #7a5f3a !important;">
-                                        <i class="fas fa-info-circle me-1"></i>Only for Textarea type
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 d-flex gap-3 flex-wrap">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fas fa-save me-2"></i><?= isset($question) ? 'Update' : 'Add' ?> Question
-                        </button>
-                        <a href="<?= base_url('admin/manageratingquestion') ?>" class="btn btn-secondary">
-                            <i class="fas fa-times me-2"></i>Cancel
-                        </a>
-                    </div>
-                </form>
+                    <a href="<?= base_url('admin/ratingquestion') ?>" class="btn btn-secondary">
+                        <i class="fas fa-times me-2"></i>
+                        Cancel
+                    </a>
+                </div>
+            </form>
             </div>
         </div>
 
@@ -947,9 +849,8 @@
     </div>
 </div>
 
-<!-- Bootstrap 5 JS (for alert dismissals) -->
+<!-- Bootstrap 5 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Header JS (if required by header.php) -->
 <script src="header.js"></script>
 
 <script>
@@ -1023,6 +924,25 @@
                 }
             });
         });
+
+        // CRITICAL FIX: Ensure the form submits properly
+        const form = document.getElementById('ratingQuestionForm');
+        if (form) {
+            // Log the form action for debugging
+            console.log('Form Action:', form.action);
+            console.log('Form Method:', form.method);
+            
+            // Remove any existing submit handlers that might interfere
+            form.onsubmit = null;
+            
+            // Add a clean submit handler - allows normal submission
+            form.addEventListener('submit', function(e) {
+                console.log('Form submitted successfully!');
+                console.log('Action:', this.action);
+                console.log('Method:', this.method);
+                // The form will submit normally - no preventDefault()
+            });
+        }
     });
 </script>
 </body>

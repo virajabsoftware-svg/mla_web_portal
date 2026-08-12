@@ -30,8 +30,12 @@ class RatingQuestionModel extends Model
     protected $updatedField = 'updated_at';
     protected $dateFormat = 'datetime';
 
+    // ================================================================
+    // FIX: Removed is_unique from question_no validation
+    // The duplicate check is already handled in the controller
+    // ================================================================
     protected $validationRules = [
-        'question_no' => 'required|integer|is_unique[rating_questions.question_no,id,{id}]',
+        'question_no' => 'required|integer',
         'question' => 'required|min_length[3]',
         'question_type' => 'required|in_list[select,range,checkbox_group,textarea,text]',
         'status' => 'permit_empty|in_list[0,1]',
@@ -41,8 +45,7 @@ class RatingQuestionModel extends Model
     protected $validationMessages = [
         'question_no' => [
             'required' => 'Question number is required.',
-            'integer' => 'Question number must be a number.',
-            'is_unique' => 'This question number is already taken.'
+            'integer' => 'Question number must be a number.'
         ],
         'question' => [
             'required' => 'Question text is required.',
@@ -53,6 +56,32 @@ class RatingQuestionModel extends Model
             'in_list' => 'Invalid question type.'
         ]
     ];
+
+    /**
+     * Override update to properly handle validation
+     */
+    public function update($id = null, $data = null): bool
+    {
+        if ($id === null || $data === null) {
+            return false;
+        }
+
+        // Remove any fields that are not in allowedFields
+        $filteredData = [];
+        foreach ($this->allowedFields as $field) {
+            if (array_key_exists($field, $data)) {
+                $filteredData[$field] = $data[$field];
+            }
+        }
+
+        // Validate before update
+        if (!$this->validate($filteredData)) {
+            return false;
+        }
+
+        // Perform the update
+        return parent::update($id, $filteredData);
+    }
 
     /**
      * Get all active questions sorted by order
@@ -119,7 +148,8 @@ class RatingQuestionModel extends Model
         if (empty($question['options'])) {
             return [];
         }
-        return json_decode($question['options'], true) ?: [];
+        $decoded = json_decode($question['options'], true);
+        return is_array($decoded) ? $decoded : [];
     }
 
     /**
@@ -130,7 +160,8 @@ class RatingQuestionModel extends Model
         if (empty($question['option_ratings'])) {
             return [];
         }
-        return json_decode($question['option_ratings'], true) ?: [];
+        $decoded = json_decode($question['option_ratings'], true);
+        return is_array($decoded) ? $decoded : [];
     }
 
     /**

@@ -761,12 +761,12 @@
                                                    onclick="return confirm('Are you sure you want to delete this question?')">
                                                     <i class="fas fa-trash"></i> Delete
                                                 </a>
-                                                <a href="<?= base_url('admin/ratingquestion/toggle-status/' . $q['id']) ?>" 
+                                                <!-- <a href="<?= base_url('admin/ratingquestion/toggle-status/' . $q['id']) ?>" 
                                                    class="btn-premium <?= $q['status'] == 1 ? 'warning' : 'emerald' ?>" 
                                                    title="<?= $q['status'] == 1 ? 'Disable' : 'Enable' ?>">
                                                     <i class="fas fa-<?= $q['status'] == 1 ? 'ban' : 'check' ?>"></i>
                                                     <?= $q['status'] == 1 ? 'Disable' : 'Enable' ?>
-                                                </a>
+                                                </a> -->
                                             </div>
                                         </td>
                                     </tr>
