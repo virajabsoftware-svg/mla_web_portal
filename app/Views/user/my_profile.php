@@ -28,7 +28,6 @@
             overflow-x: hidden;
         }
 
-        /* Color Scheme Variables - Lighter & Softer */
         :root {
             --soft-white: #F4F2F5;
             --lime-gold: #C3C848;
@@ -43,9 +42,6 @@
             --transition-smooth: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* ============================================
-           MAIN CONTENT - FIXED POSITIONING FOR SIDEBAR & TOPBAR
-           ============================================ */
         .main-content {
             position: relative;
             min-height: 100vh;
@@ -80,7 +76,6 @@
             background: var(--lime-gold);
         }
 
-        /* Premium card base - Lighter hover effect */
         .premium-card {
             background: var(--glass-bg);
             backdrop-filter: blur(2px);
@@ -93,7 +88,6 @@
             width: 100%;
         }
 
-        /* Subtle gradient border - Light & Elegant */
         .premium-card::before {
             content: '';
             position: absolute;
@@ -120,7 +114,6 @@
             100% { background-position: 0% 50%;}
         }
 
-        /* Light lift effect - No dark shadows */
         .premium-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 28px -8px rgba(0,0,0,0.06), 0 0 0 1px rgba(195,200,72,0.15);
@@ -142,30 +135,29 @@
 
         .stagger-1 { animation-delay: 0.05s; }
 
-        .card-header-premium {
-            background: linear-gradient(135deg, rgba(195,200,72,0.08), rgba(34,86,97,0.03));
-            padding: 1rem 1.8rem;
-            border-bottom: 1px solid rgba(195,200,72,0.15);
-            border-radius: 28px 28px 0 0;
+        .profile-avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--lime-gold);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            transition: var(--transition-smooth);
+            background: #f0f0f0;
+        }
+        .profile-avatar-large:hover {
+            transform: scale(1.03);
+            border-color: var(--teal-blue-light);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
         }
 
-        .card-header-premium h5 {
-            color: var(--teal-blue);
-            font-weight: 700;
-            margin: 0;
-            font-size: 1.1rem;
+        .section-divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(195,200,72,0.25), transparent);
+            margin: 1.5rem 0;
         }
 
-        .badge-premium {
-            background: var(--olive-green);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 60px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        /* Value display - Lighter background */
         .value-display {
             background: rgba(195,200,72,0.06);
             padding: 10px 14px;
@@ -175,12 +167,6 @@
             font-size: 0.95rem;
             transition: all 0.2s;
             border: 1px solid rgba(195,200,72,0.08);
-        }
-
-        .value-display:hover {
-            background: rgba(195,200,72,0.10);
-            transform: translateX(3px);
-            border-color: rgba(195,200,72,0.20);
         }
 
         .value-display-readonly {
@@ -208,7 +194,6 @@
             width: 18px;
         }
 
-        /* Button - Light gold with soft glow */
         .btn-gold {
             background: linear-gradient(135deg, var(--lime-gold), #B5BA4A);
             border: none;
@@ -247,29 +232,15 @@
             transform: scale(0.98);
         }
 
-        .profile-avatar-large {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--lime-gold);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            transition: var(--transition-smooth);
-        }
-        .profile-avatar-large:hover {
-            transform: scale(1.03);
-            border-color: var(--teal-blue-light);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+        .badge-premium {
+            background: var(--olive-green);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
-        .section-divider {
-            border: none;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(195,200,72,0.25), transparent);
-            margin: 1.5rem 0;
-        }
-
-        /* Footer - Light & Clean */
         .footer {
             position: relative;
             margin-top: 2rem;
@@ -333,7 +304,15 @@
             width: 100%;
         }
 
-        /* Edit Profile Modal - Clean & Light */
+        .profile-header-bg {
+            background: linear-gradient(135deg, rgba(195,200,72,0.06) 0%, rgba(34,86,97,0.04) 100%);
+        }
+
+        .camera-btn {
+            cursor: pointer;
+            z-index: 10;
+        }
+
         .modal-content {
             border-radius: 24px;
             border: 1px solid rgba(195,200,72,0.15);
@@ -384,7 +363,6 @@
             border-color: #ccc;
         }
 
-        /* Toast notification - Soft & Clean */
         .toast-notification {
             position: fixed;
             bottom: 30px;
@@ -407,7 +385,23 @@
             opacity: 1;
         }
 
-        /* Responsive */
+        .avatar-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--lime-gold-light), var(--lime-gold));
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--lime-gold);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
         @media (max-width: 1024px) {
             .main-content { padding: 1.25rem 1.5rem; }
         }
@@ -418,12 +412,12 @@
             }
             body.sidebar-collapsed .main-content { margin-left: 0; }
             .profile-avatar-large { width: 90px; height: 90px; }
-            .card-header-premium { padding: 0.875rem 1.2rem; }
-            .card-header-premium h5 { font-size: 1rem; }
+            .avatar-placeholder { width: 90px; height: 90px; font-size: 2.5rem; }
         }
         @media (max-width: 576px) {
             .main-content { padding: 0.75rem 0.85rem; }
             .profile-avatar-large { width: 75px; height: 75px; }
+            .avatar-placeholder { width: 75px; height: 75px; font-size: 2rem; }
             .btn-gold { width: 100%; }
             .value-display { font-size: 0.85rem; padding: 8px 12px; }
             .info-label { font-size: 0.65rem; }
@@ -436,9 +430,11 @@
         body.sidebar-expanded .main-content { margin-left: 280px; }
         body.sidebar-collapsed .main-content { margin-left: 80px; }
 
-        /* Profile header gradient - Light & Airy */
-        .profile-header-bg {
-            background: linear-gradient(135deg, rgba(195,200,72,0.06) 0%, rgba(34,86,97,0.04) 100%);
+        .debug-info {
+            font-size: 10px;
+            color: #999;
+            margin-top: 5px;
+            word-break: break-all;
         }
     </style>
 </head>
@@ -446,417 +442,335 @@
 <body>
     <?php include "common/header.php"?>
 
-    <!-- ============================================================
-         INNER DASHBOARD CONTENT — my_profile.php
-         Light & Premium Design
-         ============================================================ -->
     <main class="main-content fade-page-transition">
+        <div class="container-fluid">
 
-        <div class="premium-card fade-up stagger-1" style="border-radius: 32px;">
+            <!-- SUCCESS MESSAGE -->
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <?= esc(session()->getFlashdata('success')) ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
 
-            <!-- ============================================================
-                 PROFILE HEADER - Light & Clean
-                 ============================================================ -->
-            <div class="profile-header-bg"
-                 style="padding: 2rem 2rem 1.5rem 2rem;
-                        border-bottom: 1px solid rgba(195,200,72,0.12);">
+            <!-- ERROR MESSAGE -->
+            <?php if (session()->getFlashdata('error')): ?>
+                <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <?= esc(session()->getFlashdata('error')) ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
 
-                <div class="row align-items-center">
-                    <!-- Avatar -->
-                    <div class="col-md-3 col-lg-2 text-center text-md-start mb-3 mb-md-0">
-                        <div style="position: relative; display: inline-block;">
-                            <img src="https://mockmind-api.uifaces.co/content/human/218.jpg"
-                                 alt="Profile Photo"
-                                 class="profile-avatar-large"
-                                 id="profileAvatar">
-                            <button class="btn btn-sm btn-light rounded-circle"
-                                    style="position: absolute; bottom: 4px; right: 4px; width: 34px; height: 34px;
-                                           border: 2px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-                                           background: white; color: var(--teal-blue); font-size: 0.9rem;
-                                           transition: var(--transition-smooth);"
+            <div class="premium-card fade-up stagger-1" style="border-radius: 32px;">
+
+                <!-- PROFILE HEADER -->
+                <div class="profile-header-bg" style="padding: 2rem 2rem 1.5rem 2rem; border-bottom: 1px solid rgba(195,200,72,0.12);">
+
+                    <div class="row align-items-center">
+                        <!-- Avatar -->
+                        <div class="col-md-3 col-lg-2 text-center text-md-start mb-3 mb-md-0">
+                            <div style="position: relative; display: inline-block;">
+                                <?php
+                                $firstLetter = !empty($user['full_name']) ? strtoupper(substr($user['full_name'], 0, 1)) : 'U';
+                                $defaultAvatar = base_url('assets/user/images/default-avatar.png');
+                                $profilePhoto = $defaultAvatar;
+                                $imageFound = false;
+                                
+                                if (!empty($user['profile_photo'])) {
+                                    $photoFilename = $user['profile_photo'];
+                                    $pathsToCheck = [
+                                        FCPATH . 'uploads/profile/' . $photoFilename,
+                                        FCPATH . 'public/uploads/profile/' . $photoFilename,
+                                        FCPATH . 'assets/uploads/profile/' . $photoFilename,
+                                        ROOTPATH . 'public/uploads/profile/' . $photoFilename,
+                                        ROOTPATH . 'uploads/profile/' . $photoFilename,
+                                    ];
+                                    
+                                    foreach ($pathsToCheck as $path) {
+                                        if (file_exists($path) && is_file($path)) {
+                                            $profilePhoto = base_url('uploads/profile/' . $photoFilename);
+                                            $imageFound = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                ?>
+                                <img src="<?= esc($profilePhoto) ?>" 
+                                     alt="Profile Photo" 
+                                     class="profile-avatar-large" 
+                                     id="profileAvatar"
+                                     onerror="handleImageError(this);">
+                                
+                                <div id="avatarPlaceholder" class="avatar-placeholder" style="display: none;">
+                                    <?= esc($firstLetter) ?>
+                                </div>
+                                
+                                <?php if (!$imageFound && !empty($user['profile_photo'])): ?>
+                                <div class="debug-info">
+                                    <small>Image not found: <?= esc($user['profile_photo']) ?></small>
+                                </div>
+                                <?php endif; ?>
+                                
+                                <button type="button" class="btn btn-sm btn-light rounded-circle camera-btn" 
+                                    style="position: absolute; bottom: 4px; right: 4px; width: 34px; height: 34px; 
+                                           border: 2px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.06); 
+                                           background: white; color: var(--teal-blue); font-size: 0.9rem; 
+                                           transition: var(--transition-smooth);" 
                                     onclick="document.getElementById('photoUpload').click();">
-                                <i class="fas fa-camera"></i>
+                                    <i class="fas fa-camera"></i>
+                                </button>
+                                
+                                <input type="file" id="photoUpload" name="profile_photo" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="updateProfilePhoto(event)">
+                            </div>
+                        </div>
+
+                        <!-- Name & Details -->
+                        <div class="col-md-6 col-lg-7 text-center text-md-start">
+                            <h2 class="fw-bold" style="color:var(--teal-blue);"><?= esc($user['full_name'] ?? 'User') ?></h2>
+                            <div class="d-flex flex-wrap align-items-center gap-3 mb-2">
+                                <span style="background: rgba(195,200,72,0.08); padding: 0.3rem 1rem; border-radius: 40px; font-weight: 500; color: var(--dark-olive); font-size: 0.9rem;">
+                                    <i class="fas fa-id-card me-1" style="color: var(--lime-gold);"></i> 
+                                    <span><?= esc($user['voter_id'] ?? 'N/A') ?></span>
+                                </span>
+                                <span class="badge-premium" style="background: var(--teal-blue); padding: 0.3rem 1rem;">
+                                    <i class="fas fa-circle-check me-1"></i> Verified User
+                                </span>
+                            </div>
+                            <div class="d-flex flex-wrap gap-3 text-muted" style="font-weight: 500; font-size: 0.95rem; color: var(--dark-olive); opacity: 0.7;">
+                                <span>
+                                    <i class="fas fa-map-pin me-1" style="color:var(--lime-gold);"></i>
+                                    <?= esc($user['district'] ?? 'N/A') ?>
+                                </span>
+                                <span>
+                                    <i class="fas fa-landmark me-1" style="color:var(--lime-gold);"></i>
+                                    <?= esc($user['constituency'] ?? 'N/A') ?>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="col-md-3 col-lg-3 text-center text-md-end mt-3 mt-md-0">
+                            <button class="btn-gold" style="padding: 0.6rem 1.8rem; font-size: 0.9rem; min-width: 140px;" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                <i class="fas fa-user-edit me-2"></i> Edit Profile
                             </button>
-                            <input type="file" id="photoUpload" accept="image/*" style="display:none;" onchange="updateProfilePhoto(event)">
-                        </div>
-                    </div>
-
-                    <!-- Name & Details -->
-                    <div class="col-md-6 col-lg-7 text-center text-md-start">
-                        <h2 class="fw-bold" style="color: var(--teal-blue); letter-spacing: -0.5px;" id="displayFullName">Rahul Patil</h2>
-                        <div class="d-flex flex-wrap align-items-center gap-3 mb-2">
-                            <span style="background: rgba(195,200,72,0.08); padding: 0.3rem 1rem; border-radius: 40px; font-weight: 500; color: var(--dark-olive); font-size: 0.9rem;">
-                                <i class="fas fa-id-card me-1" style="color: var(--lime-gold);"></i> <span id="displayVoterId">MH1234567890</span>
-                            </span>
-                            <span class="badge-premium" style="background: var(--teal-blue); padding: 0.3rem 1rem;">
-                                <i class="fas fa-circle-check me-1"></i> Verified User
-                            </span>
-                        </div>
-                        <div class="d-flex flex-wrap gap-3 text-muted" style="font-weight: 500; font-size: 0.95rem; color: var(--dark-olive); opacity: 0.7;">
-                            <span><i class="fas fa-map-pin me-1" style="color: var(--lime-gold);"></i> <span id="displayDistrict">Satara</span></span>
-                            <span><i class="fas fa-landmark me-1" style="color: var(--lime-gold);"></i> <span id="displayConstituency">Karad South</span></span>
-                        </div>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="col-md-3 col-lg-3 text-center text-md-end mt-3 mt-md-0">
-                        <button class="btn-gold" style="padding: 0.6rem 1.8rem; font-size: 0.9rem; min-width: 140px;" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                            <i class="fas fa-user-edit me-2"></i> Edit Profile
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================================
-                 BODY — All sections in one card
-                 ============================================================ -->
-            <div class="p-4 p-md-5">
-
-                <!-- SECTION 1: Basic Information -->
-                <div class="mb-4">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-user" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
-                        <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Basic Information</h5>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-id-card"></i> Voter ID</div>
-                            <div class="value-display" id="voterIdValue">MH1234567890</div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-calendar"></i> Date of Birth</div>
-                            <div class="value-display" id="dobValue">15 August 2001</div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-venus-mars"></i> Gender</div>
-                            <div class="value-display" id="genderValue">Male</div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-user"></i> Full Name</div>
-                            <div class="value-display" id="fullNameValue">Rahul Patil</div>
                         </div>
                     </div>
                 </div>
 
-                <hr class="section-divider">
+                <!-- BODY -->
+                <div class="p-4 p-md-5">
 
-                <!-- SECTION 2: Account Information -->
-                <div class="mb-4">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-envelope" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
-                        <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Account Information</h5>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="info-label"><i class="fas fa-envelope"></i> Email Address</div>
-                            <div class="value-display" id="emailValue"><i class="fas fa-at me-1" style="color: var(--teal-blue); opacity: 0.6;"></i> rahul@gmail.com</div>
+                    <!-- SECTION 1: Basic Information -->
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="fas fa-user" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
+                            <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Basic Information</h5>
                         </div>
-                        <div class="col-md-6">
-                            <div class="info-label"><i class="fas fa-phone"></i> Mobile Number</div>
-                            <div class="value-display" id="mobileValue"><i class="fas fa-phone-alt me-1" style="color: var(--teal-blue); opacity: 0.6;"></i> 9876543210</div>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="section-divider">
-
-                <!-- SECTION 3: Address Information -->
-                <div class="mb-4">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-map-marker-alt" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
-                        <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Address Information</h5>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-map"></i> State</div>
-                            <div class="value-display" id="stateValue">Maharashtra</div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-location-dot"></i> District</div>
-                            <div class="value-display" id="districtValue">Satara</div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-landmark"></i> Assembly Constituency</div>
-                            <div class="value-display" id="constituencyValue">Karad South</div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-home"></i> Locality / Area</div>
-                            <div class="value-display" id="localityValue">Malkapur</div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="info-label"><i class="fas fa-mailbox"></i> Pincode</div>
-                            <div class="value-display" id="pincodeValue">415110</div>
+                        <div class="row g-3">
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-id-card"></i> Voter ID</div>
+                                <div class="value-display"><?= esc($user['voter_id'] ?? '-') ?></div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-calendar"></i> Date of Birth</div>
+                                <div class="value-display">
+                                    <?php if (!empty($user['dob'])): ?>
+                                        <?= date('d F Y', strtotime($user['dob'])) ?>
+                                    <?php else: ?> - <?php endif; ?>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-venus-mars"></i> Gender</div>
+                                <div class="value-display"><?= esc($user['gender'] ?? '-') ?></div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-user"></i> Full Name</div>
+                                <div class="value-display"><?= esc($user['full_name'] ?? '-') ?></div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <hr class="section-divider">
+                    <hr class="section-divider">
 
-                <!-- SECTION 4: Assigned MLA Information (Read-Only) -->
-                <div>
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-user-tie" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
-                        <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Assigned MLA Information</h5>
-                        <span class="badge ms-2" style="background: rgba(195,200,72,0.10); color: var(--dark-olive); font-weight: 500; border-radius: 40px; padding: 0.2rem 0.9rem; font-size: 0.65rem;">
-                            <i class="fas fa-lock me-1"></i> Read-Only
-                        </span>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-id-card"></i> MLA ID</div>
-                            <div class="value-display-readonly">MLA-178</div>
+                    <!-- SECTION 2: Account Information -->
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="fas fa-envelope" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
+                            <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Account Information</h5>
                         </div>
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-user-tie"></i> MLA Name</div>
-                            <div class="value-display-readonly">Shri ABC Patil</div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-building"></i> Party</div>
-                            <div class="value-display-readonly">XYZ Party</div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="info-label"><i class="fas fa-landmark"></i> Constituency</div>
-                            <div class="value-display-readonly">Karad South</div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="info-label"><i class="fas fa-map-pin"></i> District</div>
-                            <div class="value-display-readonly">Satara</div>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <span class="badge" style="background: rgba(107,138,34,0.06); color: var(--olive-green); padding: 0.5rem 1.2rem; border-radius: 40px; font-weight: 500; font-size: 0.85rem;">
-                                <i class="fas fa-arrow-right me-1"></i> Auto Mapped Based on Constituency
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-            </div><!-- end body -->
-        </div><!-- end premium-card -->
-
-        <!-- FOOTER -->
-        <footer class="footer">
-            <p class="mb-0">
-                &copy; <script>document.write(new Date().getFullYear());</script>
-                MLA Monitoring & Voter Feedback System. All Rights Reserved.
-                Design by
-                <a href="https://absoftwaresolution.co.in/" target="_blank">
-                    AB Software Solution
-                </a>
-            </p>
-        </footer>
-
-    </main>
-
-    <!-- ============================================================
-         EDIT PROFILE MODAL
-         ============================================================ -->
-    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-user-edit me-2" style="color: var(--lime-gold);"></i>Edit Profile</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editProfileForm">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label"><i class="fas fa-user me-1" style="color: var(--lime-gold);"></i> Full Name</label>
-                                <input type="text" class="form-control" id="editFullName" value="Rahul Patil">
+                                <div class="info-label"><i class="fas fa-envelope"></i> Email Address</div>
+                                <div class="value-display"><i class="fas fa-at me-1"></i><?= esc($user['email'] ?? '-') ?></div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label"><i class="fas fa-id-card me-1" style="color: var(--lime-gold);"></i> Voter ID</label>
-                                <input type="text" class="form-control" id="editVoterId" value="MH1234567890">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label"><i class="fas fa-calendar me-1" style="color: var(--lime-gold);"></i> Date of Birth</label>
-                                <input type="text" class="form-control" id="editDob" value="15 August 2001">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label"><i class="fas fa-venus-mars me-1" style="color: var(--lime-gold);"></i> Gender</label>
-                                <select class="form-control" id="editGender">
-                                    <option value="Male" selected>Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label"><i class="fas fa-envelope me-1" style="color: var(--lime-gold);"></i> Email Address</label>
-                                <input type="email" class="form-control" id="editEmail" value="rahul@gmail.com">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label"><i class="fas fa-phone me-1" style="color: var(--lime-gold);"></i> Mobile Number</label>
-                                <input type="text" class="form-control" id="editMobile" value="9876543210">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label"><i class="fas fa-map me-1" style="color: var(--lime-gold);"></i> State</label>
-                                <input type="text" class="form-control" id="editState" value="Maharashtra">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label"><i class="fas fa-location-dot me-1" style="color: var(--lime-gold);"></i> District</label>
-                                <input type="text" class="form-control" id="editDistrict" value="Satara">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label"><i class="fas fa-landmark me-1" style="color: var(--lime-gold);"></i> Assembly Constituency</label>
-                                <input type="text" class="form-control" id="editConstituency" value="Karad South">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label"><i class="fas fa-home me-1" style="color: var(--lime-gold);"></i> Locality / Area</label>
-                                <input type="text" class="form-control" id="editLocality" value="Malkapur">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label"><i class="fas fa-mailbox me-1" style="color: var(--lime-gold);"></i> Pincode</label>
-                                <input type="text" class="form-control" id="editPincode" value="415110">
+                                <div class="info-label"><i class="fas fa-phone"></i> Mobile Number</div>
+                                <div class="value-display"><i class="fas fa-phone-alt me-1"></i><?= esc($user['mobile'] ?? '-') ?></div>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn-gold" id="saveProfileBtn" style="padding: 8px 32px;">
-                        <i class="fas fa-save me-2"></i> Save Changes
-                    </button>
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <!-- SECTION 3: Address Information -->
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="fas fa-map-marker-alt" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
+                            <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Address Information</h5>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-map"></i> State</div>
+                                <div class="value-display"><?= esc($user['state'] ?? '-') ?></div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-location-dot"></i> District</div>
+                                <div class="value-display"><?= esc($user['district'] ?? '-') ?></div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-landmark"></i> Constituency</div>
+                                <div class="value-display"><?= esc($user['constituency'] ?? '-') ?></div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-home"></i> Locality</div>
+                                <div class="value-display"><?= esc($user['locality'] ?? '-') ?></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="info-label"><i class="fas fa-mailbox"></i> Pincode</div>
+                                <div class="value-display"><?= esc($user['pincode'] ?? '-') ?></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <!-- SECTION 4: MLA Information -->
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="fas fa-user-tie" style="color: var(--lime-gold); font-size: 1.2rem;"></i>
+                            <h5 class="mb-0" style="color: var(--teal-blue); font-weight: 700;">Assigned MLA Information</h5>
+                            <span class="badge ms-2" style="background: rgba(195,200,72,0.10); color: var(--dark-olive); font-weight: 500; border-radius: 40px; padding: 0.2rem 0.9rem; font-size: 0.65rem;">
+                                <i class="fas fa-lock me-1"></i> Read-Only
+                            </span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-id-card"></i> MLA ID</div>
+                                <div class="value-display-readonly"><?= esc($mla['mla_id'] ?? '-') ?></div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-user-tie"></i> MLA Name</div>
+                                <div class="value-display-readonly"><?= esc($mla['mla_name'] ?? '-') ?></div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-building"></i> Party</div>
+                                <div class="value-display-readonly"><?= esc($mla['mla_party'] ?? '-') ?></div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="info-label"><i class="fas fa-landmark"></i> Constituency</div>
+                                <div class="value-display-readonly"><?= esc($mla['constituency'] ?? '-') ?></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="info-label"><i class="fas fa-map-pin"></i> District</div>
+                                <div class="value-display-readonly"><?= esc($mla['district'] ?? '-') ?></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+
+            <!-- FOOTER -->
+            <footer class="footer">
+                <p class="mb-0">
+                    &copy; <script>document.write(new Date().getFullYear());</script>
+                    MLA Monitoring & Voter Feedback System. All Rights Reserved.
+                    Design by <a href="https://absoftwaresolution.co.in/" target="_blank">AB Software Solution</a>
+                </p>
+            </footer>
+
         </div>
-    </div>
+    </main>
+
+    <!-- EDIT PROFILE MODAL - COMPLETELY FIXED -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true"> <div class="modal-dialog modal-lg modal-dialog-centered"> 
+        <div class="modal-content"> <!-- HEADER --> <div class="modal-header"> <h5 class="modal-title"> <i class="fas fa-user-edit me-2" style="color: var(--lime-gold);">
+
+        </i> Edit Profile </h5> <button type="button" class="btn-close" data-bs-dismiss="modal"> </button> 
+    </div> <!-- BODY --> <div class="modal-body"> <form id="editProfileForm" action="<?= base_url('user/profile/update') ?>" method="POST" enctype="multipart/form-data"> <?= csrf_field() ?> <div class="row g-3"> <!-- FULL NAME --> <div class="col-md-6"> <label class="form-label"> Full Name <span class="text-danger">*</span> </label> <input type="text" name="full_name" class="form-control" value="<?= esc($user['full_name'] ?? '') ?>" required> </div> <!-- VOTER ID --> <div class="col-md-6"> <label class="form-label"> Voter ID </label> <input type="text" class="form-control" value="<?= esc($user['voter_id'] ?? '') ?>" readonly> </div> <!-- DOB --> <div class="col-md-6"> <label class="form-label"> Date of Birth <span class="text-danger">*</span> </label> <input type="date" name="dob" class="form-control" value="<?= esc($user['dob'] ?? '') ?>" required> </div> <!-- GENDER --> <div class="col-md-6"> <label class="form-label"> Gender <span class="text-danger">*</span> </label> <select name="gender" class="form-control" required> <option value=""> Select Gender </option> <option value="Male" <?= ($user['gender'] ?? '') === 'Male' ? 'selected' : '' ?>> Male </option> <option value="Female" <?= ($user['gender'] ?? '') === 'Female' ? 'selected' : '' ?>> Female </option> <option value="Other" <?= ($user['gender'] ?? '') === 'Other' ? 'selected' : '' ?>> Other </option> </select> </div> <!-- EMAIL --> <div class="col-md-6"> <label class="form-label"> Email Address <span class="text-danger">*</span> </label> <input type="email" name="email" class="form-control" value="<?= esc($user['email'] ?? '') ?>" required> </div> <!-- MOBILE --> <div class="col-md-6"> <label class="form-label"> Mobile Number </label> <input type="text" name="mobile" class="form-control" value="<?= esc($user['mobile'] ?? '') ?>"> </div> <!-- STATE --> <div class="col-md-4"> <label class="form-label"> State </label> <input type="text" class="form-control" value="<?= esc($user['state'] ?? '') ?>" readonly> </div> <!-- DISTRICT --> <div class="col-md-4"> <label class="form-label"> District </label> <input type="text" class="form-control" value="<?= esc($user['district'] ?? '') ?>" readonly> </div> <!-- CONSTITUENCY --> <div class="col-md-4"> <label class="form-label"> Assembly Constituency </label> <input type="text" class="form-control" value="<?= esc($user['constituency'] ?? '') ?>" readonly> </div> <!-- LOCALITY --> <div class="col-md-6"> <label class="form-label"> Locality / Area </label> <input type="text" name="locality" class="form-control" value="<?= esc($user['locality'] ?? '') ?>"> </div> <!-- PINCODE --> <div class="col-md-6"> <label class="form-label"> Pincode </label> <input type="text" name="pincode" class="form-control" maxlength="6" inputmode="numeric" value="<?= esc($user['pincode'] ?? '') ?>"> </div> <!-- PROFILE PHOTO --> <div class="col-12"> <label class="form-label"> Profile Photo </label> <input type="file" name="profile_photo" class="form-control" accept="image/jpeg,image/png,image/webp"> <small class="text-muted"> JPG, PNG, WEBP | Maximum 2 MB </small> <?php if (!empty($user['profile_photo'])): ?> <small class="d-block text-muted mt-1"> Current: <?= esc($user['profile_photo']) ?> </small> <?php endif; ?> </div> </div> </form> </div> <!-- FOOTER --> <div class="modal-footer"> <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"> Cancel </button> <button type="submit" form="editProfileForm" class="btn-gold"> <i class="fas fa-save me-2"></i> Save Changes </button> </div> </div> </div> </div>
 
     <!-- Toast Notification -->
     <div class="toast-notification" id="toastNotification">
         <i class="fas fa-check-circle me-2" style="color: var(--lime-gold);"></i> Profile updated successfully!
     </div>
 
-    <!-- Bootstrap JS for Modal -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="navbar.js"></script>
     <script>
-        // ============================================================
-        // EDIT PROFILE FUNCTIONALITY
-        // ============================================================
-        document.addEventListener("DOMContentLoaded", function() {
-
-            const displayFullName = document.getElementById('displayFullName');
-            const displayVoterId = document.getElementById('displayVoterId');
-            const displayDistrict = document.getElementById('displayDistrict');
-            const displayConstituency = document.getElementById('displayConstituency');
-
-            const fullNameValue = document.getElementById('fullNameValue');
-            const voterIdValue = document.getElementById('voterIdValue');
-            const dobValue = document.getElementById('dobValue');
-            const genderValue = document.getElementById('genderValue');
-            const emailValue = document.getElementById('emailValue');
-            const mobileValue = document.getElementById('mobileValue');
-            const stateValue = document.getElementById('stateValue');
-            const districtValue = document.getElementById('districtValue');
-            const constituencyValue = document.getElementById('constituencyValue');
-            const localityValue = document.getElementById('localityValue');
-            const pincodeValue = document.getElementById('pincodeValue');
-
-            const editFullName = document.getElementById('editFullName');
-            const editVoterId = document.getElementById('editVoterId');
-            const editDob = document.getElementById('editDob');
-            const editGender = document.getElementById('editGender');
-            const editEmail = document.getElementById('editEmail');
-            const editMobile = document.getElementById('editMobile');
-            const editState = document.getElementById('editState');
-            const editDistrict = document.getElementById('editDistrict');
-            const editConstituency = document.getElementById('editConstituency');
-            const editLocality = document.getElementById('editLocality');
-            const editPincode = document.getElementById('editPincode');
-
-            const saveBtn = document.getElementById('saveProfileBtn');
-            const toast = document.getElementById('toastNotification');
-
-            function showToast(message) {
-                toast.innerHTML = '<i class="fas fa-check-circle me-2" style="color: var(--lime-gold);"></i> ' + message;
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 3000);
-            }
-
-            saveBtn.addEventListener('click', function() {
-                const newName = editFullName.value.trim() || 'Rahul Patil';
-                const newVoterId = editVoterId.value.trim() || 'MH1234567890';
-                const newDob = editDob.value.trim() || '15 August 2001';
-                const newGender = editGender.value;
-                const newEmail = editEmail.value.trim() || 'rahul@gmail.com';
-                const newMobile = editMobile.value.trim() || '9876543210';
-                const newState = editState.value.trim() || 'Maharashtra';
-                const newDistrict = editDistrict.value.trim() || 'Satara';
-                const newConstituency = editConstituency.value.trim() || 'Karad South';
-                const newLocality = editLocality.value.trim() || 'Malkapur';
-                const newPincode = editPincode.value.trim() || '415110';
-
-                displayFullName.textContent = newName;
-                displayVoterId.textContent = newVoterId;
-                displayDistrict.textContent = newDistrict;
-                displayConstituency.textContent = newConstituency;
-
-                fullNameValue.textContent = newName;
-                voterIdValue.textContent = newVoterId;
-                dobValue.textContent = newDob;
-                genderValue.textContent = newGender;
-
-                emailValue.innerHTML = '<i class="fas fa-at me-1" style="color: var(--teal-blue); opacity: 0.6;"></i> ' + newEmail;
-                mobileValue.innerHTML = '<i class="fas fa-phone-alt me-1" style="color: var(--teal-blue); opacity: 0.6;"></i> ' + newMobile;
-
-                stateValue.textContent = newState;
-                districtValue.textContent = newDistrict;
-                constituencyValue.textContent = newConstituency;
-                localityValue.textContent = newLocality;
-                pincodeValue.textContent = newPincode;
-
-                const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
-                modal.hide();
-                showToast('Profile updated successfully!');
-            });
-
-            document.getElementById('editProfileForm').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    saveBtn.click();
-                }
-            });
-
-            document.getElementById('editProfileModal').addEventListener('show.bs.modal', function() {
-                editFullName.value = fullNameValue.textContent;
-                editVoterId.value = voterIdValue.textContent;
-                editDob.value = dobValue.textContent;
-                editGender.value = genderValue.textContent;
-                let emailText = emailValue.textContent.trim();
-                let mobileText = mobileValue.textContent.trim();
-                editEmail.value = emailText;
-                editMobile.value = mobileText;
-                editState.value = stateValue.textContent;
-                editDistrict.value = districtValue.textContent;
-                editConstituency.value = constituencyValue.textContent;
-                editLocality.value = localityValue.textContent;
-                editPincode.value = pincodeValue.textContent;
-            });
-
-        });
-
-        // ============================================================
-        // PROFILE PHOTO UPLOAD
-        // ============================================================
         function updateProfilePhoto(event) {
             const file = event.target.files[0];
             if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('File size exceeds 2MB limit.');
+                    event.target.value = '';
+                    return;
+                }
+                const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Please upload a valid image file (JPG, PNG, or WEBP).');
+                    event.target.value = '';
+                    return;
+                }
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const avatar = document.getElementById('profileAvatar');
+                    const placeholder = document.getElementById('avatarPlaceholder');
+                    
+                    avatar.style.display = 'block';
+                    placeholder.style.display = 'none';
                     avatar.src = e.target.result;
-                    const toast = document.getElementById('toastNotification');
-                    toast.innerHTML = '<i class="fas fa-check-circle me-2" style="color: var(--lime-gold);"></i> Profile photo updated!';
-                    toast.classList.add('show');
-                    setTimeout(() => {
-                        toast.classList.remove('show');
-                    }, 3000);
+                    
+                    showToast('Profile photo updated!');
+                    
+                    // Sync with modal form
+                    const modalFileInput = document.querySelector('#editProfileForm input[name="profile_photo"]');
+                    if (modalFileInput) {
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(file);
+                        modalFileInput.files = dataTransfer.files;
+                    }
                 };
                 reader.readAsDataURL(file);
             }
         }
+
+        function handleImageError(img) {
+            img.style.display = 'none';
+            const placeholder = document.getElementById('avatarPlaceholder');
+            if (placeholder) {
+                placeholder.style.display = 'flex';
+            }
+            console.warn('Failed to load profile image:', img.src);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            toast.innerHTML = '<i class="fas fa-check-circle me-2" style="color: var(--lime-gold);"></i> ' + message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.alert').forEach(alert => {
+                setTimeout(() => {
+                    const closeBtn = alert.querySelector('.btn-close');
+                    if (closeBtn) closeBtn.click();
+                }, 5000);
+            });
+        });
     </script>
 
 </body>
