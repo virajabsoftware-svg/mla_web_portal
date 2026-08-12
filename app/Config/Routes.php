@@ -171,9 +171,12 @@ $routes->group('user', ['namespace' => 'App\Controllers\User'], function ($route
     // MY PROFILE
     // =================================================
 
-    $routes->get('my-profile', 'MyProfile::index');
+//   $routes->get('my-profile', 'Profile::index');  
+    // Profile page
+  $routes->get('my-profile', 'Profile::index');
 
 
+    $routes->post('profile/update', 'Profile::update');
     // =================================================
     // NOTIFICATION
     // =================================================
