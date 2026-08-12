@@ -78,6 +78,8 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 
     // Search Route
     $routes->get('search', 'Search::index');
+
+    $routes->get('get-districts/(:num)', 'ConstituencyManagement::getDistricts/$1');
 });
 
 

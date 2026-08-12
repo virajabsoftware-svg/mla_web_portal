@@ -916,20 +916,30 @@
             <div class="row g-3">
                 <div class="col-md-2">
                     <label><i class="fas fa-flag me-1"></i> State</label>
-                    <select class="form-select">
+                    <select name="state_id" id="state_id" class="form-select">
                         <option value="">All States</option>
-                        <option value="Maharashtra">Maharashtra</option>
+
+                        <?php if (!empty($states)): ?>
+                            <?php foreach ($states as $state): ?>
+                                <option value="<?= $state['id']; ?>">
+                                    <?= esc($state['state_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </select>
                 </div>
                 <div class="col-md-2">
                     <label><i class="fas fa-city me-1"></i> District</label>
-                    <select class="form-select">
+                    <select name="district_id" id="district_id" class="form-select">
                         <option value="">All Districts</option>
-                        <option value="Thane">Thane</option>
-                        <option value="Nagpur">Nagpur</option>
-                        <option value="Satara">Satara</option>
-                        <option value="Pune">Pune</option>
-                        <option value="Mumbai">Mumbai</option>
+
+                        <?php if (!empty($districts)): ?>
+                            <?php foreach ($districts as $district): ?>
+                                <option value="<?= $district['id']; ?>">
+                                    <?= esc($district['district_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -1380,21 +1390,31 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="">Select State</option>
-                                    <option value="Maharashtra">Maharashtra</option>
-                                </select>
+                                <select name="state_id" id="modal_state_id" class="form-select">
+                        <option value="">All States</option>
+
+                        <?php if (!empty($states)): ?>
+                            <?php foreach ($states as $state): ?>
+                                <option value="<?= $state['id']; ?>">
+                                    <?= esc($state['state_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="">Select District</option>
-                                    <option value="Thane">Thane</option>
-                                    <option value="Nagpur">Nagpur</option>
-                                    <option value="Satara">Satara</option>
-                                    <option value="Pune">Pune</option>
-                                    <option value="Mumbai">Mumbai</option>
-                                </select>
+                                                    <select name="district_id" id="modal_district_id" class="form-select">
+                        <option value="">All Districts</option>
+
+                        <?php if (!empty($districts)): ?>
+                            <?php foreach ($districts as $district): ?>
+                                <option value="<?= $district['id']; ?>">
+                                    <?= esc($district['district_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
@@ -1745,6 +1765,87 @@
     </script>
     <script src="header.js">
     </script>
+    <script>
+$(document).ready(function () {
+
+    $('#state_id').change(function () {
+
+        var stateId = $(this).val();
+
+        if (stateId != '') {
+
+            $.ajax({
+                url: "<?= base_url('admin/get-districts'); ?>/" + stateId,
+                type: "GET",
+                dataType: "JSON",
+                success: function (response) {
+
+                    $('#district_id').html('<option value="">All Districts</option>');
+
+                    $.each(response, function (index, district) {
+
+                        $('#district_id').append(
+                            '<option value="' + district.id + '">' +
+                            district.district_name +
+                            '</option>'
+                        );
+
+                    });
+
+                }
+            });
+
+        } else {
+
+            $('#district_id').html('<option value="">All Districts</option>');
+
+        }
+
+    });
+
+});
+</script>
+
+<script>
+$(document).ready(function () {
+
+    $('#modal_state_id').change(function () {
+
+        var stateId = $(this).val();
+
+        if (stateId != '') {
+
+            $.ajax({
+                url: "<?= base_url('admin/get-districts'); ?>/" + stateId,
+                type: "GET",
+                dataType: "JSON",
+                success: function (response) {
+
+                    $('#modal_district_id').html('<option value="">All Districts</option>');
+
+                    $.each(response, function (index, district) {
+
+                        $('#modal_district_id').append(
+                            '<option value="' + district.id + '">' +
+                            district.district_name +
+                            '</option>'
+                        );
+
+                    });
+
+                }
+            });
+
+        } else {
+
+            $('#district_id').html('<option value="">All Districts</option>');
+
+        }
+
+    });
+
+});
+</script>
 </body>
 
 </html>
