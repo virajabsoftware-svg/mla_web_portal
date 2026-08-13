@@ -780,6 +780,48 @@
             font-size: 0.9rem;
             padding: 8px 12px;
         }
+
+        /* Pagination styling to match existing theme */
+        .pagination {
+            margin-top: 1rem;
+            margin-bottom: 0;
+        }
+
+        .pagination .page-link {
+            color: var(--teal-blue);
+            border: 1px solid rgba(195, 200, 72, 0.3);
+            background: white;
+            border-radius: 8px !important;
+            margin: 0 2px;
+            padding: 8px 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .pagination .page-link:hover {
+            background: rgba(195, 200, 72, 0.1);
+            border-color: var(--lime-gold);
+            color: var(--olive-green);
+        }
+
+        .pagination .page-item.active .page-link {
+            background: linear-gradient(95deg, var(--lime-gold), #A9B43C);
+            border-color: var(--lime-gold);
+            color: #1F3F3A;
+            font-weight: 600;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #b0b0b0;
+            background: #f5f5f5;
+            border-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-item:first-child .page-link,
+        .pagination .page-item:last-child .page-link {
+            border-radius: 8px !important;
+        }
     </style>
 </head>
 
@@ -1088,6 +1130,22 @@ class="form-control">
 
                     </div>
 
+                    <!-- Pagination - FIXED: Removed invalid 'bootstrap_full' template -->
+                    <?php if(isset($pager) && $pager): ?>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <span class="text-muted small">
+                                Showing <?= (($pager->getCurrentPage() - 1) * $pager->getPerPage()) + 1 ?> 
+                                to <?= min(($pager->getCurrentPage() * $pager->getPerPage()), $pager->getTotal()) ?> 
+                                of <?= $pager->getTotal() ?> entries
+                            </span>
+                        </div>
+                        <div>
+                            <?= $pager->links() ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
                 </div>
 
             </div>
@@ -1139,6 +1197,7 @@ class="form-control">
                 </div>
                 <form id="editFeedbackForm" action="<?= base_url('user/feedback/update') ?>" method="post" enctype="multipart/form-data">
                     <?= csrf_field() ?>
+                    <input type="hidden" name="id" id="editFeedbackId" value="">
                     <div class="modal-body">
                         <div id="editModalContent">
                             <div class="text-center py-4">
@@ -1306,10 +1365,12 @@ class="form-control">
             const editModal = new bootstrap.Modal(document.getElementById('editFeedbackModal'));
             const editModalContent = document.getElementById('editModalContent');
             const editModalFooter = document.getElementById('editModalFooter');
+            const editFeedbackId = document.getElementById('editFeedbackId');
             
             document.querySelectorAll('.edit-feedback').forEach(button => {
                 button.addEventListener('click', function() {
                     const feedbackId = this.getAttribute('data-id');
+                    editFeedbackId.value = feedbackId;
                     
                     // Show loading
                     editModalContent.innerHTML = `
@@ -1332,7 +1393,6 @@ class="form-control">
                                 const f = data.data;
                                 
                                 editModalContent.innerHTML = `
-                                    <input type="hidden" name="id" value="${f.id}">
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-md-6">
@@ -1430,7 +1490,8 @@ class="form-control">
             document.getElementById('editFeedbackForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                const formData = new FormData(this);
+                const form = this;
+                const formData = new FormData(form);
                 
                 Swal.fire({
                     title: 'Updating...',
@@ -1441,7 +1502,7 @@ class="form-control">
                     }
                 });
                 
-                fetch(this.action, {
+                fetch(form.action, {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -1466,10 +1527,14 @@ class="form-control">
                             location.reload();
                         });
                     } else {
+                        let errorMsg = data.message || 'Failed to update feedback';
+                        if (data.errors) {
+                            errorMsg = Object.values(data.errors).join('\n');
+                        }
                         Swal.fire({
                             icon: 'error',
                             title: 'Error!',
-                            text: data.message || 'Failed to update feedback',
+                            text: errorMsg,
                             confirmButtonColor: '#C3C848',
                             confirmButtonText: 'OK'
                         });

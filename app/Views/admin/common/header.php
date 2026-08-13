@@ -81,13 +81,13 @@
                         //     'tooltip' => 'Logs',
                         //     'segments' => ['activity-logs', 'logs']
                         // ],
-                        'voter-management' => [
-                            'url' => base_url('admin/voter-management'),
-                            'icon' => 'fa fa-user',
-                            'label' => 'Voter Management',
-                            'tooltip' => 'Voters',
-                            'segments' => ['voter-management', 'voter']
-                        ],
+                        // 'voter-management' => [
+                        //     'url' => base_url('admin/voter-management'),
+                        //     'icon' => 'fa fa-user',
+                        //     'label' => 'Voter Management',
+                        //     'tooltip' => 'Voters',
+                        //     'segments' => ['voter-management', 'voter']
+                        // ],
                         'rating-question' => [
     'url' => base_url('admin/ratingquestion'),
     'icon' => 'fa fa-star',

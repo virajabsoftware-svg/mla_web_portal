@@ -12,8 +12,8 @@ class Feedback extends BaseController
     {
         $model = new FeedbackModel();
         
-        // Fetch all feedback records (newest first)
-        $feedbacks = $model->orderBy('id', 'DESC')->findAll();
+        // Use CodeIgniter's pagination - 10 records per page
+        $feedbacks = $model->orderBy('id', 'DESC')->paginate(10, 'default');
         
         // Calculate dashboard counts
         $totalFeedback = $model->countAll();
@@ -26,7 +26,8 @@ class Feedback extends BaseController
             'totalFeedback' => $totalFeedback,
             'reviewed' => $reviewed,
             'underReview' => $underReview,
-            'resolved' => $resolved
+            'resolved' => $resolved,
+            'pager' => $model->pager
         ];
         
         return view('user/Feedback', $data);
@@ -219,6 +220,7 @@ class Feedback extends BaseController
             $data['attachment'] = $filename;
         }
         
+        // Use the model's update method with primary key
         if ($model->update($id, $data)) {
             if ($this->request->isAJAX()) {
                 return $this->response->setJSON([
