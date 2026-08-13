@@ -80,6 +80,14 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->get('search', 'Search::index');
 
     $routes->get('get-districts/(:num)', 'ConstituencyManagement::getDistricts/$1');
+
+    $routes->post('constituency/save', 'ConstituencyManagement::save');
+
+    $routes->get('constituency/get/(:num)', 'ConstituencyManagement::getConstituency/$1');
+
+    $routes->post('constituency/update', 'ConstituencyManagement::update');
+
+    $routes->post('constituency/delete/(:num)', 'ConstituencyManagement::delete/$1');
 });
 
 

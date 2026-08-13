@@ -778,14 +778,14 @@
         <!-- ============================================================ -->
         <!-- TOP 3 DEVELOPED CONSTITUENCIES -->
         <!-- ============================================================ -->
-        <div class="text-center mb-4">
+        <!-- <div class="text-center mb-4">
             <h2 class="gold-gradient-text fs-2 fw-bold"><i class="fas fa-trophy me-2"></i> Top 3 Developed Constituencies</h2>
             <p class="text-muted" style="color:#9b7c54 !important;">Leading constituencies in development performance</p>
-        </div>
+        </div> -->
 
-        <div class="row g-4 mb-5">
+        <!-- <div class="row g-4 mb-5"> -->
             <!-- Constituency 1: Kopri-Pachpakhadi -->
-            <div class="col-lg-4 col-md-6 mb-4">
+            <!-- <div class="col-lg-4 col-md-6 mb-4">
                 <div class="constituency-card">
                     <div class="card-header" style="background: #FFF8E1;">
                         <div class="location-icon">
@@ -823,10 +823,10 @@
                         <span class="status-active">Active</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Constituency 2: Nagpur South West -->
-            <div class="col-lg-4 col-md-6 mb-4">
+            <!-- <div class="col-lg-4 col-md-6 mb-4">
                 <div class="constituency-card">
                     <div class="card-header" style="background: #FFF4E8;">
                         <div class="location-icon">
@@ -864,10 +864,10 @@
                         <span class="status-active">Active</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Constituency 3: Karad South -->
-            <div class="col-lg-4 col-md-6 mb-4">
+            <!-- <div class="col-lg-4 col-md-6 mb-4">
                 <div class="constituency-card">
                     <div class="card-header" style="background: #FFF4E8;">
                         <div class="location-icon">
@@ -906,8 +906,19 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
+         
+        <?php if (session()->getFlashdata('success')): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <?= session()->getFlashdata('success'); ?>
 
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                </button>
+            </div>
+        <?php endif; ?>
         <!-- ============================================================ -->
         <!-- FILTER SECTION - CONSTITUENCY COMMAND CENTER -->
         <!-- ============================================================ -->
@@ -994,91 +1005,104 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td><strong>Kopri-Pachpakhadi</strong></td>
-                            <td>Thane</td>
-                            <td>Maharashtra</td>
-                            <td>MH-TH-001</td>
-                            <td>28</td>
-                            <td>42</td>
-                            <td><span class="status-active">Active</span></td>
-                            <td>
-                                <div class="action-btn-group">
-                                    <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewConstituencyModal1"><i class="fas fa-eye"></i> View</button>
-                                    <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editConstituencyModal1"><i class="fas fa-edit"></i> Edit</button>
-                                    <button class="action-btn delete-btn" onclick="if(confirm('Delete this constituency?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td><strong>Nagpur South West</strong></td>
-                            <td>Nagpur</td>
-                            <td>Maharashtra</td>
-                            <td>MH-NG-001</td>
-                            <td>31</td>
-                            <td>48</td>
-                            <td><span class="status-active">Active</span></td>
-                            <td>
-                                <div class="action-btn-group">
-                                    <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewConstituencyModal2"><i class="fas fa-eye"></i> View</button>
-                                    <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editConstituencyModal2"><i class="fas fa-edit"></i> Edit</button>
-                                    <button class="action-btn delete-btn" onclick="if(confirm('Delete this constituency?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td><strong>Karad South</strong></td>
-                            <td>Satara</td>
-                            <td>Maharashtra</td>
-                            <td>MH-ST-001</td>
-                            <td>35</td>
-                            <td>51</td>
-                            <td><span class="status-active">Active</span></td>
-                            <td>
-                                <div class="action-btn-group">
-                                    <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewConstituencyModal3"><i class="fas fa-eye"></i> View</button>
-                                    <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editConstituencyModal3"><i class="fas fa-edit"></i> Edit</button>
-                                    <button class="action-btn delete-btn" onclick="if(confirm('Delete this constituency?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td><strong>Pune Central</strong></td>
-                            <td>Pune</td>
-                            <td>Maharashtra</td>
-                            <td>MH-PN-001</td>
-                            <td>22</td>
-                            <td>38</td>
-                            <td><span class="status-active">Active</span></td>
-                            <td>
-                                <div class="action-btn-group">
-                                    <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewConstituencyModal4"><i class="fas fa-eye"></i> View</button>
-                                    <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editConstituencyModal4"><i class="fas fa-edit"></i> Edit</button>
-                                    <button class="action-btn delete-btn" onclick="if(confirm('Delete this constituency?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td><strong>Mumbai South</strong></td>
-                            <td>Mumbai</td>
-                            <td>Maharashtra</td>
-                            <td>MH-MB-001</td>
-                            <td>18</td>
-                            <td>55</td>
-                            <td><span class="status-active">Active</span></td>
-                            <td>
-                                <div class="action-btn-group">
-                                    <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewConstituencyModal5"><i class="fas fa-eye"></i> View</button>
-                                    <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editConstituencyModal5"><i class="fas fa-edit"></i> Edit</button>
-                                    <button class="action-btn delete-btn" onclick="if(confirm('Delete this constituency?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                </div>
-                            </td>
-                        </tr>
+                        <?php if (!empty($constituencies)): ?>
+
+                            <?php foreach ($constituencies as $index => $constituency): ?>
+
+                                <tr>
+                                    <td><?= $index + 1 ?></td>
+
+                                    <td>
+                                        <strong>
+                                            <?= esc($constituency['constituency_name']) ?>
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        <?= esc($constituency['district_name']) ?>
+                                    </td>
+
+                                    <td>
+                                        <?= esc($constituency['state_name']) ?>
+                                    </td>
+
+                                    <td>
+                                        <?= esc($constituency['constituency_code'] ?? '-') ?>
+                                    </td>
+
+                                    <td>
+                                        <?= esc($constituency['total_villages'] ?? 0) ?>
+                                    </td>
+
+                                    <td>
+                                        <?= esc($constituency['total_booths'] ?? 0) ?>
+                                    </td>
+
+                                    <td>
+                                        <?php if ($constituency['status'] === 'Active'): ?>
+
+                                            <span class="status-active">
+                                                Active
+                                            </span>
+
+                                        <?php else: ?>
+
+                                            <span class="status-inactive">
+                                                Inactive
+                                            </span>
+
+                                        <?php endif; ?>
+                                    </td>
+
+                                    <td>
+                                        <div class="action-btn-group">
+
+                                            <button class="action-btn view-btn"
+                                                    type="button"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#viewConstituencyModal"
+                                                    data-id="<?= $constituency['id'] ?>">
+
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+
+                                            <button class="action-btn edit-btn"
+                                                type="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editConstituencyModal"
+                                                data-id="<?= $constituency['id'] ?>">
+
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+
+                                            <form action="<?= base_url('admin/constituency/delete/' . $constituency['id']) ?>"
+      method="post"
+      style="display:inline;"
+      onsubmit="return confirm('Are you sure you want to delete this constituency?');">
+
+    <?= csrf_field() ?>
+
+    <button type="submit" class="action-btn delete-btn">
+        <i class="fas fa-trash"></i> Delete
+    </button>
+
+</form>
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            <?php endforeach; ?>
+
+                            <?php else: ?>
+
+                                <tr>
+                                    <td colspan="9" class="text-center py-4">
+                                        No constituencies found.
+                                    </td>
+                                </tr>
+
+                            <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -1095,285 +1119,156 @@
     <!-- ============================================================ -->
     <!-- VIEW CONSTITUENCY MODALS (read-only, form-style) -->
     <!-- ============================================================ -->
-    <!-- View Modal 1: Kopri-Pachpakhadi -->
-    <div class="modal fade modal-cream" id="viewConstituencyModal1" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content modal-cream">
-                <div class="modal-header border-warning">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>Constituency Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row g-3">
-                            <div class="col-12 text-center mb-3">
-                                <i class="fas fa-map-location-dot" style="font-size:4rem;color:var(--gold-dark);"></i>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name</label>
-                                <input type="text" class="form-control view-field-readonly" value="Kopri-Pachpakhadi" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                <input type="text" class="form-control view-field-readonly" value="Thane" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State</label>
-                                <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                                <input type="text" class="form-control view-field-readonly" value="MH-TH-001" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
-                                <input type="text" class="form-control view-field-readonly" value="28" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
-                                <input type="text" class="form-control view-field-readonly" value="42" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-chart-line me-1"></i> Development Score</label>
-                                <input type="text" class="form-control view-field-readonly" value="96%" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                </div>
+    
+    <div class="modal fade modal-cream"
+     id="viewConstituencyModal"
+     tabindex="-1"
+     data-bs-backdrop="static">
+
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+
+        <div class="modal-content modal-cream">
+
+            <div class="modal-header border-warning">
+
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-eye me-2"></i>
+                    Constituency Details
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
             </div>
+
+            <div class="modal-body">
+
+                <div class="row g-3">
+
+                    <div class="col-12 text-center mb-3">
+                        <i class="fas fa-map-location-dot"
+                           style="font-size:4rem;color:var(--gold-dark);">
+                        </i>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold" style="color:#876b42;">
+                            <i class="fas fa-map-pin me-1"></i>
+                            Constituency Name
+                        </label>
+
+                        <input type="text"
+                               id="view_constituency_name"
+                               class="form-control view-field-readonly"
+                               readonly>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold" style="color:#876b42;">
+                            <i class="fas fa-city me-1"></i>
+                            District
+                        </label>
+
+                        <input type="text"
+                               id="view_district_name"
+                               class="form-control view-field-readonly"
+                               readonly>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold" style="color:#876b42;">
+                            <i class="fas fa-flag me-1"></i>
+                            State
+                        </label>
+
+                        <input type="text"
+                               id="view_state_name"
+                               class="form-control view-field-readonly"
+                               readonly>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold" style="color:#876b42;">
+                            <i class="fas fa-barcode me-1"></i>
+                            Constituency Code
+                        </label>
+
+                        <input type="text"
+                               id="view_constituency_code"
+                               class="form-control view-field-readonly"
+                               readonly>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold" style="color:#876b42;">
+                            <i class="fas fa-flag me-1"></i>
+                            No. of Villages
+                        </label>
+
+                        <input type="text"
+                               id="view_total_villages"
+                               class="form-control view-field-readonly"
+                               readonly>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold" style="color:#876b42;">
+                            <i class="fas fa-building me-1"></i>
+                            No. of Booths
+                        </label>
+
+                        <input type="text"
+                               id="view_total_booths"
+                               class="form-control view-field-readonly"
+                               readonly>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold" style="color:#876b42;">
+                            <i class="fas fa-chart-line me-1"></i>
+                            Development Score
+                        </label>
+
+                        <input type="text"
+                            id="view_development_score"
+                            class="form-control view-field-readonly"
+                            value="85%"
+                            readonly>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-bold" style="color:#876b42;">
+                            <i class="fas fa-toggle-on me-1"></i>
+                            Status
+                        </label>
+
+                        <input type="text"
+                               id="view_status"
+                               class="form-control view-field-readonly"
+                               readonly>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-outline-cream px-4"
+                        data-bs-dismiss="modal">
+                    Close
+                </button>
+
+            </div>
+
         </div>
+
     </div>
 
-    <!-- View Modal 2: Nagpur South West -->
-    <div class="modal fade modal-cream" id="viewConstituencyModal2" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content modal-cream">
-                <div class="modal-header border-warning">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>Constituency Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row g-3">
-                            <div class="col-12 text-center mb-3">
-                                <i class="fas fa-map-location-dot" style="font-size:4rem;color:var(--gold-dark);"></i>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name</label>
-                                <input type="text" class="form-control view-field-readonly" value="Nagpur South West" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                <input type="text" class="form-control view-field-readonly" value="Nagpur" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State</label>
-                                <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                                <input type="text" class="form-control view-field-readonly" value="MH-NG-001" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
-                                <input type="text" class="form-control view-field-readonly" value="31" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
-                                <input type="text" class="form-control view-field-readonly" value="48" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-chart-line me-1"></i> Development Score</label>
-                                <input type="text" class="form-control view-field-readonly" value="94%" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- View Modal 3: Karad South -->
-    <div class="modal fade modal-cream" id="viewConstituencyModal3" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content modal-cream">
-                <div class="modal-header border-warning">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>Constituency Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row g-3">
-                            <div class="col-12 text-center mb-3">
-                                <i class="fas fa-map-location-dot" style="font-size:4rem;color:var(--gold-dark);"></i>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name</label>
-                                <input type="text" class="form-control view-field-readonly" value="Karad South" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                <input type="text" class="form-control view-field-readonly" value="Satara" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State</label>
-                                <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                                <input type="text" class="form-control view-field-readonly" value="MH-ST-001" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
-                                <input type="text" class="form-control view-field-readonly" value="35" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
-                                <input type="text" class="form-control view-field-readonly" value="51" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-chart-line me-1"></i> Development Score</label>
-                                <input type="text" class="form-control view-field-readonly" value="92%" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- View Modal 4: Pune Central -->
-    <div class="modal fade modal-cream" id="viewConstituencyModal4" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content modal-cream">
-                <div class="modal-header border-warning">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>Constituency Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row g-3">
-                            <div class="col-12 text-center mb-3">
-                                <i class="fas fa-map-location-dot" style="font-size:4rem;color:var(--gold-dark);"></i>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name</label>
-                                <input type="text" class="form-control view-field-readonly" value="Pune Central" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                <input type="text" class="form-control view-field-readonly" value="Pune" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State</label>
-                                <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                                <input type="text" class="form-control view-field-readonly" value="MH-PN-001" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
-                                <input type="text" class="form-control view-field-readonly" value="22" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
-                                <input type="text" class="form-control view-field-readonly" value="38" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-chart-line me-1"></i> Development Score</label>
-                                <input type="text" class="form-control view-field-readonly" value="88%" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- View Modal 5: Mumbai South -->
-    <div class="modal fade modal-cream" id="viewConstituencyModal5" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content modal-cream">
-                <div class="modal-header border-warning">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>Constituency Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row g-3">
-                            <div class="col-12 text-center mb-3">
-                                <i class="fas fa-map-location-dot" style="font-size:4rem;color:var(--gold-dark);"></i>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name</label>
-                                <input type="text" class="form-control view-field-readonly" value="Mumbai South" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                <input type="text" class="form-control view-field-readonly" value="Mumbai" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State</label>
-                                <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                                <input type="text" class="form-control view-field-readonly" value="MH-MB-001" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
-                                <input type="text" class="form-control view-field-readonly" value="18" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
-                                <input type="text" class="form-control view-field-readonly" value="55" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-chart-line me-1"></i> Development Score</label>
-                                <input type="text" class="form-control view-field-readonly" value="85%" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 
     <!-- ============================================================ -->
     <!-- ADD CONSTITUENCY MODAL -->
@@ -1386,7 +1281,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addConstituencyForm" class="needs-validation" novalidate>
+                    <form id="addConstituencyForm"
+                        action="<?= base_url('admin/constituency/save') ?>"
+                        method="post"
+                        class="needs-validation"
+                        novalidate>
+
+                        <?= csrf_field(); ?>
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
@@ -1418,34 +1319,35 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter constituency name" required>
+                                <input type="text" name="constituency_name" class="form-control" placeholder="Enter constituency name" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                                <input type="text" class="form-control" placeholder="Enter constituency code">
+                                <input type="text" name="constituency_code" class="form-control" placeholder="Enter constituency code">
                             </div>
                             <div class="col-md-6">
                                 <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
-                                <input type="number" class="form-control" placeholder="Enter number of villages">
+                                <input type="number" name="total_villages" class="form-control" placeholder="Enter number of villages">
                             </div>
                             <div class="col-md-6">
                                 <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
-                                <input type="number" class="form-control" placeholder="Enter number of booths">
+                                <input type="number" name="total_booths" class="form-control" placeholder="Enter number of booths">
                             </div>
                             <div class="col-md-6">
                                 <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                <select class="form-select">
+                                <select name="status" class="form-select">
                                     <option value="Active">Active</option>
                                     <option value="Inactive">Inactive</option>
                                 </select>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warm-gold px-4">Save Constituency</button>
+                </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Add Constituency clicked (static)');">Save Constituency</button>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -1453,310 +1355,189 @@
     <!-- ============================================================ -->
     <!-- EDIT CONSTITUENCY MODALS (editable, same layout) -->
     <!-- ============================================================ -->
-    <!-- Edit Modal 1: Kopri-Pachpakhadi -->
-    <div class="modal fade modal-cream" id="editConstituencyModal1" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content modal-cream">
-                <div class="modal-header border-warning">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit Constituency</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editConstituencyForm1" class="needs-validation" novalidate>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="Maharashtra" selected>Maharashtra</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="Thane" selected>Thane</option>
-                                    <option value="Nagpur">Nagpur</option>
-                                    <option value="Satara">Satara</option>
-                                    <option value="Pune">Pune</option>
-                                    <option value="Mumbai">Mumbai</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" value="Kopri-Pachpakhadi" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                                <input type="text" class="form-control" value="MH-TH-001">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
-                                <input type="number" class="form-control" value="28">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
-                                <input type="number" class="form-control" value="42">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                <select class="form-select">
-                                    <option value="Active" selected>Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit Constituency clicked (static)');">Update Constituency</button>
-                </div>
+    <div class="modal fade modal-cream"
+     id="editConstituencyModal"
+     tabindex="-1"
+     data-bs-backdrop="static">
+
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+
+        <div class="modal-content modal-cream">
+
+            <div class="modal-header border-warning">
+
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-edit me-2"></i>
+                    Edit Constituency
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
             </div>
+
+            <div class="modal-body">
+
+                <form id="editConstituencyForm">
+
+                    <input type="hidden"
+                           name="id"
+                           id="edit_constituency_id">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label class="fw-bold" style="color:#876b42;">
+                                <i class="fas fa-flag me-1"></i>
+                                State
+                            </label>
+
+                            <select name="state_id"
+                                    id="edit_state_id"
+                                    class="form-select"
+                                    required>
+
+                                <option value="">Select State</option>
+
+                                <?php if (!empty($states)): ?>
+
+                                    <?php foreach ($states as $state): ?>
+
+                                        <option value="<?= $state['id']; ?>">
+                                            <?= esc($state['state_name']); ?>
+                                        </option>
+
+                                    <?php endforeach; ?>
+
+                                <?php endif; ?>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="fw-bold" style="color:#876b42;">
+                                <i class="fas fa-city me-1"></i>
+                                District
+                            </label>
+
+                            <select name="district_id"
+                                    id="edit_district_id"
+                                    class="form-select"
+                                    required>
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="fw-bold" style="color:#876b42;">
+                                <i class="fas fa-map-pin me-1"></i>
+                                Constituency Name
+                            </label>
+
+                            <input type="text"
+                                   name="constituency_name"
+                                   id="edit_constituency_name"
+                                   class="form-control"
+                                   required>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="fw-bold" style="color:#876b42;">
+                                <i class="fas fa-barcode me-1"></i>
+                                Constituency Code
+                            </label>
+
+                            <input type="text"
+                                   name="constituency_code"
+                                   id="edit_constituency_code"
+                                   class="form-control">
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="fw-bold" style="color:#876b42;">
+                                <i class="fas fa-flag me-1"></i>
+                                No. of Villages
+                            </label>
+
+                            <input type="number"
+                                   name="total_villages"
+                                   id="edit_total_villages"
+                                   class="form-control">
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="fw-bold" style="color:#876b42;">
+                                <i class="fas fa-building me-1"></i>
+                                No. of Booths
+                            </label>
+
+                            <input type="number"
+                                   name="total_booths"
+                                   id="edit_total_booths"
+                                   class="form-control">
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="fw-bold" style="color:#876b42;">
+                                <i class="fas fa-toggle-on me-1"></i>
+                                Status
+                            </label>
+
+                            <select name="status"
+                                    id="edit_status"
+                                    class="form-select">
+
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-outline-cream px-4"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        class="btn btn-warm-gold px-4"
+                        id="updateConstituencyBtn">
+
+                    <i class="fas fa-save me-2"></i>
+                    Update Constituency
+
+                </button>
+
+            </div>
+
         </div>
+
     </div>
 
-    <!-- Edit Modal 2: Nagpur South West -->
-    <div class="modal fade modal-cream" id="editConstituencyModal2" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content modal-cream">
-                <div class="modal-header border-warning">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit Constituency</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editConstituencyForm2" class="needs-validation" novalidate>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="Maharashtra" selected>Maharashtra</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="Nagpur" selected>Nagpur</option>
-                                    <option value="Thane">Thane</option>
-                                    <option value="Satara">Satara</option>
-                                    <option value="Pune">Pune</option>
-                                    <option value="Mumbai">Mumbai</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" value="Nagpur South West" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                                <input type="text" class="form-control" value="MH-NG-001">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
-                                <input type="number" class="form-control" value="31">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
-                                <input type="number" class="form-control" value="48">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                <select class="form-select">
-                                    <option value="Active" selected>Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit Constituency clicked (static)');">Update Constituency</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Modal 3: Karad South -->
-    <div class="modal fade modal-cream" id="editConstituencyModal3" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content modal-cream">
-                <div class="modal-header border-warning">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit Constituency</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editConstituencyForm3" class="needs-validation" novalidate>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="Maharashtra" selected>Maharashtra</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="Satara" selected>Satara</option>
-                                    <option value="Thane">Thane</option>
-                                    <option value="Nagpur">Nagpur</option>
-                                    <option value="Pune">Pune</option>
-                                    <option value="Mumbai">Mumbai</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" value="Karad South" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                                <input type="text" class="form-control" value="MH-ST-001">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
-                                <input type="number" class="form-control" value="35">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
-                                <input type="number" class="form-control" value="51">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                <select class="form-select">
-                                    <option value="Active" selected>Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit Constituency clicked (static)');">Update Constituency</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Modal 4: Pune Central -->
-    <div class="modal fade modal-cream" id="editConstituencyModal4" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content modal-cream">
-                <div class="modal-header border-warning">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit Constituency</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editConstituencyForm4" class="needs-validation" novalidate>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="Maharashtra" selected>Maharashtra</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="Pune" selected>Pune</option>
-                                    <option value="Thane">Thane</option>
-                                    <option value="Nagpur">Nagpur</option>
-                                    <option value="Satara">Satara</option>
-                                    <option value="Mumbai">Mumbai</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" value="Pune Central" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                                <input type="text" class="form-control" value="MH-PN-001">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
-                                <input type="number" class="form-control" value="22">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
-                                <input type="number" class="form-control" value="38">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                <select class="form-select">
-                                    <option value="Active" selected>Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit Constituency clicked (static)');">Update Constituency</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Modal 5: Mumbai South -->
-    <div class="modal fade modal-cream" id="editConstituencyModal5" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content modal-cream">
-                <div class="modal-header border-warning">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit Constituency</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editConstituencyForm5" class="needs-validation" novalidate>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> State <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="Maharashtra" selected>Maharashtra</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District <span class="text-danger">*</span></label>
-                                <select class="form-select" required>
-                                    <option value="Mumbai" selected>Mumbai</option>
-                                    <option value="Thane">Thane</option>
-                                    <option value="Nagpur">Nagpur</option>
-                                    <option value="Satara">Satara</option>
-                                    <option value="Pune">Pune</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" value="Mumbai South" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                                <input type="text" class="form-control" value="MH-MB-001">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Villages</label>
-                                <input type="number" class="form-control" value="18">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> No. of Booths</label>
-                                <input type="number" class="form-control" value="55">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                <select class="form-select">
-                                    <option value="Active" selected>Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit Constituency clicked (static)');">Update Constituency</button>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 
     <!-- ============================================================ -->
     <!-- SCRIPTS -->
@@ -1766,11 +1547,13 @@
     <script src="header.js">
     </script>
     <script>
-$(document).ready(function () {
+    function loadDistricts(stateSelector, districtSelector) {
 
-    $('#state_id').change(function () {
+    $(stateSelector).change(function () {
 
         var stateId = $(this).val();
+
+        $(districtSelector).html('<option value="">Loading...</option>');
 
         if (stateId != '') {
 
@@ -1780,11 +1563,11 @@ $(document).ready(function () {
                 dataType: "JSON",
                 success: function (response) {
 
-                    $('#district_id').html('<option value="">All Districts</option>');
+                    $(districtSelector).html('<option value="">Select District</option>');
 
                     $.each(response, function (index, district) {
 
-                        $('#district_id').append(
+                        $(districtSelector).append(
                             '<option value="' + district.id + '">' +
                             district.district_name +
                             '</option>'
@@ -1797,51 +1580,214 @@ $(document).ready(function () {
 
         } else {
 
-            $('#district_id').html('<option value="">All Districts</option>');
+            $(districtSelector).html('<option value="">Select District</option>');
 
         }
 
+    });
+
+}
+
+$(document).ready(function () {
+
+    loadDistricts('#filter_state_id', '#filter_district_id');
+
+    loadDistricts('#modal_state_id', '#modal_district_id');
+
+
+});
+
+$('#edit_state_id').on('change', function () {
+
+    let stateId = $(this).val();
+    let districtDropdown = $('#edit_district_id');
+
+    districtDropdown.html('<option value="">Loading...</option>');
+
+    if (stateId === '') {
+
+        districtDropdown.html(
+            '<option value="">Select District</option>'
+        );
+
+        return;
+    }
+
+    $.ajax({
+
+        url: "<?= base_url('admin/get-districts'); ?>/" + stateId,
+
+        type: "GET",
+
+        dataType: "JSON",
+
+        success: function (response) {
+
+            districtDropdown.html(
+                '<option value="">Select District</option>'
+            );
+
+            $.each(response, function (index, district) {
+
+                districtDropdown.append(
+                    '<option value="' + district.id + '">' +
+                    district.district_name +
+                    '</option>'
+                );
+
+            });
+
+            // Existing district automatically select
+            let selectedDistrictId =
+                districtDropdown.data('selected');
+
+            if (selectedDistrictId) {
+
+                districtDropdown.val(selectedDistrictId);
+
+                districtDropdown.removeData('selected');
+            }
+
+        },
+
+        error: function (xhr) {
+
+            console.log(xhr.responseText);
+
+            districtDropdown.html(
+                '<option value="">Unable to load districts</option>'
+            );
+        }
+
+    });
+
+});
+
+$('#updateConstituencyBtn').on('click', function () {
+
+    let formData = $('#editConstituencyForm').serialize();
+
+    $.ajax({
+        url: "<?= base_url('admin/constituency/update'); ?>",
+        type: "POST",
+        data: formData,
+        dataType: "JSON",
+
+        success: function (response) {
+
+            if (response.status) {
+
+                alert(response.message);
+
+                // Close modal
+                $('#editConstituencyModal').modal('hide');
+
+                // Reload page to show updated data
+                location.reload();
+
+            } else {
+
+                alert(response.message);
+            }
+        },
+
+        error: function (xhr) {
+
+            console.log(xhr.responseText);
+
+            alert('Unable to update constituency.');
+        }
     });
 
 });
 </script>
 
 <script>
-$(document).ready(function () {
+    $(document).on('click', '.view-btn', function () {
 
-    $('#modal_state_id').change(function () {
+    let constituencyId = $(this).data('id');
 
-        var stateId = $(this).val();
+    $.ajax({
+        url: "<?= base_url('admin/constituency/get/') ?>" + constituencyId,
+        type: "GET",
+        dataType: "json",
 
-        if (stateId != '') {
+        success: function (response) {
 
-            $.ajax({
-                url: "<?= base_url('admin/get-districts'); ?>/" + stateId,
-                type: "GET",
-                dataType: "JSON",
-                success: function (response) {
+            if (response.status) {
 
-                    $('#modal_district_id').html('<option value="">All Districts</option>');
+                let data = response.data;
 
-                    $.each(response, function (index, district) {
+                $('#view_constituency_name').val(data.constituency_name);
+                $('#view_district_name').val(data.district_name);
+                $('#view_state_name').val(data.state_name);
+                $('#view_constituency_code').val(data.constituency_code ?? '-');
+                $('#view_total_villages').val(data.total_villages ?? 0);
+                $('#view_total_booths').val(data.total_booths ?? 0);
+                $('#view_status').val(data.status);
 
-                        $('#modal_district_id').append(
-                            '<option value="' + district.id + '">' +
-                            district.district_name +
-                            '</option>'
-                        );
+                // Temporary hardcoded development score
+                $('#view_development_score').val('85%');
 
-                    });
+            } else {
 
-                }
-            });
+                alert(response.message);
+            }
+        },
 
-        } else {
+        error: function (xhr) {
 
-            $('#district_id').html('<option value="">All Districts</option>');
+            console.log(xhr.responseText);
 
+            alert('Unable to fetch constituency details.');
         }
+    });
 
+});
+</script>
+
+<script>
+    $(document).on('click', '.edit-btn', function () {
+
+    let constituencyId = $(this).data('id');
+
+    $.ajax({
+        url: "<?= base_url('admin/constituency/get/') ?>" + constituencyId,
+        type: "GET",
+        dataType: "json",
+
+        success: function (response) {
+
+            if (response.status) {
+
+                let data = response.data;
+
+                // Hidden ID
+                $('#edit_constituency_id').val(data.id);
+
+                // Basic fields
+                $('#edit_constituency_name').val(data.constituency_name);
+                $('#edit_constituency_code').val(data.constituency_code ?? '');
+                $('#edit_total_villages').val(data.total_villages ?? 0);
+                $('#edit_total_booths').val(data.total_booths ?? 0);
+                $('#edit_status').val(data.status);
+
+                $('#edit_district_id').data('selected', data.district_id);
+
+                $('#edit_state_id').val(data.state_id).trigger('change');
+
+            } else {
+
+                alert(response.message);
+            }
+        },
+
+        error: function (xhr) {
+
+            console.log(xhr.responseText);
+
+            alert('Unable to fetch constituency details.');
+        }
     });
 
 });
