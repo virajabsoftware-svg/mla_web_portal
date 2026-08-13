@@ -1,29 +1,26 @@
 <?php
- namespace App\Models;
 
- use CodeIgniter\Model;
+namespace App\Models;
 
- class ConstituencyModel extends Model{
+use CodeIgniter\Model;
 
-   protected $table            = 'constituencies';
+class ConstituencyModel extends Model
+{
+    protected $table = 'constituencies';
 
-   protected $primarykey       = 'id';
+    protected $primaryKey = 'id';
 
-   protected $useAutoIncrement = true;
+    protected $returnType = 'array';
 
-   protected $returnType       = 'array';
+    protected $allowedFields = [
+        'state_id',
+        'district_id',
+        'constituency_name',
+        'constituency_code',
+        'total_villages',
+        'total_booths',
+        'status'
+    ];
 
-   protected $allowedfields    = [
-       'state_id',
-       'district_id',
-       'constituency_name',
-       'constituency_code',
-       'status'
-   ];
-
-    protected $useTimestamps    = true;
-
-    protected $createdField     = 'created_at';
-    protected $updatedField     = 'updated_at';
- }
-?>
+    protected $useTimestamps = false;
+}

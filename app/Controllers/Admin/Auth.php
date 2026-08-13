@@ -48,7 +48,7 @@ class Auth extends BaseController
 
 
             return redirect()->to(
-                base_url('admin/mla-management')
+                base_url('admin/dashboard')
             );
 
 
