@@ -165,19 +165,16 @@ class Auth extends BaseController
             {
 
 
-                session()->set([
+             session()->set([
 
-                    'user_id'=>$user['id'],
+    'user_id'       => $user['id'],
+    'voter_id'      => $user['voter_id'],
+    'full_name'     => $user['full_name'],
+    'email'         => $user['email'],
+    'profile_photo' => $user['profile_photo'],
+    'logged_in'     => true
 
-                    'full_name'=>$user['full_name'],
-
-                    'email'=>$user['email'],
-
-                    'profile_photo'=>$user['profile_photo'],
-
-                    'logged_in'=>true
-
-                ]);
+]);
 
 
 

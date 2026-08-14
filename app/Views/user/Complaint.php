@@ -699,7 +699,9 @@
                 <div class="col-xl-3 col-md-6 fade-up stat-1">
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
-                            <h3 class="stat-number counter-number" id="totalComplaints">12</h3>
+                           <h3 class="stat-number counter-number" id="totalComplaints">
+    <?= esc($totalComplaints ?? 0) ?>
+</h3>
                             <p class="mb-0 text-muted fw-semibold"><i class="bi bi-folder2-open me-1"></i> Total
                                 Complaints</p>
                         </div>
@@ -708,7 +710,9 @@
                 <div class="col-xl-3 col-md-6 fade-up stat-2">
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
-                            <h3 class="stat-number counter-number" id="pendingComplaints">3</h3>
+                           <h3 class="stat-number counter-number" id="pendingComplaints">
+    <?= esc($pendingComplaints ?? 0) ?>
+</h3>
                             <p class="mb-0 text-muted fw-semibold"><i class="bi bi-hourglass-split me-1"></i> Pending
                             </p>
                         </div>
@@ -717,7 +721,9 @@
                 <div class="col-xl-3 col-md-6 fade-up stat-3">
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
-                            <h3 class="stat-number counter-number" id="resolvedComplaints">7</h3>
+                           <h3 class="stat-number counter-number" id="resolvedComplaints">
+    <?= esc($resolvedComplaints ?? 0) ?>
+</h3>
                             <p class="mb-0 text-muted fw-semibold"><i class="bi bi-check-circle-fill me-1"></i> Resolved
                             </p>
                         </div>
@@ -726,7 +732,9 @@
                 <div class="col-xl-3 col-md-6 fade-up stat-4">
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
-                            <h3 class="stat-number counter-number" id="escalatedComplaints">2</h3>
+                            <h3 class="stat-number counter-number" id="escalatedComplaints">
+    <?= esc($escalatedComplaints ?? 0) ?>
+</h3>
                             <p class="mb-0 text-muted fw-semibold"><i class="bi bi-exclamation-triangle-fill me-1"></i>
                                 Escalated</p>
                         </div>
@@ -750,13 +758,21 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-person-badge"></i> Voter ID</label>
-                                <input type="text" class="form-control bg-light" id="voterIdField" value="VTR10254"
-                                    readonly>
+                                 <input
+            type="text"
+            class="form-control"
+            value="<?= esc($voter_id ?? '') ?>"
+            readonly
+        >
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label"><i class="bi bi-building"></i> Assigned MLA ID</label>
-                                <input type="text" class="form-control bg-light" id="mlaIdField" name="mla" value="MLA501"
-                                    readonly>
+                                <label class="form-label"><i class="bi bi-building"></i>MLA ID</label>
+                                 <input
+            type="text"
+            class="form-control"
+            value="<?= esc($mla_id ?? '') ?>"
+            readonly
+        >
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-flag-fill"></i> Priority</label>
@@ -776,27 +792,25 @@
 
                             <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-geo-alt-fill"></i> District</label>
-                                <select class="form-select" id="districtSelect"  name="district" required>
-                                    <option value="">Select District</option>
-                                    <option>Satara</option>
-                                    <option>Pune</option>
-                                    <option>Kolhapur</option>
-                                    <option>Sangli</option>
-                                    <option>Nashik</option>
-                                </select>
+                                  <input
+            type="text"
+            class="form-control"
+            value="<?= esc($district ?? '') ?>"
+            readonly
+        >
                             </div>
 
                             <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-pin-map-fill"></i> Constituency</label>
-                                <select class="form-select" id="constituencySelect" name="constituency" required>
-                                    <option value="">Select Constituency</option>
-                                    <option>Wai</option>
-                                    <option>Karad</option>
-                                    <option>Satara North</option>
-                                    <option>Koregaon</option>
-                                    <option>Pachgani</option>
-                                </select>
+                                  <input
+            type="text"
+            class="form-control"
+            value="<?= esc($constituency ?? '') ?>"
+            readonly
+        >
                             </div>
+
+                           
 
                             <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-house-heart"></i> Village</label>
@@ -867,52 +881,178 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Complaint</th>
-                                    <th>Location</th>
-                                    <th>Status</th>
-                                    <th>Resolution Date</th>
-                                </tr>
-                            </thead>
-                           <tbody id="complaintHistoryBody">
+                   <div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Complaint ID</th>
+                <th>Voter ID</th>
+                <th>MLA ID</th>
+                <th>Priority</th>
+                <th>Complaint Title</th>
+                <th>District</th>
+                <th>Constituency</th>
+                <th>Village</th>
+                <th>Location / Landmark</th>
+                <th>Submission Date</th>
+                <th>Description</th>
+                <th>Evidence</th>
+                <th>Status</th>
+                <th>Resolution Date</th>
+            </tr>
+        </thead>
 
-<?php if(!empty($complaints)): ?>
+        <tbody id="complaintHistoryBody">
 
-<?php foreach($complaints as $complaint): ?>
+            <?php if (!empty($complaints)): ?>
 
-<tr>
-    <td><?= $complaint['id']; ?></td>
-    <td><?= $complaint['title']; ?></td>
-    <td><?= $complaint['constituency']; ?></td>
-    <td>
-        <span class="badge bg-warning">
-            <?= $complaint['status']; ?>
-        </span>
-    </td>
-    <td>
-        <?= $complaint['created_at']; ?>
-    </td>
-</tr>
+                <?php foreach ($complaints as $complaint): ?>
 
-<?php endforeach; ?>
+                    <tr>
 
-<?php else: ?>
+                        <!-- Complaint ID -->
+                        <td>
+                            <strong>
+                                <?= esc($complaint['complaint_id'] ?? '-') ?>
+                            </strong>
+                        </td>
 
-<tr>
-    <td colspan="5" class="text-center">
-        No complaints found
-    </td>
-</tr>
+                        <!-- Voter ID -->
+                        <td>
+                            <?= esc($complaint['voter_id'] ?? '-') ?>
+                        </td>
 
-<?php endif; ?>
+                        <!-- MLA ID -->
+                        <td>
+                            <?= esc($complaint['mla_id'] ?? '-') ?>
+                        </td>
 
-</tbody>
-                        </table>
-                    </div>
+                        <!-- Priority -->
+                        <td>
+                            <?php
+                                $priority = $complaint['priority'] ?? 'Medium';
+
+                                if ($priority === 'Critical') {
+                                    $priorityClass = 'bg-danger';
+                                } elseif ($priority === 'High') {
+                                    $priorityClass = 'bg-warning text-dark';
+                                } elseif ($priority === 'Medium') {
+                                    $priorityClass = 'bg-info text-dark';
+                                } else {
+                                    $priorityClass = 'bg-secondary';
+                                }
+                            ?>
+
+                            <span class="badge <?= $priorityClass ?>">
+                                <?= esc($priority) ?>
+                            </span>
+                        </td>
+
+                        <!-- Complaint Title -->
+                        <td>
+                            <?= esc($complaint['title'] ?? '-') ?>
+                        </td>
+
+                        <!-- District -->
+                        <td>
+                            <?= esc($complaint['district'] ?? '-') ?>
+                        </td>
+
+                        <!-- Constituency -->
+                        <td>
+                            <?= esc($complaint['constituency'] ?? '-') ?>
+                        </td>
+
+                        <!-- Village -->
+                        <td>
+                            <?= esc($complaint['village'] ?? '-') ?>
+                        </td>
+
+                        <!-- Location -->
+                        <td>
+                            <?= esc($complaint['location'] ?? '-') ?>
+                        </td>
+
+                        <!-- Submission Date -->
+                        <td>
+                            <?php
+                                $submittedAt = $complaint['submitted_at']
+                                    ?? $complaint['submission_date']
+                                    ?? null;
+                            ?>
+
+                            <?= !empty($submittedAt)
+                                ? esc($submittedAt)
+                                : '-' ?>
+                        </td>
+
+                        <!-- Description -->
+                        <td style="min-width:250px;">
+                            <?= esc($complaint['description'] ?? '-') ?>
+                        </td>
+
+                        <!-- Evidence -->
+                        <td>
+                            <?php if (!empty($complaint['attachment'])): ?>
+
+                                <a href="<?= base_url($complaint['attachment']) ?>"
+                                   target="_blank"
+                                   class="btn btn-sm btn-secondary-custom">
+                                    <i class="bi bi-paperclip"></i>
+                                    View
+                                </a>
+
+                            <?php else: ?>
+
+                                <span class="text-muted">No file</span>
+
+                            <?php endif; ?>
+                        </td>
+
+                        <!-- Status -->
+                        <td>
+                            <?php
+                                $status = $complaint['status'] ?? 'Pending';
+
+                                if ($status === 'Resolved') {
+                                    $badgeClass = 'bg-success';
+                                } elseif ($status === 'Escalated') {
+                                    $badgeClass = 'bg-danger';
+                                } else {
+                                    $badgeClass = 'bg-warning text-dark';
+                                }
+                            ?>
+
+                            <span class="badge <?= $badgeClass ?>">
+                                <?= esc($status) ?>
+                            </span>
+                        </td>
+
+                        <!-- Resolution Date -->
+                        <td>
+                            <?= !empty($complaint['resolution_date'])
+                                ? esc($complaint['resolution_date'])
+                                : '-' ?>
+                        </td>
+
+                    </tr>
+
+                <?php endforeach; ?>
+
+            <?php else: ?>
+
+                <tr>
+                    <td colspan="14" class="text-center py-4 text-muted">
+                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                        No complaints found
+                    </td>
+                </tr>
+
+            <?php endif; ?>
+
+        </tbody>
+    </table>
+</div>
                 </div>
             </div>
         </div>

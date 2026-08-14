@@ -1,3 +1,8 @@
+<?php
+// In your feedback-dashboard.php controller or view, 
+// make sure the page uses the same layout structure as the main dashboard
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -78,49 +83,37 @@
         }
 
         /* ===================================================== */
-        /* FIX: RESTORE ORIGINAL DASHBOARD WIDTH */
+        /* FIX: USE SAME LAYOUT AS MAIN ADMIN DASHBOARD */
         /* ===================================================== */
         
-        /* Remove any padding that might be restricting width */
+        /* Remove any custom padding that might restrict width */
         .feedback_dashboard {
-            padding: 30px;
+            padding: 30px 15px;
             width: 100%;
             max-width: 100%;
-            margin: 0 auto;
+            margin: 0;
         }
 
-        /* Ensure the container uses full width */
-        .feedback_dashboard .container-fluid {
+        /* Ensure the container matches the main dashboard structure */
+        .feedback_dashboard .container-fluid,
+        .feedback_dashboard > .container-fluid,
+        .feedback_dashboard .row {
             padding-left: 0;
             padding-right: 0;
+            margin-left: 0;
+            margin-right: 0;
             width: 100%;
             max-width: 100%;
         }
 
-        /* Restore original row behavior */
-        .feedback_dashboard .row {
-            margin-left: -12px !important;
-            margin-right: -12px !important;
-            width: auto;
-        }
-
-        /* Restore original column padding */
-        .feedback_dashboard [class*="col-"] {
-            padding-left: 12px !important;
-            padding-right: 12px !important;
-        }
-
-        /* Ensure the main content area uses full width */
-        .inner_page {
-            padding: 0;
-            margin: 0;
-            width: 100%;
-            max-width: 100%;
-            overflow-x: hidden;
+        /* Match the main dashboard's content area */
+        .feedback_dashboard .col-12 {
+            padding-left: 12px;
+            padding-right: 12px;
         }
 
         /* ===================================================== */
-        /* MAHARASHTRA FEEDBACK CARD - Premium Design */
+        /* MAHARASHTRA FEEDBACK CARD - Premium Design (UNCHANGED) */
         /* ===================================================== */
 
         .maharashtra-feedback-card {
@@ -347,7 +340,7 @@
         }
 
         /* ===================================================== */
-        /* MLA FEEDBACK COUNT TABLE - Premium Design */
+        /* MLA FEEDBACK COUNT TABLE - Premium Design (UNCHANGED) */
         /* ===================================================== */
 
         .mla_feedback_section {
@@ -564,7 +557,7 @@
 
         @media (max-width: 768px) {
             .feedback_dashboard {
-                padding: 15px;
+                padding: 15px 10px;
             }
 
             .maharashtra-feedback-card {
@@ -634,7 +627,7 @@
 
         @media (max-width: 576px) {
             .feedback_dashboard {
-                padding: 10px;
+                padding: 10px 5px;
             }
 
             .maharashtra-feedback-card {
@@ -688,74 +681,88 @@
 
 <body class="inner_page widgets">
     <?php include "common/header.php"?>  
-    <div class="container-fluid feedback_dashboard">
+    
+    <!-- ===================================================== -->
+    <!-- MAIN CONTENT WRAPPER - MATCHING ADMIN DASHBOARD      -->
+    <!-- ===================================================== -->
+    <div class="main-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar is already included via header.php or separate -->
+                <div class="col-md-12 col-lg-10 col-xl-10 offset-lg-1 offset-xl-1">
+                    <!-- Your existing content -->
+                    <div class="feedback_dashboard">
 
-        <!-- ================= MAHARASHTRA FEEDBACK CARD ================= -->
-        <div class="row">
-            <div class="col-12">
-                <div class="maharashtra-feedback-card" id="maharashtraFeedbackCard">
-                    <!-- Corner Accents -->
-                    <div class="corner-accent tl"></div>
-                    <div class="corner-accent tr"></div>
-                    <div class="corner-accent bl"></div>
-                    <div class="corner-accent br"></div>
+                        <!-- ================= MAHARASHTRA FEEDBACK CARD ================= -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="maharashtra-feedback-card" id="maharashtraFeedbackCard">
+                                    <!-- Corner Accents -->
+                                    <div class="corner-accent tl"></div>
+                                    <div class="corner-accent tr"></div>
+                                    <div class="corner-accent bl"></div>
+                                    <div class="corner-accent br"></div>
 
-                    <!-- Header -->
-                    <div class="feedback-card-header">
-                        <i class="fas fa-map-marked-alt header-icon"></i>
-                        <span class="header-title">Maharashtra Feedback</span>
-                    </div>
+                                    <!-- Header -->
+                                    <div class="feedback-card-header">
+                                        <i class="fas fa-map-marked-alt header-icon"></i>
+                                        <span class="header-title">Maharashtra Feedback</span>
+                                    </div>
 
-                    <!-- Divider -->
-                    <div class="feedback-card-divider"></div>
+                                    <!-- Divider -->
+                                    <div class="feedback-card-divider"></div>
 
-                    <!-- Content -->
-                    <div class="feedback-card-content">
-                        <div class="feedback-label">
-                            <i class="fas fa-chart-line me-1"></i> Total Feedbacks
+                                    <!-- Content -->
+                                    <div class="feedback-card-content">
+                                        <div class="feedback-label">
+                                            <i class="fas fa-chart-line me-1"></i> Total Feedbacks
+                                        </div>
+
+                                        <div class="feedback-total">
+                                            <span class="feedback-arrow">↑</span>
+                                            <span class="feedback-number" id="maharashtraTotalFeedbacks">
+                                                <?= number_format((int)($totalFeedbacks ?? 0)) ?>
+                                            </span>
+                                        </div>
+
+                                        <div class="feedback-subtitle">
+                                            <i class="fas fa-database"></i> Live from database
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="feedback-total">
-                            <span class="feedback-arrow">↑</span>
-                            <span class="feedback-number" id="maharashtraTotalFeedbacks">
-                                <?= number_format((int)($totalFeedbacks ?? 0)) ?>
-                            </span>
+                        <!-- ================= MLA FEEDBACK COUNT SECTION ================= -->
+                        <div class="mla_feedback_section">
+                            <div class="section-title">
+                                <i class="fas fa-user-tie me-2"></i> MLA-wise Feedback Count
+                                <span style="font-size: 14px; font-weight: 400; color: #64748B; margin-left: auto;">
+                                    <i class="fas fa-chart-bar me-1"></i> Total feedbacks received by each MLA
+                                </span>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="mla_count_table" id="mlaCountTable">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 30%;">MLA Name</th>
+                                            <th style="width: 25%;">Total Feedbacks</th>
+                                            <th style="width: 25%;">Avg. Rating</th>
+                                            <th style="width: 20%;">Performance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="mlaCountBody">
+                                        <!-- Dynamic content will be rendered here -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
-                        <div class="feedback-subtitle">
-                            <i class="fas fa-database"></i> Live from database
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- ================= MLA FEEDBACK COUNT SECTION ================= -->
-        <div class="mla_feedback_section">
-            <div class="section-title">
-                <i class="fas fa-user-tie me-2"></i> MLA-wise Feedback Count
-                <span style="font-size: 14px; font-weight: 400; color: #64748B; margin-left: auto;">
-                    <i class="fas fa-chart-bar me-1"></i> Total feedbacks received by each MLA
-                </span>
-            </div>
-
-            <div class="table-responsive">
-                <table class="mla_count_table" id="mlaCountTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 30%;">MLA Name</th>
-                            <th style="width: 25%;">Total Feedbacks</th>
-                            <th style="width: 25%;">Avg. Rating</th>
-                            <th style="width: 20%;">Performance</th>
-                        </tr>
-                    </thead>
-                    <tbody id="mlaCountBody">
-                        <!-- Dynamic content will be rendered here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     </div>
 
     <!-- footer -->

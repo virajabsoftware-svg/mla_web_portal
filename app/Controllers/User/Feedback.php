@@ -3,96 +3,251 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
+use App\Models\User\UserModel;
 use App\Models\User\FeedbackModel;
 
 class Feedback extends BaseController
 {
 
-    public function index()
-    {
-        $model = new FeedbackModel();
-        
-        // Use CodeIgniter's pagination - 10 records per page
-        $feedbacks = $model->orderBy('id', 'DESC')->paginate(10, 'default');
-        
-        // Calculate dashboard counts
-        $totalFeedback = $model->countAll();
-        $reviewed = $model->where('status', 'Reviewed')->countAllResults();
-        $underReview = $model->where('status', 'Under Review')->countAllResults();
-        $resolved = $model->where('status', 'Resolved')->countAllResults();
-        
-        $data = [
-            'feedbacks' => $feedbacks,
-            'totalFeedback' => $totalFeedback,
-            'reviewed' => $reviewed,
-            'underReview' => $underReview,
-            'resolved' => $resolved,
-            'pager' => $model->pager
-        ];
-        
-        return view('user/Feedback', $data);
+  public function index()
+{
+    $model = new FeedbackModel();
+
+    // ==========================================
+    // GET LOGGED-IN VOTER ID FROM SESSION
+    // ==========================================
+
+    $userId = session()->get('user_id');
+
+    if (!$userId || !session()->get('logged_in')) {
+        return redirect()->to('/user/login')
+            ->with('error', 'Please login first.');
     }
 
-    public function save()
-    {
-        $validation = \Config\Services::validation();
+    // ==========================================
+    // GET CURRENT VOTER FROM VOTERS TABLE
+    // ==========================================
 
-        $rules = [
-            'voter_id' => 'required',
-            'mla_id' => 'required',
-            'district' => 'required',
-            'constituency' => 'required',
-            'village' => 'required',
-            'category' => 'required',
-            'description' => 'required|min_length[10]'
-        ];
+    $userModel = new UserModel();
 
-        if (!$this->validate($rules)) {
-            return redirect()->back()
-                ->withInput()
-                ->with('errors', $validation->getErrors());
-        }
+    $voter = $userModel->find($userId);
 
-        $file = $this->request->getFile('attachment');
-        $filename = "";
+    if (!$voter) {
+        session()->destroy();
 
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            // Create upload directory if it doesn't exist
-            $uploadPath = ROOTPATH . 'public/uploads/feedback';
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
-            }
-            
-            $filename = $file->getRandomName();
-            $file->move($uploadPath, $filename);
-        }
+        return redirect()->to('/user/login')
+            ->with('error', 'Voter information not found.');
+    }
 
-        $model = new FeedbackModel();
+    // ==========================================
+    // CURRENT VOTER FEEDBACKS ONLY
+    // ==========================================
 
-        $data = [
-            'feedback_id' => 'FDB' . date('YmdHis'),
-            'voter_id' => $this->request->getPost('voter_id'),
-            'mla_id' => $this->request->getPost('mla_id'),
-            'work_id' => $this->request->getPost('work_id'),
-            'district' => $this->request->getPost('district'),
-            'constituency' => $this->request->getPost('constituency'),
-            'village' => $this->request->getPost('village'),
-            'category' => $this->request->getPost('category'),
-            'source' => 'Web Portal',
-            'description' => $this->request->getPost('description'),
-            'attachment' => $filename,
-            'status' => 'Pending',
-            'submitted_at' => date('Y-m-d H:i:s')
-        ];
+    $feedbacks = $model
+        ->where('voter_id', $voter['voter_id'])
+        ->orderBy('id', 'DESC')
+        ->paginate(10, 'default');
 
-        if ($model->insert($data)) {
-            return redirect()->to('/user/feedback')
-                ->with('success', 'Feedback Submitted Successfully');
-        }
+    // ==========================================
+    // CURRENT VOTER COUNTS
+    // ==========================================
+
+    $totalFeedback = $model
+        ->where('voter_id', $voter['voter_id'])
+        ->countAllResults();
+
+    $reviewed = $model
+        ->where('voter_id', $voter['voter_id'])
+        ->where('status', 'Reviewed')
+        ->countAllResults();
+
+    $underReview = $model
+        ->where('voter_id', $voter['voter_id'])
+        ->where('status', 'Under Review')
+        ->countAllResults();
+
+    $resolved = $model
+        ->where('voter_id', $voter['voter_id'])
+        ->where('status', 'Resolved')
+        ->countAllResults();
+
+    // ==========================================
+    // GENERATE NEXT FEEDBACK ID
+    // ==========================================
+
+    $feedbackCount = $model
+        ->where('voter_id', $voter['voter_id'])
+        ->countAllResults();
+
+    $nextNumber = str_pad(
+        $feedbackCount + 1,
+        3,
+        '0',
+        STR_PAD_LEFT
+    );
+
+    $feedbackId =
+        'FDB-' .
+        $voter['voter_id'] .
+        '-' .
+        $nextNumber;
+
+    // ==========================================
+    // SEND DATA TO VIEW
+    // ==========================================
+
+    $data = [
+        'feedbacks'     => $feedbacks,
+
+        'totalFeedback' => $totalFeedback,
+        'reviewed'      => $reviewed,
+        'underReview'   => $underReview,
+        'resolved'      => $resolved,
+
+        'pager'         => $model->pager,
+
+        // Automatic voter information
+        'feedback_id'   => $feedbackId,
+        'voter_id'      => $voter['voter_id'],
+        'mla_id'        => $voter['mla_id'] ?? '',
+        'district'      => $voter['district'] ?? '',
+        'constituency'  => $voter['constituency'] ?? '',
+        'full_name'     => $voter['full_name'] ?? ''
+    ];
+
+    return view('user/Feedback', $data);
+}
+
+  public function save()
+{
+    // ==========================================
+    // CHECK LOGIN
+    // ==========================================
+
+    $userId = session()->get('user_id');
+
+    if (!$userId || !session()->get('logged_in')) {
+        return redirect()->to('/user/login')
+            ->with('error', 'Please login first.');
+    }
+
+    // ==========================================
+    // GET LOGGED-IN VOTER
+    // ==========================================
+
+    $userModel = new UserModel();
+
+    $voter = $userModel->find($userId);
+
+    if (!$voter) {
+        return redirect()->back()
+            ->with('error', 'Voter information not found.');
+    }
+
+    // ==========================================
+    // VALIDATION
+    // ==========================================
+
+    $rules = [
+        'village'     => 'required',
+        'category'    => 'required',
+        'description' => 'required|min_length[10]'
+    ];
+
+    if (!$this->validate($rules)) {
 
         return redirect()->back()
-            ->with('error', 'Database Insert Failed');
+            ->withInput()
+            ->with(
+                'errors',
+                \Config\Services::validation()->getErrors()
+            );
     }
+
+    // ==========================================
+    // FILE UPLOAD
+    // ==========================================
+
+    $file = $this->request->getFile('attachment');
+
+    $filename = '';
+
+    if ($file && $file->isValid() && !$file->hasMoved()) {
+
+        $uploadPath = ROOTPATH . 'public/uploads/feedback';
+
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0777, true);
+        }
+
+        $filename = $file->getRandomName();
+
+        $file->move($uploadPath, $filename);
+    }
+
+    // ==========================================
+    // GENERATE UNIQUE FEEDBACK ID
+    // ==========================================
+
+    $model = new FeedbackModel();
+
+    $feedbackCount = $model
+        ->where('voter_id', $voter['voter_id'])
+        ->countAllResults();
+
+    $nextNumber = str_pad(
+        $feedbackCount + 1,
+        3,
+        '0',
+        STR_PAD_LEFT
+    );
+
+    $feedbackId =
+        'FDB-' .
+        $voter['voter_id'] .
+        '-' .
+        $nextNumber;
+
+    // ==========================================
+    // SAVE FEEDBACK
+    // ==========================================
+
+    $data = [
+
+        // AUTOMATIC FROM VOTERS TABLE
+        'feedback_id'  => $feedbackId,
+        'voter_id'     => $voter['voter_id'],
+        'mla_id'       => $voter['mla_id'],
+        'district'     => $voter['district'],
+        'constituency' => $voter['constituency'],
+
+        // USER ENTERED
+        'work_id'      => $this->request->getPost('work_id'),
+        'village'      => $this->request->getPost('village'),
+        'category'     => $this->request->getPost('category'),
+        'source'       => 'Web Portal',
+        'description'  => $this->request->getPost('description'),
+        'attachment'   => $filename,
+
+        // SYSTEM
+        'status'       => 'Pending',
+        'submitted_at' => date('Y-m-d H:i:s')
+    ];
+
+    if ($model->insert($data)) {
+
+        return redirect()
+            ->to('/user/feedback')
+            ->with(
+                'success',
+                'Feedback Submitted Successfully'
+            );
+    }
+
+    return redirect()
+        ->back()
+        ->with('error', 'Database Insert Failed');
+}
 
     /**
      * Get feedback data for AJAX requests (View and Edit modals)

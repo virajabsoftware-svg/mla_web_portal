@@ -769,6 +769,10 @@ readonly></div>
             </div>
 
             <!-- SURVEY HISTORY -->
+<!-- =====================================================
+     SURVEY HISTORY
+===================================================== -->
+
 <div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
 
     <div class="card-header bg-white border-0 pt-4">
@@ -778,102 +782,104 @@ readonly></div>
         </h5>
     </div>
 
-
     <div class="card-body">
 
         <div class="table-responsive">
 
-            <table class="table table-hover">
+            <table class="table table-hover align-middle">
 
                 <thead>
                     <tr>
                         <th>Survey ID</th>
+                        <th>Survey Code</th>
                         <th>Survey Title</th>
-                        <th>Selected Answer</th>
-                        <th>Submission Date</th>
+                        <th>MLA ID</th>
+                        <th>Constituency</th>
+                        <th>Status</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
                     </tr>
                 </thead>
 
-
                 <tbody id="historyTableBody">
-
 
                 <?php if (!empty($responses)): ?>
 
-
                     <?php foreach ($responses as $row): ?>
 
-                    <tr>
+                        <tr>
 
-                        <td>
-                            <?= esc($row['survey_id']) ?>
-                        </td>
+                            <!-- Survey ID -->
+                            <td>
+                                <?= esc($row['id'] ?? 'N/A') ?>
+                            </td>
 
+                            <!-- Survey Code -->
+                            <td>
+                                <?= esc($row['survey_code'] ?? 'N/A') ?>
+                            </td>
 
-                        <td>
-                            <?= esc($row['survey_title'] ?? 'N/A') ?>
-                        </td>
+                            <!-- Survey Title -->
+                            <td>
+                                <?= esc($row['title'] ?? 'N/A') ?>
+                            </td>
 
+                            <!-- MLA ID -->
+                            <td>
+                                <?= esc($row['mla_id'] ?? 'N/A') ?>
+                            </td>
 
-                        <td>
+                            <!-- Constituency -->
+                            <td>
+                                <?= esc($row['constituency'] ?? 'N/A') ?>
+                            </td>
 
-                            <?php
-                            $answers = json_decode($row['answers'], true);
-                            ?>
+                            <!-- Status -->
+                            <td>
 
+                                <?php
+                                $status = $row['status'] ?? 'N/A';
 
-                            <?php if (is_array($answers) && !empty($answers)): ?>
+                                if ($status === 'Active') {
+                                    $badge = 'bg-success';
+                                } elseif ($status === 'Pending') {
+                                    $badge = 'bg-warning text-dark';
+                                } elseif ($status === 'Closed') {
+                                    $badge = 'bg-danger';
+                                } else {
+                                    $badge = 'bg-secondary';
+                                }
+                                ?>
 
-                                <ul class="mb-0 ps-3">
-
-                                <?php foreach ($answers as $ans): ?>
-
-                                    <li>
-                                        <?= esc($ans) ?>
-                                    </li>
-
-                                <?php endforeach; ?>
-
-                                </ul>
-
-
-                            <?php else: ?>
-
-                                <span class="text-muted">
-                                    No answers found
+                                <span class="badge <?= $badge ?>">
+                                    <?= esc($status) ?>
                                 </span>
 
-                            <?php endif; ?>
+                            </td>
 
+                            <!-- Start Date -->
+                            <td>
+                                <?= esc($row['start_date'] ?? 'N/A') ?>
+                            </td>
 
-                        </td>
+                            <!-- End Date -->
+                            <td>
+                                <?= esc($row['end_date'] ?? 'N/A') ?>
+                            </td>
 
-
-                        <td>
-                            <?= esc($row['submitted_at']) ?>
-                        </td>
-
-
-                    </tr>
-
+                        </tr>
 
                     <?php endforeach; ?>
 
-
                 <?php else: ?>
 
-
                     <tr>
-
-                        <td colspan="4" class="text-center text-muted">
+                        <td colspan="8" class="text-center text-muted">
                             No Survey History Found
                         </td>
-
                     </tr>
 
-
                 <?php endif; ?>
-
 
                 </tbody>
 

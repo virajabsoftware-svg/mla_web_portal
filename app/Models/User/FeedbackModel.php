@@ -7,11 +7,11 @@ use CodeIgniter\Model;
 class FeedbackModel extends Model
 {
     protected $table = 'feedback';
-    
+
     protected $primaryKey = 'id';
-    
+
     protected $returnType = 'array';
-    
+
     protected $allowedFields = [
         'feedback_id',
         'voter_id',
@@ -27,10 +27,10 @@ class FeedbackModel extends Model
         'status',
         'submitted_at'
     ];
-    
+
     protected $useTimestamps = true;
-    
+
     protected $createdField = 'created_at';
-    
+
     protected $updatedField = 'updated_at';
 }

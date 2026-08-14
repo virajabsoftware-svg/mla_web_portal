@@ -910,23 +910,37 @@
                             <!-- Feedback ID -->
                             <div class="col-md-3">
                                 <label class="form-label">Feedback ID</label>
-                                <input type="text" class="form-control" value="FDB001245" readonly name="feedback_id">
+                                <input
+    type="text"
+    name="feedback_id"
+    class="form-control"
+    value="<?= esc($feedback_id ?? '') ?>"
+    readonly
+>
                             </div>
 
                             <!-- Voter ID -->
                             <div class="col-md-3">
                                 <label class="form-label">Voter ID</label>
-                                <input
-type="text"
-name="voter_id"
-class="form-control"
-value="<?= isset($voter_id) ? $voter_id : '' ?>">
+                               <input
+    type="text"
+    name="voter_id"
+    class="form-control"
+    value="<?= esc($voter_id ?? '') ?>"
+    readonly
+>
                             </div>
 
                             <!-- MLA ID -->
                             <div class="col-md-3">
                                 <label class="form-label">MLA ID</label>
-                                <input type="text" class="form-control" value="MLA501" readonly name="mla_id">
+<input
+    type="text"
+    name="mla_id"
+    class="form-control"
+    value="<?= esc($mla_id ?? '') ?>"
+    readonly
+>
                             </div>
 
                             <!-- Work ID -->
@@ -938,17 +952,25 @@ value="<?= isset($voter_id) ? $voter_id : '' ?>">
                             <!-- District -->
                             <div class="col-md-4">
                                 <label class="form-label">District</label>
-                                <select class="form-select" id="district" name="district">
-                                    <option value="">Select District</option>
-                                </select>
+                                <input
+    type="text"
+    name="district"
+    class="form-control"
+    value="<?= esc($district ?? '') ?>"
+    readonly
+>
                             </div>
 
                             <!-- Constituency -->
                             <div class="col-md-4">
                                 <label class="form-label">Constituency</label>
-                                <select class="form-select" id="constituency" name="constituency">
-                                    <option value="">Select Constituency</option>
-                                </select>
+                                <input
+    type="text"
+    name="constituency"
+    class="form-control"
+    value="<?= esc($constituency ?? '') ?>"
+    readonly
+>
                             </div>
 
                             <!-- Village -->
