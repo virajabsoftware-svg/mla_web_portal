@@ -4,7 +4,7 @@ namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use App\Models\User\ComplaintModel;
-use App\Models\User\VoterModel;
+use App\Models\User\UserModel;
 
 class Complaint extends BaseController
 {

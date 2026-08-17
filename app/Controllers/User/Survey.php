@@ -3,7 +3,7 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
-use App\Models\User\SurveyModel;
+use App\Models\User\SurveyResponseModel;
 
 class Survey extends BaseController
 {
@@ -12,95 +12,209 @@ class Survey extends BaseController
 
     public function __construct()
     {
-        $this->surveyModel = new SurveyModel();
+        $this->surveyModel = new SurveyResponseModel();
         $this->db = \Config\Database::connect();
     }
 
-
-    // =====================================================
-    // INDEX
-    // =====================================================
-
+    /**
+     * Survey page
+     */
     public function index()
     {
-        // -------------------------------------------------
-        // MLA / Constituency Wise Survey Count
-        // -------------------------------------------------
+        /*
+        |--------------------------------------------------------------------------
+        | MLA Survey Count
+        |--------------------------------------------------------------------------
+        */
 
-        $data['mlaSurveyCount'] = $this->surveyModel
-            ->getMLAWiseSurveyCount();
+        $data['mlaSurveyCount'] = $this->db
+            ->table('survey_responses sr')
+            ->select('m.mla_name, m.mla_code, COUNT(sr.id) AS total_surveys')
+            ->join(
+                'mlas m',
+                'm.mla_code = sr.mla_id',
+                'left'
+            )
+            ->groupBy([
+                'm.mla_code',
+                'm.mla_name'
+            ])
+            ->orderBy('total_surveys', 'DESC')
+            ->get()
+            ->getResultArray();
 
 
-        // -------------------------------------------------
-        // Survey List / History
-        // -------------------------------------------------
+        /*
+        |--------------------------------------------------------------------------
+        | Survey Response History
+        |--------------------------------------------------------------------------
+        */
 
-        $data['responses'] = $this->surveyModel
-            ->orderBy('id', 'DESC')
-            ->findAll();
+        $data['responses'] = $this->surveyModel->getHistory();
 
 
-        // -------------------------------------------------
-        // Active Surveys
-        // -------------------------------------------------
-
-        $data['activeSurveys'] = $this->surveyModel
-            ->where('status', 'Active')
-            ->orderBy('id', 'DESC')
-            ->findAll();
-
+        /*
+        |--------------------------------------------------------------------------
+        | Load Survey View
+        |--------------------------------------------------------------------------
+        */
 
         return view('user/survey', $data);
     }
 
 
-    // =====================================================
-    // SAVE
-    // =====================================================
+    /**
+     * Save Survey Response
+     */
+  public function save()
+{
+    /**
+     * Get Survey ID
+     */
+    $surveyId = $this->request->getPost('survey_id');
 
-    public function save()
+    if (empty($surveyId)) {
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'Survey ID is required.'
+        ]);
+    }
+
+
+    /**
+     * Check Survey
+     */
+    $survey = $this->db
+        ->table('surveys')
+        ->where('id', $surveyId)
+        ->get()
+        ->getRowArray();
+
+    if (!$survey) {
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'Survey not found.'
+        ]);
+    }
+
+
+    /**
+     * Prepare data according to
+     * survey_responses table
+     */
+    $data = [
+        'survey_id'    => $surveyId,
+        'voter_id'     => $this->request->getPost('voter_id'),
+        'mla_id'       => $this->request->getPost('mla_id'),
+        'district'     => $this->request->getPost('district'),
+        'constituency' => $this->request->getPost('constituency'),
+        'status'       => 'submitted',
+        'submitted_at' => date('Y-m-d H:i:s')
+    ];
+
+
+    /**
+     * Insert Survey Response
+     */
+    try {
+
+        $inserted = $this->surveyModel->insert($data);
+
+        if ($inserted) {
+
+            $responseId = $this->surveyModel->getInsertID();
+
+            return $this->response->setJSON([
+                'status'  => true,
+                'message' => 'Survey submitted successfully.',
+                'id'      => $responseId
+            ]);
+        }
+
+
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'Database insert failed.',
+            'errors'  => $this->surveyModel->errors()
+        ]);
+
+    } catch (\Throwable $e) {
+
+        log_message(
+            'error',
+            'Survey Submit Error: ' . $e->getMessage()
+        );
+
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'Database error occurred.',
+            'error'   => $e->getMessage()
+        ]);
+    }
+}
+
+    /**
+     * Get Survey Response History
+     */
+    public function history()
     {
-        $surveyId = $this->request->getPost('survey_id');
-
-
-        // -------------------------------------------------
-        // Validate Survey ID
-        // -------------------------------------------------
-
-        if (!$surveyId) {
-            return $this->response->setJSON([
-                'status'  => false,
-                'message' => 'Survey ID is required'
-            ]);
-        }
-
-
-        // -------------------------------------------------
-        // Get Survey
-        // -------------------------------------------------
-
-        $survey = $this->surveyModel
-            ->where('id', $surveyId)
-            ->first();
-
-
-        if (!$survey) {
-            return $this->response->setJSON([
-                'status'  => false,
-                'message' => 'Survey not found'
-            ]);
-        }
-
-
-        // -------------------------------------------------
-        // Survey Found
-        // -------------------------------------------------
+        $responses = $this->surveyModel->getHistory();
 
         return $this->response->setJSON([
             'status'    => true,
-            'message'   => 'Survey submitted successfully',
-            'survey_id' => $survey['id'],
-            'title'     => $survey['title']
+            'responses' => $responses
+        ]);
+    }
+
+
+    /**
+     * View Single Survey Response
+     */
+    public function view($id)
+    {
+        $response = $this->surveyModel->getResponse($id);
+
+        if (!$response) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Survey response not found.'
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'status'   => true,
+            'response' => $response
+        ]);
+    }
+
+
+    /**
+     * Delete Survey Response
+     */
+    public function delete($id)
+    {
+        $response = $this->surveyModel->getResponse($id);
+
+        if (!$response) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Survey response not found.'
+            ]);
+        }
+
+
+        if ($this->surveyModel->deleteResponse($id)) {
+
+            return $this->response->setJSON([
+                'status'  => true,
+                'message' => 'Survey response deleted successfully.'
+            ]);
+        }
+
+
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'Failed to delete survey response.'
         ]);
     }
 }

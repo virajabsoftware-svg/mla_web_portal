@@ -683,13 +683,9 @@
             </div>
 
             <!-- FOOTER -->
-            <footer class="footer">
-                <p class="mb-0">
-                    &copy; <script>document.write(new Date().getFullYear());</script>
-                    MLA Monitoring & Voter Feedback System. All Rights Reserved.
-                    Design by <a href="https://absoftwaresolution.co.in/" target="_blank">AB Software Solution</a>
-                </p>
-            </footer>
+              <footer class="footer">
+          <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
+        </footer>
 
         </div>
     </main>
