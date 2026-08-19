@@ -1079,6 +1079,12 @@
                         </div>
                     </div>
 
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <script>
+                            alert("<?= session()->getFlashdata('success'); ?>");
+                        </script>
+                    <?php endif; ?>
+
                     <!-- FILTER PAVILION -->
                     <div class="filter-astro p-4 shadow-lg mt-2">
                         <h3 class="mb-4 fw-semibold" style="color:#876b42;"><i class="fas fa-tachometer-alt me-2" style="color: var(--gold-dark);"></i> Constituency Command Center</h3>
@@ -1112,142 +1118,111 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Eknath Shinde -->
+
+                                    <?php if (!empty($mlas)): ?>
+
+                                        <?php foreach ($mlas as $mla): ?>
+
+                                            <tr>
+
+                                                <td>
+
+                                                    <?php if (!empty($mla['profile_photo'])): ?>
+
+                                                        <img src="<?= base_url('uploads/mla/' . $mla['profile_photo']) ?>"
+                                                            class="mla-table-photo"
+                                                            alt="<?= esc($mla['mla_name']) ?>">
+
+                                                    <?php else: ?>
+
+                                                        <img src="<?= base_url('assets/admin/images/default-user.png') ?>"
+                                                            class="mla-table-photo"
+                                                            alt="No Photo">
+
+                                                    <?php endif; ?>
+
+                                                </td>
+
+                                                <td>
+                                                    <strong><?= esc($mla['mla_name']) ?></strong>
+                                                </td>
+
+                                                <td>
+                                                    <?= esc($mla['party']) ?>
+                                                </td>
+
+                                                <td>
+                                                    <?= esc($mla['district_name']) ?> ·
+                                                    <?= esc($mla['constituency_name']) ?>
+                                                </td>
+
+                                                <td>
+
+                                                    <?php if ($mla['status'] == 'Active'): ?>
+
+                                                        <span class="status-active">Active</span>
+
+                                                    <?php else: ?>
+
+                                                        <span class="status-inactive">Inactive</span>
+
+                                                    <?php endif; ?>
+
+                                                </td>
+
+                                                <td>
+
+                                                    <div class="action-btn-group">
+
+                                                        <button
+                                                            class="action-btn view-btn"
+                                                            data-id="<?= $mla['id']; ?>">
+
+                                                            <i class="fas fa-eye"></i> View
+
+                                                        </button>
+
+                                                        <button
+                                                            class="action-btn edit-btn"
+                                                            data-id="<?= $mla['id']; ?>">
+
+                                                            <i class="fas fa-edit"></i> Edit
+
+                                                        </button>
+
+                                                        
+
+                                                        <button
+                                                            class="action-btn delete-btn"
+                                                            onclick="if(confirm('Are you sure you want to delete this MLA?')){ window.location.href='<?= base_url('admin/mla/delete/'.$mla['id']); ?>'; }">
+
+                                                            <i class="fas fa-trash"></i> Delete
+
+                                                        </button>
+
+                                                    </div>
+
+                                                </td>
+
+                                            </tr>
+
+                                        <?php endforeach; ?>
+
+                                    <?php else: ?>
+
                                     <tr>
-                                        <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1NGljE8Ngab0V6mQkSMycyNgBuQ8jKzUhV-lEJbcUiw&s=10" class="mla-table-photo" alt="Eknath Shinde"></td>
-                                        <td><strong>Eknath Shinde</strong></td>
-                                        <td>Shiv Sena (ES)</td>
-                                        <td>Thane · Kopri-Pachpakhadi</td>
-                                        <td><span class="status-active">Active</span></td>
-                                        <td>
-                                            <div class="action-btn-group">
-                                                <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewMlaModal1"><i class="fas fa-eye"></i> View</button>
-                                                <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editMlaModal1"><i class="fas fa-edit"></i> Edit</button>
-                                                <button class="action-btn delete-btn" onclick="if(confirm('Delete this MLA?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                            </div>
+
+                                        <td colspan="6" class="text-center">
+
+                                            No MLA Found
+
                                         </td>
+
                                     </tr>
-                                    <!-- Devendra Fadnavis -->
-                                    <tr>
-                                        <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStvxUGPAClLVGXg8r5U1Cxl7VuSn5KswQO6unnzhdIxQ&s=10" class="mla-table-photo" alt="Devendra Fadnavis"></td>
-                                        <td><strong>Devendra Fadnavis</strong></td>
-                                        <td>BJP</td>
-                                        <td>Nagpur · Nagpur South West</td>
-                                        <td><span class="status-active">Active</span></td>
-                                        <td>
-                                            <div class="action-btn-group">
-                                                <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewMlaModal2"><i class="fas fa-eye"></i> View</button>
-                                                <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editMlaModal2"><i class="fas fa-edit"></i> Edit</button>
-                                                <button class="action-btn delete-btn" onclick="if(confirm('Delete this MLA?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- Chh Shivendra Raje Bhosale -->
-                                    <tr>
-                                        <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq9MdbQ5p9mCdUedqffaq4_dJD_TKSJ64CtpvzEEnMcg&s=10" class="mla-table-photo" alt="Chh Shivendra Raje Bhosale"></td>
-                                        <td><strong>Chh Shivendra Raje Bhosale</strong></td>
-                                        <td>BJP</td>
-                                        <td>Satara · Jaoli</td>
-                                        <td><span class="status-active">Active</span></td>
-                                        <td>
-                                            <div class="action-btn-group">
-                                                <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewMlaModal3"><i class="fas fa-eye"></i> View</button>
-                                                <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editMlaModal3"><i class="fas fa-edit"></i> Edit</button>
-                                                <button class="action-btn delete-btn" onclick="if(confirm('Delete this MLA?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- Makarand Patil -->
-                                    <tr>
-                                        <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTksDnHBv0qgkjvbIwYhetTmC4Gg3HAGcot8CdfeZ-XNw&s=10" class="mla-table-photo" alt="Makarand Patil"></td>
-                                        <td><strong>Makarand Patil</strong></td>
-                                        <td>BJP</td>
-                                        <td>Satara · Khandala</td>
-                                        <td><span class="status-active">Active</span></td>
-                                        <td>
-                                            <div class="action-btn-group">
-                                                <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewMlaModal4"><i class="fas fa-eye"></i> View</button>
-                                                <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editMlaModal4"><i class="fas fa-edit"></i> Edit</button>
-                                                <button class="action-btn delete-btn" onclick="if(confirm('Delete this MLA?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- Uddhav Thackeray -->
-                                    <tr>
-                                        <td><img src="https://i.pinimg.com/736x/f8/c4/68/f8c46840bee48df1157ae44b44dd25ef.jpg" class="mla-table-photo" alt="Uddhav Thackeray"></td>
-                                        <td><strong>Uddhav Thackeray</strong></td>
-                                        <td>Shiv Sena (UBT)</td>
-                                        <td>Mumbai · Mahim</td>
-                                        <td><span class="status-active">Active</span></td>
-                                        <td>
-                                            <div class="action-btn-group">
-                                                <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewMlaModal5"><i class="fas fa-eye"></i> View</button>
-                                                <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editMlaModal5"><i class="fas fa-edit"></i> Edit</button>
-                                                <button class="action-btn delete-btn" onclick="if(confirm('Delete this MLA?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- Jayant Patil -->
-                                    <tr>
-                                        <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgW4DmOIsgWr_MlVFaIBQwr0GBxHJzq4MDA1YWpdi0wQ&s=10" class="mla-table-photo" alt="Jayant Patil"></td>
-                                        <td><strong>Jayant Patil</strong></td>
-                                        <td>NCP (Sharad Pawar)</td>
-                                        <td>Pune · Indapur</td>
-                                        <td><span class="status-active">Active</span></td>
-                                        <td>
-                                            <div class="action-btn-group">
-                                                <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewMlaModal6"><i class="fas fa-eye"></i> View</button>
-                                                <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editMlaModal6"><i class="fas fa-edit"></i> Edit</button>
-                                                <button class="action-btn delete-btn" onclick="if(confirm('Delete this MLA?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- Aaditya Thackeray -->
-                                    <tr>
-                                        <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpOBJk4aw0Id3PwJnySMln-nJYdR3vJsTgINJAs3FBtg&s=10" class="mla-table-photo" alt="Aaditya Thackeray"></td>
-                                        <td><strong>Aaditya Thackeray</strong></td>
-                                        <td>Shiv Sena (UBT)</td>
-                                        <td>Mumbai · Worli</td>
-                                        <td><span class="status-active">Active</span></td>
-                                        <td>
-                                            <div class="action-btn-group">
-                                                <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewMlaModal7"><i class="fas fa-eye"></i> View</button>
-                                                <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editMlaModal7"><i class="fas fa-edit"></i> Edit</button>
-                                                <button class="action-btn delete-btn" onclick="if(confirm('Delete this MLA?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- Amit Kadam -->
-                                    <tr>
-                                        <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVsYF2Sfv60e4N3RTNPDbmvIH2xGdbTn9D5WdQfGa6pw&s=10" class="mla-table-photo" alt="Amit Kadam"></td>
-                                        <td><strong>Amit Kadam</strong></td>
-                                        <td>Shiv Sena (UBT)</td>
-                                        <td>Satara · Jaoli</td>
-                                        <td><span class="status-active">Active</span></td>
-                                        <td>
-                                            <div class="action-btn-group">
-                                                <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewMlaModal8"><i class="fas fa-eye"></i> View</button>
-                                                <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editMlaModal8"><i class="fas fa-edit"></i> Edit</button>
-                                                <button class="action-btn delete-btn" onclick="if(confirm('Delete this MLA?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- Kedar Dighe -->
-                                    <tr>
-                                        <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWvvLHD_KEEToCjzzaVXJAbczt1cKLuTldAXrFWmGYwsLple0zQY5saPeE&s=10" class="mla-table-photo" alt="Kedar Dighe"></td>
-                                        <td><strong>Kedar Dighe</strong></td>
-                                        <td>Shiv Sena (UBT)</td>
-                                        <td>Thane · Kopri-Pachpakhadi</td>
-                                        <td><span class="status-active">Active</span></td>
-                                        <td>
-                                            <div class="action-btn-group">
-                                                <button class="action-btn view-btn" data-bs-toggle="modal" data-bs-target="#viewMlaModal9"><i class="fas fa-eye"></i> View</button>
-                                                <button class="action-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editMlaModal9"><i class="fas fa-edit"></i> Edit</button>
-                                                <button class="action-btn delete-btn" onclick="if(confirm('Delete this MLA?'))alert('Delete clicked (static)');"><i class="fas fa-trash"></i> Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
+
+                                    <?php endif; ?>
+
+                                    </tbody>
                             </table>
                         </div>
                     </div>
@@ -1261,8 +1236,8 @@
                 <!-- ============================================================
                 VIEW MLA MODALS — detailed information form-style (read-only)
                 ============================================================ -->
-                <!-- View Modal 1: Eknath Shinde -->
-                <div class="modal fade modal-cream" id="viewMlaModal1" tabindex="-1" data-bs-backdrop="static">
+                
+                <div class="modal fade modal-cream" id="viewMlaModal" tabindex="-1" data-bs-backdrop="static">
                     <div class="modal-dialog modal-xl modal-dialog-scrollable">
                         <div class="modal-content modal-cream">
                             <div class="modal-header border-warning">
@@ -1274,59 +1249,59 @@
                                     <div class="row g-3">
                                         <div class="col-12">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1NGljE8Ngab0V6mQkSMycyNgBuQ8jKzUhV-lEJbcUiw&s=10" style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);"></div>
+                                            <div><img id="view_photo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1NGljE8Ngab0V6mQkSMycyNgBuQ8jKzUhV-lEJbcUiw&s=10" style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);"></div>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Eknath Shinde" readonly>
+                                            <input type="text" id="view_mla_name" class="form-control view-field-readonly" value="Eknath Shinde" readonly>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number</label>
-                                            <input type="tel" class="form-control view-field-readonly" value="+91 98765 43210" readonly>
+                                            <input type="tel" id="view_mobile" class="form-control view-field-readonly" value="+91 98765 43210" readonly>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control view-field-readonly" value="eknath.shinde@maharashtra.gov" readonly>
+                                            <input type="email" id="view_email" class="form-control view-field-readonly" value="eknath.shinde@maharashtra.gov" readonly>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Male" readonly>
+                                            <input type="text" id="view_gender" class="form-control view-field-readonly" value="Male" readonly>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Shiv Sena (ES)" readonly>
+                                            <input type="text" id="view_party" class="form-control view-field-readonly" value="Shiv Sena (ES)" readonly>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
+                                            <input type="text" id="view_state" class="form-control view-field-readonly" value="Maharashtra" readonly>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Thane" readonly>
+                                            <input type="text" id="view_district" class="form-control view-field-readonly" value="Thane" readonly>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Kopri-Pachpakhadi" readonly>
+                                            <input type="text" id="view_constituency" class="form-control view-field-readonly" value="Kopri-Pachpakhadi" readonly>
                                         </div>
                                         <div class="col-12">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control view-field-readonly" rows="2" readonly>Thane, Maharashtra</textarea>
+                                            <textarea id="view_address" class="form-control view-field-readonly" rows="2" readonly>Thane, Maharashtra</textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode</label>
-                                            <input type="text" class="form-control view-field-readonly" value="400601" readonly>
+                                            <input type="text" id="view_pincode" class="form-control view-field-readonly" value="400601" readonly>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar</label>
-                                            <input type="text" class="form-control view-field-readonly" value="1234-5678-9012" readonly>
+                                            <input type="text" id="view_aadhaar" class="form-control view-field-readonly" value="1234-5678-9012" readonly>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date</label>
-                                            <input type="text" class="form-control view-field-readonly" value="2019-11-01" readonly>
+                                            <input type="text" id="view_joining_date" class="form-control view-field-readonly" value="2019-11-01" readonly>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Active" readonly>
+                                            <input type="text" id="view_status" class="form-control view-field-readonly" value="Active" readonly>
                                         </div>
                                     </div>
                                 </form>
@@ -1338,621 +1313,6 @@
                     </div>
                 </div>
 
-                <!-- View Modal 2: Devendra Fadnavis -->
-                <div class="modal fade modal-cream" id="viewMlaModal2" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>View MLA Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStvxUGPAClLVGXg8r5U1Cxl7VuSn5KswQO6unnzhdIxQ&s=10" style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Devendra Fadnavis" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number</label>
-                                            <input type="tel" class="form-control view-field-readonly" value="+91 99887 76655" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control view-field-readonly" value="devendra.fadnavis@mla.in" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Male" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <input type="text" class="form-control view-field-readonly" value="BJP" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Nagpur" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Nagpur South West" readonly>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control view-field-readonly" rows="2" readonly>Nagpur, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode</label>
-                                            <input type="text" class="form-control view-field-readonly" value="440001" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar</label>
-                                            <input type="text" class="form-control view-field-readonly" value="9876-5432-1012" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date</label>
-                                            <input type="text" class="form-control view-field-readonly" value="2014-10-01" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- View Modal 3: Chh Shivendra Raje Bhosale -->
-                <div class="modal fade modal-cream" id="viewMlaModal3" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>View MLA Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq9MdbQ5p9mCdUedqffaq4_dJD_TKSJ64CtpvzEEnMcg&s=10" style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Chh Shivendra Raje Bhosale" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number</label>
-                                            <input type="tel" class="form-control view-field-readonly" value="+91 90909 09090" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control view-field-readonly" value="shivendra@mla.com" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Male" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <input type="text" class="form-control view-field-readonly" value="BJP" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Satara" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Jaoli" readonly>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control view-field-readonly" rows="2" readonly>Satara, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode</label>
-                                            <input type="text" class="form-control view-field-readonly" value="415001" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar</label>
-                                            <input type="text" class="form-control view-field-readonly" value="1111-2222-3333" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date</label>
-                                            <input type="text" class="form-control view-field-readonly" value="2019-11-01" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- View Modal 4: Makarand Patil -->
-                <div class="modal fade modal-cream" id="viewMlaModal4" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>View MLA Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTksDnHBv0qgkjvbIwYhetTmC4Gg3HAGcot8CdfeZ-XNw&s=10" style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Makarand Patil" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number</label>
-                                            <input type="tel" class="form-control view-field-readonly" value="+91 88888 81111" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control view-field-readonly" value="Makarandpatil@ncp.in" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Male" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <input type="text" class="form-control view-field-readonly" value="BJP" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Satara" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Khandala" readonly>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control view-field-readonly" rows="2" readonly>Satara, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode</label>
-                                            <input type="text" class="form-control view-field-readonly" value="415001" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar</label>
-                                            <input type="text" class="form-control view-field-readonly" value="5555-6666-7777" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date</label>
-                                            <input type="text" class="form-control view-field-readonly" value="2019-11-01" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- View Modal 5: Uddhav Thackeray -->
-                <div class="modal fade modal-cream" id="viewMlaModal5" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>View MLA Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <div><img src="https://i.pinimg.com/736x/f8/c4/68/f8c46840bee48df1157ae44b44dd25ef.jpg" style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Uddhav Thackeray" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number</label>
-                                            <input type="tel" class="form-control view-field-readonly" value="+91 77777 72222" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control view-field-readonly" value="uddhav@ssubt.org" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Male" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Shiv Sena (UBT)" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Mumbai" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Mahim" readonly>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control view-field-readonly" rows="2" readonly>Mumbai, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode</label>
-                                            <input type="text" class="form-control view-field-readonly" value="400001" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar</label>
-                                            <input type="text" class="form-control view-field-readonly" value="2222-3333-4444" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date</label>
-                                            <input type="text" class="form-control view-field-readonly" value="2019-11-01" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- View Modal 6: Jayant Patil -->
-                <div class="modal fade modal-cream" id="viewMlaModal6" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>View MLA Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgW4DmOIsgWr_MlVFaIBQwr0GBxHJzq4MDA1YWpdi0wQ&s=10" style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Jayant Patil" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number</label>
-                                            <input type="tel" class="form-control view-field-readonly" value="+91 9876543210" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control view-field-readonly" value="jayant@ncp.com" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Male" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <input type="text" class="form-control view-field-readonly" value="NCP (Sharad Pawar)" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Pune" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Indapur" readonly>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control view-field-readonly" rows="2" readonly>Pune, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode</label>
-                                            <input type="text" class="form-control view-field-readonly" value="411001" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar</label>
-                                            <input type="text" class="form-control view-field-readonly" value="4444-5555-6666" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date</label>
-                                            <input type="text" class="form-control view-field-readonly" value="2019-11-01" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- View Modal 7: Aaditya Thackeray -->
-                <div class="modal fade modal-cream" id="viewMlaModal7" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>View MLA Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpOBJk4aw0Id3PwJnySMln-nJYdR3vJsTgINJAs3FBtg&s=10" style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Aaditya Thackeray" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number</label>
-                                            <input type="tel" class="form-control view-field-readonly" value="+91 9988001122" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control view-field-readonly" value="aaditya@ssubt.org" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Male" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Shiv Sena (UBT)" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Mumbai" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Worli" readonly>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control view-field-readonly" rows="2" readonly>Mumbai, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode</label>
-                                            <input type="text" class="form-control view-field-readonly" value="400001" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar</label>
-                                            <input type="text" class="form-control view-field-readonly" value="6666-7777-8888" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date</label>
-                                            <input type="text" class="form-control view-field-readonly" value="2019-11-01" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- View Modal 8: Amit Kadam -->
-                <div class="modal fade modal-cream" id="viewMlaModal8" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>View MLA Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVsYF2Sfv60e4N3RTNPDbmvIH2xGdbTn9D5WdQfGa6pw&s=10" style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Amit Kadam" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number</label>
-                                            <input type="tel" class="form-control view-field-readonly" value="+91 90390 09090" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control view-field-readonly" value="amitkadam@mla.com" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Male" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Shiv Sena (UBT)" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Satara" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Jaoli" readonly>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control view-field-readonly" rows="2" readonly>Satara, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode</label>
-                                            <input type="text" class="form-control view-field-readonly" value="415001" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar</label>
-                                            <input type="text" class="form-control view-field-readonly" value="8888-9999-0000" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date</label>
-                                            <input type="text" class="form-control view-field-readonly" value="2019-11-01" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- View Modal 9: Kedar Dighe -->
-                <div class="modal fade modal-cream" id="viewMlaModal9" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>View MLA Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWvvLHD_KEEToCjzzaVXJAbczt1cKLuTldAXrFWmGYwsLple0zQY5saPeE&s=10" style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Kedar Dighe" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number</label>
-                                            <input type="tel" class="form-control view-field-readonly" value="+91 98767 43210" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control view-field-readonly" value="kedardighe@maharashtra.gov" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Male" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Shiv Sena (UBT)" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Thane" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Kopri-Pachpakhadi" readonly>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control view-field-readonly" rows="2" readonly>Thane, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode</label>
-                                            <input type="text" class="form-control view-field-readonly" value="400601" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar</label>
-                                            <input type="text" class="form-control view-field-readonly" value="0000-1111-2222" readonly>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date</label>
-                                            <input type="text" class="form-control view-field-readonly" value="2019-11-01" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <input type="text" class="form-control view-field-readonly" value="Active" readonly>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- ============================================================
                 ADD MLA MODAL (unchanged)
@@ -1965,31 +1325,32 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                <form id="addMlaForm" class="needs-validation" novalidate>
+                                <form id="addMlaForm" action="<?= base_url('admin/mla/save') ?>" method="post"enctype="multipart/form-data" class="needs-validation" novalidate>
+                                     <?= csrf_field(); ?>    
                                     <div class="row g-3">
                                         <div class="col-12">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <input type="file" class="form-control" accept="image/*">
+                                            <input type="file" name="profile_photo" class="form-control" accept="image/*">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control" placeholder="Enter full name" required>
+                                            <input type="text" name="mla_name" class="form-control" placeholder="Enter full name" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number (optional)</label>
-                                            <input type="tel" class="form-control" placeholder="Enter mobile number">
+                                            <input type="tel" name="mobile" class="form-control" placeholder="Enter mobile number">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control" placeholder="Enter email" required>
+                                            <input type="email" name="email" class="form-control" placeholder="Enter email" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-lock me-1"></i> Password</label>
-                                            <input type="password" class="form-control" placeholder="Enter password" required>
+                                            <input type="password" name="password" class="form-control" placeholder="Enter password" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <select class="form-select" required>
+                                            <select class="form-select" name="gender" required>
                                                 <option value="">Select Gender</option>
                                                 <option value="Male">Male</option>
                                                 <option value="Female">Female</option>
@@ -1998,7 +1359,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" required>
+                                            <select class="form-select" name="party" required>
                                                 <option value="">Select Party</option>
                                                 <option value="Shiv Sena (ES)">Shiv Sena (ES)</option>
                                                 <option value="BJP">BJP</option>
@@ -2008,66 +1369,88 @@
                                             </select>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <select class="form-select" required>
-                                                <option value="">Select District</option>
-                                                <option value="Thane">Thane</option>
-                                                <option value="Nagpur">Nagpur</option>
-                                                <option value="Satara">Satara</option>
-                                                <option value="Pune">Pune</option>
-                                                <option value="Mumbai">Mumbai</option>
-                                                <option value="Ahmednagar">Ahmednagar</option>
-                                                <option value="Kolhapur">Kolhapur</option>
-                                                <option value="Nashik">Nashik</option>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-map-marker-alt me-1"></i> State
+                                            </label>
+
+                                            <select name="state_id"
+                                                    id="mla_state_id"
+                                                    class="form-select"
+                                                    required>
+
+                                                <option value="">Select State</option>
+
+                                                <?php foreach ($states as $state): ?>
+
+                                                    <option value="<?= $state['id']; ?>">
+                                                        <?= esc($state['state_name']); ?>
+                                                    </option>
+
+                                                <?php endforeach; ?>
+
                                             </select>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <select class="form-select" required>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-city me-1"></i> District
+                                            </label>
+
+                                            <select
+                                                name="district_id"
+                                                id="mla_district_id"
+                                                class="form-select"
+                                                required>
+
+                                                <option value="">Select District</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-map-pin me-1"></i> Constituency
+                                            </label>
+
+                                            <select
+                                                name="constituency_id"
+                                                id="mla_constituency_id"
+                                                class="form-select"
+                                                required>
+
                                                 <option value="">Select Constituency</option>
-                                                <option value="Kopri-Pachpakhadi">Kopri-Pachpakhadi</option>
-                                                <option value="Nagpur South West">Nagpur South West</option>
-                                                <option value="Jaoli">Jaoli</option>
-                                                <option value="Khandala">Khandala</option>
-                                                <option value="Mahim">Mahim</option>
-                                                <option value="Indapur">Indapur</option>
-                                                <option value="Worli">Worli</option>
+
                                             </select>
                                         </div>
                                         <div class="col-12">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control" rows="2" placeholder="Enter address"></textarea>
+                                            <textarea class="form-control" name="address" rows="2" placeholder="Enter address"></textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode (optional)</label>
-                                            <input type="text" class="form-control" placeholder="Enter pincode">
+                                            <input type="text" name="pincode" class="form-control" placeholder="Enter pincode">
                                         </div>
                                         <div class="col-md-4">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar (optional)</label>
-                                            <input type="text" class="form-control" placeholder="Enter Aadhaar number">
+                                            <input type="text" name="aadhaar" class="form-control" placeholder="Enter Aadhaar number">
                                         </div>
                                         <div class="col-md-4">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date (optional)</label>
-                                            <input type="date" class="form-control">
+                                            <input type="date" name="joining_date" class="form-control">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <select class="form-select">
+                                            <select class="form-select" name="status">
                                                 <option value="Active">Active</option>
                                                 <option value="Inactive">Inactive</option>
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-warm-gold px-4"> Add MLA </button>
+                            </div>
                                 </form>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Add MLA clicked (static)');">Add MLA</button>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -2075,8 +1458,8 @@
                 <!-- ============================================================
                 EDIT MLA MODALS (unchanged - editable)
                 ============================================================ -->
-                <!-- Edit Modal 1: Eknath Shinde -->
-                <div class="modal fade modal-cream" id="editMlaModal1" tabindex="-1" data-bs-backdrop="static">
+                
+                <div class="modal fade modal-cream" id="editMlaModal" tabindex="-1" data-bs-backdrop="static">
                     <div class="modal-dialog modal-xl modal-dialog-scrollable">
                         <div class="modal-content modal-cream">
                             <div class="modal-header border-warning">
@@ -2084,31 +1467,32 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                <form id="editMlaForm1" class="needs-validation" novalidate>
+                                <form id="editMlaForm" action="<?= base_url('admin/mla/update') ?>" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="id" id="edit_mla_id">
                                     <div class="row g-3">
                                         <div class="col-12">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <input type="file" class="form-control" accept="image/*">
+                                            <input type="file" id="edit_profile_photo" name="profile_photo" class="form-control" accept="image/*">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control" value="Eknath Shinde" required>
+                                            <input type="text"  id="edit_mla_name" name="mla_name" class="form-control" value="Eknath Shinde" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number (optional)</label>
-                                            <input type="tel" class="form-control" value="+91 98765 43210">
+                                            <input type="tel" id="edit_mobile" name="mobile" class="form-control" value="+91 98765 43210">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control" value="eknath.shinde@maharashtra.gov" required>
+                                            <input type="email" id="edit_email" name="email" class="form-control" value="eknath.shinde@maharashtra.gov" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-lock me-1"></i> Password</label>
-                                            <input type="password" class="form-control" placeholder="Enter new password" value="••••••••">
+                                            <input type="password" id="edit_password" name="password" class="form-control" placeholder="Enter new password" value="••••••••">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <select class="form-select" required>
+                                            <select id="edit_gender" name="gender" class="form-select" required>
                                                 <option value="Male" selected>Male</option>
                                                 <option value="Female">Female</option>
                                                 <option value="Other">Other</option>
@@ -2116,7 +1500,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" required>
+                                            <select id="edit_party" name="party" class="form-select" required>
                                                 <option value="Shiv Sena (ES)" selected>Shiv Sena (ES)</option>
                                                 <option value="BJP">BJP</option>
                                                 <option value="NCP">NCP</option>
@@ -2126,958 +1510,64 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <select class="form-select" required>
-                                                <option value="Thane" selected>Thane</option>
-                                                <option value="Nagpur">Nagpur</option>
-                                                <option value="Satara">Satara</option>
-                                                <option value="Pune">Pune</option>
-                                                <option value="Mumbai">Mumbai</option>
-                                                <option value="Ahmednagar">Ahmednagar</option>
-                                                <option value="Kolhapur">Kolhapur</option>
-                                                <option value="Nashik">Nashik</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <select class="form-select" required>
-                                                <option value="Kopri-Pachpakhadi" selected>Kopri-Pachpakhadi</option>
-                                                <option value="Nagpur South West">Nagpur South West</option>
-                                                <option value="Jaoli">Jaoli</option>
-                                                <option value="Khandala">Khandala</option>
-                                                <option value="Mahim">Mahim</option>
-                                                <option value="Indapur">Indapur</option>
-                                                <option value="Worli">Worli</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control" rows="2">Thane, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode (optional)</label>
-                                            <input type="text" class="form-control" value="400601">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar (optional)</label>
-                                            <input type="text" class="form-control" value="1234-5678-9012">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date (optional)</label>
-                                            <input type="date" class="form-control" value="2019-11-01">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <select class="form-select">
-                                                <option value="Active" selected>Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit MLA clicked (static)');">Update MLA</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                            <select id="edit_state_id" name="state_id" class="form-select" required>
+                                                <option value="">Select State</option>
 
-                <!-- Edit Modal 2: Devendra Fadnavis -->
-                <div class="modal fade modal-cream" id="editMlaModal2" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit MLA</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editMlaForm2" class="needs-validation" novalidate>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <input type="file" class="form-control" accept="image/*">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control" value="Devendra Fadnavis" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number (optional)</label>
-                                            <input type="tel" class="form-control" value="+91 99887 76655">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control" value="devendra.fadnavis@mla.in" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-lock me-1"></i> Password</label>
-                                            <input type="password" class="form-control" placeholder="Enter new password" value="••••••••">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <select class="form-select" required>
-                                                <option value="Male" selected>Male</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" required>
-                                                <option value="BJP" selected>BJP</option>
-                                                <option value="Shiv Sena (ES)">Shiv Sena (ES)</option>
-                                                <option value="NCP">NCP</option>
-                                                <option value="Shiv Sena (UBT)">Shiv Sena (UBT)</option>
-                                                <option value="NCP (Sharad Pawar)">NCP (Sharad Pawar)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <select class="form-select" required>
-                                                <option value="Nagpur" selected>Nagpur</option>
-                                                <option value="Thane">Thane</option>
-                                                <option value="Satara">Satara</option>
-                                                <option value="Pune">Pune</option>
-                                                <option value="Mumbai">Mumbai</option>
-                                                <option value="Ahmednagar">Ahmednagar</option>
-                                                <option value="Kolhapur">Kolhapur</option>
-                                                <option value="Nashik">Nashik</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <select class="form-select" required>
-                                                <option value="Nagpur South West" selected>Nagpur South West</option>
-                                                <option value="Kopri-Pachpakhadi">Kopri-Pachpakhadi</option>
-                                                <option value="Jaoli">Jaoli</option>
-                                                <option value="Khandala">Khandala</option>
-                                                <option value="Mahim">Mahim</option>
-                                                <option value="Indapur">Indapur</option>
-                                                <option value="Worli">Worli</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control" rows="2">Nagpur, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode (optional)</label>
-                                            <input type="text" class="form-control" value="440001">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar (optional)</label>
-                                            <input type="text" class="form-control" value="9876-5432-1012">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date (optional)</label>
-                                            <input type="date" class="form-control" value="2014-10-01">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <select class="form-select">
-                                                <option value="Active" selected>Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit MLA clicked (static)');">Update MLA</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                                <?php foreach ($states as $state): ?>
 
-                <!-- Edit Modal 3: Chh Shivendra Raje Bhosale -->
-                <div class="modal fade modal-cream" id="editMlaModal3" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit MLA</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editMlaForm3" class="needs-validation" novalidate>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <input type="file" class="form-control" accept="image/*">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control" value="Chh Shivendra Raje Bhosale" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number (optional)</label>
-                                            <input type="tel" class="form-control" value="+91 90909 09090">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control" value="shivendra@mla.com" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-lock me-1"></i> Password</label>
-                                            <input type="password" class="form-control" placeholder="Enter new password" value="••••••••">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <select class="form-select" required>
-                                                <option value="Male" selected>Male</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" required>
-                                                <option value="BJP" selected>BJP</option>
-                                                <option value="Shiv Sena (ES)">Shiv Sena (ES)</option>
-                                                <option value="NCP">NCP</option>
-                                                <option value="Shiv Sena (UBT)">Shiv Sena (UBT)</option>
-                                                <option value="NCP (Sharad Pawar)">NCP (Sharad Pawar)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <select class="form-select" required>
-                                                <option value="Satara" selected>Satara</option>
-                                                <option value="Thane">Thane</option>
-                                                <option value="Nagpur">Nagpur</option>
-                                                <option value="Pune">Pune</option>
-                                                <option value="Mumbai">Mumbai</option>
-                                                <option value="Ahmednagar">Ahmednagar</option>
-                                                <option value="Kolhapur">Kolhapur</option>
-                                                <option value="Nashik">Nashik</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <select class="form-select" required>
-                                                <option value="Jaoli" selected>Jaoli</option>
-                                                <option value="Kopri-Pachpakhadi">Kopri-Pachpakhadi</option>
-                                                <option value="Nagpur South West">Nagpur South West</option>
-                                                <option value="Khandala">Khandala</option>
-                                                <option value="Mahim">Mahim</option>
-                                                <option value="Indapur">Indapur</option>
-                                                <option value="Worli">Worli</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control" rows="2">Satara, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode (optional)</label>
-                                            <input type="text" class="form-control" value="415001">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar (optional)</label>
-                                            <input type="text" class="form-control" value="1111-2222-3333">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date (optional)</label>
-                                            <input type="date" class="form-control" value="2019-11-01">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <select class="form-select">
-                                                <option value="Active" selected>Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit MLA clicked (static)');">Update MLA</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                                    <option value="<?= $state['id']; ?>">
+                                                        <?= esc($state['state_name']); ?>
+                                                    </option>
 
-                <!-- Edit Modal 4: Makarand Patil -->
-                <div class="modal fade modal-cream" id="editMlaModal4" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit MLA</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editMlaForm4" class="needs-validation" novalidate>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <input type="file" class="form-control" accept="image/*">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control" value="Makarand Patil" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number (optional)</label>
-                                            <input type="tel" class="form-control" value="+91 88888 81111">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control" value="Makarandpatil@ncp.in" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-lock me-1"></i> Password</label>
-                                            <input type="password" class="form-control" placeholder="Enter new password" value="••••••••">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <select class="form-select" required>
-                                                <option value="Male" selected>Male</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" required>
-                                                <option value="BJP" selected>BJP</option>
-                                                <option value="Shiv Sena (ES)">Shiv Sena (ES)</option>
-                                                <option value="NCP">NCP</option>
-                                                <option value="Shiv Sena (UBT)">Shiv Sena (UBT)</option>
-                                                <option value="NCP (Sharad Pawar)">NCP (Sharad Pawar)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <select class="form-select" required>
-                                                <option value="Satara" selected>Satara</option>
-                                                <option value="Thane">Thane</option>
-                                                <option value="Nagpur">Nagpur</option>
-                                                <option value="Pune">Pune</option>
-                                                <option value="Mumbai">Mumbai</option>
-                                                <option value="Ahmednagar">Ahmednagar</option>
-                                                <option value="Kolhapur">Kolhapur</option>
-                                                <option value="Nashik">Nashik</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <select class="form-select" required>
-                                                <option value="Khandala" selected>Khandala</option>
-                                                <option value="Kopri-Pachpakhadi">Kopri-Pachpakhadi</option>
-                                                <option value="Nagpur South West">Nagpur South West</option>
-                                                <option value="Jaoli">Jaoli</option>
-                                                <option value="Mahim">Mahim</option>
-                                                <option value="Indapur">Indapur</option>
-                                                <option value="Worli">Worli</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control" rows="2">Satara, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode (optional)</label>
-                                            <input type="text" class="form-control" value="415001">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar (optional)</label>
-                                            <input type="text" class="form-control" value="5555-6666-7777">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date (optional)</label>
-                                            <input type="date" class="form-control" value="2019-11-01">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <select class="form-select">
-                                                <option value="Active" selected>Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit MLA clicked (static)');">Update MLA</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                                <?php endforeach; ?>
 
-                <!-- Edit Modal 5: Uddhav Thackeray -->
-                <div class="modal fade modal-cream" id="editMlaModal5" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit MLA</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editMlaForm5" class="needs-validation" novalidate>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <input type="file" class="form-control" accept="image/*">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control" value="Uddhav Thackeray" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number (optional)</label>
-                                            <input type="tel" class="form-control" value="+91 77777 72222">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control" value="uddhav@ssubt.org" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-lock me-1"></i> Password</label>
-                                            <input type="password" class="form-control" placeholder="Enter new password" value="••••••••">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <select class="form-select" required>
-                                                <option value="Male" selected>Male</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Other">Other</option>
                                             </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" required>
-                                                <option value="Shiv Sena (UBT)" selected>Shiv Sena (UBT)</option>
-                                                <option value="BJP">BJP</option>
-                                                <option value="Shiv Sena (ES)">Shiv Sena (ES)</option>
-                                                <option value="NCP">NCP</option>
-                                                <option value="NCP (Sharad Pawar)">NCP (Sharad Pawar)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control" value="Maharashtra" readonly>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <select class="form-select" required>
-                                                <option value="Mumbai" selected>Mumbai</option>
-                                                <option value="Thane">Thane</option>
-                                                <option value="Nagpur">Nagpur</option>
-                                                <option value="Satara">Satara</option>
-                                                <option value="Pune">Pune</option>
-                                                <option value="Ahmednagar">Ahmednagar</option>
-                                                <option value="Kolhapur">Kolhapur</option>
-                                                <option value="Nashik">Nashik</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <select class="form-select" required>
-                                                <option value="Mahim" selected>Mahim</option>
-                                                <option value="Kopri-Pachpakhadi">Kopri-Pachpakhadi</option>
-                                                <option value="Nagpur South West">Nagpur South West</option>
-                                                <option value="Jaoli">Jaoli</option>
-                                                <option value="Khandala">Khandala</option>
-                                                <option value="Indapur">Indapur</option>
-                                                <option value="Worli">Worli</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control" rows="2">Mumbai, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode (optional)</label>
-                                            <input type="text" class="form-control" value="400001">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar (optional)</label>
-                                            <input type="text" class="form-control" value="2222-3333-4444">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date (optional)</label>
-                                            <input type="date" class="form-control" value="2019-11-01">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <select class="form-select">
-                                                <option value="Active" selected>Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit MLA clicked (static)');">Update MLA</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                            <select id="edit_district_id" name="district_id" class="form-select" required>
 
-                <!-- Edit Modal 6: Jayant Patil -->
-                <div class="modal fade modal-cream" id="editMlaModal6" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit MLA</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editMlaForm6" class="needs-validation" novalidate>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <input type="file" class="form-control" accept="image/*">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control" value="Jayant Patil" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number (optional)</label>
-                                            <input type="tel" class="form-control" value="+91 9876543210">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control" value="jayant@ncp.com" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-lock me-1"></i> Password</label>
-                                            <input type="password" class="form-control" placeholder="Enter new password" value="••••••••">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <select class="form-select" required>
-                                                <option value="Male" selected>Male</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" required>
-                                                <option value="NCP (Sharad Pawar)" selected>NCP (Sharad Pawar)</option>
-                                                <option value="BJP">BJP</option>
-                                                <option value="Shiv Sena (ES)">Shiv Sena (ES)</option>
-                                                <option value="NCP">NCP</option>
-                                                <option value="Shiv Sena (UBT)">Shiv Sena (UBT)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <select class="form-select" required>
-                                                <option value="Pune" selected>Pune</option>
-                                                <option value="Thane">Thane</option>
-                                                <option value="Nagpur">Nagpur</option>
-                                                <option value="Satara">Satara</option>
-                                                <option value="Mumbai">Mumbai</option>
-                                                <option value="Ahmednagar">Ahmednagar</option>
-                                                <option value="Kolhapur">Kolhapur</option>
-                                                <option value="Nashik">Nashik</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <select class="form-select" required>
-                                                <option value="Indapur" selected>Indapur</option>
-                                                <option value="Kopri-Pachpakhadi">Kopri-Pachpakhadi</option>
-                                                <option value="Nagpur South West">Nagpur South West</option>
-                                                <option value="Jaoli">Jaoli</option>
-                                                <option value="Khandala">Khandala</option>
-                                                <option value="Mahim">Mahim</option>
-                                                <option value="Worli">Worli</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control" rows="2">Pune, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode (optional)</label>
-                                            <input type="text" class="form-control" value="411001">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar (optional)</label>
-                                            <input type="text" class="form-control" value="4444-5555-6666">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date (optional)</label>
-                                            <input type="date" class="form-control" value="2019-11-01">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <select class="form-select">
-                                                <option value="Active" selected>Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit MLA clicked (static)');">Update MLA</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                                <option value="">Select District</option>
 
-                <!-- Edit Modal 7: Aaditya Thackeray -->
-                <div class="modal fade modal-cream" id="editMlaModal7" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit MLA</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editMlaForm7" class="needs-validation" novalidate>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <input type="file" class="form-control" accept="image/*">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control" value="Aaditya Thackeray" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number (optional)</label>
-                                            <input type="tel" class="form-control" value="+91 9988001122">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control" value="aaditya@ssubt.org" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-lock me-1"></i> Password</label>
-                                            <input type="password" class="form-control" placeholder="Enter new password" value="••••••••">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <select class="form-select" required>
-                                                <option value="Male" selected>Male</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" required>
-                                                <option value="Shiv Sena (UBT)" selected>Shiv Sena (UBT)</option>
-                                                <option value="BJP">BJP</option>
-                                                <option value="Shiv Sena (ES)">Shiv Sena (ES)</option>
-                                                <option value="NCP">NCP</option>
-                                                <option value="NCP (Sharad Pawar)">NCP (Sharad Pawar)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <select class="form-select" required>
-                                                <option value="Mumbai" selected>Mumbai</option>
-                                                <option value="Thane">Thane</option>
-                                                <option value="Nagpur">Nagpur</option>
-                                                <option value="Satara">Satara</option>
-                                                <option value="Pune">Pune</option>
-                                                <option value="Ahmednagar">Ahmednagar</option>
-                                                <option value="Kolhapur">Kolhapur</option>
-                                                <option value="Nashik">Nashik</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <select class="form-select" required>
-                                                <option value="Worli" selected>Worli</option>
-                                                <option value="Kopri-Pachpakhadi">Kopri-Pachpakhadi</option>
-                                                <option value="Nagpur South West">Nagpur South West</option>
-                                                <option value="Jaoli">Jaoli</option>
-                                                <option value="Khandala">Khandala</option>
-                                                <option value="Mahim">Mahim</option>
-                                                <option value="Indapur">Indapur</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control" rows="2">Mumbai, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode (optional)</label>
-                                            <input type="text" class="form-control" value="400001">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar (optional)</label>
-                                            <input type="text" class="form-control" value="6666-7777-8888">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date (optional)</label>
-                                            <input type="date" class="form-control" value="2019-11-01">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <select class="form-select">
-                                                <option value="Active" selected>Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit MLA clicked (static)');">Update MLA</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                            <select id="edit_constituency_id" name="constituency_id" class="form-select" required>
 
-                <!-- Edit Modal 8: Amit Kadam -->
-                <div class="modal fade modal-cream" id="editMlaModal8" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit MLA</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editMlaForm8" class="needs-validation" novalidate>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <input type="file" class="form-control" accept="image/*">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control" value="Amit Kadam" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number (optional)</label>
-                                            <input type="tel" class="form-control" value="+91 90390 09090">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control" value="amitkadam@mla.com" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-lock me-1"></i> Password</label>
-                                            <input type="password" class="form-control" placeholder="Enter new password" value="••••••••">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <select class="form-select" required>
-                                                <option value="Male" selected>Male</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" required>
-                                                <option value="Shiv Sena (UBT)" selected>Shiv Sena (UBT)</option>
-                                                <option value="BJP">BJP</option>
-                                                <option value="Shiv Sena (ES)">Shiv Sena (ES)</option>
-                                                <option value="NCP">NCP</option>
-                                                <option value="NCP (Sharad Pawar)">NCP (Sharad Pawar)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <select class="form-select" required>
-                                                <option value="Satara" selected>Satara</option>
-                                                <option value="Thane">Thane</option>
-                                                <option value="Nagpur">Nagpur</option>
-                                                <option value="Pune">Pune</option>
-                                                <option value="Mumbai">Mumbai</option>
-                                                <option value="Ahmednagar">Ahmednagar</option>
-                                                <option value="Kolhapur">Kolhapur</option>
-                                                <option value="Nashik">Nashik</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <select class="form-select" required>
-                                                <option value="Jaoli" selected>Jaoli</option>
-                                                <option value="Kopri-Pachpakhadi">Kopri-Pachpakhadi</option>
-                                                <option value="Nagpur South West">Nagpur South West</option>
-                                                <option value="Khandala">Khandala</option>
-                                                <option value="Mahim">Mahim</option>
-                                                <option value="Indapur">Indapur</option>
-                                                <option value="Worli">Worli</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control" rows="2">Satara, Maharashtra</textarea>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode (optional)</label>
-                                            <input type="text" class="form-control" value="415001">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar (optional)</label>
-                                            <input type="text" class="form-control" value="8888-9999-0000">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date (optional)</label>
-                                            <input type="date" class="form-control" value="2019-11-01">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <select class="form-select">
-                                                <option value="Active" selected>Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit MLA clicked (static)');">Update MLA</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                                <option value="">Select Constituency</option>
 
-                <!-- Edit Modal 9: Kedar Dighe -->
-                <div class="modal fade modal-cream" id="editMlaModal9" tabindex="-1" data-bs-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content modal-cream">
-                            <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Edit MLA</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editMlaForm9" class="needs-validation" novalidate>
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <input type="file" class="form-control" accept="image/*">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" class="form-control" value="Kedar Dighe" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number (optional)</label>
-                                            <input type="tel" class="form-control" value="+91 98767 43210">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" class="form-control" value="kedardighe@maharashtra.gov" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-lock me-1"></i> Password</label>
-                                            <input type="password" class="form-control" placeholder="Enter new password" value="••••••••">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <select class="form-select" required>
-                                                <option value="Male" selected>Male</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" required>
-                                                <option value="Shiv Sena (UBT)" selected>Shiv Sena (UBT)</option>
-                                                <option value="BJP">BJP</option>
-                                                <option value="Shiv Sena (ES)">Shiv Sena (ES)</option>
-                                                <option value="NCP">NCP</option>
-                                                <option value="NCP (Sharad Pawar)">NCP (Sharad Pawar)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" class="form-control" value="Maharashtra" readonly>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <select class="form-select" required>
-                                                <option value="Thane" selected>Thane</option>
-                                                <option value="Nagpur">Nagpur</option>
-                                                <option value="Satara">Satara</option>
-                                                <option value="Pune">Pune</option>
-                                                <option value="Mumbai">Mumbai</option>
-                                                <option value="Ahmednagar">Ahmednagar</option>
-                                                <option value="Kolhapur">Kolhapur</option>
-                                                <option value="Nashik">Nashik</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <select class="form-select" required>
-                                                <option value="Kopri-Pachpakhadi" selected>Kopri-Pachpakhadi</option>
-                                                <option value="Nagpur South West">Nagpur South West</option>
-                                                <option value="Jaoli">Jaoli</option>
-                                                <option value="Khandala">Khandala</option>
-                                                <option value="Mahim">Mahim</option>
-                                                <option value="Indapur">Indapur</option>
-                                                <option value="Worli">Worli</option>
                                             </select>
                                         </div>
                                         <div class="col-12">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea class="form-control" rows="2">Thane, Maharashtra</textarea>
+                                            <textarea id="edit_address" name="address" class="form-control" rows="2"></textarea>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode (optional)</label>
-                                            <input type="text" class="form-control" value="400601">
+                                            <input type="text" id="edit_pincode" name="pincode" class="form-control" value="400601">
                                         </div>
                                         <div class="col-md-4">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar (optional)</label>
-                                            <input type="text" class="form-control" value="0000-1111-2222">
+                                            <input type="text" id="edit_aadhaar" name="aadhaar" class="form-control" value="1234-5678-9012">
                                         </div>
                                         <div class="col-md-4">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date (optional)</label>
-                                            <input type="date" class="form-control" value="2019-11-01">
+                                            <input type="date" id="edit_joining_date" name="joining_date" class="form-control" value="2019-11-01">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <select class="form-select">
+                                            <select id="edit_status" name="status" class="form-select">
                                                 <option value="Active" selected>Active</option>
                                                 <option value="Inactive">Inactive</option>
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-warm-gold px-4"> Update MLA </button>
+                                   </div>
                                 </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warm-gold px-4" onclick="alert('Edit MLA clicked (static)');">Update MLA</button>
                             </div>
                         </div>
                     </div>
@@ -3181,6 +1671,333 @@
                 </script>
                 <script src="header.js">
                 </script>
+
+                <script>
+                     function loadDistricts(stateSelector, districtSelector) {
+
+                        $(stateSelector).change(function () {
+
+                            var stateId = $(this).val();
+
+                            $(districtSelector).html('<option value="">Loading...</option>');
+
+                            if (stateId != '') {
+
+                                $.ajax({
+                                    url: "<?= base_url('admin/get-districts'); ?>/" + stateId,
+                                    type: "GET",
+                                    dataType: "JSON",
+                                    success: function (response) {
+
+                                        $(districtSelector).html('<option value="">Select District</option>');
+
+                                        $.each(response, function (index, district) {
+
+                                            $(districtSelector).append(
+                                                '<option value="' + district.id + '">' +
+                                                district.district_name +
+                                                '</option>'
+                                            );
+
+                                        });
+
+                                    }
+                                });
+
+                            } else {
+
+                                $(districtSelector).html('<option value="">Select District</option>');
+
+                            }
+
+                        });
+
+                    }
+
+                    $(document).ready(function () {
+
+                        loadDistricts('#filter_state_id', '#filter_district_id');
+
+                        loadDistricts('#modal_state_id', '#modal_district_id');
+
+                        loadDistricts('#mla_state_id', '#mla_district_id');
+
+                        loadConstituencies('#mla_district_id', '#mla_constituency_id');
+                    });
+
+                    function loadConstituencies(districtSelector, constituencySelector) {
+
+    $(districtSelector).change(function () {
+
+        var districtId = $(this).val();
+
+        $(constituencySelector).html('<option value="">Loading...</option>');
+
+        if (districtId != '') {
+
+            $.ajax({
+
+                url: "<?= base_url('admin/get-constituencies'); ?>/" + districtId,
+                type: "GET",
+                dataType: "JSON",
+
+                success: function (response) {
+
+                    $(constituencySelector).html('<option value="">Select Constituency</option>');
+
+                    $.each(response, function (index, constituency) {
+
+                        $(constituencySelector).append(
+                            '<option value="' + constituency.id + '">' +
+                            constituency.constituency_name +
+                            '</option>'
+                        );
+
+                    });
+
+                }
+
+            });
+
+        } else {
+
+            $(constituencySelector).html('<option value="">Select Constituency</option>');
+
+        }
+
+    });
+
+}
+</script>
+
+<script>
+    $(document).on('click', '.view-btn', function () {
+
+    let mlaId = $(this).data('id');
+
+    $.ajax({
+
+        url: "<?= base_url('admin/mla/get/') ?>" + mlaId,
+
+        type: "GET",
+
+        dataType: "json",
+
+        success: function (response) {
+
+            if (response.status) {
+
+                let data = response.data;
+
+                if (data.profile_photo != '') {
+
+                    $('#view_photo').attr(
+                        'src',
+                        "<?= base_url('uploads/mla/') ?>" + data.profile_photo
+                    );
+
+                } else {
+
+                    $('#view_photo').attr(
+                        'src',
+                        "<?= base_url('assets/admin/images/default-user.png') ?>"
+                    );
+
+                }
+
+                $('#view_mla_name').val(data.mla_name);
+                $('#view_mobile').val(data.mobile);
+                $('#view_email').val(data.email);
+                $('#view_gender').val(data.gender);
+                $('#view_party').val(data.party);
+                $('#view_state').val(data.state_name);
+                $('#view_district').val(data.district_name);
+                $('#view_constituency').val(data.constituency_name);
+                $('#view_address').val(data.address);
+                $('#view_pincode').val(data.pincode);
+                $('#view_aadhaar').val(data.aadhaar);
+                $('#view_joining_date').val(data.joining_date);
+                $('#view_status').val(data.status);
+
+                $('#viewMlaModal').modal('show');
+
+            } else {
+
+                alert(response.message);
+
+            }
+
+        },
+
+        error: function (xhr) {
+
+            console.log(xhr.responseText);
+
+            alert('Unable to fetch MLA details.');
+
+        }
+
+    });
+
+});
+
+$(document).on('click', '.edit-btn', function () {
+
+    let mlaId = $(this).data('id');
+
+    $.ajax({
+
+        url: "<?= base_url('admin/mla/get/') ?>" + mlaId,
+
+        type: "GET",
+
+        dataType: "json",
+
+        success: function (response) {
+
+            if (response.status) {
+
+                let data = response.data;
+
+                $('#edit_mla_id').val(data.id);
+
+                $('#edit_mla_name').val(data.mla_name);
+                $('#edit_mobile').val(data.mobile);
+                $('#edit_email').val(data.email);
+                $('#edit_password').val();
+                $('#edit_gender').val(data.gender);
+                $('#edit_party').val(data.party);
+                $('#edit_address').val(data.address);
+                $('#edit_pincode').val(data.pincode);
+                $('#edit_aadhaar').val(data.aadhaar);
+                $('#edit_joining_date').val(data.joining_date);
+                $('#edit_status').val(data.status);
+
+                $('#edit_state_id').val(data.state_id);
+
+                $('#edit_district_id').data('selected', data.district_id);
+
+                $('#edit_constituency_id').data('selected', data.constituency_id);
+
+                $('#edit_state_id').trigger('change');
+
+                $('#editMlaModal').modal('show');
+
+            } else {
+
+                alert(response.message);
+
+            }
+
+        },
+
+        error: function (xhr) {
+
+            console.log(xhr.responseText);
+
+            alert('Unable to fetch MLA details.');
+
+        }
+
+    });
+
+});
+
+
+$('#edit_state_id').on('change', function () {
+
+    let stateId = $(this).val();
+
+    let districtDropdown = $('#edit_district_id');
+
+    districtDropdown.html('<option value="">Loading...</option>');
+
+    $.ajax({
+
+        url: "<?= base_url('admin/get-districts/') ?>" + stateId,
+
+        type: "GET",
+
+        dataType: "json",
+
+        success: function (districts) {
+
+            districtDropdown.html('<option value="">Select District</option>');
+
+            $.each(districts, function (index, district) {
+
+                districtDropdown.append(
+                    '<option value="' + district.id + '">' +
+                    district.district_name +
+                    '</option>'
+                );
+
+            });
+
+            let selectedDistrict = districtDropdown.data('selected');
+
+            if (selectedDistrict) {
+
+                districtDropdown.val(selectedDistrict);
+
+                districtDropdown.removeData('selected');
+
+                districtDropdown.trigger('change');
+
+            }
+
+        }
+
+    });
+
+});
+
+$('#edit_district_id').on('change', function () {
+
+    let districtId = $(this).val();
+
+    let constituencyDropdown = $('#edit_constituency_id');
+
+    constituencyDropdown.html('<option value="">Loading...</option>');
+
+    $.ajax({
+
+        url: "<?= base_url('admin/get-constituencies/') ?>" + districtId,
+
+        type: "GET",
+
+        dataType: "json",
+
+        success: function (constituencies) {
+
+            constituencyDropdown.html('<option value="">Select Constituency</option>');
+
+            $.each(constituencies, function (index, constituency) {
+
+                constituencyDropdown.append(
+                    '<option value="' + constituency.id + '">' +
+                    constituency.constituency_name +
+                    '</option>'
+                );
+
+            });
+
+            let selectedConstituency = constituencyDropdown.data('selected');
+
+            if (selectedConstituency) {
+
+                constituencyDropdown.val(selectedConstituency);
+
+                constituencyDropdown.removeData('selected');
+
+            }
+
+        }
+
+    });
+
+});
+</script>
 </body>
 
 </html>

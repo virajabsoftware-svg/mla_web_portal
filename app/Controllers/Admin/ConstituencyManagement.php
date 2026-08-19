@@ -98,7 +98,7 @@ class ConstituencyManagement extends BaseController
                 'status' => true,
                 'message' => 'Constituency updated successfully.'
             ]);
-        }
+        } 
 
         return $this->response->setJSON([
             'status' => false,

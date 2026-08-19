@@ -1706,7 +1706,6 @@ $(document).ready(function () {
 
     loadDistricts('#modal_state_id', '#modal_district_id');
 
-
 });
 
 $('#edit_state_id').on('change', function () {

@@ -79,6 +79,8 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     // Search Route
     $routes->get('search', 'Search::index');
 
+    //constituency management
+
     $routes->get('get-districts/(:num)', 'ConstituencyManagement::getDistricts/$1');
 
     $routes->post('constituency/save', 'ConstituencyManagement::save');
@@ -88,6 +90,18 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->post('constituency/update', 'ConstituencyManagement::update');
 
     $routes->post('constituency/delete/(:num)', 'ConstituencyManagement::delete/$1');
+
+    //mla management
+
+    $routes->get('get-constituencies/(:num)', 'MLAManagement::getConstituencies/$1');
+
+    $routes->post('mla/save', 'MLAManagement::save');
+
+    $routes->get('mla/get/(:num)', 'MLAManagement::get/$1');
+
+    $routes->post('mla/update', 'MLAManagement::update');
+
+    $routes->get('mla/delete/(:num)', 'MLAManagement::delete/$1');
 });
 
 
