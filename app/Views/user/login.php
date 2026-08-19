@@ -374,35 +374,35 @@
             }
         }
         .popup{
-    position:fixed;
-    top:25px;
-    right:25px;
-    min-width:320px;
-    max-width:420px;
-    padding:18px 20px;
-    border-radius:10px;
-    color:#fff;
-    font-size:15px;
-    font-weight:600;
-    z-index:999999;
-    box-shadow:0 10px 25px rgba(0,0,0,.25);
-    transform:translateX(450px);
-    opacity:0;
-    transition:.5s;
-}
+            position:fixed;
+            top:25px;
+            right:25px;
+            min-width:320px;
+            max-width:420px;
+            padding:18px 20px;
+            border-radius:10px;
+            color:#fff;
+            font-size:15px;
+            font-weight:600;
+            z-index:999999;
+            box-shadow:0 10px 25px rgba(0,0,0,.25);
+            transform:translateX(450px);
+            opacity:0;
+            transition:.5s;
+        }
 
-.popup.show{
-    transform:translateX(0);
-    opacity:1;
-}
+        .popup.show{
+            transform:translateX(0);
+            opacity:1;
+        }
 
-.popup.success{
-    background:#28a745;
-}
+        .popup.success{
+            background:#28a745;
+        }
 
-.popup.error{
-    background:#dc3545;
-}
+        .popup.error{
+            background:#dc3545;
+        }
     </style>
 </head>
 <body>
@@ -421,7 +421,7 @@
         <h3 class="auth-title text-center">Welcome Back</h3>
         <p class="auth-subtitle text-center">Secure Government Portal Login</p>
 
-      <form action="<?= base_url('user/login') ?>" method="post">
+        <form action="<?= base_url('user/login') ?>" method="post">
             <!-- Add CSRF if using CodeIgniter -->
             <!-- <?= csrf_field() ?> -->
             
@@ -471,7 +471,7 @@
     </div>
 
     <!-- ============================================
-    REGISTRATION FORM - COMPLETE FIXED VERSION
+    REGISTRATION FORM - ID BASED STORAGE
     ============================================ -->
     <div class="registration-wrap" id="registerWrap">
         
@@ -491,10 +491,10 @@
             <span class="step-dot" data-step="4"></span>
         </div>
 
-       <form id="regForm"
-      action="<?= base_url('user/register') ?>"
-      method="post"
-      enctype="multipart/form-data">
+        <form id="regForm"
+              action="<?= base_url('user/register') ?>"
+              method="post"
+              enctype="multipart/form-data">
             
             <!-- CSRF Protection -->
             <!-- <?= csrf_field() ?> -->
@@ -543,25 +543,20 @@
                     </div>
                 </div>
 
-               <div class="profile-photo-upload" onclick="document.getElementById('photoUpload').click()">
-
-    <img id="photoPreview" 
-         src="" 
-         style="display:none; max-height:80px; border-radius:8px;">
-
-    <i class="bi bi-camera" id="cameraIcon"></i>
-
-    <p class="mb-0 text-muted small" id="photoText">
-        Click to upload photo
-    </p>
-
-    <input type="file"
-           id="photoUpload"
-           name="profile_photo"
-           accept="image/*"
-           style="display:none;">
-
-</div>
+                <div class="profile-photo-upload" onclick="document.getElementById('photoUpload').click()">
+                    <img id="photoPreview" 
+                         src="" 
+                         style="display:none; max-height:80px; border-radius:8px;">
+                    <i class="bi bi-camera" id="cameraIcon"></i>
+                    <p class="mb-0 text-muted small" id="photoText">
+                        Click to upload photo
+                    </p>
+                    <input type="file"
+                           id="photoUpload"
+                           name="profile_photo"
+                           accept="image/*"
+                           style="display:none;">
+                </div>
 
                 <div class="mt-4 text-end">
                     <button type="button" class="btn btn-gradient" style="width: auto; padding: 0.6rem 1.8rem;" onclick="nextStep(1)">
@@ -612,7 +607,7 @@
             </div>
 
             <!-- ================================
-            STEP 3: ADDRESS & LOCATION MAPPING
+            STEP 3: ADDRESS & LOCATION MAPPING - STORES IDS
             ================================ -->
             <div class="form-step" data-step="3">
                 <h6 class="fw-bold text-dark mb-3"><i class="bi bi-geo-alt me-2 text-success"></i>Address & Location Mapping</h6>
@@ -620,16 +615,24 @@
                 <div class="row g-2">
                     <div class="col-6">
                         <label class="form-label">State <span class="required">*</span></label>
-                        <select class="form-select" name="state" required>
+                        <select class="form-select" 
+                                id="stateSelect" 
+                                name="state_id"
+                                required>
                             <option value="">Select State</option>
-                            <option value="Maharashtra" selected>Maharashtra</option>
+                            <!-- Populated from database via PHP -->
+                            <?php if(isset($states) && !empty($states)): ?>
+                                <?php foreach($states as $state): ?>
+                                    <option value="<?= $state['id'] ?>"><?= $state['state_name'] ?></option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </select>
                     </div>
                     <div class="col-6">
                         <label class="form-label">District <span class="required">*</span></label>
                         <select class="form-select" 
                                 id="districtSelect" 
-                                name="district"
+                                name="district_id"
                                 required>
                             <option value="">Select District</option>
                         </select>
@@ -641,7 +644,7 @@
                         <label class="form-label">Constituency <span class="required">*</span></label>
                         <select class="form-select" 
                                 id="constituencySelect" 
-                                name="constituency"
+                                name="constituency_id"
                                 required 
                                 disabled>
                             <option value="">Select Constituency</option>
@@ -673,7 +676,7 @@
             </div>
 
             <!-- ================================
-            STEP 4: MLA MAPPING & SUBMIT
+            STEP 4: MLA MAPPING & SUBMIT - STORES MLA ID
             ================================ -->
             <div class="form-step" data-step="4">
                 <h6 class="fw-bold text-dark mb-3"><i class="bi bi-person-vcard me-2 text-info"></i>MLA Mapping & Verification</h6>
@@ -682,10 +685,8 @@
                     <i class="bi bi-info-circle me-1"></i> Based on your constituency, your assigned MLA will be auto-mapped.
                 </div>
 
-                <!-- Hidden inputs for MLA data submission -->
-                <input type="hidden" name="mla_name" id="mlaNameHidden">
-                <input type="hidden" name="mla_party" id="mlaPartyHidden">
-                <input type="hidden" name="mla_id" id="mlaIdHidden">
+                <!-- Hidden input for MLA ID submission -->
+                <input type="hidden" name="mla_id" id="mlaIdHidden" value="">
 
                 <div class="row g-2">
                     <div class="col-6">
@@ -727,8 +728,6 @@
     </div>
 </div>
 
-
-
 <?php if(session()->getFlashdata('success')): ?>
 <div id="popupMessage" class="popup success">
     <span><?= session()->getFlashdata('success'); ?></span>
@@ -741,803 +740,381 @@
 </div>
 <?php endif; ?>
 
-<?php if(session()->getFlashdata('error')): ?>
-<script>
-Swal.fire({
-    icon: 'error',
-    title: 'Registration Failed',
-    text: '<?= session()->getFlashdata('error') ?>'
-});
-</script>
-<?php endif; ?>
-
-<?php if(session()->getFlashdata('success')): ?>
-<script>
-Swal.fire({
-    icon: 'success',
-    title: 'Success',
-    text: '<?= session()->getFlashdata('success') ?>'
-});
-</script>
-<?php endif; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-window.onload=function(){
-
-    let popup=document.getElementById("popupMessage");
-
-    if(popup){
-
-        setTimeout(()=>{
-            popup.classList.add("show");
-        },100);
-
-        setTimeout(()=>{
-            popup.classList.remove("show");
-        },3500);
-
-        setTimeout(()=>{
-            popup.remove();
-        },4000);
+// ============================================
+// POPUP HANDLING
+// ============================================
+window.onload = function() {
+    let popup = document.getElementById("popupMessage");
+    if (popup) {
+        setTimeout(() => { popup.classList.add("show"); }, 100);
+        setTimeout(() => { popup.classList.remove("show"); }, 3500);
+        setTimeout(() => { popup.remove(); }, 4000);
     }
+};
 
-}
-</script>
-
-
-<script>
-    // ============================================
-    // COMPLETE JAVASCRIPT - FIXED VERSION
-    // ============================================
-
-    // ============================================
-    // MAHARASHTRA DATA
-    // ============================================
-    const maharashtraData = {
-        "Nandurbar": ["Akkalkuwa (ST)", "Shahada (ST)", "Nandurbar (ST)", "Navapur (ST)"],
-        "Dhule": ["Sakri (ST)", "Dhule Rural", "Dhule City", "Sindkheda", "Shirpur (ST)"],
-        "Jalgaon": ["Chopda (ST)", "Raver", "Bhusawal (SC)", "Jalgaon City", "Jalgaon Rural", "Amalner", "Erandol", "Chalisgaon", "Pachora", "Jamner", "Muktainagar"],
-        "Buldana": ["Malkapur", "Buldhana", "Chikhali", "Sindkhed Raja", "Mehkar (SC)", "Khamgaon", "Jalgaon (Jamod)"],
-        "Akola": ["Akot", "Balapur", "Akola West", "Akola East", "Murtizapur (SC)"],
-        "Washim": ["Risod", "Washim (SC)", "Karanja"],
-        "Amravati": ["Dhamangaon Railway", "Badnera", "Amravati", "Teosa", "Daryapur (SC)", "Melghat (ST)", "Achalpur", "Morshi"],
-        "Wardha": ["Arvi", "Deoli", "Hinganghat", "Wardha"],
-        "Nagpur": ["Katol", "Savner", "Hingna", "Umred (SC)", "Nagpur South West", "Nagpur South", "Nagpur East", "Nagpur Central", "Nagpur West", "Nagpur North (SC)", "Kamthi", "Ramtek"],
-        "Bhandara": ["Tumsar", "Bhandara (SC)", "Sakoli"],
-        "Gondia": ["Arjuni Morgaon (SC)", "Tirora", "Gondiya", "Amgaon (ST)"],
-        "Gadchiroli": ["Armori (ST)", "Gadchiroli (ST)", "Aheri (ST)"],
-        "Chandrapur": ["Rajura", "Chandrapur (SC)", "Ballarpur", "Bramhapuri", "Chimur", "Warora"],
-        "Yavatmal": ["Wani", "Ralegaon (ST)", "Yavatmal", "Digras", "Arni (ST)", "Pusad", "Umarkhed (SC)"],
-        "Nanded": ["Kinwat", "Hadgaon", "Bhokar", "Nanded North", "Nanded South", "Loha", "Naigaon", "Deglur (SC)", "Mukhed"],
-        "Hingoli": ["Basmath", "Kalamnuri", "Hingoli"],
-        "Parbhani": ["Jintur", "Parbhani", "Gangakhed", "Pathri"],
-        "Jalna": ["Partur", "Ghansawangi", "Jalna", "Badnapur (SC)", "Bhokardan"],
-        "Chhatrapati Sambhaji Nagar": ["Sillod", "Kannad", "Phulambri", "Aurangabad Central", "Aurangabad West (SC)", "Aurangabad East", "Paithan", "Gangapur", "Vaijapur"],
-        "Nashik": ["Nandgaon", "Malegaon Central", "Malegaon Outer", "Baglan (ST)", "Kalwan (ST)", "Chandwad", "Yevla", "Sinnar", "Niphad", "Dindori (ST)", "Nashik East", "Nashik Central", "Nashik West", "Deolali (SC)", "Igatpuri (ST)"],
-        "Palghar": ["Dahanu (ST)", "Vikramgad (ST)", "Palghar (ST)", "Boisar (ST)", "Nalasopara", "Vasai"],
-        "Thane": ["Bhiwandi Rural (ST)", "Shahapur (ST)", "Bhiwandi West", "Bhiwandi East", "Kalyan West", "Murbad", "Ambernath (SC)", "Ulhasnagar", "Kalyan East", "Dombivli", "Kalyan Rural", "Mira Bhayandar", "Ovala-Majiwada", "Kopri-Pachpakhadi", "Thane", "Mumbra-Kalwa", "Airoli", "Belapur"],
-        "Mumbai Suburban": ["Borivali", "Dahisar", "Magathane", "Mulund", "Vikhroli", "Bhandup West", "Jogeshwari East", "Dindoshi", "Kandivali East", "Charkop", "Malad West", "Goregaon", "Versova", "Andheri West", "Andheri East", "Vile Parle", "Chandivali", "Ghatkopar West", "Ghatkopar East", "Mankhurd Shivaji Nagar", "Anushakti Nagar", "Chembur", "Kurla(SC)", "Kalina", "Vandre East", "Vandre West"],
-        "Mumbai City": ["Dharavi (SC)", "Sion Koliwada", "Wadala", "Mahim", "Worli", "Shivadi", "Byculla", "Malabar Hill", "Mumbadevi", "Colaba"],
-        "Raigad": ["Panvel", "Karjat", "Uran", "Pen", "Alibag", "Shrivardhan", "Mahad"],
-        "Pune": ["Junnar", "Ambegaon", "Khed Alandi", "Shirur", "Daund", "Indapur", "Baramati", "Purandar", "Bhor", "Maval", "Chinchwad", "Pimpri (SC)", "Bhosari", "Vadgaon Sheri", "Shivajinagar", "Kothrud", "Khadakwasala", "Parvati", "Hadapsar", "Pune Cantonment", "Kasba Peth"],
-        "Ahmednagar": ["Akole (ST)", "Sangamner", "Shirdi", "Kopargaon", "Shrirampur (SC)", "Nevasa", "Shevgaon", "Rahuri", "Parner", "Ahmednagar City", "Shrigonda", "Karjat Jamkhed"],
-        "Beed": ["Georai (SC)", "Majalgaon", "Beed", "Ashti", "Kaij (SC)", "Parli"],
-        "Latur": ["Latur Rural", "Latur City", "Ahmadpur", "Udgir (SC)", "Nilanga", "Ausa"],
-        "Dharashiv": ["Umarga (SC)", "Tuljapur", "Dharashiv", "Paranda"],
-        "Solapur": ["Karmala", "Madha", "Barshi", "Mohol (SC)", "Solapur City North", "Solapur City Central", "Akkalkot", "Solapur South", "Pandharpur", "Sangola", "Malshiras (SC)"],
-        "Satara": ["Phaltan (SC)", "Wai", "Koregaon", "Man", "Karad North", "Karad South", "Patan", "Satara"],
-        "Ratnagiri": ["Dapoli", "Guhagar", "Chiplun", "Ratnagiri", "Rajapur"],
-        "Sindhudurg": ["Kankavli", "Kudal", "Sawantwadi"],
-        "Kolhapur": ["Chandgad", "Radhanagari", "Kagal", "Kolhapur South", "Karvir", "Kolhapur North", "Shahuwadi", "Hatkanangle (SC)", "Ichalkaranji", "Shirol"],
-        "Sangli": ["Miraj (SC)", "Sangli", "Islampur", "Shirala", "Palus-Kadegaon", "Khanapur", "Tasgaon-Kavathe Mahankal", "Jat"]
-    };
-
-    // ============================================
-    // MLA DATA
-    // ============================================
-    const mlaData = [
-        // Nandurbar
-        { constituency: "Akkalkuwa (ST)", mla: "Aamshya Padavi", party: "SHS", district: "Nandurbar", },
-        { constituency: "Shahada (ST)", mla: "Rajesh Padvi", party: "BJP", district: "Nandurbar" },
-        { constituency: "Nandurbar (ST)", mla: "Vijaykumar Gavit", party: "BJP", district: "Nandurbar" },
-        { constituency: "Navapur (ST)", mla: "Shirishkumar Naik", party: "INC", district: "Nandurbar" },
-        // Dhule
-        { constituency: "Sakri (ST)", mla: "Manjula Gavit", party: "SHS", district: "Dhule" },
-        { constituency: "Dhule Rural", mla: "Raghavendra Patil", party: "BJP", district: "Dhule" },
-        { constituency: "Dhule City", mla: "Anup Agrawal", party: "BJP", district: "Dhule" },
-        { constituency: "Sindkheda", mla: "Jayakumar Rawal", party: "BJP", district: "Dhule" },
-        { constituency: "Shirpur (ST)", mla: "Kashiram Pawara", party: "BJP", district: "Dhule" },
-        // Jalgaon
-        { constituency: "Chopda (ST)", mla: "Chandrakant Sonawane", party: "SHS", district: "Jalgaon" },
-        { constituency: "Raver", mla: "Amol Jawale", party: "BJP", district: "Jalgaon" },
-        { constituency: "Bhusawal (SC)", mla: "Sanjay Savkare", party: "BJP", district: "Jalgaon" },
-        { constituency: "Jalgaon City", mla: "Suresh Bhole", party: "BJP", district: "Jalgaon" },
-        { constituency: "Jalgaon Rural", mla: "Gulabrao Patil", party: "SHS", district: "Jalgaon" },
-        { constituency: "Amalner", mla: "Anil Bhaidas Patil", party: "NCP", district: "Jalgaon" },
-        { constituency: "Erandol", mla: "Amol Patil", party: "SHS", district: "Jalgaon" },
-        { constituency: "Chalisgaon", mla: "Mangesh Chavan", party: "BJP", district: "Jalgaon" },
-        { constituency: "Pachora", mla: "Kishor Appa Patil", party: "SHS", district: "Jalgaon" },
-        { constituency: "Jamner", mla: "Girish Mahajan", party: "BJP", district: "Jalgaon" },
-        { constituency: "Muktainagar", mla: "Chandrakant Nimba Patil", party: "SHS", district: "Jalgaon" },
-        // Buldana
-        { constituency: "Malkapur", mla: "Chainsukh Sancheti", party: "BJP", district: "Buldana" },
-        { constituency: "Buldhana", mla: "Sanjay Gaikwad", party: "SHS", district: "Buldana" },
-        { constituency: "Chikhali", mla: "Shweta Mahale", party: "BJP", district: "Buldana" },
-        { constituency: "Sindkhed Raja", mla: "Manoj Kayande", party: "NCP", district: "Buldana" },
-        { constituency: "Mehkar (SC)", mla: "Siddharth Kharat", party: "SS(UBT)", district: "Buldana" },
-        { constituency: "Khamgaon", mla: "Akash Fundkar", party: "BJP", district: "Buldana" },
-        { constituency: "Jalgaon (Jamod)", mla: "Sanjay Kute", party: "BJP", district: "Buldana" },
-        // Akola
-        { constituency: "Akot", mla: "Prakash Bharsakale", party: "BJP", district: "Akola" },
-        { constituency: "Balapur", mla: "Nitin Tale", party: "SS(UBT)", district: "Akola" },
-        { constituency: "Akola West", mla: "Sajid Khan Pathan", party: "INC", district: "Akola" },
-        { constituency: "Akola East", mla: "Randhir Savarkar", party: "BJP", district: "Akola" },
-        { constituency: "Murtizapur (SC)", mla: "Harish Pimple", party: "BJP", district: "Akola" },
-        // Washim
-        { constituency: "Risod", mla: "Amit Zanak", party: "INC", district: "Washim" },
-        { constituency: "Washim (SC)", mla: "Shyam Khode", party: "BJP", district: "Washim" },
-        { constituency: "Karanja", mla: "Sai Prakash Dahake", party: "BJP", district: "Washim" },
-        // Amravati
-        { constituency: "Dhamangaon Railway", mla: "Pratap Adsad", party: "BJP", district: "Amravati" },
-        { constituency: "Badnera", mla: "Ravi Rana", party: "RYSP", district: "Amravati" },
-        { constituency: "Amravati", mla: "Sulbha Khodke", party: "NCP", district: "Amravati" },
-        { constituency: "Teosa", mla: "Rajesh Wankhade", party: "BJP", district: "Amravati" },
-        { constituency: "Daryapur (SC)", mla: "Gajanan Lawate", party: "SS(UBT)", district: "Amravati" },
-        { constituency: "Melghat (ST)", mla: "Kewalram Kale", party: "BJP", district: "Amravati" },
-        { constituency: "Achalpur", mla: "Pravin Tayade", party: "BJP", district: "Amravati" },
-        { constituency: "Morshi", mla: "Chandu Yawalkar", party: "BJP", district: "Amravati" },
-        // Wardha
-        { constituency: "Arvi", mla: "Sumit Wankhede", party: "BJP", district: "Wardha" },
-        { constituency: "Deoli", mla: "Rajesh Bakane", party: "BJP", district: "Wardha" },
-        { constituency: "Hinganghat", mla: "Samir Kunawar", party: "BJP", district: "Wardha" },
-        { constituency: "Wardha", mla: "Pankaj Bhoyar", party: "BJP", district: "Wardha" },
-        // Nagpur
-        { constituency: "Katol", mla: "Charansing Thakur", party: "BJP", district: "Nagpur" },
-        { constituency: "Savner", mla: "Ashish Deshmukh", party: "BJP", district: "Nagpur" },
-        { constituency: "Hingna", mla: "Sameer Meghe", party: "BJP", district: "Nagpur" },
-        { constituency: "Umred (SC)", mla: "Sanjay Meshram", party: "INC", district: "Nagpur" },
-        { constituency: "Nagpur South West", mla: "Devendra Fadnavis", party: "BJP", district: "Nagpur", photo: "https://www.maharashtranama.com/wp-content/uploads/2022/06/Devendra-Fadnavis.jpg"},
-        { constituency: "Nagpur South", mla: "Mohan Mate", party: "BJP", district: "Nagpur" },
-        { constituency: "Nagpur East", mla: "Krishna Khopde", party: "BJP", district: "Nagpur" },
-        { constituency: "Nagpur Central", mla: "Pravin Datke", party: "BJP", district: "Nagpur" },
-        { constituency: "Nagpur West", mla: "Vikas Thakre", party: "INC", district: "Nagpur" },
-        { constituency: "Nagpur North (SC)", mla: "Nitin Raut", party: "INC", district: "Nagpur" },
-        { constituency: "Kamthi", mla: "Chandrashekhar Bawankule", party: "BJP", district: "Nagpur" },
-        { constituency: "Ramtek", mla: "Ashish Jaiswal", party: "SHS", district: "Nagpur" },
-        // Bhandara
-        { constituency: "Tumsar", mla: "Raju Karemore", party: "NCP", district: "Bhandara" },
-        { constituency: "Bhandara (SC)", mla: "Narendra Bhondekar", party: "SHS", district: "Bhandara" },
-        { constituency: "Sakoli", mla: "Nana Patole", party: "INC", district: "Bhandara" },
-        // Gondia
-        { constituency: "Arjuni Morgaon (SC)", mla: "Rajkumar Badole", party: "NCP", district: "Gondia" },
-        { constituency: "Tirora", mla: "Vijay Rahangdale", party: "BJP", district: "Gondia" },
-        { constituency: "Gondiya", mla: "Vinod Agrawal", party: "BJP", district: "Gondia" },
-        { constituency: "Amgaon (ST)", mla: "Sanjay Puram", party: "BJP", district: "Gondia" },
-        // Gadchiroli
-        { constituency: "Armori (ST)", mla: "Ramdas Masram", party: "INC", district: "Gadchiroli" },
-        { constituency: "Gadchiroli (ST)", mla: "Milind Narote", party: "BJP", district: "Gadchiroli" },
-        { constituency: "Aheri (ST)", mla: "Dharamrao Baba Atram", party: "NCP", district: "Gadchiroli" },
-        // Chandrapur
-        { constituency: "Rajura", mla: "Deorao Bhongle", party: "BJP", district: "Chandrapur" },
-        { constituency: "Chandrapur (SC)", mla: "Kishor Jorgewar", party: "BJP", district: "Chandrapur" },
-        { constituency: "Ballarpur", mla: "Sudhir Mungantiwar", party: "BJP", district: "Chandrapur" },
-        { constituency: "Bramhapuri", mla: "Vijay Wadettiwar", party: "INC", district: "Chandrapur" },
-        { constituency: "Chimur", mla: "Bunty Bhangdiya", party: "BJP", district: "Chandrapur" },
-        { constituency: "Warora", mla: "Karan Deotale", party: "BJP", district: "Chandrapur" },
-        // Yavatmal
-        { constituency: "Wani", mla: "Sanjay Derkar", party: "SS(UBT)", district: "Yavatmal" },
-        { constituency: "Ralegaon (ST)", mla: "Ashok Uike", party: "BJP", district: "Yavatmal" },
-        { constituency: "Yavatmal", mla: "Balasaheb Mangulkar", party: "INC", district: "Yavatmal" },
-        { constituency: "Digras", mla: "Sanjay Rathod", party: "SHS", district: "Yavatmal" },
-        { constituency: "Arni (ST)", mla: "Raju Todsam", party: "BJP", district: "Yavatmal" },
-        { constituency: "Pusad", mla: "Indranil Naik", party: "NCP", district: "Yavatmal" },
-        { constituency: "Umarkhed (SC)", mla: "Kisan Wankhede", party: "BJP", district: "Yavatmal" },
-        // Nanded
-        { constituency: "Kinwat", mla: "Bhimrao Keram", party: "BJP", district: "Nanded" },
-        { constituency: "Hadgaon", mla: "Baburao Kadam", party: "SHS", district: "Nanded" },
-        { constituency: "Bhokar", mla: "Sreejaya Chavan", party: "BJP", district: "Nanded" },
-        { constituency: "Nanded North", mla: "Balaji Kalyankar", party: "SHS", district: "Nanded" },
-        { constituency: "Nanded South", mla: "Anand Tidke", party: "SHS", district: "Nanded" },
-        { constituency: "Loha", mla: "Prataprao Chikhalikar", party: "NCP", district: "Nanded" },
-        { constituency: "Naigaon", mla: "Rajesh Pawar", party: "BJP", district: "Nanded" },
-        { constituency: "Deglur (SC)", mla: "Jitesh Antapurkar", party: "BJP", district: "Nanded" },
-        { constituency: "Mukhed", mla: "Tushar Rathod", party: "BJP", district: "Nanded" },
-        // Hingoli
-        { constituency: "Basmath", mla: "Chandrakant Nawghare", party: "NCP", district: "Hingoli" },
-        { constituency: "Kalamnuri", mla: "Santosh Bangar", party: "SHS", district: "Hingoli" },
-        { constituency: "Hingoli", mla: "Tanaji Mutkule", party: "BJP", district: "Hingoli" },
-        // Parbhani
-        { constituency: "Jintur", mla: "Meghana Bordikar", party: "BJP", district: "Parbhani" },
-        { constituency: "Parbhani", mla: "Rahul Vedprakash Patil", party: "SS(UBT)", district: "Parbhani" },
-        { constituency: "Gangakhed", mla: "Ratnakar Gutte", party: "RSPS", district: "Parbhani" },
-        { constituency: "Pathri", mla: "Rajesh Vitekar", party: "NCP", district: "Parbhani" },
-        // Jalna
-        { constituency: "Partur", mla: "Babanrao Lonikar", party: "BJP", district: "Jalna" },
-        { constituency: "Ghansawangi", mla: "Hikmat Udhan", party: "SHS", district: "Jalna" },
-        { constituency: "Jalna", mla: "Arjun Khotkar", party: "SHS", district: "Jalna" },
-        { constituency: "Badnapur (SC)", mla: "Narayan Kuche", party: "BJP", district: "Jalna" },
-        { constituency: "Bhokardan", mla: "Santosh Danve", party: "BJP", district: "Jalna" },
-        // Chhatrapati Sambhaji Nagar
-        { constituency: "Sillod", mla: "Abdul Sattar", party: "SHS", district: "Chhatrapati Sambhaji Nagar" },
-        { constituency: "Kannad", mla: "Sanjana Jadhav", party: "SHS", district: "Chhatrapati Sambhaji Nagar" },
-        { constituency: "Phulambri", mla: "Anuradha Chavan", party: "BJP", district: "Chhatrapati Sambhaji Nagar" },
-        { constituency: "Aurangabad Central", mla: "Pradeep Jaiswal", party: "SHS", district: "Chhatrapati Sambhaji Nagar" },
-        { constituency: "Aurangabad West (SC)", mla: "Sanjay Shirsat", party: "SHS", district: "Chhatrapati Sambhaji Nagar" },
-        { constituency: "Aurangabad East", mla: "Atul Save", party: "BJP", district: "Chhatrapati Sambhaji Nagar" },
-        { constituency: "Paithan", mla: "Vilas Bhumre", party: "SHS", district: "Chhatrapati Sambhaji Nagar" },
-        { constituency: "Gangapur", mla: "Prashant Bamb", party: "BJP", district: "Chhatrapati Sambhaji Nagar" },
-        { constituency: "Vaijapur", mla: "Ramesh Bornare", party: "SHS", district: "Chhatrapati Sambhaji Nagar" },
-        // Nashik
-        { constituency: "Nandgaon", mla: "Suhas Kande", party: "SHS", district: "Nashik" },
-        { constituency: "Malegaon Central", mla: "Ismail Abdul Khalique", party: "AIMIM", district: "Nashik" },
-        { constituency: "Malegaon Outer", mla: "Dadaji Bhuse", party: "SHS", district: "Nashik" },
-        { constituency: "Baglan (ST)", mla: "Dilip Borse", party: "BJP", district: "Nashik" },
-        { constituency: "Kalwan (ST)", mla: "Nitin Pawar", party: "NCP", district: "Nashik" },
-        { constituency: "Chandwad", mla: "Rahul Aher", party: "BJP", district: "Nashik" },
-        { constituency: "Yevla", mla: "Chhagan Bhujbal", party: "NCP", district: "Nashik" },
-        { constituency: "Sinnar", mla: "Manikrao Kokate", party: "NCP", district: "Nashik" },
-        { constituency: "Niphad", mla: "Diliprao Bankar", party: "NCP", district: "Nashik" },
-        { constituency: "Dindori (ST)", mla: "Narhari Zirwal", party: "NCP", district: "Nashik" },
-        { constituency: "Nashik East", mla: "Rahul Dhikale", party: "BJP", district: "Nashik" },
-        { constituency: "Nashik Central", mla: "Devayani Farande", party: "BJP", district: "Nashik" },
-        { constituency: "Nashik West", mla: "Seema Hiray", party: "BJP", district: "Nashik" },
-        { constituency: "Deolali (SC)", mla: "Saroj Ahire", party: "NCP", district: "Nashik" },
-        { constituency: "Igatpuri (ST)", mla: "Hiraman Khoskar", party: "NCP", district: "Nashik" },
-        // Palghar
-        { constituency: "Dahanu (ST)", mla: "Vinod Bhiva Nikole", party: "CPI(M)", district: "Palghar" },
-        { constituency: "Vikramgad (ST)", mla: "Harishchandra Bhoye", party: "BJP", district: "Palghar" },
-        { constituency: "Palghar (ST)", mla: "Rajendra Gavit", party: "SHS", district: "Palghar" },
-        { constituency: "Boisar (ST)", mla: "Vilas Tare", party: "SHS", district: "Palghar" },
-        { constituency: "Nalasopara", mla: "Rajan Naik", party: "BJP", district: "Palghar" },
-        { constituency: "Vasai", mla: "Sneha Pandit", party: "NCP", district: "Palghar" },
-        // Thane
-        { constituency: "Bhiwandi Rural (ST)", mla: "Shantaram More", party: "SHS", district: "Thane" },
-        { constituency: "Shahapur (ST)", mla: "Daulat Daroda", party: "NCP", district: "Thane" },
-        { constituency: "Bhiwandi West", mla: "Mahesh Choughule", party: "BJP", district: "Thane" },
-        { constituency: "Bhiwandi East", mla: "Rais Shaikh", party: "SP", district: "Thane" },
-        { constituency: "Kalyan West", mla: "Vishwanath Bhoir", party: "SHS", district: "Thane" },
-        { constituency: "Murbad", mla: "Kisan Kathore", party: "BJP", district: "Thane" },
-        { constituency: "Ambernath (SC)", mla: "Balaji Kinikar", party: "SHS", district: "Thane" },
-        { constituency: "Ulhasnagar", mla: "Kumar Ailani", party: "BJP", district: "Thane" },
-        { constituency: "Kalyan East", mla: "Sulbha Gaikwad", party: "BJP", district: "Thane" },
-        { constituency: "Dombivli", mla: "Ravindra Chavan", party: "BJP", district: "Thane" },
-        { constituency: "Kalyan Rural", mla: "Rajesh More", party: "SHS", district: "Thane" },
-        { constituency: "Mira Bhayandar", mla: "Narendra Mehta", party: "BJP", district: "Thane" },
-        { constituency: "Ovala-Majiwada", mla: "Pratap Sarnaik", party: "SHS", district: "Thane" },
-        { constituency: "Kopri-Pachpakhadi", mla: "Eknath Shinde", party: "SHS", district: "Thane",photo: "https://upload.wikimedia.org/wikipedia/commons/7/79/Eknath_Shinde.jpg" },
-        { constituency: "Thane", mla: "Sanjay Kelkar", party: "BJP", district: "Thane" },
-        { constituency: "Mumbra-Kalwa", mla: "Jitendra Awhad", party: "NCP-SP", district: "Thane" },
-        { constituency: "Airoli", mla: "Ganesh Naik", party: "BJP", district: "Thane" },
-        { constituency: "Belapur", mla: "Manda Mhatre", party: "BJP", district: "Thane" },
-        // Mumbai Suburban
-        { constituency: "Borivali", mla: "Sanjay Upadhyay", party: "BJP", district: "Mumbai Suburban" },
-        { constituency: "Dahisar", mla: "Manisha Chaudhary", party: "BJP", district: "Mumbai Suburban" },
-        { constituency: "Magathane", mla: "Prakash Surve", party: "SHS", district: "Mumbai Suburban" },
-        { constituency: "Mulund", mla: "Mihir Kotecha", party: "BJP", district: "Mumbai Suburban" },
-        { constituency: "Vikhroli", mla: "Sunil Raut", party: "SS(UBT)", district: "Mumbai Suburban" },
-        { constituency: "Bhandup West", mla: "Ashok Patil", party: "SHS", district: "Mumbai Suburban" },
-        { constituency: "Jogeshwari East", mla: "Anant Nar", party: "SS(UBT)", district: "Mumbai Suburban" },
-        { constituency: "Dindoshi", mla: "Sunil Prabhu", party: "SS(UBT)", district: "Mumbai Suburban" },
-        { constituency: "Kandivali East", mla: "Atul Bhatkhalkar", party: "BJP", district: "Mumbai Suburban" },
-        { constituency: "Charkop", mla: "Yogesh Sagar", party: "BJP", district: "Mumbai Suburban" },
-        { constituency: "Malad West", mla: "Aslam Shaikh", party: "INC", district: "Mumbai Suburban" },
-        { constituency: "Goregaon", mla: "Vidya Thakur", party: "BJP", district: "Mumbai Suburban" },
-        { constituency: "Versova", mla: "Haroon Rashid Khan", party: "SS(UBT)", district: "Mumbai Suburban" },
-        { constituency: "Andheri West", mla: "Ameet Satam", party: "BJP", district: "Mumbai Suburban" },
-        { constituency: "Andheri East", mla: "Murji Patel", party: "SHS", district: "Mumbai Suburban" },
-        { constituency: "Vile Parle", mla: "Parag Alavani", party: "BJP", district: "Mumbai Suburban" },
-        { constituency: "Chandivali", mla: "Dilip Lande", party: "SHS", district: "Mumbai Suburban" },
-        { constituency: "Ghatkopar West", mla: "Ram Kadam", party: "BJP", district: "Mumbai Suburban" },
-        { constituency: "Ghatkopar East", mla: "Parag Shah", party: "BJP", district: "Mumbai Suburban" },
-        { constituency: "Mankhurd Shivaji Nagar", mla: "Abu Asim Azmi", party: "SP", district: "Mumbai Suburban" },
-        { constituency: "Anushakti Nagar", mla: "Sana Malik", party: "NCP", district: "Mumbai Suburban" },
-        { constituency: "Chembur", mla: "Tukaram Kate", party: "SHS", district: "Mumbai Suburban" },
-        { constituency: "Kurla(SC)", mla: "Mangesh Kudalkar", party: "SHS", district: "Mumbai Suburban" },
-        { constituency: "Kalina", mla: "Sanjay Potnis", party: "SS(UBT)", district: "Mumbai Suburban" },
-        { constituency: "Vandre East", mla: "Varun Sardesai", party: "SS(UBT)", district: "Mumbai Suburban" },
-        { constituency: "Vandre West", mla: "Ashish Shelar", party: "BJP", district: "Mumbai Suburban" },
-        // Mumbai City
-        { constituency: "Dharavi (SC)", mla: "Jyoti Gaikwad", party: "INC", district: "Mumbai City" },
-        { constituency: "Sion Koliwada", mla: "R. Tamil Selvan", party: "BJP", district: "Mumbai City" },
-        { constituency: "Wadala", mla: "Kalidas Kolambkar", party: "BJP", district: "Mumbai City" },
-        { constituency: "Mahim", mla: "Mahesh Sawant", party: "SS(UBT)", district: "Mumbai City" },
-        { constituency: "Worli", mla: "Aaditya Thackeray", party: "SS(UBT)", district: "Mumbai City",photo: "https://upload.wikimedia.org/wikipedia/commons/4/45/Aaditya_Thackeray.jpg"},
-        { constituency: "Shivadi", mla: "Ajay Choudhari", party: "SHS", district: "Mumbai City" },
-        { constituency: "Byculla", mla: "Manoj Jamsutkar", party: "SS(UBT)", district: "Mumbai City" },
-        { constituency: "Malabar Hill", mla: "Mangal Lodha", party: "BJP", district: "Mumbai City" },
-        { constituency: "Mumbadevi", mla: "Amin Patel", party: "INC", district: "Mumbai City" },
-        { constituency: "Colaba", mla: "Rahul Narwekar", party: "BJP", district: "Mumbai City" },
-        // Raigad
-        { constituency: "Panvel", mla: "Prashant Thakur", party: "BJP", district: "Raigad" },
-        { constituency: "Karjat", mla: "Mahendra Thorve", party: "SHS", district: "Raigad" },
-        { constituency: "Uran", mla: "Mahesh Baldi", party: "BJP", district: "Raigad" },
-        { constituency: "Pen", mla: "Ravisheth Patil", party: "BJP", district: "Raigad" },
-        { constituency: "Alibag", mla: "Mahendra Dalvi", party: "SHS", district: "Raigad" },
-        { constituency: "Shrivardhan", mla: "Aditi Tatkare", party: "NCP", district: "Raigad" },
-        { constituency: "Mahad", mla: "Bharatshet Gogawale", party: "SHS", district: "Raigad" },
-        // Pune
-        { constituency: "Junnar", mla: "Sharaddada Sonavane", party: "IND", district: "Pune" },
-        { constituency: "Ambegaon", mla: "Dilip Walse Patil", party: "NCP", district: "Pune" },
-        { constituency: "Khed Alandi", mla: "Babaji Kale", party: "SS(UBT)", district: "Pune" },
-        { constituency: "Shirur", mla: "Dnyaneshwar Katke", party: "NCP", district: "Pune" },
-        { constituency: "Daund", mla: "Rahul Kul", party: "BJP", district: "Pune" },
-        { constituency: "Indapur", mla: "Dattatray Bharne", party: "NCP", district: "Pune" },
-        { constituency: "Baramati", mla: "Sunetra Pawar", party: "NCP", district: "Pune" },
-        { constituency: "Purandar", mla: "Vijay Shivtare", party: "SHS", district: "Pune" },
-        { constituency: "Bhor", mla: "Shankar Mandekar", party: "NCP", district: "Pune" },
-        { constituency: "Maval", mla: "Sunil Shelke", party: "NCP", district: "Pune" },
-        { constituency: "Chinchwad", mla: "Shankar Jagtap", party: "BJP", district: "Pune" },
-        { constituency: "Pimpri (SC)", mla: "Anna Bansode", party: "NCP", district: "Pune" },
-        { constituency: "Bhosari", mla: "Mahesh Landge", party: "BJP", district: "Pune" },
-        { constituency: "Vadgaon Sheri", mla: "Bapusaheb Pathare", party: "NCP-SP", district: "Pune" },
-        { constituency: "Shivajinagar", mla: "Siddharth Shirole", party: "BJP", district: "Pune" },
-        { constituency: "Kothrud", mla: "Chandrakant Patil", party: "BJP", district: "Pune" },
-        { constituency: "Khadakwasala", mla: "Bhimrao Tapkir", party: "BJP", district: "Pune" },
-        { constituency: "Parvati", mla: "Madhuri Misal", party: "BJP", district: "Pune" },
-        { constituency: "Hadapsar", mla: "Chetan Tupe", party: "NCP", district: "Pune" },
-        { constituency: "Pune Cantonment", mla: "Sunil Kamble", party: "BJP", district: "Pune" },
-        { constituency: "Kasba Peth", mla: "Hemant Rasane", party: "BJP", district: "Pune" },
-        // Ahmednagar
-        { constituency: "Akole (ST)", mla: "Kiran Lahamate", party: "NCP", district: "Ahmednagar" },
-        { constituency: "Sangamner", mla: "Amol Khatal", party: "SHS", district: "Ahmednagar" },
-        { constituency: "Shirdi", mla: "Radhakrishna Vikhe Patil", party: "BJP", district: "Ahmednagar" },
-        { constituency: "Kopargaon", mla: "Ashutosh Kale", party: "NCP", district: "Ahmednagar" },
-        { constituency: "Shrirampur (SC)", mla: "Hemant Ogale", party: "INC", district: "Ahmednagar" },
-        { constituency: "Nevasa", mla: "Vitthalrao Langhe", party: "SHS", district: "Ahmednagar" },
-        { constituency: "Shevgaon", mla: "Monika Rajale", party: "BJP", district: "Ahmednagar" },
-        { constituency: "Rahuri", mla: "Akshay Shivajirao Kardile", party: "BJP", district: "Ahmednagar" },
-        { constituency: "Parner", mla: "Kashinath Date", party: "NCP", district: "Ahmednagar" },
-        { constituency: "Ahmednagar City", mla: "Sangram Jagtap", party: "NCP", district: "Ahmednagar" },
-        { constituency: "Shrigonda", mla: "Vikram Pachpute", party: "BJP", district: "Ahmednagar" },
-        { constituency: "Karjat Jamkhed", mla: "Rohit Pawar", party: "NCP-SP", district: "Ahmednagar" },
-        // Beed
-        { constituency: "Georai (SC)", mla: "Vijaysinh Pandit", party: "NCP", district: "Beed" },
-        { constituency: "Majalgaon", mla: "Prakashdada Solanke", party: "NCP", district: "Beed" },
-        { constituency: "Beed", mla: "Sandeep Kshirsagar", party: "NCP-SP", district: "Beed" },
-        { constituency: "Ashti", mla: "Suresh Dhas", party: "BJP", district: "Beed" },
-        { constituency: "Kaij (SC)", mla: "Namita Mundada", party: "BJP", district: "Beed" },
-        { constituency: "Parli", mla: "Dhananjay Munde", party: "NCP", district: "Beed" },
-        // Latur
-        { constituency: "Latur Rural", mla: "Ramesh Karad", party: "BJP", district: "Latur" },
-        { constituency: "Latur City", mla: "Amit Deshmukh", party: "INC", district: "Latur" },
-        { constituency: "Ahmadpur", mla: "Babasaheb Patil", party: "NCP", district: "Latur" },
-        { constituency: "Udgir (SC)", mla: "Sanjay Bansode", party: "NCP", district: "Latur" },
-        { constituency: "Nilanga", mla: "Sambhaji Patil Nilangekar", party: "BJP", district: "Latur" },
-        { constituency: "Ausa", mla: "Abhimanyu Pawar", party: "BJP", district: "Latur" },
-        // Dharashiv
-        { constituency: "Umarga (SC)", mla: "Pravin Virbhadrayya Swami", party: "SS(UBT)", district: "Dharashiv" },
-        { constituency: "Tuljapur", mla: "Ranajagjitsinha Patil", party: "BJP", district: "Dharashiv" },
-        { constituency: "Dharashiv", mla: "Kailas Patil", party: "SS(UBT)", district: "Dharashiv" },
-        { constituency: "Paranda", mla: "Tanaji Sawant", party: "SHS", district: "Dharashiv" },
-        // Solapur
-        { constituency: "Karmala", mla: "Narayan Patil", party: "NCP-SP", district: "Solapur" },
-        { constituency: "Madha", mla: "Abhijeet Patil", party: "NCP-SP", district: "Solapur" },
-        { constituency: "Barshi", mla: "Dilip Sopal", party: "SS(UBT)", district: "Solapur" },
-        { constituency: "Mohol (SC)", mla: "Raju Khare", party: "NCP-SP", district: "Solapur" },
-        { constituency: "Solapur City North", mla: "Vijay Deshmukh", party: "BJP", district: "Solapur" },
-        { constituency: "Solapur City Central", mla: "Devendra Kothe", party: "BJP", district: "Solapur" },
-        { constituency: "Akkalkot", mla: "Sachin Kalyanshetti", party: "BJP", district: "Solapur" },
-        { constituency: "Solapur South", mla: "Subhash Deshmukh", party: "BJP", district: "Solapur" },
-        { constituency: "Pandharpur", mla: "Samadhan Autade", party: "BJP", district: "Solapur" },
-        { constituency: "Sangola", mla: "Babasaheb Deshmukh", party: "PWPI", district: "Solapur" },
-        { constituency: "Malshiras (SC)", mla: "Uttamrao Jankar", party: "NCP-SP", district: "Solapur" },
-        // Satara
-        { constituency: "Phaltan (SC)", mla: "Sachin Patil", party: "NCP", district: "Satara" },
-        { constituency: "Wai", mla: "Makrand Jadhav - Patil", party: "NCP-SP", district: "Satara" },
-        { constituency: "Koregaon", mla: "Mahesh Shinde", party: "SHS", district: "Satara" },
-        { constituency: "Man", mla: "Jaykumar Gore", party: "BJP", district: "Satara" },
-        { constituency: "Karad North", mla: "Manoj Ghorpade", party: "BJP", district: "Satara" },
-        { constituency: "Karad South", mla: "Atulbaba Bhosale", party: "BJP", district: "Satara" },
-        { constituency: "Patan", mla: "Shambhuraj Desai", party: "SHS", district: "Satara" },
-        { constituency: "Satara", mla: "Shivendra Raje Bhosale", party: "BJP", district: "Satara" },
-        // Ratnagiri
-        { constituency: "Dapoli", mla: "Yogesh Kadam", party: "SHS", district: "Ratnagiri" },
-        { constituency: "Guhagar", mla: "Bhaskar Jadhav", party: "SS(UBT)", district: "Ratnagiri" },
-        { constituency: "Chiplun", mla: "Shekhar Nikam", party: "NCP", district: "Ratnagiri" },
-        { constituency: "Ratnagiri", mla: "Uday Samant", party: "SHS", district: "Ratnagiri" },
-        { constituency: "Rajapur", mla: "Kiran Samant", party: "SHS", district: "Ratnagiri" },
-        // Sindhudurg
-        { constituency: "Kankavli", mla: "Nitesh Rane", party: "BJP", district: "Sindhudurg" },
-        { constituency: "Kudal", mla: "Nilesh Rane", party: "SHS", district: "Sindhudurg" },
-        { constituency: "Sawantwadi", mla: "Deepak Kesarkar", party: "SHS", district: "Sindhudurg" },
-        // Kolhapur
-        { constituency: "Chandgad", mla: "Shivaji Patil", party: "IND", district: "Kolhapur" },
-        { constituency: "Radhanagari", mla: "Prakashrao Abitkar", party: "SHS", district: "Kolhapur" },
-        { constituency: "Kagal", mla: "Hasan Mushrif", party: "NCP", district: "Kolhapur" },
-        { constituency: "Kolhapur South", mla: "Amal Mahadik", party: "BJP", district: "Kolhapur" },
-        { constituency: "Karvir", mla: "Chandradip Narke", party: "SHS", district: "Kolhapur" },
-        { constituency: "Kolhapur North", mla: "Rajesh Kshirsagar", party: "SHS", district: "Kolhapur" },
-        { constituency: "Shahuwadi", mla: "Vinay Kore", party: "JSS", district: "Kolhapur" },
-        { constituency: "Hatkanangle (SC)", mla: "Ashokrao Mane", party: "JSS", district: "Kolhapur" },
-        { constituency: "Ichalkaranji", mla: "Rahul Awade", party: "BJP", district: "Kolhapur" },
-        { constituency: "Shirol", mla: "Rajendra Patil Yadravkar", party: "RSVA", district: "Kolhapur" },
-        // Sangli
-        { constituency: "Miraj (SC)", mla: "Suresh Khade", party: "BJP", district: "Sangli" },
-        { constituency: "Sangli", mla: "Sudhir Gadgil", party: "BJP", district: "Sangli" },
-        { constituency: "Islampur", mla: "Jayant Patil", party: "NCP-SP", district: "Sangli" },
-        { constituency: "Shirala", mla: "Satyajit Deshmukh", party: "BJP", district: "Sangli" },
-        { constituency: "Palus-Kadegaon", mla: "Vishwajeet Kadam", party: "INC", district: "Sangli" },
-        { constituency: "Khanapur", mla: "Suhas Babar", party: "SHS", district: "Sangli" },
-        { constituency: "Tasgaon-Kavathe Mahankal", mla: "Rohit Patil", party: "NCP-SP", district: "Sangli" },
-        { constituency: "Jat", mla: "Gopichand Padalkar", party: "BJP", district: "Sangli" }
-    ];
-
-    // ============================================
-    // DOM ELEMENTS
-    // ============================================
+// ============================================
+// LOAD DISTRICTS BASED ON STATE ID
+// ============================================
+function loadDistricts(stateId) {
     const districtSelect = document.getElementById('districtSelect');
     const constituencySelect = document.getElementById('constituencySelect');
-    const mlaNameDisplay = document.getElementById('mlaNameDisplay');
-    const mlaPartyDisplay = document.getElementById('mlaPartyDisplay');
-    const mlaConstituencyDisplay = document.getElementById('mlaConstituencyDisplay');
-    const mlaDistrictDisplay = document.getElementById('mlaDistrictDisplay');
-    const mlaIdDisplay = document.getElementById('mlaIdDisplay');
-    const mlaNameHidden = document.getElementById('mlaNameHidden');
-    const mlaPartyHidden = document.getElementById('mlaPartyHidden');
-    const mlaIdHidden = document.getElementById('mlaIdHidden');
-
-    // ============================================
-    // POPULATE DISTRICTS
-    // ============================================
-    function populateDistricts() {
-        const districts = Object.keys(maharashtraData).sort();
-        districts.forEach(dist => {
-            const option = document.createElement('option');
-            option.value = dist;
-            option.textContent = dist;
-            districtSelect.appendChild(option);
+    
+    // Reset dependent dropdowns
+    districtSelect.innerHTML = '<option value="">Select District</option>';
+    districtSelect.disabled = true;
+    constituencySelect.innerHTML = '<option value="">Select Constituency</option>';
+    constituencySelect.disabled = true;
+    resetMlaDisplay();
+    
+    if (!stateId) return;
+    
+    // AJAX call to fetch districts
+    fetch('<?= base_url("api/get-districts") ?>?state_id=' + stateId)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.districts.length > 0) {
+                districtSelect.disabled = false;
+                data.districts.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district.id;
+                    option.textContent = district.district_name;
+                    districtSelect.appendChild(option);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error loading districts:', error);
         });
-    }
-    populateDistricts();
+}
 
-    // ============================================
-    // DISTRICT CHANGE → LOAD CONSTITUENCIES
-    // ============================================
-    districtSelect.addEventListener('change', function() {
-        const selectedDistrict = this.value;
-        constituencySelect.innerHTML = '<option value="">Select Constituency</option>';
-        constituencySelect.disabled = true;
-        resetMlaDisplay();
+// ============================================
+// LOAD CONSTITUENCIES BASED ON DISTRICT ID
+// ============================================
+function loadConstituencies(districtId) {
+    const constituencySelect = document.getElementById('constituencySelect');
+    
+    // Reset constituency dropdown
+    constituencySelect.innerHTML = '<option value="">Select Constituency</option>';
+    constituencySelect.disabled = true;
+    resetMlaDisplay();
+    
+    if (!districtId) return;
+    
+    // AJAX call to fetch constituencies
+    fetch('<?= base_url("api/get-constituencies") ?>?district_id=' + districtId)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.constituencies.length > 0) {
+                constituencySelect.disabled = false;
+                data.constituencies.forEach(constituency => {
+                    const option = document.createElement('option');
+                    option.value = constituency.id;
+                    option.textContent = constituency.constituency_name;
+                    constituencySelect.appendChild(option);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error loading constituencies:', error);
+        });
+}
 
-        if (selectedDistrict && maharashtraData[selectedDistrict]) {
-            const constituencies = maharashtraData[selectedDistrict];
-            constituencies.forEach(cons => {
-                const option = document.createElement('option');
-                option.value = cons;
-                option.textContent = cons;
-                constituencySelect.appendChild(option);
-            });
-            constituencySelect.disabled = false;
-        }
-    });
-
-    // ============================================
-    // CONSTITUENCY CHANGE → AUTO-MAP MLA
-    // ============================================
-    constituencySelect.addEventListener('change', function() {
-        const selectedConstituency = this.value;
-        const selectedDistrict = districtSelect.value;
-        
-        if (selectedConstituency && selectedDistrict) {
-            const mla = mlaData.find(m => m.constituency === selectedConstituency && m.district === selectedDistrict);
-            if (mla) {
-                mlaNameDisplay.value = mla.mla;
-                mlaPartyDisplay.value = mla.party;
-                mlaConstituencyDisplay.value = mla.constituency;
-                mlaDistrictDisplay.value = mla.district;
-                mlaIdDisplay.value = `MLA-${mla.district.substring(0,3).toUpperCase()}-${mla.constituency.substring(0,3).toUpperCase()}`;
-                
-                // Set hidden inputs for form submission
-                mlaNameHidden.value = mla.mla;
-                mlaPartyHidden.value = mla.party;
-                mlaIdHidden.value = `MLA-${mla.district.substring(0,3).toUpperCase()}-${mla.constituency.substring(0,3).toUpperCase()}`;
+// ============================================
+// LOAD MLA BASED ON CONSTITUENCY ID
+// ============================================
+function loadMla(constituencyId) {
+    resetMlaDisplay();
+    
+    if (!constituencyId) return;
+    
+    // AJAX call to fetch MLA
+    fetch('<?= base_url("api/get-mla") ?>?constituency_id=' + constituencyId)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.mla) {
+                document.getElementById('mlaIdHidden').value = data.mla.id;
+                document.getElementById('mlaIdDisplay').value = 'MLA-' + data.mla.id;
+                document.getElementById('mlaNameDisplay').value = data.mla.mla_name || '—';
+                document.getElementById('mlaPartyDisplay').value = data.mla.party || '—';
+                document.getElementById('mlaConstituencyDisplay').value = data.mla.constituency_name || '—';
+                document.getElementById('mlaDistrictDisplay').value = data.mla.district_name || '—';
             } else {
-                resetMlaDisplay();
-                alert('⚠️ No MLA found for the selected constituency. Please verify the data.');
+                document.getElementById('mlaNameDisplay').value = 'No MLA assigned';
+                document.getElementById('mlaIdHidden').value = '';
             }
-        } else {
-            resetMlaDisplay();
-        }
-    });
-
-    // ============================================
-    // RESET MLA DISPLAY
-    // ============================================
-    function resetMlaDisplay() {
-        mlaNameDisplay.value = 'Select constituency';
-        mlaPartyDisplay.value = '—';
-        mlaConstituencyDisplay.value = '—';
-        mlaDistrictDisplay.value = '—';
-        mlaIdDisplay.value = 'Auto-mapped';
-        mlaNameHidden.value = '';
-        mlaPartyHidden.value = '';
-        mlaIdHidden.value = '';
-    }
-
-    // ============================================
-    // VIEW TOGGLING
-    // ============================================
-    function switchToRegister() {
-        document.getElementById('loginWrap').style.display = 'none';
-        document.getElementById('registerWrap').style.display = 'block';
-        resetToStep(1);
-    }
-
-    function switchToLogin() {
-        document.getElementById('registerWrap').style.display = 'none';
-        document.getElementById('loginWrap').style.display = 'block';
-        resetToStep(1);
-    }
-
-    // ============================================
-    // STEP NAVIGATION
-    // ============================================
-    function resetToStep(step) {
-        document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
-        const targetStep = document.querySelector(`.form-step[data-step="${step}"]`);
-        if (targetStep) {
-            targetStep.classList.add('active');
-        }
-        updateStepIndicators(step);
-        updateProfileCompletion(step);
-    }
-
-    function nextStep(current) {
-        // Validate current step before proceeding
-        if (!validateStep(current)) {
-            return;
-        }
-        
-        let next = current + 1;
-        
-        // Special validation for step 3 before going to step 4
-        if (current === 3) {
-            const district = districtSelect.value;
-            const constituency = constituencySelect.value;
-            const voterId = document.getElementById('voterIdInput').value.trim();
-            
-            if (!voterId) {
-                alert('⚠️ Voter ID is required. Please go back to Step 1 and enter your Voter ID.');
-                return;
-            }
-            if (!district) {
-                alert('⚠️ Please select a District.');
-                return;
-            }
-            if (!constituency) {
-                alert('⚠️ Please select a Constituency.');
-                return;
-            }
-            
-            const mla = mlaData.find(m => m.constituency === constituency && m.district === district);
-            if (!mla) {
-                alert('⚠️ No MLA found for the selected constituency. Please verify your selection.');
-                return;
-            }
-        }
-        
-        // Update MLA display when moving to step 4
-        if (next === 4) {
-            const constituency = constituencySelect.value;
-            const district = districtSelect.value;
-            if (!constituency || !district) {
-                alert('⚠️ Please select District and Constituency first.');
-                return;
-            }
-            const mla = mlaData.find(m => m.constituency === constituency && m.district === district);
-            if (!mla) {
-                alert('⚠️ No MLA mapping available. Please verify your selection.');
-                return;
-            }
-            // Update MLA display
-            mlaNameDisplay.value = mla.mla;
-            mlaPartyDisplay.value = mla.party;
-            mlaConstituencyDisplay.value = mla.constituency;
-            mlaDistrictDisplay.value = mla.district;
-            mlaIdDisplay.value = `MLA-${mla.district.substring(0,3).toUpperCase()}-${mla.constituency.substring(0,3).toUpperCase()}`;
-            mlaNameHidden.value = mla.mla;
-            mlaPartyHidden.value = mla.party;
-            mlaIdHidden.value = `MLA-${mla.district.substring(0,3).toUpperCase()}-${mla.constituency.substring(0,3).toUpperCase()}`;
-        }
-        
-        // Move to next step
-        document.querySelector(`.form-step[data-step="${current}"]`).classList.remove('active');
-        document.querySelector(`.form-step[data-step="${next}"]`).classList.add('active');
-        updateStepIndicators(next);
-        updateProfileCompletion(next);
-    }
-
-    function prevStep(current) {
-        let prev = current - 1;
-        document.querySelector(`.form-step[data-step="${current}"]`).classList.remove('active');
-        document.querySelector(`.form-step[data-step="${prev}"]`).classList.add('active');
-        updateStepIndicators(prev);
-        updateProfileCompletion(prev);
-    }
-
-    // ============================================
-    // VALIDATION FUNCTIONS
-    // ============================================
-    function validateStep(step) {
-        switch(step) {
-            case 1:
-                const voterId = document.getElementById('voterIdInput').value.trim();
-                const fullName = document.querySelector('input[name="full_name"]').value.trim();
-                const dob = document.querySelector('input[name="dob"]').value;
-                const gender = document.querySelector('select[name="gender"]').value;
-                
-                if (!voterId) {
-                    alert('⚠️ Please enter your Voter ID.');
-                    return false;
-                }
-                if (!fullName) {
-                    alert('⚠️ Please enter your Full Name.');
-                    return false;
-                }
-                if (!dob) {
-                    alert('⚠️ Please select your Date of Birth.');
-                    return false;
-                }
-                if (!gender) {
-                    alert('⚠️ Please select your Gender.');
-                    return false;
-                }
-                return true;
-                
-            case 2:
-                const password = document.getElementById('passwordField').value;
-                const confirmPassword = document.getElementById('confirmPasswordField').value;
-                
-                if (password.length < 8) {
-                    alert('⚠️ Password must be at least 8 characters long.');
-                    return false;
-                }
-                if (password !== confirmPassword) {
-                    alert('⚠️ Passwords do not match.');
-                    return false;
-                }
-                return true;
-                
-            case 3:
-                const district = districtSelect.value;
-                const constituency = constituencySelect.value;
-                const pincode = document.querySelector('input[name="pincode"]').value.trim();
-                const locality = document.querySelector('input[name="locality"]').value.trim();
-                
-                if (!district) {
-                    alert('⚠️ Please select a District.');
-                    return false;
-                }
-                if (!constituency) {
-                    alert('⚠️ Please select a Constituency.');
-                    return false;
-                }
-                if (!pincode) {
-                    alert('⚠️ Please enter your Pincode.');
-                    return false;
-                }
-                if (!locality) {
-                    alert('⚠️ Please enter your Locality/Area.');
-                    return false;
-                }
-                return true;
-                
-            default:
-                return true;
-        }
-    }
-
-    // ============================================
-    // UPDATE STEP INDICATORS
-    // ============================================
-    function updateStepIndicators(currentStep) {
-        document.querySelectorAll('.step-dot').forEach((dot, index) => {
-            const stepNum = index + 1;
-            dot.classList.remove('active', 'completed');
-            if (stepNum === currentStep) {
-                dot.classList.add('active');
-            } else if (stepNum < currentStep) {
-                dot.classList.add('completed');
-            }
+        })
+        .catch(error => {
+            console.error('Error loading MLA:', error);
+            document.getElementById('mlaNameDisplay').value = 'Error loading MLA';
         });
-    }
+}
 
-    // ============================================
-    // UPDATE PROFILE COMPLETION
-    // ============================================
-    function updateProfileCompletion(step) {
-        const percentages = {1: 20, 2: 40, 3: 60, 4: 80, 5: 100};
-        const badge = document.getElementById('completionBadge');
-        if (badge && percentages[step]) {
-            badge.textContent = `Profile: ${percentages[step]}%`;
-        }
-    }
+// ============================================
+// RESET MLA DISPLAY
+// ============================================
+function resetMlaDisplay() {
+    document.getElementById('mlaIdHidden').value = '';
+    document.getElementById('mlaIdDisplay').value = 'Auto-mapped';
+    document.getElementById('mlaNameDisplay').value = 'Select constituency';
+    document.getElementById('mlaPartyDisplay').value = '—';
+    document.getElementById('mlaConstituencyDisplay').value = '—';
+    document.getElementById('mlaDistrictDisplay').value = '—';
+}
 
-    // ============================================
-    // FORM SUBMIT VALIDATION
-    // ============================================
-    document.getElementById('regForm').addEventListener('submit', function(e) {
-        // Validate all steps before submission
-        if (!validateStep(1) || !validateStep(2) || !validateStep(3)) {
-            e.preventDefault();
-            return false;
-        }
-        
-        const voterId = document.getElementById('voterIdInput').value.trim();
-        const district = districtSelect.value;
-        const constituency = constituencySelect.value;
-        
-        if (!voterId || !district || !constituency) {
-            e.preventDefault();
-            alert('⚠️ Please complete all required fields.');
-            return false;
-        }
-        
-        const mla = mlaData.find(m => m.constituency === constituency && m.district === district);
-        if (!mla) {
-            e.preventDefault();
-            alert('⚠️ No MLA assigned for this constituency. Registration cannot be completed.');
-            return false;
-        }
-        
-        // Set hidden fields one more time before submit
-        mlaNameHidden.value = mla.mla;
-        mlaPartyHidden.value = mla.party;
-        mlaIdHidden.value = `MLA-${mla.district.substring(0,3).toUpperCase()}-${mla.constituency.substring(0,3).toUpperCase()}`;
-        
-        // Show confirmation
-        if (!confirm('Are you sure all details are correct? This will register you as a voter.')) {
-            e.preventDefault();
-            return false;
-        }
-    });
-
-    // ============================================
-    // PROFILE PHOTO UPLOAD PREVIEW
-    // ============================================
-   document.getElementById('photoUpload')?.addEventListener('change', function(e){
-
-    const file = e.target.files[0];
-
-    if(file){
-
-        const reader = new FileReader();
-
-        reader.onload = function(ev){
-
-            document.getElementById('photoPreview').src = ev.target.result;
-            document.getElementById('photoPreview').style.display = 'block';
-
-            document.getElementById('cameraIcon').style.display = 'none';
-
-            document.getElementById('photoText').innerHTML = 
-                "Photo uploaded";
-
-        };
-
-        reader.readAsDataURL(file);
-    }
-
+// ============================================
+// EVENT LISTENERS FOR DYNAMIC DROPDOWNS
+// ============================================
+document.getElementById('stateSelect').addEventListener('change', function() {
+    loadDistricts(this.value);
 });
 
-    // ============================================
-    // OTP AUTO-FOCUS (for future use)
-    // ============================================
-    document.querySelectorAll('.otp-input').forEach((inp, idx, arr) => {
-        inp.addEventListener('input', function() {
-            if (this.value.length === 1 && idx < arr.length - 1) {
-                arr[idx + 1].focus();
-            }
-        });
-        inp.addEventListener('keydown', function(e) {
-            if (e.key === 'Backspace' && this.value === '' && idx > 0) {
-                arr[idx - 1].focus();
-            }
-        });
-    });
+document.getElementById('districtSelect').addEventListener('change', function() {
+    loadConstituencies(this.value);
+});
 
-    console.log('✅ Registration form loaded successfully!');
+document.getElementById('constituencySelect').addEventListener('change', function() {
+    loadMla(this.value);
+});
+
+// ============================================
+// VIEW TOGGLING
+// ============================================
+function switchToRegister() {
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('registerWrap').style.display = 'block';
+    resetToStep(1);
+}
+
+function switchToLogin() {
+    document.getElementById('registerWrap').style.display = 'none';
+    document.getElementById('loginWrap').style.display = 'block';
+    resetToStep(1);
+}
+
+// ============================================
+// STEP NAVIGATION
+// ============================================
+function resetToStep(step) {
+    document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+    const targetStep = document.querySelector(`.form-step[data-step="${step}"]`);
+    if (targetStep) {
+        targetStep.classList.add('active');
+    }
+    updateStepIndicators(step);
+    updateProfileCompletion(step);
+}
+
+function nextStep(current) {
+    if (!validateStep(current)) {
+        return;
+    }
+    
+    let next = current + 1;
+    
+    // Special validation for step 3 before going to step 4
+    if (current === 3) {
+        const stateId = document.getElementById('stateSelect').value;
+        const districtId = document.getElementById('districtSelect').value;
+        const constituencyId = document.getElementById('constituencySelect').value;
+        const mlaId = document.getElementById('mlaIdHidden').value;
+        
+        if (!stateId) {
+            alert('⚠️ Please select a State.');
+            return;
+        }
+        if (!districtId) {
+            alert('⚠️ Please select a District.');
+            return;
+        }
+        if (!constituencyId) {
+            alert('⚠️ Please select a Constituency.');
+            return;
+        }
+        if (!mlaId) {
+            alert('⚠️ No MLA found for the selected constituency. Please verify your selection.');
+            return;
+        }
+    }
+    
+    // Move to next step
+    document.querySelector(`.form-step[data-step="${current}"]`).classList.remove('active');
+    document.querySelector(`.form-step[data-step="${next}"]`).classList.add('active');
+    updateStepIndicators(next);
+    updateProfileCompletion(next);
+}
+
+function prevStep(current) {
+    let prev = current - 1;
+    document.querySelector(`.form-step[data-step="${current}"]`).classList.remove('active');
+    document.querySelector(`.form-step[data-step="${prev}"]`).classList.add('active');
+    updateStepIndicators(prev);
+    updateProfileCompletion(prev);
+}
+
+// ============================================
+// VALIDATION FUNCTIONS
+// ============================================
+function validateStep(step) {
+    switch(step) {
+        case 1:
+            const voterId = document.getElementById('voterIdInput').value.trim();
+            const fullName = document.querySelector('input[name="full_name"]').value.trim();
+            const dob = document.querySelector('input[name="dob"]').value;
+            const gender = document.querySelector('select[name="gender"]').value;
+            
+            if (!voterId) {
+                alert('⚠️ Please enter your Voter ID.');
+                return false;
+            }
+            if (!fullName) {
+                alert('⚠️ Please enter your Full Name.');
+                return false;
+            }
+            if (!dob) {
+                alert('⚠️ Please select your Date of Birth.');
+                return false;
+            }
+            if (!gender) {
+                alert('⚠️ Please select your Gender.');
+                return false;
+            }
+            return true;
+            
+        case 2:
+            const password = document.getElementById('passwordField').value;
+            const confirmPassword = document.getElementById('confirmPasswordField').value;
+            
+            if (password.length < 8) {
+                alert('⚠️ Password must be at least 8 characters long.');
+                return false;
+            }
+            if (password !== confirmPassword) {
+                alert('⚠️ Passwords do not match.');
+                return false;
+            }
+            return true;
+            
+        case 3:
+            const stateId = document.getElementById('stateSelect').value;
+            const districtId = document.getElementById('districtSelect').value;
+            const constituencyId = document.getElementById('constituencySelect').value;
+            const pincode = document.querySelector('input[name="pincode"]').value.trim();
+            const locality = document.querySelector('input[name="locality"]').value.trim();
+            
+            if (!stateId) {
+                alert('⚠️ Please select a State.');
+                return false;
+            }
+            if (!districtId) {
+                alert('⚠️ Please select a District.');
+                return false;
+            }
+            if (!constituencyId) {
+                alert('⚠️ Please select a Constituency.');
+                return false;
+            }
+            if (!pincode) {
+                alert('⚠️ Please enter your Pincode.');
+                return false;
+            }
+            if (!locality) {
+                alert('⚠️ Please enter your Locality/Area.');
+                return false;
+            }
+            return true;
+            
+        default:
+            return true;
+    }
+}
+
+// ============================================
+// UPDATE STEP INDICATORS
+// ============================================
+function updateStepIndicators(currentStep) {
+    document.querySelectorAll('.step-dot').forEach((dot, index) => {
+        const stepNum = index + 1;
+        dot.classList.remove('active', 'completed');
+        if (stepNum === currentStep) {
+            dot.classList.add('active');
+        } else if (stepNum < currentStep) {
+            dot.classList.add('completed');
+        }
+    });
+}
+
+// ============================================
+// UPDATE PROFILE COMPLETION
+// ============================================
+function updateProfileCompletion(step) {
+    const percentages = {1: 20, 2: 40, 3: 60, 4: 80, 5: 100};
+    const badge = document.getElementById('completionBadge');
+    if (badge && percentages[step]) {
+        badge.textContent = `Profile: ${percentages[step]}%`;
+    }
+}
+
+// ============================================
+// FORM SUBMIT VALIDATION
+// ============================================
+document.getElementById('regForm').addEventListener('submit', function(e) {
+    // Validate all steps before submission
+    if (!validateStep(1) || !validateStep(2) || !validateStep(3)) {
+        e.preventDefault();
+        return false;
+    }
+    
+    const mlaId = document.getElementById('mlaIdHidden').value;
+    if (!mlaId) {
+        e.preventDefault();
+        alert('⚠️ No MLA assigned. Please verify your constituency selection.');
+        return false;
+    }
+    
+    // Show confirmation
+    if (!confirm('Are you sure all details are correct? This will register you as a voter.')) {
+        e.preventDefault();
+        return false;
+    }
+});
+
+// ============================================
+// PROFILE PHOTO UPLOAD PREVIEW
+// ============================================
+document.getElementById('photoUpload')?.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            document.getElementById('photoPreview').src = ev.target.result;
+            document.getElementById('photoPreview').style.display = 'block';
+            document.getElementById('cameraIcon').style.display = 'none';
+            document.getElementById('photoText').innerHTML = "Photo uploaded";
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// ============================================
+// OTP AUTO-FOCUS (for future use)
+// ============================================
+document.querySelectorAll('.otp-input').forEach((inp, idx, arr) => {
+    inp.addEventListener('input', function() {
+        if (this.value.length === 1 && idx < arr.length - 1) {
+            arr[idx + 1].focus();
+        }
+    });
+    inp.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && this.value === '' && idx > 0) {
+            arr[idx - 1].focus();
+        }
+    });
+});
+
+console.log('✅ Registration form with ID-based storage loaded successfully!');
 </script>
 
 </body>

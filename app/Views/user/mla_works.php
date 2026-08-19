@@ -903,5 +903,6 @@
     renderProjects('all', 'all', '');
   })();
 </script>
+  <script src="<?= base_url('assets/user/js/navbar.js') ?>"></script>
 </body>
 </html>

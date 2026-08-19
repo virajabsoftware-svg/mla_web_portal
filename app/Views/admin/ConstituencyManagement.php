@@ -919,70 +919,174 @@
                 </button>
             </div>
         <?php endif; ?>
-        <!-- ============================================================ -->
-        <!-- FILTER SECTION - CONSTITUENCY COMMAND CENTER -->
-        <!-- ============================================================ -->
-        <div class="filter-astro p-4 shadow-lg mt-2">
-            <h3 class="mb-4 fw-semibold" style="color:#876b42;"><i class="fas fa-map-location-dot me-2" style="color: var(--gold-dark);"></i> Constituency Command Center</h3>
-            <div class="row g-3">
-                <div class="col-md-2">
-                    <label><i class="fas fa-flag me-1"></i> State</label>
-                    <select name="state_id" id="state_id" class="form-select">
-                        <option value="">All States</option>
+       <!-- ============================================================ -->
+<!-- FILTER SECTION - CONSTITUENCY COMMAND CENTER -->
+<!-- ============================================================ -->
+<div class="filter-astro p-4 shadow-lg mt-2">
 
-                        <?php if (!empty($states)): ?>
-                            <?php foreach ($states as $state): ?>
-                                <option value="<?= $state['id']; ?>">
-                                    <?= esc($state['state_name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label><i class="fas fa-city me-1"></i> District</label>
-                    <select name="district_id" id="district_id" class="form-select">
-                        <option value="">All Districts</option>
+    <h3 class="mb-4 fw-semibold" style="color:#876b42;">
+        <i class="fas fa-map-location-dot me-2"
+           style="color: var(--gold-dark);"></i>
+        Constituency Command Center
+    </h3>
 
-                        <?php if (!empty($districts)): ?>
-                            <?php foreach ($districts as $district): ?>
-                                <option value="<?= $district['id']; ?>">
-                                    <?= esc($district['district_name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                    <input type="text" class="form-control" placeholder="Search constituency">
-                </div>
-                <div class="col-md-2">
-                    <label><i class="fas fa-barcode me-1"></i> Constituency Code</label>
-                    <input type="text" class="form-control" placeholder="Search code">
-                </div>
-                <div class="col-md-2">
-                    <label><i class="fas fa-toggle-on me-1"></i> Status</label>
-                    <select class="form-select">
-                        <option value="">All Status</option>
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label><i class="fas fa-sort-amount-down me-1"></i> Sort By</label>
-                    <select class="form-select">
-                        <option value="asc">A → Z</option>
-                        <option value="desc">Z → A</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mt-4 d-flex gap-3 flex-wrap">
-                <button class="btn btn-warm-gold px-4 fw-bold" onclick="alert('Deploy Filters clicked (static)');"><i class="fas fa-filter me-2"></i>Deploy Filters</button>
-                <button class="btn btn-outline-cream px-4" onclick="alert('Reset clicked (static)');"><i class="fas fa-sync-alt me-2"></i>Reset</button>
-                <button class="btn btn-warm-gold px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#addConstituencyModal"><i class="fas fa-plus me-2"></i>Add Constituency</button>
-            </div>
+    <div class="row g-3">
+
+        <!-- STATE -->
+        <div class="col-md-2">
+            <label>
+                <i class="fas fa-flag me-1"></i>
+                State
+            </label>
+
+            <select name="state_id"
+                    id="state_id"
+                    class="form-select">
+
+                <option value="">All States</option>
+
+                <?php if (!empty($states)): ?>
+                    <?php foreach ($states as $state): ?>
+
+                        <option value="<?= esc($state['id']); ?>">
+                            <?= esc($state['state_name']); ?>
+                        </option>
+
+                    <?php endforeach; ?>
+                <?php endif; ?>
+
+            </select>
         </div>
+
+
+        <!-- DISTRICT -->
+        <div class="col-md-2">
+            <label>
+                <i class="fas fa-city me-1"></i>
+                District
+            </label>
+
+            <select name="district_id"
+                    id="district_id"
+                    class="form-select">
+
+                <option value="">All Districts</option>
+
+                <?php if (!empty($districts)): ?>
+                    <?php foreach ($districts as $district): ?>
+
+                        <option value="<?= esc($district['id']); ?>">
+                            <?= esc($district['district_name']); ?>
+                        </option>
+
+                    <?php endforeach; ?>
+                <?php endif; ?>
+
+            </select>
+        </div>
+
+
+        <!-- CONSTITUENCY SEARCH -->
+        <div class="col-md-2">
+            <label>
+                <i class="fas fa-map-pin me-1"></i>
+                Constituency
+            </label>
+
+            <input type="text"
+                   id="filter_constituency"
+                   class="form-control"
+                   placeholder="Search constituency">
+        </div>
+
+
+        <!-- CONSTITUENCY CODE -->
+        <div class="col-md-2">
+            <label>
+                <i class="fas fa-barcode me-1"></i>
+                Constituency Code
+            </label>
+
+            <input type="text"
+                   id="filter_code"
+                   class="form-control"
+                   placeholder="Search code">
+        </div>
+
+
+        <!-- STATUS -->
+        <div class="col-md-2">
+            <label>
+                <i class="fas fa-toggle-on me-1"></i>
+                Status
+            </label>
+
+            <select id="filter_status"
+                    class="form-select">
+
+                <option value="">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+
+            </select>
+        </div>
+
+
+        <!-- SORT -->
+        <div class="col-md-2">
+            <label>
+                <i class="fas fa-sort-amount-down me-1"></i>
+                Sort By
+            </label>
+
+            <select id="filter_sort"
+                    class="form-select">
+
+                <option value="asc">A → Z</option>
+                <option value="desc">Z → A</option>
+
+            </select>
+        </div>
+
+    </div>
+
+
+    <div class="mt-4 d-flex gap-3 flex-wrap">
+
+        <button type="button"
+                id="deployFiltersBtn"
+                class="btn btn-warm-gold px-4 fw-bold">
+
+            <i class="fas fa-filter me-2"></i>
+            Deploy Filters
+
+        </button>
+
+
+        <button type="button"
+                id="resetFiltersBtn"
+                class="btn btn-outline-cream px-4">
+
+            <i class="fas fa-sync-alt me-2"></i>
+            Reset
+
+        </button>
+
+
+        <!-- ADD CONSTITUENCY - UNCHANGED -->
+        <button type="button"
+                class="btn btn-warm-gold px-4 fw-bold"
+                data-bs-toggle="modal"
+                data-bs-target="#addConstituencyModal">
+
+            <i class="fas fa-plus me-2"></i>
+            Add Constituency
+
+        </button>
+
+    </div>
+
+</div>
 
         <!-- ============================================================ -->
         <!-- CONSTITUENCY DIRECTORY TABLE -->
@@ -1007,9 +1111,17 @@
                     <tbody>
                         <?php if (!empty($constituencies)): ?>
 
-                            <?php foreach ($constituencies as $index => $constituency): ?>
+                           <?php foreach ($constituencies as $index => $constituency): ?>
 
-                                <tr>
+<tr
+    class="constituency-row"
+    data-id="<?= esc($constituency['id']); ?>"
+    data-state-id="<?= esc($constituency['state_id'] ?? ''); ?>"
+    data-district-id="<?= esc($constituency['district_id'] ?? ''); ?>"
+    data-constituency="<?= esc(strtolower(trim($constituency['constituency_name'] ?? ''))); ?>"
+    data-code="<?= esc(strtolower(trim($constituency['constituency_code'] ?? ''))); ?>"
+    data-status="<?= esc(strtolower(trim($constituency['status'] ?? ''))); ?>"
+>
                                     <td><?= $index + 1 ?></td>
 
                                     <td>
@@ -1590,7 +1702,7 @@
 
 $(document).ready(function () {
 
-    loadDistricts('#filter_state_id', '#filter_district_id');
+    
 
     loadDistricts('#modal_state_id', '#modal_district_id');
 
@@ -1791,7 +1903,362 @@ $('#updateConstituencyBtn').on('click', function () {
     });
 
 });
+</script><script>
+$(document).ready(function () {
+
+    // ============================================================
+    // CONSTITUENCY FILTER SYSTEM
+    // ============================================================
+
+    const $state = $('#state_id');
+    const $district = $('#district_id');
+    const $constituency = $('#filter_constituency');
+    const $code = $('#filter_code');
+    const $status = $('#filter_status');
+    const $sort = $('#filter_sort');
+    const $rows = $('.constituency-row');
+
+
+    // ------------------------------------------------------------
+    // APPLY FILTERS
+    // ------------------------------------------------------------
+
+    function applyConstituencyFilters() {
+
+        const stateValue =
+            $.trim($state.val()).toLowerCase();
+
+        const districtValue =
+            $.trim($district.val()).toLowerCase();
+
+        const constituencyValue =
+            $.trim($constituency.val()).toLowerCase();
+
+        const codeValue =
+            $.trim($code.val()).toLowerCase();
+
+        const statusValue =
+            $.trim($status.val()).toLowerCase();
+
+        let visibleRows = [];
+
+
+        // --------------------------------------------------------
+        // FILTER EACH ROW
+        // --------------------------------------------------------
+
+        $rows.each(function () {
+
+            const $row = $(this);
+
+            const rowState =
+                String($row.attr('data-state-id') || '')
+                    .trim()
+                    .toLowerCase();
+
+            const rowDistrict =
+                String($row.attr('data-district-id') || '')
+                    .trim()
+                    .toLowerCase();
+
+            const rowConstituency =
+                String($row.attr('data-constituency') || '')
+                    .trim()
+                    .toLowerCase();
+
+            const rowCode =
+                String($row.attr('data-code') || '')
+                    .trim()
+                    .toLowerCase();
+
+            const rowStatus =
+                String($row.attr('data-status') || '')
+                    .trim()
+                    .toLowerCase();
+
+
+            // STATE
+            const stateMatch =
+                stateValue === '' ||
+                rowState === stateValue;
+
+
+            // DISTRICT
+            const districtMatch =
+                districtValue === '' ||
+                rowDistrict === districtValue;
+
+
+            // CONSTITUENCY NAME
+            const constituencyMatch =
+                constituencyValue === '' ||
+                rowConstituency.includes(constituencyValue);
+
+
+            // CODE
+            const codeMatch =
+                codeValue === '' ||
+                rowCode.includes(codeValue);
+
+
+            // STATUS
+            const statusMatch =
+                statusValue === '' ||
+                rowStatus === statusValue;
+
+
+            // FINAL RESULT
+            const show =
+                stateMatch &&
+                districtMatch &&
+                constituencyMatch &&
+                codeMatch &&
+                statusMatch;
+
+
+            if (show) {
+
+                $row.show();
+
+                visibleRows.push($row);
+
+            } else {
+
+                $row.hide();
+
+            }
+
+        });
+
+
+        // --------------------------------------------------------
+        // SORT VISIBLE ROWS
+        // --------------------------------------------------------
+
+        const sortOrder = $sort.val() || 'asc';
+
+        const $tbody =
+            $('.premium-table tbody');
+
+
+        visibleRows.sort(function (a, b) {
+
+            const nameA =
+                String(a.attr('data-constituency') || '')
+                    .trim()
+                    .toLowerCase();
+
+            const nameB =
+                String(b.attr('data-constituency') || '')
+                    .trim()
+                    .toLowerCase();
+
+
+            if (sortOrder === 'desc') {
+
+                return nameB.localeCompare(
+                    nameA,
+                    undefined,
+                    {
+                        numeric: true,
+                        sensitivity: 'base'
+                    }
+                );
+
+            }
+
+            return nameA.localeCompare(
+                nameB,
+                undefined,
+                {
+                    numeric: true,
+                    sensitivity: 'base'
+                }
+            );
+
+        });
+
+
+        // --------------------------------------------------------
+        // RE-APPEND SORTED ROWS
+        // --------------------------------------------------------
+
+        $.each(visibleRows, function (index, $row) {
+
+            $tbody.append($row);
+
+        });
+
+
+        // --------------------------------------------------------
+        // UPDATE SERIAL NUMBER
+        // --------------------------------------------------------
+
+        let serialNumber = 1;
+
+        $tbody.find('.constituency-row:visible').each(function () {
+
+            $(this)
+                .find('td:first-child')
+                .text(serialNumber);
+
+            serialNumber++;
+
+        });
+
+
+        // --------------------------------------------------------
+        // NO RESULT MESSAGE
+        // --------------------------------------------------------
+
+        $('#noFilterResultRow').remove();
+
+
+        if (visibleRows.length === 0) {
+
+            $tbody.append(`
+                <tr id="noFilterResultRow">
+                    <td colspan="9"
+                        class="text-center py-5">
+
+                        <div style="
+                            color:#876b42;
+                            font-weight:600;
+                            font-size:1rem;
+                        ">
+
+                            <i class="fas fa-search"
+                               style="
+                                   font-size:2rem;
+                                   color:#b8860b;
+                                   margin-bottom:10px;
+                               ">
+                            </i>
+
+                            <br>
+
+                            No constituencies found
+                            matching the selected filters.
+
+                        </div>
+
+                    </td>
+                </tr>
+            `);
+
+        }
+
+    }
+
+
+    // ============================================================
+    // DEPLOY FILTERS BUTTON
+    // ============================================================
+
+    $('#deployFiltersBtn').on('click', function () {
+
+        applyConstituencyFilters();
+
+    });
+
+
+    // ============================================================
+    // LIVE SEARCH
+    // ============================================================
+
+    $constituency.on('input', function () {
+
+        applyConstituencyFilters();
+
+    });
+
+
+    $code.on('input', function () {
+
+        applyConstituencyFilters();
+
+    });
+
+
+    // ============================================================
+    // SELECT FILTERS
+    // ============================================================
+
+    $state.on('change', function () {
+
+        applyConstituencyFilters();
+
+    });
+
+
+    $district.on('change', function () {
+
+        applyConstituencyFilters();
+
+    });
+
+
+    $status.on('change', function () {
+
+        applyConstituencyFilters();
+
+    });
+
+
+    $sort.on('change', function () {
+
+        applyConstituencyFilters();
+
+    });
+
+
+    // ============================================================
+    // RESET FILTERS
+    // ============================================================
+
+    $('#resetFiltersBtn').on('click', function () {
+
+        $state.val('');
+        $district.val('');
+        $constituency.val('');
+        $code.val('');
+        $status.val('');
+        $sort.val('asc');
+
+
+        // Remove no-result message
+        $('#noFilterResultRow').remove();
+
+
+        // Show all rows
+        $rows.show();
+
+
+        // Reset serial numbers
+        $rows.each(function (index) {
+
+            $(this)
+                .find('td:first-child')
+                .text(index + 1);
+
+        });
+
+
+        // Apply default A-Z sorting
+        applyConstituencyFilters();
+
+    });
+
+
+    // ============================================================
+    // INITIAL LOAD
+    // ============================================================
+
+    applyConstituencyFilters();
+
+});
 </script>
+
 </body>
 
 </html>

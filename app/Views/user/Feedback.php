@@ -1711,7 +1711,7 @@ class="form-control">
     </script>
     <?php endif; ?>
 
-    <script src=navbar.js></script>
+      <script src="<?= base_url('assets/user/js/navbar.js') ?>"></script>
 </body>
 
 </html>
