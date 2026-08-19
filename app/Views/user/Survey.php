@@ -675,57 +675,106 @@ name="mla_id"
 id="mlaIdHidden">
 
 <input type="hidden"
-name="voter_id"
-value="<?= session()->get('voter_id'); ?>">
-
+       name="voter_id"
+       value="<?= esc($voter['voter_id'] ?? '') ?>">
 
 <input type="hidden"
-name="mla_id"
-value="<?= session()->get('mla_id'); ?>">
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-3"><label class="form-label fw-semibold"><i class="bi bi-upc-scan"></i>
-                                    Survey ID</label><input type="text"
-class="form-control"
-id="surveyIdField"
-readonly></div>
-                            <div class="col-md-3"><label class="form-label fw-semibold"><i
-                                        class="bi bi-person-badge"></i> Voter ID</label><input type="text"
-                                    class="form-control bg-light" id="voterIdField" value="VTR10254" readonly></div>
-                            <div class="col-md-3"><label class="form-label fw-semibold"><i class="bi bi-building"></i>
-                                    MLA ID</label><input type="text" class="form-control bg-light" id="mlaIdField"
-                                    value="MLA501" readonly></div>
-                            <div class="col-md-3"><label class="form-label fw-semibold"><i
-                                        class="bi bi-calendar-event"></i> Submission</label><input type="datetime-local"
-                                    class="form-control bg-light" id="submissionTimestamp" readonly></div>
-                        </div>
+       name="mla_id"
+       value="<?= esc($voter['mla_id'] ?? '') ?>">
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+        <label class="form-label fw-semibold">
+            <i class="bi bi-upc-scan"></i> Survey ID
+        </label>
+
+        <input type="text"
+               class="form-control"
+               id="surveyIdField"
+               readonly>
+    </div>
+
+
+    <div class="col-md-3">
+        <label class="form-label fw-semibold">
+            <i class="bi bi-person-badge"></i> Voter ID
+        </label>
+
+      <input type="text"
+       class="form-control bg-light"
+       id="voterIdField"
+       value="<?= esc($voter['voter_id'] ?? '') ?>"
+       readonly>
+
+
+    <div class="col-md-3">
+        <label class="form-label fw-semibold">
+            <i class="bi bi-building"></i> MLA ID
+        </label>
+
+       <input type="text"
+       class="form-control bg-light"
+       id="mlaIdField"
+       value="<?= esc($voter['mla_id'] ?? '') ?>"
+       readonly>
+    </div>
+
+
+    <div class="col-md-3">
+        <label class="form-label fw-semibold">
+            <i class="bi bi-calendar-event"></i> Submission
+        </label>
+
+        <input type="datetime-local"
+               class="form-control bg-light"
+               id="submissionTimestamp"
+               readonly>
+    </div>
+
+</div>
 
                         <div class="row g-3 mb-4">
-                            <div class="col-md-3"><label class="form-label fw-semibold"><i
-                                        class="bi bi-geo-alt-fill"></i> District</label><select class="form-select"
-                                        name="district"
-                                    id="districtSelect" required>
-                                    <option value="">Select District</option>
-                                    <option>Satara</option>
-                                    <option>Pune</option>
-                                    <option>Kolhapur</option>
-                                    <option>Sangli</option>
-                                    <option>Nashik</option>
-                                </select></div>
-                            <div class="col-md-3"><label class="form-label fw-semibold"><i
-                                        class="bi bi-pin-map-fill"></i> Constituency</label><select class="form-select"
-                                        name="constituency"
-                                    id="constituencySelect" required>
-                                    <option value="">Select Constituency</option>
-                                    <option>Wai</option>
-                                    <option>Karad</option>
-                                    <option>Satara</option>
-                                    <option>Koregaon</option>
-                                    <option>Pachgani</option>
-                                </select></div>
-                            <div class="col-md-3"><label class="form-label fw-semibold"><i
-                                        class="bi bi-house-heart"></i> Village / Town</label><input type="text"
-                                    class="form-control" name="village" id="villageInput" placeholder="Enter Village Name" required>
-                            </div>
+                           <div class="col-md-3">
+    <label class="form-label fw-semibold">
+        <i class="bi bi-geo-alt-fill"></i> District
+    </label>
+
+   <input type="text"
+       class="form-control bg-light"
+       id="districtField"
+       name="district"
+       value="<?= esc($voter['district'] ?? '') ?>"
+       readonly>
+</div>
+
+
+<div class="col-md-3">
+    <label class="form-label fw-semibold">
+        <i class="bi bi-pin-map-fill"></i> Constituency
+    </label>
+
+    <input type="text"
+       class="form-control bg-light"
+       id="constituencyField"
+       name="constituency"
+       value="<?= esc($voter['constituency'] ?? '') ?>"
+       readonly>
+</div>
+
+
+<div class="col-md-3">
+    <label class="form-label fw-semibold">
+        <i class="bi bi-house-heart"></i> Village / Town
+    </label>
+
+    <input type="text"
+       class="form-control bg-light"
+       id="villageField"
+       name="village"
+       value="<?= esc($voter['village'] ?? '') ?>"
+       readonly>
+</div>
                             <div class="col-md-3"><label class="form-label fw-semibold"><i class="bi bi-file-text"></i>
                                     Survey Category</label><select class="form-select" name="survey_category" id="surveyTypeSelect" required>
                                         <!-- <input type="hidden" name="survey_id" id="surveyIdHidden"> -->
@@ -1534,7 +1583,6 @@ document.getElementById('surveyResponseForm')
 
 let form = document.getElementById('surveyResponseForm');
 
-document.getElementById('mlaIdHidden').value = 501;
 
 let formData = new FormData(form);
 
