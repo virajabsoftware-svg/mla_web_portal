@@ -3,7 +3,9 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+
 use App\Models\Admin\DashboardModel;
+
 
 class Dashboard extends BaseController
 {
@@ -25,5 +27,6 @@ class Dashboard extends BaseController
         ];
 
         return view('admin/dashboard', $data);
+
     }
 }

@@ -108,8 +108,10 @@ $routes->group('admin', [
     'namespace' => 'App\Controllers\Admin'
 ], function ($routes) {
 
+    // Admin Login
     $routes->get('login', 'Auth::login');
     $routes->post('login', 'Auth::loginCheck');
+
     $routes->get('logout', 'Auth::logout');
 });
 
@@ -123,9 +125,12 @@ $routes->group('admin', [
     'filter'    => 'adminauth'
 ], function ($routes) {
 
+
     $routes->get('dashboard', 'Dashboard::index');
 
+    // MLA Management
     $routes->get('mla-management', 'MLAManagement::index');
+
 
     $routes->get(
         'constituency-management',
@@ -374,6 +379,7 @@ $routes->group('user', [
         'get-mla/(:num)',
         'Auth::getMla/$1'
     );
+
 });
 
 

@@ -32,6 +32,7 @@
     'segments' => ['dashboard']
 ],
  'constituency-management' => [
+
                             'url' => base_url('admin/constituency-management'),
                             'icon' => 'fa fa-map-marker',
                             'label' => 'Constituency Management',

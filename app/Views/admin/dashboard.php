@@ -540,9 +540,11 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="dash-stat-content">
+
                         <div class="stat-number dash-stat-count">
                     <?= number_format($total_voters ?? 0) ?>
                 </div>
+
 
                         <div class="dash-stat-title">Total Voters</div>
                         <div class="dash-stat-sub">Registered Electors</div>
@@ -573,10 +575,12 @@
                         <i class="fas fa-triangle-exclamation"></i>
                     </div>
                     <div class="dash-stat-content">
+
                         
                 <div class="stat-number  dash-stat-count">
                     <?= number_format($total_complaints ?? 0) ?>
                 </div>
+
 
                         <div class="dash-stat-title">Total Complaint</div>
                         <div class="dash-stat-sub">Citizen Grievances</div>
@@ -592,9 +596,11 @@
                         <i class="fas fa-square-poll-vertical"></i>
                     </div>
                     <div class="dash-stat-content">
+
                        <div class="stat-number dash-stat-count">
                     <?= number_format($total_surveys ?? 0) ?>
                 </div>
+
                         <div class="dash-stat-title">Total Surveys</div>
                         <div class="dash-stat-sub">Public Opinion Polls</div>
                     </div>
@@ -609,9 +615,11 @@
                         <i class="fas fa-comments"></i>
                     </div>
                     <div class="dash-stat-content">
+
                         <div class="stat-number dash-stat-count">
                     <?= number_format($total_feedback ?? 0) ?>
                 </div>
+
                         <div class="dash-stat-title">Total Feedback</div>
                         <div class="dash-stat-sub">Citizen Responses</div>
                     </div>
