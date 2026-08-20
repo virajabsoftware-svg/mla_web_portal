@@ -130,7 +130,8 @@ $routes->group('user', ['namespace' => 'App\Controllers\User'], function ($route
     $routes->post('forgot-password', 'Auth::sendResetLink');
     $routes->get('reset-password/(:any)', 'Auth::resetPassword/$1');
     $routes->post('reset-password', 'Auth::updatePassword');
-
+     $routes->post('check-voter-id', 'Auth::checkVoterId');
+    $routes->get('get-mla/(:num)', 'Auth::getMla/$1');
 
     // =================================================
     // USER DASHBOARD

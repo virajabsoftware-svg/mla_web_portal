@@ -4,6 +4,10 @@ namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use App\Models\User\UserModel;
+use App\Models\StateModel;
+use App\Models\DistrictModel;
+use App\Models\ConstituencyModel;
+
 
 class Profile extends BaseController
 {
@@ -37,9 +41,34 @@ class Profile extends BaseController
                 ->with('error', 'User not found.');
         }
 
-        // Load correct profile view
+        // Models
+        $stateModel = new StateModel();
+        $districtModel = new DistrictModel();
+        $constituencyModel = new ConstituencyModel();
+
+        // Get State
+        $state = $stateModel->find($user['state']);
+
+        // Get District
+        $district = $districtModel->find($user['district']);
+
+        // Get Constituency
+        $constituency = $constituencyModel->find($user['constituency']);
+
+        // Load profile view
         return view('user/my_profile', [
-            'user' => $user
+            'user' => $user,
+
+            'stateName' => $state['state_name'] ?? '',
+
+            'districtName' => $district['district_name'] ?? '',
+
+            'constituencyName' =>
+                $constituency['constituency_name'] ?? '',
+
+            'states' => $stateModel
+                ->orderBy('state_name', 'ASC')
+                ->findAll(),
         ]);
     }
 
@@ -90,6 +119,9 @@ class Profile extends BaseController
             'gender'    => $this->request->getPost('gender'),
             'email'     => $this->request->getPost('email'),
             'mobile'    => $this->request->getPost('mobile'),
+            'state'     => $this->request->getPost('state_id'),
+            'district'  => $this->request->getPost('district_id'),
+            'constituency' => $this->request->getPost('constituency_id'),
             'locality'  => $this->request->getPost('locality'),
             'pincode'   => $this->request->getPost('pincode'),
         ];

@@ -514,6 +514,8 @@
                            placeholder="Enter Voter ID" 
                            required>
                 </div>
+
+                <div id="voterIdError"  class="text-danger mt-1"style="display:none;">      </div>
                 
                 <div class="mb-2">
                     <label class="form-label">Full Name <span class="required">*</span></label>
@@ -772,12 +774,12 @@ function loadDistricts(stateId) {
     if (!stateId) return;
     
     // AJAX call to fetch districts
-    fetch('<?= base_url("api/get-districts") ?>?state_id=' + stateId)
+    fetch('<?= base_url("admin/get-districts") ?>/' + stateId)
         .then(response => response.json())
-        .then(data => {
-            if (data.success && data.districts.length > 0) {
+        .then(districts => {
+            if (districts.length > 0) {
                 districtSelect.disabled = false;
-                data.districts.forEach(district => {
+                districts.forEach(district => {
                     const option = document.createElement('option');
                     option.value = district.id;
                     option.textContent = district.district_name;
@@ -804,12 +806,12 @@ function loadConstituencies(districtId) {
     if (!districtId) return;
     
     // AJAX call to fetch constituencies
-    fetch('<?= base_url("api/get-constituencies") ?>?district_id=' + districtId)
+    fetch('<?= base_url("admin/get-constituencies") ?>/' + districtId)
         .then(response => response.json())
-        .then(data => {
-            if (data.success && data.constituencies.length > 0) {
+        .then(constituencies => {
+            if (constituencies.length > 0) {
                 constituencySelect.disabled = false;
-                data.constituencies.forEach(constituency => {
+                constituencies.forEach(constituency => {
                     const option = document.createElement('option');
                     option.value = constituency.id;
                     option.textContent = constituency.constituency_name;
@@ -831,7 +833,7 @@ function loadMla(constituencyId) {
     if (!constituencyId) return;
     
     // AJAX call to fetch MLA
-    fetch('<?= base_url("api/get-mla") ?>?constituency_id=' + constituencyId)
+    fetch('<?= base_url("user/get-mla") ?>/' + constituencyId)
         .then(response => response.json())
         .then(data => {
             if (data.success && data.mla) {
@@ -1113,6 +1115,71 @@ document.querySelectorAll('.otp-input').forEach((inp, idx, arr) => {
         }
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', function ()
+      {
+            const voterIdInput = document.getElementById('voterIdInput');
+            const voterIdError = document.getElementById('voterIdError');
+
+            if (!voterIdInput) {
+                return;
+            }
+
+            voterIdInput.addEventListener('blur', function () {
+
+                const voterId = this.value.trim();
+
+                if (voterId === '') {
+                    return;
+                }
+
+                fetch("<?= base_url('user/check-voter-id') ?>", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    body: "voter_id=" + encodeURIComponent(voterId)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Server error: ' + response.status);
+                    }
+
+                    return response.json();
+                })
+                .then(data => {
+
+                    if (data.exists) {
+
+                        voterIdInput.classList.add('is-invalid');
+
+                        if (voterIdError) {
+                            voterIdError.textContent = data.message;
+                            voterIdError.style.display = 'block';
+                        }
+                        voterIdInput.value = '';
+
+                    } else {
+
+                        voterIdInput.classList.remove('is-invalid');
+
+                        if (voterIdError) {
+                            voterIdError.textContent = '';
+                            voterIdError.style.display = 'none';
+                        }
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Voter ID check failed:', error);
+                });
+
+            });
+
+        });
+
 
 console.log('✅ Registration form with ID-based storage loaded successfully!');
 </script>
