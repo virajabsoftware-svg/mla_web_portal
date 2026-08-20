@@ -18,7 +18,7 @@ class UserModel extends Model
         'dob',
         'gender',
         'profile_photo',
-        // 'mobile',
+        'mobile',
         'email',
         'state',
         'district',

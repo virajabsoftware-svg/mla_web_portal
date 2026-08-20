@@ -532,6 +532,7 @@
                         <input type="date"
                                name="dob"
                                class="form-control"
+                               max="<?= date('Y-m-d', strtotime('-18 years')) ?>"
                                required>
                     </div>
                     <div class="col-5">
@@ -547,11 +548,12 @@
 
                 <div class="row g-2">
                     <div class="col-7">
-                        <label class="form-label">Mobile Number </label>
+                        <label class="form-label">Mobile Number <span class="optional">(Optional)</span></label>
                         <input type="tel" name="mobile" id="mobileInput" class="form-control"  placeholder="Enter 10 digit mobile number"
-                            maxlength="10"    pattern="[0-9]{10}"  inputmode="numeric"                            >
+                            maxlength="10"    pattern="[0-9]{10}"  inputmode="numeric">
 
                         <div id="mobileError" class="text-danger mt-1" style="display:none;"></div>
+                        <br>
                     </div>
                     
                 </div>
@@ -561,6 +563,7 @@
 
 
 
+             <div class="row g-2">
                 <div class="profile-photo-upload" onclick="document.getElementById('photoUpload').click()">
                     <img id="photoPreview" 
                          src="" 
@@ -575,6 +578,8 @@
                            accept="image/*"
                            style="display:none;">
                 </div>
+            </div>
+
 
                 <div class="mt-4 text-end">
                     <button type="button" class="btn btn-gradient" style="width: auto; padding: 0.6rem 1.8rem;" onclick="nextStep(1)">
@@ -993,13 +998,21 @@ function validateStep(step) {
                 return false;
             }
             
-            if (!/^[0-9]{10}$/.test(mobile)) {
+            if (mobile && !/^[0-9]{10}$/.test(mobile)) {
                 alert('⚠️ Please enter a valid 10 digit Mobile Number.');
                 return false;
             } 
 
             if (!dob) {
                 alert('⚠️ Please select your Date of Birth.');
+                return false;
+            }
+            const eighteenthBirthday = new Date();
+            eighteenthBirthday.setHours(0, 0, 0, 0);
+            eighteenthBirthday.setFullYear(eighteenthBirthday.getFullYear() - 18);
+            const birthDate = new Date(`${dob}T00:00:00`);
+            if (birthDate > eighteenthBirthday) {
+                alert('⚠️ You must be at least 18 years old to register.');
                 return false;
             }
             if (!gender) {

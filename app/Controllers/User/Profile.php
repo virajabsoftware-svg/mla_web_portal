@@ -129,7 +129,10 @@ class Profile extends BaseController
             'pincode'   => 'permit_empty|numeric|exact_length[6]',
         ];
 
-        if (!$this->validate($rules)) {
+        $postData = $this->request->getPost();
+        $postData['mobile'] = trim((string) ($postData['mobile'] ?? ''));
+
+        if (!$this->validateData($postData, $rules)) {
             return redirect()->back()
                 ->withInput()
                 ->with(
@@ -144,7 +147,7 @@ class Profile extends BaseController
 
         $data = $this->buildLocationLockedUpdateData(
             $currentUser,
-            $this->request->getPost()
+            $postData
         );
 
         // ---------------------------------------------

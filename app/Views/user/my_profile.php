@@ -716,7 +716,8 @@
                 <label class="form-label">
                      Email Address <span class="text-danger">*</span> </label>
                       <input type="email" name="email" class="form-control" value="<?= esc($user['email'] ?? '') ?>" required> </div>
-                       <!-- MOBILE --> <div class="col-md-6"> <label class="form-label"> Mobile Number </label> 
+                       <!-- MOBILE -->
+                        <div class="col-md-6"> <label class="form-label"> Mobile Number </label> 
                         <input type="text" name="mobile" class="form-control" value="<?= esc($user['mobile'] ?? '') ?>">
                      </div> <!-- STATE --> <div class="col-md-4"> <label class="form-label"> State </label> 
                      <input type="text" class="form-control" value="<?= esc($stateName ?? '-') ?>" readonly>

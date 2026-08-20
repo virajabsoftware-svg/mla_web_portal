@@ -168,6 +168,7 @@ class DashboardModel extends Model
         $mla_name = $voter['mla_name'] ?? null;
         $mla_party = $voter['mla_party'] ?? null;
         $constituency = $voter['constituency'] ?? null;
+        $mla_image = '';
 
         if (!empty($constituency) && $this->db->tableExists('constituencies')) {
             $constituencyRow = $this->db
@@ -192,8 +193,8 @@ class DashboardModel extends Model
             if ($mlaRecord) {
                 $mla_name = $mla_name ?? ($mlaRecord['mla_name'] ?? $mlaRecord['name'] ?? null);
                 $mla_party = $mla_party ?? ($mlaRecord['party'] ?? $mlaRecord['mla_party'] ?? null);
-                $mla_image = $mla_image ?? ($mlaRecord['profile_photo'] ?? null);
-
+                $mla_image = $this->resolveMlaPhoto($mlaRecord['profile_photo'] ?? '');
+                   
                 if (empty($constituency) && !empty($mlaRecord['constituency_id']) && $this->db->tableExists('constituencies')) {
                     $constituencyRow = $this->db
                         ->table('constituencies')
@@ -225,6 +226,23 @@ class DashboardModel extends Model
             'rating' => $this->getMLARating($mla_id, $constituency),
             'credibility' => $this->calculateCredibility($total_works, $completed_works)
         ];
+    }
+
+    private function resolveMlaPhoto($photo)
+    {
+        if (empty($photo)) {
+            return '';
+        }
+
+        if (filter_var($photo, FILTER_VALIDATE_URL)) {
+            return $photo;
+        }
+      
+        $photoPath = FCPATH . 'uploads/profile/' . $photo;
+           
+        return file_exists($photoPath)
+            ? base_url('uploads/profile/' . $photo)
+            : '';
     }
 
     // ==========================

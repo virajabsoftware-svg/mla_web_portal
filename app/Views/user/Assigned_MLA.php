@@ -1,3 +1,48 @@
+<?php 
+
+
+// Redirect if not logged in
+$session = session();
+if (!$session->get('logged_in') || !$session->get('user_id')) {
+    return redirect()->to(base_url('user/login'));
+}
+
+$dashboardModel = new \App\Models\User\DashboardModel();
+$user_id = $session->get('user_id');
+$mla_data_from_db = $dashboardModel->getAssignedMLA($user_id);
+
+
+if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
+    $mla_image = $mla_data_from_db['mla_image'] ?? '';
+    
+    /*if (empty($mla_image)) {
+        $mla_image = 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max';
+    }*/
+
+    $mla_data = [
+        'name' => $mla_data_from_db['mla_name'] ?? 'Not Assigned',
+        'constituency' => $mla_data_from_db['constituency'] ?? $mla_constituency,
+        'total_works' => $mla_data_from_db['total_works'] ?? 0,
+        'completed_works' => $mla_data_from_db['completed_works'] ?? 0,
+        'rating' => $mla_data_from_db['rating'] ?? '0★',
+        'credibility' => $mla_data_from_db['credibility'] ?? '0%',
+        'mla_image' => $mla_data_from_db['mla_image'] ,
+    ];
+} else {
+    // Fallback static MLA data only if the user truly has no MLA assigned
+    $mla_data = [
+        'name' => '',
+        'constituency' => '',
+        'total_works' => '',
+        'completed_works' => '',
+        'rating' => '',
+        'credibility' => '',
+        'mla_image' => ''
+    ];
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -793,26 +838,26 @@
                     <div class="row align-items-center">
 
                         <div class="col-lg-2 text-center">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHU7JyHwMp4-aGduf9KRGRs2xpyfTRNMV10lrRCXPC&s"
+                            <img src="<?= !empty($mla_data['mla_image']) ? htmlspecialchars($mla_data['mla_image']) : 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max' ?>"
                                 class="rounded-circle img-thumbnail" width="120">
                         </div>
 
                         <div class="col-lg-7">
 
                             <h3 class="fw-bold mb-2">
-                                Chh. Shivendrasinh Bhosale
+                                <?= htmlspecialchars($mla_data['name'] ?? 'Not Assigned') ?>
                             </h3>
 
-                            <p class="mb-1">
+                            <!--p class="mb-1">
                                 <strong>MLA ID :</strong> MLA-501
                             </p>
 
                             <p class="mb-1">
                                 <strong>Constituency ID :</strong> CON-102
-                            </p>
+                            </p-->
 
                             <p class="mb-0">
-                                <strong>Constituency :</strong> Satara
+                                <strong>Constituency : <?= htmlspecialchars($mla_data['constituency'] ?? $mla_constituency) ?></strong> 
                             </p>
 
                         </div>

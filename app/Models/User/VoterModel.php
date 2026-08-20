@@ -10,7 +10,7 @@ class VoterModel extends Model
     protected $primaryKey = 'id';
     protected $allowedFields = [
         'voter_id', 'full_name', 'dob', 'gender', 'email', 'password',
-        'state', 'district', 'constituency', 'locality', 'pincode',
+        'mobile', 'state', 'district', 'constituency', 'locality', 'pincode',
         'profile_photo', 'mla_name', 'mla_party', 'mla_id',
         'status', 'reset_token', 'reset_token_expiry'  // Added reset fields
     ];
