@@ -6,23 +6,22 @@ use CodeIgniter\Model;
 
 class SurveyModel extends Model
 {
-    protected $table = 'surveys';
+    protected $table = 'survey_responses';
     protected $primaryKey = 'id';
 
-    protected $allowedFields = [
-    'survey_code',
-    'title',
-    'survey_category',
-    'description',
+  protected $allowedFields = [
+    'survey_id',
+    'voter_id',
     'mla_id',
+    'district',
     'constituency',
-    'responses',
-    'sentiment',
-    'participation',
+    'village',
+    'survey_category',
+    'answers',
     'status',
-    'start_date',
-    'end_date',
-    'created_by'
+    'submitted_at',
+    'created_at',
+    'updated_at'
 ];
 
 

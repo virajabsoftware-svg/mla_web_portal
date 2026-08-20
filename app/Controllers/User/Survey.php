@@ -16,191 +16,353 @@ class Survey extends BaseController
         $this->db = \Config\Database::connect();
     }
 
-    /**
-     * Survey page
-     */
-public function index()
-{
-    $session = session();
 
-    // Logged-in voter
-    $voterId = $session->get('voter_id');
+    // =========================================================
+    // SURVEY PAGE
+    // =========================================================
 
-    if (empty($voterId)) {
-        return redirect()->to('/login')
-            ->with('error', 'Please login first.');
+    public function index()
+    {
+        $session = session();
+
+        // -----------------------------------------------------
+        // Logged-in voter ID
+        // -----------------------------------------------------
+
+        $voterId = $session->get('voter_id');
+
+        if (empty($voterId)) {
+            return redirect()
+                ->to('/login')
+                ->with('error', 'Please login first.');
+        }
+
+
+        // -----------------------------------------------------
+        // Get logged-in voter information
+        // -----------------------------------------------------
+
+        $voter = $this->db
+            ->table('voters')
+            ->where('voter_id', $voterId)
+            ->get()
+            ->getRowArray();
+
+
+        if (!$voter) {
+            return redirect()
+                ->back()
+                ->with(
+                    'error',
+                    'Voter information not found for Voter ID: ' . $voterId
+                );
+        }
+
+
+        // -----------------------------------------------------
+        // Get active surveys
+        // -----------------------------------------------------
+
+        $activeSurveys = $this->db
+            ->table('surveys')
+            ->where('status', 'Active')
+            ->orderBy('id', 'ASC')
+            ->get()
+            ->getResultArray();
+
+
+        // -----------------------------------------------------
+        // Get logged-in voter's survey history
+        // -----------------------------------------------------
+
+        $responses = $this->surveyModel
+            ->where('voter_id', $voterId)
+            ->orderBy('submitted_at', 'DESC')
+            ->findAll();
+
+
+        // -----------------------------------------------------
+        // Send data to view
+        // -----------------------------------------------------
+
+        $data = [
+            'voter'         => $voter,
+            'activeSurveys' => $activeSurveys,
+            'responses'     => $responses
+        ];
+
+
+        return view('user/Survey', $data);
     }
 
-    $db = \Config\Database::connect();
 
-    // Get only logged-in voter's information
-    $voter = $db->table('voters')
-        ->where('voter_id', $voterId)
-        ->get()
-        ->getRowArray();
 
-    if (!$voter) {
-        return redirect()->back()
-            ->with(
-                'error',
-                'Voter information not found for Voter ID: ' . $voterId
-            );
-    }
+    // =========================================================
+    // SAVE / SUBMIT SURVEY RESPONSE
+    // =========================================================
 
-    // Get active surveys
-    $activeSurveys = $db->table('surveys')
-        ->where('status', 'Active')
-        ->orderBy('id', 'ASC')
-        ->get()
-        ->getResultArray();
+    public function save()
+    {
+        $request = $this->request;
+        $session = session();
 
-    // Get only logged-in user's survey history
-    $responses = $this->surveyModel
-        ->where('voter_id', $voter['voter_id'])
-        ->orderBy('submitted_at', 'DESC')
-        ->findAll();
 
-    $data = [
-        'voter'         => $voter,
-        'activeSurveys' => $activeSurveys,
-        'responses'     => $responses,
-    ];
+        // -----------------------------------------------------
+        // Get logged-in voter from SESSION
+        // -----------------------------------------------------
 
-    return view('user/Survey', $data);
-}
-    /**
-     * Save Survey Response
-     */
- public function save()
-{
-    $session = session();
+        $voterId = $session->get('voter_id');
 
-    // Logged-in voter
-    $voterId = $session->get('voter_id');
 
-    if (empty($voterId)) {
-        return $this->response->setJSON([
-            'status'  => false,
-            'message' => 'User is not logged in.'
-        ]);
-    }
+        if (empty($voterId)) {
 
-    $db = \Config\Database::connect();
+            return $this->response
+                ->setStatusCode(401)
+                ->setJSON([
+                    'status'  => false,
+                    'message' => 'Please login first.'
+                ]);
+        }
 
-    // Get logged-in user's voter information
-    $voter = $db->table('voters')
-        ->where('voter_id', $voterId)
-        ->get()
-        ->getRowArray();
 
-    if (!$voter) {
-        return $this->response->setJSON([
-            'status'  => false,
-            'message' => 'Voter information not found.'
-        ]);
-    }
+        // -----------------------------------------------------
+        // Get POST data
+        // -----------------------------------------------------
 
-    // Survey ID
-    $surveyId = $this->request->getPost('survey_id');
+        $surveyId = $request->getPost('survey_id');
 
-    // Answers from frontend
-    $answers = $this->request->getPost('answers');
+        $mlaId = $request->getPost('mla_id');
 
-    if (empty($surveyId)) {
-        return $this->response->setJSON([
-            'status'  => false,
-            'message' => 'Survey ID is missing.'
-        ]);
-    }
+        $district = $request->getPost('district');
 
-    if (empty($answers)) {
-        return $this->response->setJSON([
-            'status'  => false,
-            'message' => 'Survey answers are missing.'
-        ]);
-    }
+        $constituency = $request->getPost('constituency');
 
-    // Check survey exists
-    $survey = $db->table('surveys')
-        ->where('id', $surveyId)
-        ->get()
-        ->getRowArray();
+        $village = $request->getPost('village');
 
-    if (!$survey) {
-        return $this->response->setJSON([
-            'status'  => false,
-            'message' => 'Survey not found.'
-        ]);
-    }
+        $surveyCategory = $request->getPost('survey_category');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Check duplicate response
-    |--------------------------------------------------------------------------
-    */
+        $answers = $request->getPost('answers');
 
-    $alreadySubmitted = $db->table('survey_responses')
-        ->where('survey_id', $surveyId)
-        ->where('voter_id', $voter['voter_id'])
-        ->get()
-        ->getRowArray();
 
-    if ($alreadySubmitted) {
-        return $this->response->setJSON([
-            'status'  => false,
-            'message' => 'You have already submitted this survey.'
-        ]);
-    }
+        // -----------------------------------------------------
+        // Validation
+        // -----------------------------------------------------
 
-    /*
-    |--------------------------------------------------------------------------
-    | Insert survey response
-    |--------------------------------------------------------------------------
-    */
-
-    $data = [
-        'survey_id'    => $surveyId,
-        'voter_id'     => $voter['voter_id'],
-        'mla_id'       => $voter['mla_id'] ?? null,
-        'district'     => $voter['district'] ?? null,
-        'constituency' => $voter['constituency'] ?? null,
-        'status'       => 'Submitted',
-        'submitted_at' => date('Y-m-d H:i:s'),
-    ];
-
-    try {
-
-        $inserted = $db->table('survey_responses')->insert($data);
-
-        if (!$inserted) {
+        if (empty($surveyId)) {
 
             return $this->response->setJSON([
                 'status'  => false,
-                'message' => 'Survey response could not be saved.',
-                'errors'   => $db->error()
+                'message' => 'Survey ID is missing.'
             ]);
         }
 
+
+        if (empty($surveyCategory)) {
+
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Survey category is missing.'
+            ]);
+        }
+
+
+        if (empty($answers)) {
+
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Please answer the survey questions.'
+            ]);
+        }
+
+
+        // -----------------------------------------------------
+        // Verify survey exists and is Active
+        // -----------------------------------------------------
+
+        $survey = $this->db
+            ->table('surveys')
+            ->where('id', $surveyId)
+            ->where('status', 'Active')
+            ->get()
+            ->getRowArray();
+
+
+        if (!$survey) {
+
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Survey not found or inactive.'
+            ]);
+        }
+
+
+        // -----------------------------------------------------
+        // Decode JSON answers
+        // -----------------------------------------------------
+
+        $decodedAnswers = json_decode($answers, true);
+
+
+        if (
+            !is_array($decodedAnswers) ||
+            empty($decodedAnswers)
+        ) {
+
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Invalid survey answers format.'
+            ]);
+        }
+
+
+        // -----------------------------------------------------
+        // Prevent duplicate submission
+        // -----------------------------------------------------
+
+        $existing = $this->db
+            ->table('survey_responses')
+            ->where('survey_id', $surveyId)
+            ->where('voter_id', $voterId)
+            ->get()
+            ->getRowArray();
+
+
+        if ($existing) {
+
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'You have already submitted this survey.'
+            ]);
+        }
+
+
+        // -----------------------------------------------------
+        // Current timestamp
+        // -----------------------------------------------------
+
+        $now = date('Y-m-d H:i:s');
+
+
+        // -----------------------------------------------------
+        // Prepare response data
+        // -----------------------------------------------------
+
+        $data = [
+
+            'survey_id' => (int) $surveyId,
+
+            'voter_id' => $voterId,
+
+            'mla_id' => !empty($mlaId)
+                ? (int) $mlaId
+                : null,
+
+            'district' => !empty($district)
+                ? $district
+                : null,
+
+            'constituency' => !empty($constituency)
+                ? $constituency
+                : null,
+
+            'village' => !empty($village)
+                ? $village
+                : null,
+
+            'survey_category' => !empty($surveyCategory)
+                ? $surveyCategory
+                : null,
+
+            'answers' => json_encode(
+                $decodedAnswers,
+                JSON_UNESCAPED_UNICODE
+            ),
+
+            'status' => 'Submitted',
+
+            'submitted_at' => $now,
+
+            'created_at' => $now,
+
+            'updated_at' => $now
+        ];
+
+
+        // -----------------------------------------------------
+        // Insert into survey_responses
+        // -----------------------------------------------------
+
+        $inserted = $this->db
+            ->table('survey_responses')
+            ->insert($data);
+
+
+        // -----------------------------------------------------
+        // Insert failed
+        // -----------------------------------------------------
+
+        if (!$inserted) {
+
+            $dbError = $this->db->error();
+
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Failed to save survey response.',
+                'error'   => $dbError['message'] ?? 'Unknown database error'
+            ]);
+        }
+
+
+        // -----------------------------------------------------
+        // Success - Return the saved response ID
+        // -----------------------------------------------------
+
+        $responseId = $this->db->insertID();
+
+        // Also return the full response data for history refresh
+        $savedResponse = $this->db
+            ->table('survey_responses')
+            ->where('id', $responseId)
+            ->get()
+            ->getRowArray();
+
         return $this->response->setJSON([
             'status'  => true,
-            'message' => 'Survey response submitted successfully.'
-        ]);
-
-    } catch (\Throwable $e) {
-
-        return $this->response->setJSON([
-            'status'  => false,
-            'message' => $e->getMessage()
+            'message' => 'Survey response submitted successfully.',
+            'response_id' => $responseId,
+            'response' => $savedResponse
         ]);
     }
-}
 
-    /**
-     * Get Survey Response History
-     */
+
+
+    // =========================================================
+    // SURVEY RESPONSE HISTORY
+    // =========================================================
+
     public function history()
     {
-        $responses = $this->surveyModel->getHistory();
+        $session = session();
+
+        $voterId = $session->get('voter_id');
+
+
+        if (empty($voterId)) {
+
+            return $this->response
+                ->setStatusCode(401)
+                ->setJSON([
+                    'status'  => false,
+                    'message' => 'Please login first.'
+                ]);
+        }
+
+
+        $responses = $this->surveyModel
+            ->where('voter_id', $voterId)
+            ->orderBy('submitted_at', 'DESC')
+            ->findAll();
+
 
         return $this->response->setJSON([
             'status'    => true,
@@ -209,19 +371,43 @@ public function index()
     }
 
 
-    /**
-     * View Single Survey Response
-     */
+
+    // =========================================================
+    // VIEW SINGLE SURVEY RESPONSE
+    // =========================================================
+
     public function view($id)
     {
-        $response = $this->surveyModel->getResponse($id);
+        $session = session();
+
+        $voterId = $session->get('voter_id');
+
+
+        if (empty($voterId)) {
+
+            return $this->response
+                ->setStatusCode(401)
+                ->setJSON([
+                    'status'  => false,
+                    'message' => 'Please login first.'
+                ]);
+        }
+
+
+        $response = $this->surveyModel
+            ->where('id', $id)
+            ->where('voter_id', $voterId)
+            ->first();
+
 
         if (!$response) {
+
             return $this->response->setJSON([
                 'status'  => false,
                 'message' => 'Survey response not found.'
             ]);
         }
+
 
         return $this->response->setJSON([
             'status'   => true,
@@ -230,14 +416,41 @@ public function index()
     }
 
 
-    /**
-     * Delete Survey Response
-     */
+
+    // =========================================================
+    // DELETE SURVEY RESPONSE
+    // =========================================================
+
     public function delete($id)
     {
-        $response = $this->surveyModel->getResponse($id);
+        $session = session();
+
+        $voterId = $session->get('voter_id');
+
+
+        if (empty($voterId)) {
+
+            return $this->response
+                ->setStatusCode(401)
+                ->setJSON([
+                    'status'  => false,
+                    'message' => 'Please login first.'
+                ]);
+        }
+
+
+        // -----------------------------------------------------
+        // Find only logged-in voter's response
+        // -----------------------------------------------------
+
+        $response = $this->surveyModel
+            ->where('id', $id)
+            ->where('voter_id', $voterId)
+            ->first();
+
 
         if (!$response) {
+
             return $this->response->setJSON([
                 'status'  => false,
                 'message' => 'Survey response not found.'
@@ -245,7 +458,17 @@ public function index()
         }
 
 
-        if ($this->surveyModel->deleteResponse($id)) {
+        // -----------------------------------------------------
+        // Delete
+        // -----------------------------------------------------
+
+        $deleted = $this->surveyModel
+            ->where('id', $id)
+            ->where('voter_id', $voterId)
+            ->delete();
+
+
+        if ($deleted) {
 
             return $this->response->setJSON([
                 'status'  => true,

@@ -3,15 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>GovTrack Aura | Premium Governance Dashboard</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('assets/user/css/style.css') ?>">
     <!-- Bootstrap 5 Grid & Utilities -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -400,6 +397,13 @@
         .stat-card-3 { animation-delay: 0.15s; }
         .stat-card-4 { animation-delay: 0.2s; }
 
+        /* Required field indicator */
+        .required-field::after {
+            content: ' *';
+            color: #dc3545;
+            font-weight: bold;
+        }
+
         @media (max-width: 1024px) {
             .main-content { padding: 1.25rem 1.5rem; }
             .stat-number { font-size: 2rem; }
@@ -520,25 +524,23 @@
 </head>
 
 <body>
-<?php include "common/header.php"?>
+    <?php include "common/header.php"; ?>
 
     <main class="main-content fade-page-transition">
         <?php if(session()->getFlashdata('success')): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> <?= session()->getFlashdata('success'); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
 
-<div class="alert alert-success">
-    <?= session()->getFlashdata('success'); ?>
-</div>
+        <?php if(session()->getFlashdata('error')): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> <?= session()->getFlashdata('error'); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
 
-<?php endif; ?>
-
-
-<?php if(session()->getFlashdata('error')): ?>
-
-<div class="alert alert-danger">
-    <?= session()->getFlashdata('error'); ?>
-</div>
-
-<?php endif; ?>
         <div class="container-fluid survey_dashboard px-3 px-lg-4">
 
             <!-- STATISTICS ROW -->
@@ -547,8 +549,7 @@
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
                             <h3 class="stat-number counter-number" id="activeSurveysCount">12</h3>
-                            <p class="mb-0 text-muted fw-semibold"><i class="bi bi-bar-chart-steps me-1"></i> Active
-                                Surveys</p>
+                            <p class="mb-0 text-muted fw-semibold"><i class="bi bi-bar-chart-steps me-1"></i> Active Surveys</p>
                         </div>
                     </div>
                 </div>
@@ -556,8 +557,7 @@
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
                             <h3 class="stat-number counter-number" id="participatedCount">28</h3>
-                            <p class="mb-0 text-muted fw-semibold"><i class="bi bi-people-fill me-1"></i> Participated
-                            </p>
+                            <p class="mb-0 text-muted fw-semibold"><i class="bi bi-people-fill me-1"></i> Participated</p>
                         </div>
                     </div>
                 </div>
@@ -565,8 +565,7 @@
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
                             <h3 class="stat-number counter-number" id="pendingCount">4</h3>
-                            <p class="mb-0 text-muted fw-semibold"><i class="bi bi-hourglass-split me-1"></i> Pending
-                                Response</p>
+                            <p class="mb-0 text-muted fw-semibold"><i class="bi bi-hourglass-split me-1"></i> Pending Response</p>
                         </div>
                     </div>
                 </div>
@@ -574,211 +573,158 @@
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
                             <h3 class="stat-number counter-number" id="participationRate">92</h3>
-                            <p class="mb-0 text-muted fw-semibold"><i class="bi bi-graph-up me-1"></i> Participation
-                                Rate%</p>
+                            <p class="mb-0 text-muted fw-semibold"><i class="bi bi-graph-up me-1"></i> Participation Rate%</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-           <!-- ACTIVE SURVEYS TABLE -->
-<div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
-    <div class="card-header bg-white border-0 pt-4 pb-0">
-        <h5 class="mb-0 fw-bold">
-            <i class="bi bi-clipboard-data-fill me-2 text-primary"></i>
-            Active Constituency Surveys
-        </h5>
-    </div>
+            <!-- ACTIVE SURVEYS TABLE -->
+            <div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
+                <div class="card-header bg-white border-0 pt-4 pb-0">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-clipboard-data-fill me-2 text-primary"></i>
+                        Active Constituency Surveys
+                    </h5>
+                </div>
 
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-
-                <thead>
-                    <tr>
-                        <th>Survey ID</th>
-                        <th>Survey Title</th>
-                        <th>MLA</th>
-                        <th>Deadline</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                <?php if (!empty($activeSurveys)): ?>
-
-                    <?php foreach ($activeSurveys as $row): ?>
-
-                        <tr>
-                            <td><?= esc($row['id']) ?></td>
-
-                            <td><?= esc($row['title']) ?></td>
-
-                            <td>
-    <?= esc($row['mla_name'] ?? $row['mla_id'] ?? 'N/A') ?>
-</td>
-                            <td><?= esc($row['end_date'] ?? 'N/A') ?></td>
-
-                            <td>
-                                <span class="badge bg-success">
-                                    <?= esc($row['status']) ?>
-                                </span>
-                            </td>
-                        </tr>
-
-                    <?php endforeach; ?>
-
-                <?php else: ?>
-
-                    <tr>
-                        <td colspan="5" class="text-center text-muted">
-                            No Active Surveys Found
-                        </td>
-                    </tr>
-
-                <?php endif; ?>
-
-                </tbody>
-
-            </table>
-        </div>
-    </div>
-</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Survey ID</th>
+                                    <th>Survey Title</th>
+                                    <th>MLA</th>
+                                    <th>Deadline</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($activeSurveys)): ?>
+                                    <?php foreach ($activeSurveys as $row): ?>
+                                        <tr>
+                                            <td><?= esc($row['id']) ?></td>
+                                            <td><?= esc($row['title']) ?></td>
+                                            <td><?= esc($row['mla_name'] ?? $row['mla_id'] ?? 'N/A') ?></td>
+                                            <td><?= esc($row['end_date'] ?? 'N/A') ?></td>
+                                            <td>
+                                                <span class="badge bg-success">
+                                                    <?= esc($row['status']) ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">
+                                            No Active Surveys Found
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <!-- STEPPER SURVEY FORM -->
             <div class="card border-0 shadow-lg dashboard-card mb-4 fade-up" id="responseFormCard">
                 <div class="card-header bg-white border-0 pt-4">
                     <div class="d-flex flex-wrap justify-content-between align-items-center">
-                        <h5 class="mb-0 fw-bold"><i class="bi bi-send-check-fill me-2 text-success"></i> Submit Survey
-                            Response</h5>
-                        <div class="step-indicator mt-2 mt-sm-0"><span id="questionCounter">1</span> / <span
-                                id="totalQuestions">12</span> Questions</div>
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-send-check-fill me-2 text-success"></i> Submit Survey Response</h5>
+                        <div class="step-indicator mt-2 mt-sm-0">
+                            <span id="questionCounter">1</span> / <span id="totalQuestions">12</span> Questions
+                        </div>
                     </div>
                     <div class="progress-bar-custom mt-3">
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
                 </div>
+
                 <div class="card-body">
+                    <form id="surveyResponseForm" method="post">
+                        <!-- Hidden Fields -->
+                        <input type="hidden" name="survey_id" id="surveyIdHidden">
+                        <input type="hidden" name="mla_id" id="mlaIdHidden" value="<?= esc($voter['mla_id'] ?? '') ?>">
+                        <input type="hidden" name="voter_id" value="<?= esc($voter['voter_id'] ?? '') ?>">
 
-                
-                    <form id="surveyResponseForm"
-
-      method="post">
-      <!-- <input type="hidden" name="survey_id" value="1"> -->
-       <input type="hidden" 
-       name="survey_id" 
-       id="surveyIdHidden">
-
-<input type="hidden"
-name="mla_id"
-id="mlaIdHidden">
-
-<input type="hidden"
-       name="voter_id"
-       value="<?= esc($voter['voter_id'] ?? '') ?>">
-
-<input type="hidden"
-       name="mla_id"
-       value="<?= esc($voter['mla_id'] ?? '') ?>">
-
-<div class="row g-3 mb-4">
-
-    <div class="col-md-3">
-        <label class="form-label fw-semibold">
-            <i class="bi bi-upc-scan"></i> Survey ID
-        </label>
-
-        <input type="text"
-               class="form-control"
-               id="surveyIdField"
-               readonly>
-    </div>
-
-
-    <div class="col-md-3">
-        <label class="form-label fw-semibold">
-            <i class="bi bi-person-badge"></i> Voter ID
-        </label>
-
-      <input type="text"
-       class="form-control bg-light"
-       id="voterIdField"
-       value="<?= esc($voter['voter_id'] ?? '') ?>"
-       readonly>
-
-
-    <div class="col-md-3">
-        <label class="form-label fw-semibold">
-            <i class="bi bi-building"></i> MLA ID
-        </label>
-
-       <input type="text"
-       class="form-control bg-light"
-       id="mlaIdField"
-       value="<?= esc($voter['mla_id'] ?? '') ?>"
-       readonly>
-    </div>
-
-
-    <div class="col-md-3">
-        <label class="form-label fw-semibold">
-            <i class="bi bi-calendar-event"></i> Submission
-        </label>
-
-        <input type="datetime-local"
-               class="form-control bg-light"
-               id="submissionTimestamp"
-               readonly>
-    </div>
-
-</div>
-
+                        <!-- Voter Information Row -->
                         <div class="row g-3 mb-4">
-                           <div class="col-md-3">
-    <label class="form-label fw-semibold">
-        <i class="bi bi-geo-alt-fill"></i> District
-    </label>
+                            <!-- Survey ID -->
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold">
+                                    <i class="bi bi-upc-scan"></i> Survey ID
+                                </label>
+                                <input type="text" class="form-control" id="surveyIdField" readonly>
+                            </div>
 
-   <input type="text"
-       class="form-control bg-light"
-       id="districtField"
-       name="district"
-       value="<?= esc($voter['district'] ?? '') ?>"
-       readonly>
-</div>
+                            <!-- Voter ID -->
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold">
+                                    <i class="bi bi-person-badge"></i> Voter ID
+                                </label>
+                                <input type="text" class="form-control bg-light" id="voterIdField" value="<?= esc($voter['voter_id'] ?? '') ?>" readonly>
+                            </div>
 
+                            <!-- MLA ID -->
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold">
+                                    <i class="bi bi-building"></i> MLA ID
+                                </label>
+                                <input type="text" class="form-control bg-light" id="mlaIdField" value="<?= esc($voter['mla_id'] ?? '') ?>" readonly>
+                            </div>
 
-<div class="col-md-3">
-    <label class="form-label fw-semibold">
-        <i class="bi bi-pin-map-fill"></i> Constituency
-    </label>
+                            <!-- Submission Timestamp -->
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold">
+                                    <i class="bi bi-calendar-event"></i> Submission
+                                </label>
+                                <input type="datetime-local" class="form-control bg-light" id="submissionTimestamp" readonly>
+                            </div>
+                        </div>
 
-    <input type="text"
-       class="form-control bg-light"
-       id="constituencyField"
-       name="constituency"
-       value="<?= esc($voter['constituency'] ?? '') ?>"
-       readonly>
-</div>
+                        <!-- Location Information Row - NOW EDITABLE -->
+                        <div class="row g-3 mb-4">
+                            <!-- District -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold required-field">
+                                    <i class="bi bi-geo-alt-fill"></i> District
+                                </label>
+                                <input type="text" class="form-control" id="districtField" name="district" 
+                                       value="<?= esc($voter['district'] ?? '') ?>" 
+                                       placeholder="Enter your district">
+                            </div>
 
+                            <!-- Constituency -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold required-field">
+                                    <i class="bi bi-pin-map-fill"></i> Constituency
+                                </label>
+                                <input type="text" class="form-control" id="constituencyField" name="constituency" 
+                                       value="<?= esc($voter['constituency'] ?? '') ?>" 
+                                       placeholder="Enter your constituency">
+                            </div>
 
-<div class="col-md-3">
-    <label class="form-label fw-semibold">
-        <i class="bi bi-house-heart"></i> Village / Town
-    </label>
+                            <!-- Village / Town - NOW EDITABLE -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold required-field">
+                                    <i class="bi bi-house-heart"></i> Village / Town
+                                </label>
+                                <input type="text" class="form-control" id="villageField" name="village" 
+                                       value="<?= esc($voter['village'] ?? '') ?>" 
+                                       placeholder="Enter your village or town name">
+                            </div>
+                        </div>
 
-    <input type="text"
-       class="form-control bg-light"
-       id="villageField"
-       name="village"
-       value="<?= esc($voter['village'] ?? '') ?>"
-       readonly>
-</div>
-                            <div class="col-md-3"><label class="form-label fw-semibold"><i class="bi bi-file-text"></i>
-                                    Survey Category</label><select class="form-select" name="survey_category" id="surveyTypeSelect" required>
-                                        <!-- <input type="hidden" name="survey_id" id="surveyIdHidden"> -->
-                                    <option value="">Select Survey Type</option>
+                        <!-- Survey Category Row -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold required-field">
+                                    <i class="bi bi-file-text"></i> Survey Category
+                                </label>
+                                <select class="form-select" name="survey_category" id="surveyTypeSelect" required>
+                                    <option value="">-- Select Survey Type --</option>
                                     <option value="Election Survey">Election Survey</option>
                                     <option value="Road Development Survey">Road Development Survey</option>
                                     <option value="Water Supply Survey">Water Supply Survey</option>
@@ -792,138 +738,91 @@ id="mlaIdHidden">
                                     <option value="Smart Village Survey">Smart Village Survey</option>
                                     <option value="MLA Performance Survey">MLA Performance Survey</option>
                                     <option value="Infrastructure Survey">Infrastructure Survey</option>
-                                </select></div>
+                                </select>
+                            </div>
                         </div>
 
+                        <!-- Question Container -->
                         <div id="questionContainer" class="mb-4"></div>
 
+                        <!-- Navigation Buttons -->
                         <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
-                            <button type="button" id="prevBtn" class="btn btn-navigate btn-prev"><i
-                                    class="bi bi-arrow-left"></i> Previous</button>
-                            <div class="text-muted small fst-italic">⚡ Step <span id="stepNumber">1</span> of <span
-                                    id="totalSteps">12</span></div>
-                            <button type="button" id="nextBtn" class="btn btn-navigate btn-next">Next <i
-                                    class="bi bi-arrow-right"></i></button>
+                            <button type="button" id="prevBtn" class="btn btn-navigate btn-prev">
+                                <i class="bi bi-arrow-left"></i> Previous
+                            </button>
+                            <div class="text-muted small fst-italic">
+                                ⚡ Step <span id="stepNumber">1</span> of <span id="totalSteps">12</span>
+                            </div>
+                            <button type="button" id="nextBtn" class="btn btn-navigate btn-next">
+                                Next <i class="bi bi-arrow-right"></i>
+                            </button>
                         </div>
 
+                        <!-- Submit Button -->
                         <div class="text-end mt-4" id="submitBtnWrapper" style="display: none;">
-                            <button type="submit" 
-        id="submitBtn"
-        class="btn btn-submit-modern px-5 py-2 rounded-pill shadow-sm">
-    <i class="bi bi-check-circle me-2"></i> Submit Response
-</button>
+                            <button type="button" id="submitBtn" class="btn btn-submit-modern px-5 py-2 rounded-pill shadow-sm">
+                                <i class="bi bi-check-circle me-2"></i> Submit Response
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
 
             <!-- SURVEY HISTORY -->
-<div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
+            <div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
+                <div class="card-header bg-white border-0 pt-4">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-clock-history me-2 text-secondary"></i>
+                        Survey History
+                    </h5>
+                </div>
 
-    <div class="card-header bg-white border-0 pt-4">
-        <h5 class="mb-0 fw-bold">
-            <i class="bi bi-clock-history me-2 text-secondary"></i>
-            Survey History
-        </h5>
-    </div>
-
-
-    <div class="card-body">
-
-        <div class="table-responsive">
-
-            <table class="table table-hover">
-
-                <thead>
-                    <tr>
-                        <th>Survey ID</th>
-                        <th>Survey Title</th>
-                        <th>Selected Answer</th>
-                        <th>Submission Date</th>
-                    </tr>
-                </thead>
-
-
-                <tbody id="historyTableBody">
-
-
-                <?php if (!empty($responses)): ?>
-
-
-                    <?php foreach ($responses as $row): ?>
-
-                    <tr>
-
-                        <td>
-                            <?= esc($row['survey_id']) ?>
-                        </td>
-
-
-                        <td>
-                            <?= esc($row['survey_title'] ?? 'N/A') ?>
-                        </td>
-
-
-                      <td>
-    <?php
-    $answers = !empty($row['answers'])
-        ? json_decode($row['answers'], true)
-        : [];
-    ?>
-
-    <?php if (is_array($answers) && !empty($answers)): ?>
-
-        <ul class="mb-0 ps-3">
-            <?php foreach ($answers as $ans): ?>
-                <li><?= esc($ans) ?></li>
-            <?php endforeach; ?>
-        </ul>
-
-    <?php else: ?>
-
-        <span class="text-muted">
-            No answers found
-        </span>
-
-    <?php endif; ?>
-</td>
-
-
-                        <td>
-                            <?= esc($row['submitted_at']) ?>
-                        </td>
-
-
-                    </tr>
-
-
-                    <?php endforeach; ?>
-
-
-                <?php else: ?>
-
-
-                    <tr>
-
-                        <td colspan="4" class="text-center text-muted">
-                            No Survey History Found
-                        </td>
-
-                    </tr>
-
-
-                <?php endif; ?>
-
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Survey ID</th>
+                                    <th>Survey Title</th>
+                                    <th>Selected Answer</th>
+                                    <th>Submission Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <?php if (!empty($responses)): ?>
+                                    <?php foreach ($responses as $row): ?>
+                                        <tr>
+                                            <td><?= esc($row['survey_id']) ?></td>
+                                            <td><?= esc($row['survey_title'] ?? 'N/A') ?></td>
+                                            <td>
+                                                <?php
+                                                $answers = !empty($row['answers']) ? json_decode($row['answers'], true) : [];
+                                                ?>
+                                                <?php if (is_array($answers) && !empty($answers)): ?>
+                                                    <ul class="mb-0 ps-3">
+                                                        <?php foreach ($answers as $ans): ?>
+                                                            <li><?= esc($ans) ?></li>
+                                                        <?php endforeach; ?>
+                                                    </ul>
+                                                <?php else: ?>
+                                                    <span class="text-muted">No answers found</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td><?= esc($row['submitted_at']) ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">
+                                            No Survey History Found
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <!-- MLA ANALYTICS -->
             <div class="card border-0 shadow-sm dashboard-card fade-up">
@@ -949,24 +848,23 @@ id="mlaIdHidden">
                             <p class="text-muted">Positive Feedback%</p>
                         </div>
                     </div>
-                    <div class="alert alert-light text-center small mt-2">📊 Real-time analytics refresh on each new
-                        submission</div>
+                    <div class="alert alert-light text-center small mt-2">
+                        📊 Real-time analytics refresh on each new submission
+                    </div>
                 </div>
             </div>
         </div>
+
         <footer class="footer">
-          <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
+            <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
         </footer>
     </main>
 
     <script>
         // ================================================================
         // 1. SURVEY QUESTIONS (13 categories, 12 questions each)
-        //    Structure matches original: { text, type, options/placeholder }
-        //    Types: "select", "text", "textarea", "rating"
         // ================================================================
         const QUESTIONS_BY_CATEGORY = {
-            // 1. Election Survey
             "Election Survey": [
                 { text: "1. मतदान केंद्रांची व्यवस्था समाधानकारक होती का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "सुधारणा हवी"] },
                 { text: "2. मतदान प्रक्रिया पारदर्शक होती का?", type: "select", options: ["निवडा", "होय, पूर्णपणे", "काही प्रमाणात", "नाही", "माहिती नाही"] },
@@ -981,7 +879,6 @@ id="mlaIdHidden">
                 { text: "11. निवडणुकीत कोणताही गैरप्रकार दिसला का?", type: "select", options: ["निवडा", "नाही", "होय, थोडा", "होय, मोठा"] },
                 { text: "12. एकूण निवडणूक व्यवस्थेबद्दल तुमचे समाधान किती आहे?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 2. Road Development Survey
             "Road Development Survey": [
                 { text: "1. रस्त्यांची गुणवत्ता कशी आहे?", type: "select", options: ["निवडा", "उत्तम", "चांगली", "मध्यम", "खराब", "अतिशय खराब"] },
                 { text: "2. रस्त्यांवर खड्डे आहेत का?", type: "select", options: ["निवडा", "नाही", "काही ठिकाणी", "बरेच", "सर्व ठिकाणी"] },
@@ -996,7 +893,6 @@ id="mlaIdHidden">
                 { text: "11. रस्ते सुरक्षित वाटतात का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
                 { text: "12. एकूण रस्ते विकासाबद्दल समाधान आहे का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 3. Water Supply Survey
             "Water Supply Survey": [
                 { text: "1. नियमित पाणीपुरवठा होतो का?", type: "select", options: ["निवडा", "होय, नियमित", "कधी कधी", "अनियमित", "अजिबात नाही"] },
                 { text: "2. पिण्याच्या पाण्याची गुणवत्ता चांगली आहे का?", type: "select", options: ["निवडा", "उत्तम", "चांगली", "मध्यम", "खराब", "अतिशय खराब"] },
@@ -1011,7 +907,6 @@ id="mlaIdHidden">
                 { text: "11. पाणी साठवण सुविधा पुरेशा आहेत का?", type: "select", options: ["निवडा", "होय", "नाही", "अपुरी"] },
                 { text: "12. एकूण पाणीपुरवठ्याबद्दल समाधान आहे का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 4. Drainage Survey
             "Drainage Survey": [
                 { text: "1. ड्रेनेज व्यवस्था चांगली आहे का?", type: "select", options: ["निवडा", "उत्तम", "चांगली", "मध्यम", "खराब", "अतिशय खराब"] },
                 { text: "2. पावसाळ्यात पाणी साचते का?", type: "select", options: ["निवडा", "नाही", "काही ठिकाणी", "बर्याच ठिकाणी", "सर्व ठिकाणी"] },
@@ -1026,7 +921,6 @@ id="mlaIdHidden">
                 { text: "11. ड्रेनेजची देखभाल नियमित होते का?", type: "select", options: ["निवडा", "होय", "नाही", "कधी कधी"] },
                 { text: "12. एकूण ड्रेनेज व्यवस्थेबद्दल समाधान आहे का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 5. Street Light Survey
             "Street Light Survey": [
                 { text: "1. सर्व रस्त्यांवर स्ट्रीट लाईट आहेत का?", type: "select", options: ["निवडा", "होय, सर्व", "बहुतांश", "काही ठिकाणी", "अजिबात नाही"] },
                 { text: "2. रात्री लाईट व्यवस्थित चालू असतात का?", type: "select", options: ["निवडा", "होय, नेहमी", "कधी कधी", "क्वचित", "अजिबात नाही"] },
@@ -1041,7 +935,6 @@ id="mlaIdHidden">
                 { text: "11. स्ट्रीट लाईटची देखभाल नियमित होते का?", type: "select", options: ["निवडा", "होय", "नाही", "कधी कधी"] },
                 { text: "12. एकूण स्ट्रीट लाईट सुविधेबद्दल समाधान आहे का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 6. Sanitation Survey
             "Sanitation Survey": [
                 { text: "1. परिसर स्वच्छ ठेवला जातो का?", type: "select", options: ["निवडा", "होय, नेहमी", "कधी कधी", "क्वचित", "अजिबात नाही"] },
                 { text: "2. नियमित कचरा संकलन होते का?", type: "select", options: ["निवडा", "होय, नियमित", "कधी कधी", "अनियमित", "अजिबात नाही"] },
@@ -1056,7 +949,6 @@ id="mlaIdHidden">
                 { text: "11. तक्रारींवर कारवाई होते का?", type: "select", options: ["निवडा", "होय, त्वरित", "कधी कधी", "उशीरा", "अजिबात नाही"] },
                 { text: "12. एकूण स्वच्छता व्यवस्थेबद्दल समाधान आहे का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 7. Health Survey
             "Health Survey": [
                 { text: "1. सरकारी आरोग्य सेवा सहज उपलब्ध आहे का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
                 { text: "2. डॉक्टर वेळेवर उपलब्ध असतात का?", type: "select", options: ["निवडा", "होय", "नाही", "कधी कधी"] },
@@ -1071,7 +963,6 @@ id="mlaIdHidden">
                 { text: "11. आरोग्य योजनांची माहिती मिळते का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
                 { text: "12. एकूण आरोग्य सेवेबद्दल समाधान आहे का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 8. Agriculture Survey
             "Agriculture Survey": [
                 { text: "1. सिंचन सुविधा उपलब्ध आहेत का?", type: "select", options: ["निवडा", "होय, पुरेशा", "कमी", "अपुरा", "अजिबात नाही"] },
                 { text: "2. खत वेळेवर मिळते का?", type: "select", options: ["निवडा", "होय", "नाही", "कधी कधी"] },
@@ -1086,7 +977,6 @@ id="mlaIdHidden">
                 { text: "11. आधुनिक तंत्रज्ञानाचा वापर होतो का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
                 { text: "12. एकूण कृषी सुविधेबद्दल समाधान आहे का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 9. Education Survey
             "Education Survey": [
                 { text: "1. शाळांची गुणवत्ता चांगली आहे का?", type: "select", options: ["निवडा", "उत्तम", "चांगली", "मध्यम", "खराब", "अतिशय खराब"] },
                 { text: "2. शिक्षक नियमित उपस्थित असतात का?", type: "select", options: ["निवडा", "होय, नेहमी", "कधी कधी", "क्वचित", "अजिबात नाही"] },
@@ -1101,7 +991,6 @@ id="mlaIdHidden">
                 { text: "11. पालक-शिक्षक संवाद चांगला आहे का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
                 { text: "12. एकूण शिक्षण व्यवस्थेबद्दल समाधान आहे का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 10. Employment Survey
             "Employment Survey": [
                 { text: "1. स्थानिक रोजगाराच्या संधी आहेत का?", type: "select", options: ["निवडा", "होय, चांगल्या", "कमी", "फार कमी", "अजिबात नाही"] },
                 { text: "2. सरकारी रोजगार योजना प्रभावी आहेत का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
@@ -1116,7 +1005,6 @@ id="mlaIdHidden">
                 { text: "11. नवीन उद्योग येत आहेत का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
                 { text: "12. एकूण रोजगार व्यवस्थेबद्दल समाधान आहे का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 11. Smart Village Survey
             "Smart Village Survey": [
                 { text: "1. गावात मोफत Wi-Fi उपलब्ध आहे का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
                 { text: "2. ऑनलाइन सरकारी सेवा उपलब्ध आहेत का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
@@ -1131,7 +1019,6 @@ id="mlaIdHidden">
                 { text: "11. पर्यावरणपूरक सुविधा आहेत का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
                 { text: "12. एकूण स्मार्ट व्हिलेज विकासाबद्दल समाधान आहे का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 12. MLA Performance Survey
             "MLA Performance Survey": [
                 { text: "1. आमदार नागरिकांना सहज भेटतात का?", type: "select", options: ["निवडा", "होय, नेहमी", "कधी कधी", "क्वचित", "अजिबात नाही"] },
                 { text: "2. जनतेच्या तक्रारींवर कारवाई करतात का?", type: "select", options: ["निवडा", "होय, त्वरित", "कधी कधी", "उशीरा", "अजिबात नाही"] },
@@ -1146,7 +1033,6 @@ id="mlaIdHidden">
                 { text: "11. जनतेशी संवाद प्रभावी आहे का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
                 { text: "12. एकूण आमदारांच्या कामगिरीबद्दल तुमचे समाधान किती आहे?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ],
-            // 13. Infrastructure Survey
             "Infrastructure Survey": [
                 { text: "1. सार्वजनिक पायाभूत सुविधा चांगल्या आहेत का?", type: "select", options: ["निवडा", "उत्तम", "चांगल्या", "मध्यम", "खराब", "अतिशय खराब"] },
                 { text: "2. रस्ते आणि पूल सुरक्षित आहेत का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
@@ -1164,15 +1050,13 @@ id="mlaIdHidden">
         };
 
         // ================================================================
-        // 2. APPLICATION LOGIC - Stepper based on selected category
+        // 2. APPLICATION LOGIC
         // ================================================================
         let currentQIndex = 0;
         let currentCategory = '';
         let currentQuestions = [];
         let answersArray = [];
-
-        // Storage & analytics globals
-       let surveyHistory = <?= json_encode($responses); ?>;
+        let surveyHistory = <?= json_encode($responses); ?>;
         let ratingValues = [8, 7];
         let positiveFlags = [true, true];
 
@@ -1188,21 +1072,22 @@ id="mlaIdHidden">
         const totalStepsSpan = document.getElementById('totalSteps');
         const timestampField = document.getElementById('submissionTimestamp');
         const surveyTypeSelect = document.getElementById('surveyTypeSelect');
+
         const surveyMap = {
-    "Election Survey": 2,
-    "Road Development Survey": 3,
-    "Water Supply Survey": 4,
-    "Drainage Survey": 5,
-    "Street Light Survey": 6,
-    "Sanitation Survey": 7,
-    "Health Survey": 8,
-    "Agriculture Survey": 9,
-    "Education Survey": 10,
-    "Employment Survey": 11,
-    "Smart Village Survey": 12,
-    "MLA Performance Survey": 13,
-    "Infrastructure Survey": 14
-};
+            "Election Survey": 1,
+            "Road Development Survey": 2,
+            "Water Supply Survey": 3,
+            "Drainage Survey": 4,
+            "Street Light Survey": 5,
+            "Sanitation Survey": 6,
+            "Health Survey": 7,
+            "Agriculture Survey": 8,
+            "Education Survey": 9,
+            "Employment Survey": 10,
+            "Smart Village Survey": 11,
+            "MLA Performance Survey": 12,
+            "Infrastructure Survey": 13
+        };
 
         // Helper: timestamp
         function setCurrentTimestamp() {
@@ -1225,7 +1110,7 @@ id="mlaIdHidden">
             return QUESTIONS_BY_CATEGORY[category] || [];
         }
 
-        // Render current question based on category
+        // Render current question
         function renderCurrentQuestion() {
             if (!currentCategory || currentQuestions.length === 0) {
                 questionContainer.innerHTML = `
@@ -1276,7 +1161,6 @@ id="mlaIdHidden">
             html += `</div>`;
             questionContainer.innerHTML = html;
 
-            // Attach event listeners
             document.querySelectorAll('.question-input').forEach(el => {
                 const idx = parseInt(el.dataset.qidx);
                 el.addEventListener('change', () => { answersArray[idx] = el.value; });
@@ -1346,75 +1230,42 @@ id="mlaIdHidden">
             }
         }
 
-        // Refresh history table & update analytics
         function refreshHistoryUI() {
+            const tbody = document.getElementById('historyTableBody');
+            if (!tbody) return;
 
-    const tbody = document.getElementById('historyTableBody');
+            tbody.innerHTML = "";
 
-    if(!tbody) return;
-
-    tbody.innerHTML = "";
-
-    if(surveyHistory.length === 0)
-    {
-        tbody.innerHTML = `
-        <tr>
-            <td colspan="4" class="text-center text-muted">
-                No Survey History Found
-            </td>
-        </tr>`;
-        return;
-    }
-
-
-    surveyHistory.forEach(row => {
-
-        let answers = [];
-
-        try{
-            answers = JSON.parse(row.answers);
-        }
-        catch(e){}
-
-
-        tbody.innerHTML += `
-        <tr>
-
-            <td>
-                ${row.survey_id}
-            </td>
-
-            <td>
-                ${row.survey_title ?? 'N/A'}
-            </td>
-
-
-            <td>
-
-            <ul class="mb-0 ps-3">
-
-            ${
-                answers.map(a=>`<li>${a}</li>`).join('')
+            if (surveyHistory.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">No Survey History Found</td>
+                    </tr>`;
+                return;
             }
 
-            </ul>
+            surveyHistory.forEach(row => {
+                let answers = [];
+                try {
+                    answers = JSON.parse(row.answers);
+                } catch(e) {}
 
-            </td>
-
-
-            <td>
-                ${row.submitted_at}
-            </td>
-
-
-        </tr>`;
-
-    });
-
-}
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.survey_id}</td>
+                        <td>${row.survey_title ?? 'N/A'}</td>
+                        <td>
+                            <ul class="mb-0 ps-3">
+                                ${answers.map(a => `<li>${a}</li>`).join('')}
+                            </ul>
+                        </td>
+                        <td>${row.submitted_at}</td>
+                    </tr>`;
+            });
+        }
 
         function updateAnalytics() {
-           const total = <?= isset($responses) ? count($responses) : 0 ?>;
+            const total = <?= isset($responses) ? count($responses) : 0 ?>;
             const totalResponsesElem = document.getElementById('totalResponsesAnalytics');
             if (totalResponsesElem) totalResponsesElem.innerText = total.toLocaleString();
             const participatedElem = document.getElementById('participatedCount');
@@ -1447,7 +1298,6 @@ id="mlaIdHidden">
             if (partRateMain) partRateMain.innerText = partRate;
         }
 
-        // Load category and reset stepper
         function loadCategory(category) {
             currentCategory = category;
             currentQuestions = getQuestionsForCategory(category);
@@ -1466,56 +1316,21 @@ id="mlaIdHidden">
                 renderCurrentQuestion();
             }
         }
-     surveyTypeSelect.addEventListener('change',function(){
 
-let category=this.value;
+        // Survey type change
+        surveyTypeSelect.addEventListener('change', function() {
+            const category = this.value;
+            const id = surveyMap[category] || '';
+            document.getElementById('surveyIdHidden').value = id;
+            document.getElementById('surveyIdField').value = id;
+            loadCategory(category);
+        });
 
-let id=surveyMap[category] || '';
-
-document.getElementById('surveyIdHidden').value=id;
-
-document.getElementById('surveyIdField').value=id;
-
-
-loadCategory(category);
-
-});
-//       surveyTypeSelect.addEventListener('change', function() {
-
-//     const category = this.value;
-
-//     loadCategory(category);
-
-
-//     const surveyMap = {
-
-//         "Election Survey": 1,
-//         "Road Development Survey": 2,
-//         "Water Supply Survey": 3,
-//         "Drainage Survey": 4,
-//         "Street Light Survey": 5,
-//         "Sanitation Survey": 6,
-//         "Health Survey": 7,
-//         "Agriculture Survey": 8,
-//         "Education Survey": 9,
-//         "Employment Survey": 10,
-//         "Smart Village Survey": 11,
-//         "MLA Performance Survey": 12,
-//         "Infrastructure Survey": 13
-
-//     };
-
-
-//     document.getElementById('surveyIdHidden').value =
-//         surveyMap[category] || '';
-
-// });
-        // Submit final response
-        function handleFormSubmit(e) {
-            e.preventDefault();
+        // Submit handler
+        function handleSubmit() {
             saveCurrentInput();
             
-            // Validate all answers
+            // Validate questions
             for (let i = 0; i < currentQuestions.length; i++) {
                 let ans = answersArray[i];
                 if (!ans || ans === "" || ans === "निवडा") {
@@ -1523,130 +1338,126 @@ loadCategory(category);
                     return;
                 }
             }
-            // Validate district, constituency, village, survey type
-            const district = document.getElementById('districtSelect').value;
-            const constituency = document.getElementById('constituencySelect').value;
-            const village = document.getElementById('villageInput').value.trim();
+            
+            // Get field values
+            const district = document.getElementById('districtField').value.trim();
+            const constituency = document.getElementById('constituencyField').value.trim();
+            const village = document.getElementById('villageField').value.trim();
             const surveyType = document.getElementById('surveyTypeSelect').value;
-            if (!district || !constituency || !village || !surveyType) {
-                alert("कृपया जिल्हा, मतदारसंघ, गाव आणि सर्वेक्षण प्रकार भरा.");
+            const surveyId = document.getElementById('surveyIdHidden').value;
+            
+            // Validate required fields
+            if (!district) {
+                alert("कृपया जिल्हा भरा. / Please enter your district.");
+                document.getElementById('districtField').focus();
+                return;
+            }
+            
+            if (!constituency) {
+                alert("कृपया मतदारसंघ भरा. / Please enter your constituency.");
+                document.getElementById('constituencyField').focus();
+                return;
+            }
+            
+            if (!village) {
+                alert("कृपया गावाचे नाव भरा. / Please enter your village name.");
+                document.getElementById('villageField').focus();
+                return;
+            }
+            
+            if (!surveyType) {
+                alert("कृपया सर्वेक्षण प्रकार निवडा. / Please select a survey type.");
+                document.getElementById('surveyTypeSelect').focus();
+                return;
+            }
+            
+            if (!surveyId) {
+                alert("कृपया योग्य सर्वेक्षण प्रकार निवडा. / Please select a valid survey type.");
                 return;
             }
 
-            // Extract rating from Q10 (index 9) if exists
-            let ratingNum = 5;
-            if (answersArray.length > 9 && answersArray[9]) {
-                let ratingVal = answersArray[9];
-                let parsed = parseInt(ratingVal, 10);
-                if (!isNaN(parsed)) ratingNum = parsed;
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="bi bi-spinner bi-spin me-2"></i> Submitting...';
+
+            const formData = new FormData();
+            formData.append('survey_id', surveyId);
+            formData.append('mla_id', document.getElementById('mlaIdHidden').value || '');
+            formData.append('district', district);
+            formData.append('constituency', constituency);
+            formData.append('village', village);
+            formData.append('survey_category', surveyType);
+            formData.append('answers', JSON.stringify(answersArray));
+
+            fetch('<?= base_url("user/survey/save") ?>', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i> Submit Response';
+                
+                if (data.status) {
+                    alert(data.message || 'Survey submitted successfully!');
+                    
+                    if (data.response) {
+                        surveyHistory.unshift(data.response);
+                        refreshHistoryUI();
+                        updateAnalytics();
+                    }
+                    
+                    // Reset form
+                    document.getElementById('surveyTypeSelect').value = '';
+                    document.getElementById('surveyIdHidden').value = '';
+                    document.getElementById('surveyIdField').value = '';
+                    currentQuestions = [];
+                    answersArray = [];
+                    currentQIndex = 0;
+                    loadCategory('');
+                    
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    alert(data.message || 'Failed to submit survey. Please try again.');
+                    console.error('Submission error:', data);
+                }
+            })
+            .catch(error => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i> Submit Response';
+                alert('An error occurred while submitting. Please check your connection and try again.');
+                console.error('Fetch error:', error);
+            });
+        }
+
+        // Event Listeners
+        prevBtn.addEventListener('click', prevQuestion);
+        nextBtn.addEventListener('click', nextQuestion);
+        document.getElementById('submitBtn').addEventListener('click', handleSubmit);
+
+        document.getElementById('surveyResponseForm').addEventListener('keydown', function(e) {
+            if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
+                e.preventDefault();
+                return false;
             }
-            ratingValues.push(ratingNum);
-            
-            // Positive flag based on first answer
-            const isPositive = (answersArray[0] === "खूप समाधानी" || answersArray[0] === "समाधानी" || answersArray[0] === "होय, पूर्णपणे" || answersArray[0] === "होय");
-            positiveFlags.push(isPositive);
+        });
 
-            const summaryAns = `${answersArray[0] || 'Answered'} | रेटिंग: ${ratingNum}/10`;
-            const surveyTitle = surveyType;
-            const surveyId = document.getElementById('surveyIdField').value;
-            const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, '-');
-
-
-          let oldAnswer = document.getElementById('answersField');
-
-if(oldAnswer){
-    oldAnswer.remove();
-}
-
-let answerField = document.createElement("input");
-
-answerField.type = "hidden";
-answerField.name = "answers";
-answerField.id = "answersField";
-answerField.value = JSON.stringify(answersArray);
-
-document.getElementById('surveyResponseForm')
-.appendChild(answerField);
-
-//             surveyHistory.push({
-//                 surveyId: surveyId,
-//                 surveyTitle: surveyTitle,
-//                 selectedAnswer: summaryAns,
-//                 submissionDate: today
-//             });
-// refreshHistoryUI();
-// updateAnalytics();
-
-// Submit data to backend
-// e.target.submit();
-// Submit data to backend using AJAX
-
-let form = document.getElementById('surveyResponseForm');
-
-
-let formData = new FormData(form);
-
-
-fetch("<?= base_url('user/survey/save') ?>", {
-
-    method:"POST",
-    body:formData
-
-})
-.then(response => response.json())
-
-.then(data => {
-
-    if(data.status)
-    {
-        alert(data.message);
-
-        // same page reload
-        window.location.href="<?= base_url('user/survey') ?>";
-    }
-    else
-    {
-        alert(data.message);
-    }
-
-})
-.catch(error => {
-
-    console.log(error);
-    alert("Something went wrong");
-
-});
-}
-
-        // Event listeners
-prevBtn.addEventListener('click', prevQuestion);
-nextBtn.addEventListener('click', nextQuestion);
-document.getElementById('surveyResponseForm')
-.addEventListener('submit', handleFormSubmit);
-
-
-// Prevent accidental Enter form submit
-document.getElementById('surveyResponseForm')
-.addEventListener('keydown', function(e){
-
-    if(e.key === "Enter" && e.target.tagName !== "TEXTAREA"){
-
-        e.preventDefault();
-
-        return false;
-    }
-
-});
-
-
-// Initialize
-loadCategory('');
-refreshHistoryUI();
-updateAnalytics();
-        console.log('✅ Dynamic Survey Module loaded. Total categories:', Object.keys(QUESTIONS_BY_CATEGORY).length);
+        // Initialize
+        loadCategory('');
+        refreshHistoryUI();
+        updateAnalytics();
+        
+        console.log('✅ Dynamic Survey Module loaded successfully.');
+        console.log('📊 Total categories:', Object.keys(QUESTIONS_BY_CATEGORY).length);
+        console.log('📝 Survey history count:', surveyHistory.length);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-     <script src="<?= base_url('assets/user/js/navbar.js') ?>"></script>
+    <script src="<?= base_url('assets/user/js/navbar.js') ?>"></script>
 </body>
 
 </html>
