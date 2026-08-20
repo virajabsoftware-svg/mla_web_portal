@@ -31,6 +31,45 @@ class DashboardModel extends Model
 
         if ($user) {
             $user['profile_photo'] = $this->handleProfilePhoto($user);
+
+            if (!empty($user['district']) && $this->db->tableExists('districts')) {
+                $districtId = $user['district'];
+                $districtRow = $this->db
+                    ->table('districts')
+                    ->select('district_name')
+                    ->where('id', $districtId)
+                    ->get()
+                    ->getRowArray();
+
+                if ($districtRow && !empty($districtRow['district_name'])) {
+                    $user['district_name'] = $districtRow['district_name'];
+                    $user['district'] = $districtRow['district_name'];
+                } else {
+                    $user['district_name'] = $user['district'];
+                }
+            } else {
+                $user['district_name'] = $user['district'] ?? 'Not Available';
+            }
+
+            if (!empty($user['constituency']) && $this->db->tableExists('constituencies')) {
+                $constituencyRow = $this->db
+                    ->table('constituencies')
+                    ->select('constituency_name')
+                    ->where('id', $user['constituency'])
+                    ->get()
+                    ->getRowArray();
+
+                if ($constituencyRow && !empty($constituencyRow['constituency_name'])) {
+                    $user['constituency_name'] = $constituencyRow['constituency_name'];
+                    $user['constituency'] = $constituencyRow['constituency_name'];
+                } else {
+                    $user['constituency_name'] = $user['constituency'];
+                }
+            } else {
+                $user['constituency_name'] = $user['constituency'] ?? 'Not Available';
+            }
+
+            $user['booth_name'] = $user['locality'] ?? $user['ward_booth'] ?? $user['booth'] ?? 'Not Available';
         }
 
         return $user;
@@ -114,7 +153,6 @@ class DashboardModel extends Model
     // ==========================
     public function getAssignedMLA($id)
     {
-        // Get voter's assigned MLA info from voters table
         $voter = $this->db
             ->table('voters')
             ->select('mla_id, mla_name, mla_party, constituency')
@@ -122,42 +160,70 @@ class DashboardModel extends Model
             ->get()
             ->getRowArray();
 
-        // If no MLA assigned
-        if (!$voter || empty($voter['mla_name'])) {
+        if (!$voter) {
             return null;
         }
 
         $mla_id = $voter['mla_id'] ?? 0;
+        $mla_name = $voter['mla_name'] ?? null;
+        $mla_party = $voter['mla_party'] ?? null;
         $constituency = $voter['constituency'] ?? null;
+
+        if (!empty($constituency) && $this->db->tableExists('constituencies')) {
+            $constituencyRow = $this->db
+                ->table('constituencies')
+                ->select('constituency_name')
+                ->where('id', $constituency)
+                ->get()
+                ->getRowArray();
+
+            if ($constituencyRow && !empty($constituencyRow['constituency_name'])) {
+                $constituency = $constituencyRow['constituency_name'];
+            }
+        }
+
+        if (!empty($mla_id) && $this->db->tableExists('mlas')) {
+            $mlaRecord = $this->db
+                ->table('mlas')
+                ->where('id', $mla_id)
+                ->get()
+                ->getRowArray();
+
+            if ($mlaRecord) {
+                $mla_name = $mla_name ?? ($mlaRecord['mla_name'] ?? $mlaRecord['name'] ?? null);
+                $mla_party = $mla_party ?? ($mlaRecord['party'] ?? $mlaRecord['mla_party'] ?? null);
+                $mla_image = $mla_image ?? ($mlaRecord['profile_photo'] ?? null);
+
+                if (empty($constituency) && !empty($mlaRecord['constituency_id']) && $this->db->tableExists('constituencies')) {
+                    $constituencyRow = $this->db
+                        ->table('constituencies')
+                        ->select('constituency_name')
+                        ->where('id', $mlaRecord['constituency_id'])
+                        ->get()
+                        ->getRowArray();
+
+                    $constituency = $constituencyRow['constituency_name'] ?? $constituency;
+                }
+            }
+        }
+
+        if (empty($mla_id) && empty($mla_name)) {
+            return null;
+        }
 
         $total_works = $this->getTotalWorksForMLA($mla_id);
         $completed_works = $this->getCompletedWorksForMLA($mla_id);
 
         return [
             'mla_id' => $mla_id,
-
-            'mla_name' => $voter['mla_name'] ?? 'Not Assigned',
-
-            'mla_party' => $voter['mla_party'] ?? 'Not Available',
-
+            'mla_name' => $mla_name ?? 'Not Assigned',
+            'mla_party' => $mla_party ?? 'Not Available',
             'constituency' => $constituency ?? 'Not Available',
-
-            'mla_image' => 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max',
-
+            'mla_image' => $mla_image ?? '',
             'total_works' => $total_works,
-
             'completed_works' => $completed_works,
-
-            // Rating comes from mla_ratings.overall_rating
-            'rating' => $this->getMLARating(
-                $mla_id,
-                $constituency
-            ),
-
-            'credibility' => $this->calculateCredibility(
-                $total_works,
-                $completed_works
-            )
+            'rating' => $this->getMLARating($mla_id, $constituency),
+            'credibility' => $this->calculateCredibility($total_works, $completed_works)
         ];
     }
 

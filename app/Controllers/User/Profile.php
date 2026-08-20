@@ -7,6 +7,7 @@ use App\Models\User\UserModel;
 use App\Models\StateModel;
 use App\Models\DistrictModel;
 use App\Models\ConstituencyModel;
+use App\Models\MlaModel;
 
 
 class Profile extends BaseController
@@ -45,6 +46,7 @@ class Profile extends BaseController
         $stateModel = new StateModel();
         $districtModel = new DistrictModel();
         $constituencyModel = new ConstituencyModel();
+        $mlaModel = new MlaModel();
 
         // Get State
         $state = $stateModel->find($user['state']);
@@ -55,9 +57,13 @@ class Profile extends BaseController
         // Get Constituency
         $constituency = $constituencyModel->find($user['constituency']);
 
+        // Get MLA
+        $mla = $mlaModel->getMlaWithLocation($user['mla_id']);
+
         // Load profile view
         return view('user/my_profile', [
             'user' => $user,
+            'mla' => $mla,
 
             'stateName' => $state['state_name'] ?? '',
 
@@ -73,6 +79,22 @@ class Profile extends BaseController
     }
 
 
+    protected function buildLocationLockedUpdateData(array $currentUser, array $postData): array
+    {
+        return [
+            'full_name'    => $postData['full_name'] ?? null,
+            'dob'          => $postData['dob'] ?? null,
+            'gender'       => $postData['gender'] ?? null,
+            'email'        => $postData['email'] ?? null,
+            'mobile'       => $postData['mobile'] ?? null,
+            'state'        => $currentUser['state'] ?? null,
+            'district'     => $currentUser['district'] ?? null,
+            'constituency' => $currentUser['constituency'] ?? null,
+            'locality'     => $postData['locality'] ?? null,
+            'pincode'      => $postData['pincode'] ?? null,
+        ];
+    }
+
     // =================================================
     // UPDATE PROFILE
     // =================================================
@@ -85,6 +107,13 @@ class Profile extends BaseController
         // Check login
         if (!$userId) {
             return redirect()->to('/login');
+        }
+
+        $currentUser = $this->userModel->find($userId);
+
+        if (!$currentUser) {
+            return redirect()->to('/login')
+                ->with('error', 'User not found.');
         }
 
         // ---------------------------------------------
@@ -113,18 +142,10 @@ class Profile extends BaseController
         // User Data
         // ---------------------------------------------
 
-        $data = [
-            'full_name' => $this->request->getPost('full_name'),
-            'dob'       => $this->request->getPost('dob'),
-            'gender'    => $this->request->getPost('gender'),
-            'email'     => $this->request->getPost('email'),
-            'mobile'    => $this->request->getPost('mobile'),
-            'state'     => $this->request->getPost('state_id'),
-            'district'  => $this->request->getPost('district_id'),
-            'constituency' => $this->request->getPost('constituency_id'),
-            'locality'  => $this->request->getPost('locality'),
-            'pincode'   => $this->request->getPost('pincode'),
-        ];
+        $data = $this->buildLocationLockedUpdateData(
+            $currentUser,
+            $this->request->getPost()
+        );
 
         // ---------------------------------------------
         // Profile Photo

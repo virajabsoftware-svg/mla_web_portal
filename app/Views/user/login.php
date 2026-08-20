@@ -545,6 +545,22 @@
                     </div>
                 </div>
 
+                <div class="row g-2">
+                    <div class="col-7">
+                        <label class="form-label">Mobile Number </label>
+                        <input type="tel" name="mobile" id="mobileInput" class="form-control"  placeholder="Enter 10 digit mobile number"
+                            maxlength="10"    pattern="[0-9]{10}"  inputmode="numeric"                            >
+
+                        <div id="mobileError" class="text-danger mt-1" style="display:none;"></div>
+                    </div>
+                    
+                </div>
+
+
+
+
+
+
                 <div class="profile-photo-upload" onclick="document.getElementById('photoUpload').click()">
                     <img id="photoPreview" 
                          src="" 
@@ -966,7 +982,8 @@ function validateStep(step) {
             const fullName = document.querySelector('input[name="full_name"]').value.trim();
             const dob = document.querySelector('input[name="dob"]').value;
             const gender = document.querySelector('select[name="gender"]').value;
-            
+            const mobile = document.querySelector('input[name="mobile"]').value;
+
             if (!voterId) {
                 alert('⚠️ Please enter your Voter ID.');
                 return false;
@@ -975,6 +992,12 @@ function validateStep(step) {
                 alert('⚠️ Please enter your Full Name.');
                 return false;
             }
+            
+            if (!/^[0-9]{10}$/.test(mobile)) {
+                alert('⚠️ Please enter a valid 10 digit Mobile Number.');
+                return false;
+            } 
+
             if (!dob) {
                 alert('⚠️ Please select your Date of Birth.');
                 return false;
@@ -983,6 +1006,8 @@ function validateStep(step) {
                 alert('⚠️ Please select your Gender.');
                 return false;
             }
+
+            
             return true;
             
         case 2:

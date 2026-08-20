@@ -74,28 +74,44 @@ class Auth extends BaseController
  
         $data = [ 
  
-            'voter_id'      => $this->request->getPost('voter_id'),  
-            'full_name'     => $this->request->getPost('full_name'),  
-            'dob'           => $this->request->getPost('dob'),  
-            'gender'        => $this->request->getPost('gender'),  
-            'email'         => $this->request->getPost('email'),  
+            'voter_id'      => $this->request->getPost('voter_id'), 
+ 
+            'full_name'     => $this->request->getPost('full_name'), 
+ 
+            'dob'           => $this->request->getPost('dob'), 
+ 
+            'gender'        => $this->request->getPost('gender'), 
+ 
+            'email'         => $this->request->getPost('email'), 
+ 
             'password'      => password_hash( 
                                 $this->request->getPost('password'), 
                                 PASSWORD_DEFAULT 
-                              ),  
-            'state'         => $this->request->getPost('state_id'),  
-            'district'      => $this->request->getPost('district_id'),  
-            'constituency'  => $this->request->getPost('constituency_id'),  
-            'locality'      => $this->request->getPost('locality'),  
+                              ), 
+ 
+ 
+            'state'         => $this->request->getPost('state_id'), 
+ 
+            'district'      => $this->request->getPost('district_id'), 
+ 
+            'constituency'  => $this->request->getPost('constituency_id'), 
+ 
+            'locality'      => $this->request->getPost('locality'), 
+ 
             'pincode'       => $this->request->getPost('pincode'), 
+ 
  
             // Photo name save in database 
             'profile_photo' => $photoName, 
  
  
             'mla_name'      => $this->request->getPost('mla_name'), 
-            'mla_party'     => $this->request->getPost('mla_party'),  
-            'mla_id'        => $this->request->getPost('mla_id'),  
+ 
+            'mla_party'     => $this->request->getPost('mla_party'), 
+ 
+            'mla_id'        => $this->request->getPost('mla_id'), 
+ 
+ 
             'status'        => 'pending' 
  
         ]; 
@@ -135,9 +151,15 @@ class Auth extends BaseController
     public function login() 
     { 
  
-        $model = new VoterModel();  
-        $email = $this->request->getPost('email');  
-        $password = $this->request->getPost('password');  
+        $model = new VoterModel(); 
+ 
+ 
+        $email = $this->request->getPost('email'); 
+ 
+        $password = $this->request->getPost('password'); 
+ 
+ 
+ 
         $user = $model 
                 ->where('email',$email) 
                 ->first(); 

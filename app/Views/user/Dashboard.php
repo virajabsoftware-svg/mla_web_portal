@@ -68,8 +68,13 @@ $_SESSION['user_email'] = $user_data['email'] ?? '';
 $_SESSION['user_role'] = $user_data['role'] ?? 'Voter';
 $_SESSION['user_image'] = $profile_photo; // ✅ Now this will have a value
 $_SESSION['voter_id'] = $user_data['voter_id'] ?? 'Not Available';
-$_SESSION['district'] = $user_data['district'] ?? 'Not Available';
-$_SESSION['booth'] = $user_data['booth'] ?? $user_data['locality'] ?? 'Not Available';
+
+$district = $user_data['district_name'] ?? $user_data['district'] ?? 'Not Available';
+$booth = $user_data['booth_name'] ?? $user_data['locality'] ?? $user_data['ward_booth'] ?? $user_data['booth'] ?? 'Not Available';
+$mla_constituency = $user_data['constituency_name'] ?? $user_data['constituency'] ?? $district ?? 'Not Available';
+
+$_SESSION['district'] = $district;
+$_SESSION['booth'] = $booth;
 
 // ==========================
 // 2. Profile Completion (FROM MODEL)
@@ -83,33 +88,32 @@ $user_email = $_SESSION['user_email'];
 $user_role = $_SESSION['user_role'];
 $user_image = $_SESSION['user_image'];
 $voter_id = $_SESSION['voter_id'];
-$district = $_SESSION['district'];
-$booth = $_SESSION['booth'];
 
 // ==========================
-// 3. Assigned MLA (FROM MODEL)
+// 3. Assigned MLA (FROM LOGIN USER'S mla_id)
 // ==========================
 $mla_data_from_db = $dashboardModel->getAssignedMLA($user_id);
 
-// Prepare MLA data for display
-if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
-    // Get MLA image
+ // Debugging line to check the structure of $mla_data_from_db
+$user_has_assigned_mla = !empty($user_data['mla_id']) || !empty($user_data['mla_name']);
+
+if ($user_has_assigned_mla && !empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
     $mla_image = $mla_data_from_db['mla_image'] ?? '';
     if (empty($mla_image)) {
         $mla_image = 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max';
     }
-    
+
     $mla_data = [
         'name' => $mla_data_from_db['mla_name'] ?? 'Not Assigned',
-        'constituency' => $mla_data_from_db['constituency'] ?? $district,
+        'constituency' => $mla_data_from_db['constituency'] ?? $mla_constituency,
         'total_works' => $mla_data_from_db['total_works'] ?? 0,
         'completed_works' => $mla_data_from_db['completed_works'] ?? 0,
         'rating' => $mla_data_from_db['rating'] ?? '0★',
         'credibility' => $mla_data_from_db['credibility'] ?? '0%',
-        'image' => $mla_image
+        'mla_image' => $mla_data_from_db['mla_image'] ,
     ];
 } else {
-    // Fallback static MLA data
+    // Fallback static MLA data only if the user truly has no MLA assigned
     $mla_data = [
         'name' => 'Chh. Shivendrasinh Bhosale',
         'constituency' => 'Satara Constituency',
@@ -117,7 +121,7 @@ if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
         'completed_works' => 118,
         'rating' => '4.6★',
         'credibility' => '91%',
-        'image' => 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max'
+        'mla_image' => 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max'
     ];
 }
 
@@ -634,7 +638,7 @@ $notification_count = 3; // STATIC
                                     <h5><?= htmlspecialchars($district) ?></h5>
                                 </div>
                                 <div class="col-6">
-                                    <h6 class="text-muted">Booth</h6>
+                                    <h6 class="text-muted">Locality / Booth</h6>
                                     <h5><?= htmlspecialchars($booth) ?></h5>
                                 </div>
                             </div>
@@ -650,14 +654,15 @@ $notification_count = 3; // STATIC
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-md-2 text-center">
-                                    <img src="<?= !empty($mla_data['image']) ? htmlspecialchars($mla_data['image']) : 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max' ?>" 
+                                    
+                                    <img src="<?= !empty($mla_data['mla_image']) ? htmlspecialchars($mla_data['mla_image']) : 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max' ?>" 
                                          class="rounded-circle" width="90" 
                                          alt="MLA"
                                          onerror="this.onerror=null; this.src='https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max';">
                                 </div>
                                 <div class="col-md-10">
                                     <h4><?= htmlspecialchars($mla_data['name'] ?? 'Not Assigned') ?></h4>
-                                    <p class="mb-2"><?= htmlspecialchars($mla_data['constituency'] ?? $district . ' Constituency') ?></p>
+                                    <p class="mb-2"><?= htmlspecialchars($mla_data['constituency'] ?? $mla_constituency) ?></p>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <h5><?= $mla_data['total_works'] ?? 0 ?></h5>

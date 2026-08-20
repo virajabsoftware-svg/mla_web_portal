@@ -656,25 +656,25 @@
                             </span>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-3 col-6">
+                            <!--div class="col-md-3 col-6">
                                 <div class="info-label"><i class="fas fa-id-card"></i> MLA ID</div>
                                 <div class="value-display-readonly"><?= esc($mla['mla_id'] ?? '-') ?></div>
-                            </div>
+                            </div-->
                             <div class="col-md-3 col-6">
                                 <div class="info-label"><i class="fas fa-user-tie"></i> MLA Name</div>
                                 <div class="value-display-readonly"><?= esc($mla['mla_name'] ?? '-') ?></div>
                             </div>
                             <div class="col-md-3 col-6">
                                 <div class="info-label"><i class="fas fa-building"></i> Party</div>
-                                <div class="value-display-readonly"><?= esc($mla['mla_party'] ?? '-') ?></div>
+                                <div class="value-display-readonly"><?= esc($mla['party'] ?? '-') ?></div>
                             </div>
                             <div class="col-md-3 col-6">
                                 <div class="info-label"><i class="fas fa-landmark"></i> Constituency</div>
-                                <div class="value-display-readonly"><?= esc($mla['constituency'] ?? '-') ?></div>
+                                <div class="value-display-readonly"><?= esc($mla['constituency_name'] ?? '-') ?></div>
                             </div>
                             <div class="col-md-3">
                                 <div class="info-label"><i class="fas fa-map-pin"></i> District</div>
-                                <div class="value-display-readonly"><?= esc($mla['district'] ?? '-') ?></div>
+                                <div class="value-display-readonly"><?= esc($mla['district_name'] ?? '-') ?></div>
                             </div>
                         </div>
                     </div>
@@ -719,8 +719,8 @@
                        <!-- MOBILE --> <div class="col-md-6"> <label class="form-label"> Mobile Number </label> 
                         <input type="text" name="mobile" class="form-control" value="<?= esc($user['mobile'] ?? '') ?>">
                      </div> <!-- STATE --> <div class="col-md-4"> <label class="form-label"> State </label> 
-                     <input type="text" class="form-control" value="<?= esc($user['state'] ?? '') ?>" readonly>
-                     </div> <!-- DISTRICT --> <div class="col-md-4"> <label class="form-label"> District </label> <input type="text" class="form-control" value="<?= esc($user['district'] ?? '') ?>" readonly> </div> <!-- CONSTITUENCY --> <div class="col-md-4"> <label class="form-label"> Assembly Constituency </label> <input type="text" class="form-control" value="<?= esc($user['constituency'] ?? '') ?>" readonly> </div> <!-- LOCALITY --> <div class="col-md-6"> <label class="form-label"> Locality / Area </label> <input type="text" name="locality" class="form-control" value="<?= esc($user['locality'] ?? '') ?>"> </div> <!-- PINCODE --> <div class="col-md-6"> <label class="form-label"> Pincode </label> <input type="text" name="pincode" class="form-control" maxlength="6" inputmode="numeric" value="<?= esc($user['pincode'] ?? '') ?>"> </div> <!-- PROFILE PHOTO --> <div class="col-12"> <label class="form-label"> Profile Photo </label> <input type="file" name="profile_photo" class="form-control" accept="image/jpeg,image/png,image/webp"> <small class="text-muted"> JPG, PNG, WEBP | Maximum 2 MB </small> <?php if (!empty($user['profile_photo'])): ?> <small class="d-block text-muted mt-1"> Current: <?= esc($user['profile_photo']) ?> </small> <?php endif; ?> </div> </div> </form> </div> <!-- FOOTER --> <div class="modal-footer"> <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"> Cancel </button> <button type="submit" form="editProfileForm" class="btn-gold"> <i class="fas fa-save me-2"></i> Save Changes </button> </div> </div> </div> </div>
+                     <input type="text" class="form-control" value="<?= esc($stateName ?? '-') ?>" readonly>
+                     </div> <!-- DISTRICT --> <div class="col-md-4"> <label class="form-label"> District </label> <input type="text" class="form-control" value="<?= esc($districtName ?? '-') ?>" readonly> </div> <!-- CONSTITUENCY --> <div class="col-md-4"> <label class="form-label"> Assembly Constituency </label> <input type="text" class="form-control" value="<?= esc($constituencyName ?? '-') ?>" readonly> </div> <!-- LOCALITY --> <div class="col-md-6"> <label class="form-label"> Locality / Area </label> <input type="text" name="locality" class="form-control" value="<?= esc($user['locality'] ?? '') ?>"> </div> <!-- PINCODE --> <div class="col-md-6"> <label class="form-label"> Pincode </label> <input type="text" name="pincode" class="form-control" maxlength="6" inputmode="numeric" value="<?= esc($user['pincode'] ?? '') ?>"> </div> <!-- PROFILE PHOTO --> <div class="col-12"> <label class="form-label"> Profile Photo </label> <input type="file" name="profile_photo" class="form-control" accept="image/jpeg,image/png,image/webp"> <small class="text-muted"> JPG, PNG, WEBP | Maximum 2 MB </small> <?php if (!empty($user['profile_photo'])): ?> <small class="d-block text-muted mt-1"> Current: <?= esc($user['profile_photo']) ?> </small> <?php endif; ?> </div> </div> </form> </div> <!-- FOOTER --> <div class="modal-footer"> <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"> Cancel </button> <button type="submit" form="editProfileForm" class="btn-gold"> <i class="fas fa-save me-2"></i> Save Changes </button> </div> </div> </div> </div>
 
     <!-- Toast Notification -->
     <div class="toast-notification" id="toastNotification">
@@ -784,111 +784,7 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        function createLocationSelect(input, id, name, placeholder) {
-            const select = document.createElement('select');
-            select.id = id;
-            select.name = name;
-            select.className = input.className;
-            select.innerHTML = '<option value="">' + placeholder + '</option>';
-            input.replaceWith(select);
-            return select;
-        }
-
-        function setSelectedLocation(select, value) {
-            const matchingOption = [...select.options].find(option =>
-                option.value === String(value) || option.textContent.trim() === String(value)
-            );
-
-            if (matchingOption) {
-                select.value = matchingOption.value;
-            }
-        }
-
-        function loadProfileDistricts(stateId, selectedDistrict, selectedConstituency) {
-            const districtSelect = document.getElementById('profileDistrictSelect');
-            const constituencySelect = document.getElementById('profileConstituencySelect');
-
-            districtSelect.innerHTML = '<option value="">Loading...</option>';
-            districtSelect.disabled = true;
-            constituencySelect.innerHTML = '<option value="">Select Constituency</option>';
-            constituencySelect.disabled = true;
-
-            if (!stateId) {
-                districtSelect.innerHTML = '<option value="">Select District</option>';
-                return;
-            }
-
-            fetch('<?= base_url("admin/get-districts") ?>/' + stateId)
-                .then(response => response.json())
-                .then(districts => {
-                    districtSelect.innerHTML = '<option value="">Select District</option>';
-                    districts.forEach(district => {
-                        districtSelect.insertAdjacentHTML(
-                            'beforeend',
-                            '<option value="' + district.id + '">' + district.district_name + '</option>'
-                        );
-                    });
-                    districtSelect.disabled = false;
-                    setSelectedLocation(districtSelect, selectedDistrict);
-                    if (districtSelect.value) {
-                        loadProfileConstituencies(districtSelect.value, selectedConstituency);
-                    }
-                })
-                .catch(() => {
-                    districtSelect.innerHTML = '<option value="">Unable to load districts</option>';
-                });
-        }
-
-        function loadProfileConstituencies(districtId, selectedConstituency) {
-            const constituencySelect = document.getElementById('profileConstituencySelect');
-            constituencySelect.innerHTML = '<option value="">Loading...</option>';
-            constituencySelect.disabled = true;
-
-            if (!districtId) return;
-
-            fetch('<?= base_url("admin/get-constituencies") ?>/' + districtId)
-                .then(response => response.json())
-                .then(constituencies => {
-                    constituencySelect.innerHTML = '<option value="">Select Constituency</option>';
-                    constituencies.forEach(constituency => {
-                        constituencySelect.insertAdjacentHTML(
-                            'beforeend',
-                            '<option value="' + constituency.id + '">' + constituency.constituency_name + '</option>'
-                        );
-                    });
-                    constituencySelect.disabled = false;
-                    setSelectedLocation(constituencySelect, selectedConstituency);
-                });
-        }
-
-        function setupProfileLocationFields() {
-            const readonlyFields = document.querySelectorAll('#editProfileForm input[readonly]');
-            const stateInput = readonlyFields[1];
-            const districtInput = readonlyFields[2];
-            const constituencyInput = readonlyFields[3];
-
-            if (!stateInput || !districtInput || !constituencyInput) return;
-
-            const stateSelect = createLocationSelect(stateInput, 'profileStateSelect', 'state_id', 'Select State');
-            const districtSelect = createLocationSelect(districtInput, 'profileDistrictSelect', 'district_id', 'Select District');
-            const constituencySelect = createLocationSelect(constituencyInput, 'profileConstituencySelect', 'constituency_id', 'Select Constituency');
-
-            <?php foreach ($states ?? [] as $state): ?>
-                stateSelect.insertAdjacentHTML('beforeend', '<option value="<?= esc($state['id']) ?>"><?= esc($state['state_name']) ?></option>');
-            <?php endforeach; ?>
-
-            const currentState = <?= json_encode($user['state'] ?? '') ?>;
-            const currentDistrict = <?= json_encode($user['district'] ?? '') ?>;
-            const currentConstituency = <?= json_encode($user['constituency'] ?? '') ?>;
-            setSelectedLocation(stateSelect, currentState);
-            stateSelect.addEventListener('change', () => loadProfileDistricts(stateSelect.value, '', ''));
-            districtSelect.addEventListener('change', () => loadProfileConstituencies(districtSelect.value, ''));
-            loadProfileDistricts(stateSelect.value, currentDistrict, currentConstituency);
-            setSelectedLocation(constituencySelect, currentConstituency);
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
-            setupProfileLocationFields();
             document.querySelectorAll('.alert').forEach(alert => {
                 setTimeout(() => {
                     const closeBtn = alert.querySelector('.btn-close');
