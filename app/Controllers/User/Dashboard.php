@@ -77,7 +77,7 @@ class Dashboard extends BaseController
         // GET MLA DATA
         // ==========================
         $mla_data_from_db = $model->getAssignedMLA($user_id);
-
+        
         // Prepare MLA data with image
         if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
             // Get full MLA details including image

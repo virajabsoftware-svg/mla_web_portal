@@ -465,6 +465,8 @@
 
             <div class="premium-card fade-up stagger-1" style="border-radius: 32px;">
 
+                 
+
                 <!-- PROFILE HEADER -->
                 <div class="profile-header-bg" style="padding: 2rem 2rem 1.5rem 2rem; border-bottom: 1px solid rgba(195,200,72,0.12);">
 
@@ -472,6 +474,7 @@
                         <!-- Avatar -->
                         <div class="col-md-3 col-lg-2 text-center text-md-start mb-3 mb-md-0">
                             <div style="position: relative; display: inline-block;">
+                                
                                 <?php
                                 $firstLetter = !empty($user['full_name']) ? strtoupper(substr($user['full_name'], 0, 1)) : 'U';
                                 $defaultAvatar = base_url('assets/user/images/default-avatar.png');
@@ -541,11 +544,11 @@
                             <div class="d-flex flex-wrap gap-3 text-muted" style="font-weight: 500; font-size: 0.95rem; color: var(--dark-olive); opacity: 0.7;">
                                 <span>
                                     <i class="fas fa-map-pin me-1" style="color:var(--lime-gold);"></i>
-                                    <?= esc($user['district'] ?? 'N/A') ?>
+                                    <?= esc($districtName ?? 'N/A') ?>
                                 </span>
                                 <span>
                                     <i class="fas fa-landmark me-1" style="color:var(--lime-gold);"></i>
-                                    <?= esc($user['constituency'] ?? 'N/A') ?>
+                                    <?= esc($constituencyName ?? 'N/A') ?>
                                 </span>
                             </div>
                         </div>

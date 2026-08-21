@@ -50,10 +50,8 @@ class Profile extends BaseController
 
         // Get State
         $state = $stateModel->find($user['state']);
-
         // Get District
         $district = $districtModel->find($user['district']);
-
         // Get Constituency
         $constituency = $constituencyModel->find($user['constituency']);
 

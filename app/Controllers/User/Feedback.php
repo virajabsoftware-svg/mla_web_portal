@@ -5,6 +5,9 @@ namespace App\Controllers\User;
 use App\Controllers\BaseController;
 use App\Models\User\UserModel;
 use App\Models\User\FeedbackModel;
+use App\Models\StateModel;
+use App\Models\DistrictModel;
+use App\Models\ConstituencyModel;
 
 class Feedback extends BaseController
 {
@@ -96,6 +99,16 @@ class Feedback extends BaseController
     // SEND DATA TO VIEW
     // ==========================================
 
+
+       // Models sam hack
+       
+        $districtModel = new DistrictModel();
+        $constituencyModel = new ConstituencyModel();
+        // Get District
+        $district = $districtModel->find($voter['district']);
+        // Get Constituency
+        $constituency = $constituencyModel->find($voter['constituency']);
+
     $data = [
         'feedbacks'     => $feedbacks,
 
@@ -103,15 +116,13 @@ class Feedback extends BaseController
         'reviewed'      => $reviewed,
         'underReview'   => $underReview,
         'resolved'      => $resolved,
-
         'pager'         => $model->pager,
-
         // Automatic voter information
         'feedback_id'   => $feedbackId,
         'voter_id'      => $voter['voter_id'],
         'mla_id'        => $voter['mla_id'] ?? '',
-        'district'      => $voter['district'] ?? '',
-        'constituency'  => $voter['constituency'] ?? '',
+        'district'      => $district['district_name'] ?? '',
+        'constituency'  => $constituency['constituency_name'] ?? '',
         'full_name'     => $voter['full_name'] ?? ''
     ];
 
@@ -271,6 +282,18 @@ class Feedback extends BaseController
             } elseif (strtolower($feedback['status']) == 'rejected') {
                 $statusClass = 'bg-danger';
             }
+
+            // Models
+           
+            $districtModel = new DistrictModel();
+            $constituencyModel = new ConstituencyModel();              
+            // Get District
+            $district = $districtModel->find($feedback['district']);
+            // Get Constituency
+            $constituency = $constituencyModel->find($feedback['constituency']);
+
+            $feedback['districtName'] = $district['district_name'] ?? '';
+            $feedback['constituencyName'] = $constituency['constituency_name'] ?? '';
             
             $feedback['status_class'] = $statusClass;
             $feedback['submitted_at'] = date('d-M-Y h:i A', strtotime($feedback['submitted_at']));
@@ -346,8 +369,8 @@ class Feedback extends BaseController
         $data = [
             'voter_id' => $this->request->getPost('voter_id'),
             'mla_id' => $this->request->getPost('mla_id'),
-            'district' => $this->request->getPost('district'),
-            'constituency' => $this->request->getPost('constituency'),
+            //'district' => $this->request->getPost('district'),
+            //'constituency' => $this->request->getPost('constituency'),
             'village' => $this->request->getPost('village'),
             'category' => $this->request->getPost('category'),
             'status' => $this->request->getPost('status'),

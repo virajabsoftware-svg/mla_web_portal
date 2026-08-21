@@ -899,48 +899,31 @@
                         </div>
                     <?php endif; ?>
 
-                    <form action="<?= base_url('user/feedback/save'); ?>"
-      method="post"
-      enctype="multipart/form-data">
+            <form action="<?= base_url('user/feedback/save'); ?>" method="post"   enctype="multipart/form-data">
 
-<?= csrf_field(); ?>
+                    <?= csrf_field(); ?>
 
                         <div class="row g-3">
 
                             <!-- Feedback ID -->
                             <div class="col-md-3">
                                 <label class="form-label">Feedback ID</label>
-                                <input
-    type="text"
-    name="feedback_id"
-    class="form-control"
-    value="<?= esc($feedback_id ?? '') ?>"
-    readonly
->
+                                <input  type="text" name="feedback_id" class="form-control" value="<?= esc($feedback_id ?? '') ?>"
+                                    readonly>
                             </div>
 
                             <!-- Voter ID -->
                             <div class="col-md-3">
                                 <label class="form-label">Voter ID</label>
-                               <input
-    type="text"
-    name="voter_id"
-    class="form-control"
-    value="<?= esc($voter_id ?? '') ?>"
-    readonly
->
+                                <input type="text" name="voter_id" class="form-control" value="<?= esc($voter_id ?? '') ?>"
+                                readonly>
                             </div>
 
                             <!-- MLA ID -->
                             <div class="col-md-3">
-                                <label class="form-label">MLA ID</label>
-<input
-    type="text"
-    name="mla_id"
-    class="form-control"
-    value="<?= esc($mla_id ?? '') ?>"
-    readonly
->
+                            <label class="form-label">MLA ID</label>
+                            <input type="text" name="mla_id" class="form-control" value="<?= esc($mla_id ?? '') ?>"
+                            readonly >
                             </div>
 
                             <!-- Work ID -->
@@ -953,25 +936,20 @@
                             <div class="col-md-4">
                                 <label class="form-label">District</label>
                                 <input
-    type="text"
-    name="district"
-    class="form-control"
-    value="<?= esc($district ?? '') ?>"
-    readonly
->
+                                    type="text"
+                                    name="district"
+                                    class="form-control"
+                                    value="<?= esc($district ?? '') ?>"
+                                    readonly>
                             </div>
 
                             <!-- Constituency -->
                             <div class="col-md-4">
                                 <label class="form-label">Constituency</label>
                                 <input
-    type="text"
-    name="constituency"
-    class="form-control"
-    value="<?= esc($constituency ?? '') ?>"
-    readonly
->
-                            </div>
+                                type="text"  name="constituency" class="form-control"  value="<?= esc($constituency ?? '') ?>"
+                                readonly >
+                             </div>
 
                             <!-- Village -->
                             <div class="col-md-4">
@@ -1004,17 +982,17 @@
                             <div class="col-12">
                                 <label class="form-label">Feedback Description</label>
                                 <textarea
-name="description"
-class="form-control"><?= isset($description) ? $description : '' ?></textarea>
+                                    name="description"
+                                    class="form-control"><?= isset($description) ? $description : '' ?></textarea>
                             </div>
 
                             <!-- Attachments -->
                             <div class="col-md-6">
                                 <label class="form-label">Upload Attachments</label>
                                 <input
-type="file"
-name="attachment"
-class="form-control">
+                                type="file"
+                                name="attachment"
+                                class="form-control">
                             </div>
 
                             <!-- Auto Date -->
@@ -1316,11 +1294,11 @@ class="form-control">
                                                 </div>
                                                 <div class="detail-row">
                                                     <div class="detail-label">District</div>
-                                                    <div class="detail-value">${f.district || '-'}</div>
+                                                    <div class="detail-value">${f.districtName || '-'}</div>
                                                 </div>
                                                 <div class="detail-row">
                                                     <div class="detail-label">Constituency</div>
-                                                    <div class="detail-value">${f.constituency || '-'}</div>
+                                                    <div class="detail-value">${f.constituencyName || '-'}</div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -1432,11 +1410,11 @@ class="form-control">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">District</label>
-                                                    <input type="text" name="district" class="form-control" value="${f.district || ''}" required>
+                                                    <input type="text" name="district" readonly class="form-control" value="${f.districtName || ''}" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Constituency</label>
-                                                    <input type="text" name="constituency" class="form-control" value="${f.constituency || ''}" required>
+                                                    <input type="text" name="constituency" readonly class="form-control" value="${f.constituencyName || ''}" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">

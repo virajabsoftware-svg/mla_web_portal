@@ -238,10 +238,10 @@ class DashboardModel extends Model
             return $photo;
         }
       
-        $photoPath = FCPATH . 'uploads/profile/' . $photo;
-           
+        $photoPath = FCPATH . 'uploads/mla/' . $photo;
+          
         return file_exists($photoPath)
-            ? base_url('uploads/profile/' . $photo)
+            ? base_url('uploads/mla/' . $photo)
             : '';
     }
 
