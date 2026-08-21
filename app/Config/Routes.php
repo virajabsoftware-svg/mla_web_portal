@@ -197,11 +197,19 @@ $routes->group('user', ['namespace' => 'App\Controllers\User'], function ($route
 
 
     // =================================================
-    // SURVEY
+    // SURVEY - ADDED/UPDATE ROUTES
     // =================================================
 
-    $routes->get('survey', 'Survey::index');
-    $routes->post('survey/save', 'Survey::save');
+ // =================================================
+// SURVEY
+// =================================================
+
+$routes->get('survey', 'Survey::index');
+$routes->post('survey/save', 'Survey::save');
+$routes->post('survey/view', 'Survey::view');      // ADD THIS - NEW
+$routes->post('survey/update', 'Survey::update');  // ADD THIS - NEW
+$routes->post('survey/delete', 'Survey::delete');
+$routes->get('survey/history', 'Survey::history');
 });
 
 

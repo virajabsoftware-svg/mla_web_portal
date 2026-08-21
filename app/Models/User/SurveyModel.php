@@ -1,83 +1,45 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\User;
 
 use CodeIgniter\Model;
 
-class SurveyModel extends Model
+class SurveyResponseModel extends Model
 {
-    protected $table = 'surveys';
+    protected $table = 'survey_responses';
     protected $primaryKey = 'id';
-
+    protected $useAutoIncrement = true;
+    protected $returnType = 'array';
+    protected $useSoftDeletes = false;
+    
     protected $allowedFields = [
-    'survey_code',
-    'title',
-    'survey_category',
-    'description',
-    'mla_id',
-    'constituency',
-    'responses',
-    'sentiment',
-    'participation',
-    'status',
-    'start_date',
-    'end_date',
-    'created_by'
-];
-
-
-    // Dashboard statistics
-public function getSurveyStats()
-{
-    return $this->db->query("
-        SELECT 
-            COUNT(*) as total_surveys
-        FROM survey_responses
-    ")->getRow();
-}
-
-
-
-    // MLA wise count only
-
-    public function getMLAWiseSurveyCount()
+        'survey_id',
+        'voter_id',
+        'mla_id',
+        'district',
+        'constituency',
+        'village',
+        'survey_category',
+        'answers',
+        'status',
+        'submitted_at',
+        'created_at',
+        'updated_at'
+    ];
+    
+    protected $useTimestamps = true;
+    protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
+    
+    // Get responses with survey details
+    public function getResponsesWithSurvey($voterId)
     {
-        return $this->db->query("
-            SELECT 
-                m.id,
-                m.mla_name,
-                COUNT(s.id) as total_surveys,
-                SUM(s.responses) as total_responses,
-                AVG(s.participation) as avg_participation
-
-            FROM mlas m
-
-            LEFT JOIN surveys s
-            ON sr.mla_id = m.mla_code
-
-            GROUP BY m.id,m.mla_name
-
-            ORDER BY total_surveys DESC
-
-        ")->getResultArray();
+        return $this->db->table('survey_responses sr')
+            ->select('sr.*, s.title as survey_title')
+            ->join('surveys s', 's.id = sr.survey_id', 'left')
+            ->where('sr.voter_id', $voterId)
+            ->orderBy('sr.submitted_at', 'DESC')
+            ->get()
+            ->getResultArray();
     }
-
-  public function getMLAResponseWiseCount()
-{
-    return $this->db->query("
-        SELECT
-            m.mla_name,
-            COUNT(sr.id) AS total_surveys
-
-        FROM survey_responses sr
-
-        LEFT JOIN mlas m
-        ON sr.mla_id = m.mla_code
-
-        GROUP BY m.mla_code, m.mla_name
-
-        ORDER BY total_surveys DESC
-
-    ")->getResultArray();
-}
 }

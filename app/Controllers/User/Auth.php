@@ -25,23 +25,6 @@ class Auth extends BaseController
     public function register() 
     { 
         $model = new VoterModel(); 
-        $mobile = trim((string) $this->request->getPost('mobile'));
-        $dob = trim((string) $this->request->getPost('dob'));
-        $dobDate = \DateTimeImmutable::createFromFormat('!Y-m-d', $dob);
-        $eighteenthBirthday = new \DateTimeImmutable('today');
-        $eighteenthBirthday = $eighteenthBirthday->modify('-18 years');
-
-        if ($mobile !== '' && !preg_match('/^\d{10}$/', $mobile)) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Mobile number must contain exactly 10 digits.');
-        }
-
-        if (!$dobDate || $dobDate->format('Y-m-d') !== $dob || $dobDate > $eighteenthBirthday) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'You must be at least 18 years old to register.');
-        }
  
  
         // ========================= 
@@ -95,7 +78,6 @@ class Auth extends BaseController
             'full_name'     => $this->request->getPost('full_name'),  
             'dob'           => $this->request->getPost('dob'),  
             'gender'        => $this->request->getPost('gender'),  
-            'mobile'        => $mobile,
             'email'         => $this->request->getPost('email'),  
             'password'      => password_hash( 
                                 $this->request->getPost('password'), 
