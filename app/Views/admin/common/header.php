@@ -38,6 +38,13 @@
                             'tooltip' => 'Constituency',
                             'segments' => ['constituency-management', 'constituency']
                         ],
+                        'party-management' => [
+    'url' => base_url('admin/party-management'),
+    'icon' => 'fa fa-flag',
+    'label' => 'Party Management',
+    'tooltip' => 'Party Management',
+    'segments' => ['party-management', 'party']
+],
                         'mla-management' => [
                             'url' => base_url('admin/mla-management'),
                             'icon' => 'fa fa-users',
@@ -94,8 +101,14 @@
     'label' => 'Rating Questions',
     'tooltip' => 'Rating Questions',
     'segments' => ['rating-question', 'ratingquestion']
-]
-
+],
+     'logout' => [
+   'url' => base_url('admin/logout'),
+    'icon' => 'fa fa-sign-out',
+    'label' => 'Logout',
+    'tooltip' => 'Logout',
+    'segments' => ['logout']
+    ]
                         
                     ];
 
@@ -172,11 +185,7 @@
                                                 class="img-responsive rounded-circle"
                                                 src="https://img.magnific.com/premium-vector/accountant_757131-15630.jpg?semt=ais_test_b&w=740&q=80" alt="#" width="38" /><span
                                                 class="name_user">ADMIN</span></a>
-                                        <div class="dropdown-menu dropdown-menu-gold-luxury">
-                                            
-                                            <a class="dropdown-item" href="#"><span>Log Out</span> <i
-                                                    class="fa fa-sign-out"></i></a>
-                                        </div>
+                                      
                                     </li>
                                 </ul>
                             </div>

@@ -30,6 +30,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 
     // Management Routes
     $routes->get('mla-management', 'MLAManagement::index');
+      $routes->get('party-management', 'PartyManagement::index');
     $routes->get('constituency-management', 'ConstituencyManagement::index');
     $routes->get('complaint-management', 'ComplaintManagement::index');
     $routes->post('complaint/save', 'Complaint::save');
