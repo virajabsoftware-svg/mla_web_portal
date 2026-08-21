@@ -12,21 +12,24 @@ class ComplaintModel extends Model
 
     protected $allowedFields = [
         'complaint_id',
-        'voter_id',
-        'mla_id',
+        'user_id',
+        'mla',
         'district',
         'constituency',
-        'village',
-        'title',
-        'location',
-        'priority',
+        'title',        
         'description',
-        'attachment',
         'status',
-        'submitted_at',
-        'resolution_date'
+        'attachment',
+        'location',
+        'priority',        
+        'created_at',
+        'resolution_date',
+        'village',
+        'voter_id',
     ];
 
+
+     //`complaint_id`, `user_id`, `voter_id`, `district`, `title`, `description`, `status`, `mla`, `constituency`, `created_at`
 
     /**
      * Generate Complaint ID
@@ -37,16 +40,15 @@ class ComplaintModel extends Model
      * CMP-VOT1785949798-002
      * CMP-VOT1785949798-003
      */
-    public function generateComplaintId($voterId)
+    public function generateComplaintId($userId)
     {
         $count = $this
-            ->where('voter_id', $voterId)
+            ->where('user_id', $userId)
             ->countAllResults();
 
         $nextNumber = $count + 1;
-
         return 'CMP-' .
-            $voterId .
+            $userId .
             '-' .
             str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
     }

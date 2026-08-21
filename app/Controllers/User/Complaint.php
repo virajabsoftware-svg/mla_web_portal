@@ -5,180 +5,208 @@ namespace App\Controllers\User;
 use App\Controllers\BaseController;
 use App\Models\User\ComplaintModel;
 use App\Models\User\UserModel;
+use App\Models\DistrictModel;
+use App\Models\ConstituencyModel;
 
 class Complaint extends BaseController
 {
-    /**
-     * Complaint Page
-     */
-   public function index()
-{
-    $userId = session()->get('user_id');
+    public function index()
+    {
+        $userId = session()->get('user_id');
+        if (!$userId) {
+            return redirect()->to('/user/login');
+        }
 
-    if (!$userId) {
-        return redirect()->to('/login');
-    }
+        $voter = (new \App\Models\User\VoterModel())->find($userId);
+        if (!$voter) {
+            return redirect()->back()->with('error', 'Voter information not found.');
+        }
 
-    $voterModel = new \App\Models\User\VoterModel();
-    $complaintModel = new ComplaintModel();
+        $model = new ComplaintModel();
 
-    // Get logged-in voter
-    $voter = $voterModel
-        ->where('id', $userId)
-        ->first();
+        //$complaints = $model->where('user_id', $userId)->orderBy('id', 'DESC')->findAll();
 
-    if (!$voter) {
-        return redirect()->back()->with('error', 'Voter information not found.');
-    }
-
-    $voterId = $voter['voter_id'] ?? '';
-    $mlaId = $voter['mla_id'] ?? '';
-    $district = $voter['district'] ?? '';
-    $constituency = $voter['constituency'] ?? '';
-
-    // Get user's complaints
-    $complaints = $complaintModel
-        ->where('voter_id', $voterId)
-        ->orderBy('id', 'DESC')
+        // Complaint + District + Constituency
+         $complaints = $model
+        ->select('complaints.*, districts.district_name, constituencies.constituency_name')
+        ->join('districts', 'districts.id = complaints.district', 'left')
+        ->join('constituencies', 'constituencies.id = complaints.constituency', 'left')
+        ->where('complaints.user_id', $userId)
+        ->orderBy('complaints.id', 'DESC')
         ->findAll();
 
-    // Counts
-    $totalComplaints = $complaintModel
-        ->where('voter_id', $voterId)
-        ->countAllResults();
+        $total = $model->where('user_id', $userId)->countAllResults();
+        $pending = $model->where('user_id', $userId)->where('status', 'Pending')->countAllResults();
+        $resolved = $model->where('user_id', $userId)->where('status', 'Resolved')->countAllResults();
+        $escalated = $model->where('user_id', $userId)->where('status', 'Escalated')->countAllResults();
 
-    $pendingComplaints = $complaintModel
-        ->where('voter_id', $voterId)
-        ->where('status', 'Pending')
-        ->countAllResults();
+        $district = (new DistrictModel())->find($voter['district'] ?? null);
+        $constituency = (new ConstituencyModel())->find($voter['constituency'] ?? null);
 
-    $resolvedComplaints = $complaintModel
-        ->where('voter_id', $voterId)
-        ->where('status', 'Resolved')
-        ->countAllResults();
+        return view('user/Complaint', [
+            'voter_id' => $voter['voter_id'] ?? '',
+            'mla_id' => $voter['mla_id'] ?? '',
+            'district' => $district['district_name'] ?? '',
+            'constituency' => $constituency['constituency_name'] ?? '',
+            'complaints' => $complaints,
+            'totalComplaints' => $total,
+            'pendingComplaints' => $pending,
+            'resolvedComplaints' => $resolved,
+            'escalatedComplaints' => $escalated
+        ]);
+    }
 
-    $escalatedComplaints = $complaintModel
-        ->where('voter_id', $voterId)
-        ->where('status', 'Escalated')
-        ->countAllResults();
-
-    $data = [
-        'voter_id' => $voterId,
-        'mla_id' => $mlaId,
-        'district' => $district,
-        'constituency' => $constituency,
-
-        'complaints' => $complaints,
-
-        'totalComplaints' => $totalComplaints,
-        'pendingComplaints' => $pendingComplaints,
-        'resolvedComplaints' => $resolvedComplaints,
-        'escalatedComplaints' => $escalatedComplaints,
-    ];
-
-    return view('user/Complaint', $data);
-}
-
-
-    /**
-     * Save Complaint
-     */
     public function save()
     {
-        $complaintModel = new ComplaintModel();
-        $userModel = new UserModel();
 
-        // Get logged-in user
+         
         $userId = session()->get('user_id');
-
         if (!$userId) {
-            return redirect()
-                ->to(base_url('user/login'))
-                ->with('error', 'Please login first');
+            return redirect()->to(base_url('user/login'))->with('error', 'Please login first');
         }
 
-        // Get actual voter from voters table
-        $voter = $userModel
-            ->where('id', $userId)
-            ->first();
-
+        $voter = (new UserModel())->find($userId);
         if (!$voter) {
-            return redirect()
-                ->back()
-                ->with('error', 'Voter details not found');
+            return redirect()->back()->with('error', 'Voter details not found');
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Automatic Voter Information
-        |--------------------------------------------------------------------------
-        */
+        $rules = [
+            'title' => 'required',
+            'location' => 'required',
+            'description' => 'required|min_length[10]',
+            'priority' => 'required|in_list[Low,Medium,High,Critical]'
+        ];
+        if (!$this->validate($rules)) {
 
-        $voterId = $voter['voter_id'];
-        $district = $voter['district'];
-        $constituency = $voter['constituency'];
-        $mlaId = $voter['mla_id'] ?? '';
-        $mlaName = $voter['mla_name'] ?? '';
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Generate Complaint ID
-        |--------------------------------------------------------------------------
-        |
-        | Example:
-        | CMP-VOT1785949798-001
-        | CMP-VOT1785949798-002
-        |
-        */
-
-        $complaintId = $complaintModel->generateComplaintId($voterId);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Complaint Data
-        |--------------------------------------------------------------------------
-        */
+        
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }    
+        $model = new ComplaintModel();
+        $village = trim((string) $this->request->getPost('village'));
+        $location = trim((string) $this->request->getPost('location'));
+        $attachment = $this->uploadAttachment();
 
         $data = [
-
-            // Automatic
-            'complaint_id' => $complaintId,
+            'complaint_id' => $model->generateComplaintId($userId),
             'user_id' => $userId,
-            'voter_id' => $voterId,
-            'district' => $district,
+            'district' => $voter['district'] ?? '',
+            'constituency' => $voter['constituency'] ?? '',
+            'mla' => $voter['mla_name'] ?? ($voter['mla_id'] ?? ''),
+            'title' => trim((string) $this->request->getPost('title')),
+            'location' => $location,
+            'village' => $village ,
+            'priority' => $this->request->getPost('priority'),
+            'description' => trim((string) $this->request->getPost('description')),
+            'attachment' => $attachment,
+            'status' => 'Pending',
+            'voter_id' => $voter['voter_id'] ?? ($voter['voter_id'] ?? ''),
+        ];          
 
-            // User entered
-            'title' => $this->request->getPost('title'),
-            'description' => $this->request->getPost('description'),
-
-            // Automatic MLA information
-            'mla' => !empty($mlaName) ? $mlaName : $mlaId,
-            'constituency' => $constituency,
-
-            // Default
-            'status' => 'Pending'
-        ];
-
-
-        if ($complaintModel->insert($data)) {
-
-            return redirect()
-                ->to(base_url('user/complaint'))
-                ->with(
-                    'success',
-                    'Complaint submitted successfully'
-                );
+        if ($model->insert($data)) {
+            return redirect()->to(base_url('user/complaint'))->with('success', 'Complaint submitted successfully');
         }
 
+        return redirect()->back()->withInput()->with('error', implode('<br>', $model->errors()));
+    }
 
-        return redirect()
-            ->back()
-            ->withInput()
-            ->with(
-                'error',
-                implode('<br>', $complaintModel->errors())
-            );
+    public function getComplaintData($id)
+    {
+        $complaint = $this->findUserComplaint($id);
+        if (!$complaint) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Complaint not found']);
+        }
+        return $this->response->setJSON(['success' => true, 'data' => $complaint]);
+    }
+
+    public function update()
+    {
+        $id = $this->request->getPost('id');
+        $complaint = $id ? $this->findUserComplaint($id) : null;
+        if (!$complaint) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Complaint not found']);
+        }
+
+        $rules = [
+            'title' => 'required',
+            'location' => 'required',
+            'priority' => 'required|in_list[Low,Medium,High,Critical]',
+            'description' => 'required|min_length[10]'
+        ];
+        if (!$this->validate($rules)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $this->validator->getErrors()
+            ]);
+        }
+
+        $village = trim((string) $this->request->getPost('village'));
+
+        $data = [
+            'title' => trim((string) $this->request->getPost('title')),
+            'location' => trim((string) $this->request->getPost('location')),
+            'priority' => $this->request->getPost('priority'),
+            'description' => trim((string) $this->request->getPost('description')),
+            'village' => $village ,
+        ];
+
+        $attachment = $this->uploadAttachment();
+        if ($attachment !== '') {
+            $data['attachment'] = $attachment;
+            $oldPath = ROOTPATH . 'public/' . ltrim((string) ($complaint['attachment'] ?? ''), '/');
+            if (is_file($oldPath)) {
+                unlink($oldPath);
+            }
+        }
+
+        if ((new ComplaintModel())->update($id, $data)) {
+            return $this->response->setJSON(['success' => true, 'message' => 'Complaint updated successfully']);
+        }
+        return $this->response->setJSON(['success' => false, 'message' => 'Update failed']);
+    }
+
+    public function delete($id)
+    {
+        $complaint = $this->findUserComplaint($id);
+        if (!$complaint) {
+            return redirect()->to('/user/complaint')->with('error', 'Complaint not found');
+        }
+
+        if ((new ComplaintModel())->delete($id)) {
+            $filePath = ROOTPATH . 'public/' . ltrim((string) ($complaint['attachment'] ?? ''), '/');
+            if (is_file($filePath)) {
+                unlink($filePath);
+            }
+            return redirect()->to('/user/complaint')->with('success', 'Complaint deleted successfully');
+        }
+        return redirect()->back()->with('error', 'Delete failed');
+    }
+
+    private function findUserComplaint($id)
+    {
+        $userId = session()->get('user_id');
+        if (!$userId) {
+            return null;
+        }
+        return (new ComplaintModel())
+            ->where('id', $id)
+            ->where('user_id', $userId)
+            ->first();
+    }
+
+    private function uploadAttachment(): string
+    {
+        $file = $this->request->getFile('attachment');
+        if (!$file || !$file->isValid() || $file->hasMoved()) {
+            return '';
+        }
+
+        $uploadPath = ROOTPATH . 'public/uploads/complaint';
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0777, true);
+        }
+        $filename = $file->getRandomName();
+        $file->move($uploadPath, $filename);
+        return 'uploads/complaint/' . $filename;
     }
 }

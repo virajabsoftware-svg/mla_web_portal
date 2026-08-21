@@ -222,6 +222,108 @@
             min-height: 100px;
         }
 
+        /* Complaint edit modal */
+        #editComplaintModal .modal-dialog {
+            max-width: 920px;
+        }
+
+        #editComplaintModal .modal-content,
+        #viewComplaintModal .modal-content {
+            border: 1px solid rgba(195, 200, 72, 0.45);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lift);
+        }
+
+        #editComplaintModal .modal-header,
+        #viewComplaintModal .modal-header {
+            background: linear-gradient(135deg, rgba(195, 200, 72, 0.2), rgba(34, 86, 97, 0.05));
+            border-bottom: 1px solid rgba(195, 200, 72, 0.4);
+            padding: 1.15rem 1.5rem;
+        }
+
+        #editComplaintModal .modal-title,
+        #viewComplaintModal .modal-title {
+            color: var(--teal-blue);
+            font-weight: 700;
+        }
+
+        #editComplaintModal .modal-body,
+        #viewComplaintModal .modal-body {
+            background: var(--soft-white);
+            padding: 1.5rem;
+        }
+
+        #editComplaintModal .modal-body .row {
+            row-gap: 0.25rem;
+        }
+
+        #editComplaintModal .form-label {
+            margin-bottom: 6px;
+        }
+
+        #editComplaintModal .form-control,
+        #editComplaintModal .form-select {
+            min-height: 44px;
+        }
+
+        #editComplaintModal textarea.form-control {
+            min-height: 120px;
+        }
+
+        #editComplaintModal input[readonly] {
+            background: rgba(195, 200, 72, 0.1);
+            color: var(--dark-olive);
+            font-weight: 600;
+        }
+
+        #editComplaintModal input[type="file"] {
+            padding: 8px 12px;
+        }
+
+        #editComplaintModal .modal-footer {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            background: #fff;
+            border-top: 1px solid rgba(195, 200, 72, 0.35);
+            padding: 1rem 1.5rem;
+        }
+
+        #editComplaintModal .modal-footer .btn {
+            border: 0;
+            border-radius: 12px;
+            font-weight: 600;
+            min-width: 135px;
+            padding: 10px 20px;
+        }
+
+        #editComplaintModal .modal-footer .btn-primary {
+            background: linear-gradient(95deg, var(--lime-gold), #A9B43C);
+            color: #fff;
+        }
+
+        #editComplaintModal .modal-footer .btn-secondary {
+            background: rgba(195, 200, 72, 0.18);
+            color: var(--teal-blue);
+        }
+
+        @media (max-width: 576px) {
+            #editComplaintModal .modal-body,
+            #editComplaintModal .modal-header,
+            #editComplaintModal .modal-footer {
+                padding: 1rem;
+            }
+
+            #editComplaintModal .modal-footer {
+                flex-direction: column-reverse;
+            }
+
+            #editComplaintModal .modal-footer .btn {
+                width: 100%;
+            }
+        }
+
         /* Button styling */
         .btn-danger-custom {
             background: linear-gradient(95deg, var(--lime-gold), #A9B43C);
@@ -733,8 +835,8 @@
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
                             <h3 class="stat-number counter-number" id="escalatedComplaints">
-    <?= esc($escalatedComplaints ?? 0) ?>
-</h3>
+                                <?= esc($escalatedComplaints ?? 0) ?>
+                            </h3>
                             <p class="mb-0 text-muted fw-semibold"><i class="bi bi-exclamation-triangle-fill me-1"></i>
                                 Escalated</p>
                         </div>
@@ -749,31 +851,32 @@
                         Complaint</h5>
                 </div>
                 <div class="card-body">
-                    <form id="complaintForm" method="post" action="<?= site_url('user/complaint/save') ?>">
+                    <form id="complaintForm" method="post" action="<?= site_url('user/complaint/save') ?>" enctype="multipart/form-data">
+                        <?= csrf_field() ?>
                         <div class="row g-3">
-                            <div class="col-md-3">
+                            <!--div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-upc-scan"></i> Complaint ID</label>
                                 <input type="text" class="form-control bg-light" id="complaintIdField" value="CMP001245"
                                     readonly>
-                            </div>
+                            </div-->
                             <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-person-badge"></i> Voter ID</label>
                                  <input
-            type="text"
-            class="form-control"
-            value="<?= esc($voter_id ?? '') ?>"
-            readonly
-        >
-                            </div>
-                            <div class="col-md-3">
+                                type="text"
+                                class="form-control"
+                                value="<?= esc($voter_id ?? '') ?>"
+                                readonly
+                                >
+                                </div>
+                                <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-building"></i>MLA ID</label>
-                                 <input
-            type="text"
-            class="form-control"
-            value="<?= esc($mla_id ?? '') ?>"
-            readonly
-        >
-                            </div>
+                                <input
+                                type="text"
+                                class="form-control"
+                                value="<?= esc($mla_id ?? '') ?>"
+                                readonly
+                                >
+                                </div>
                             <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-flag-fill"></i> Priority</label>
                                 <select class="form-select" id="prioritySelect" name="priority">
@@ -789,25 +892,26 @@
                                 <input type="text" class="form-control" id="complaintTitle" name="title"
                                     placeholder="Enter complaint title" required>
                             </div>
+                            <div class="col-md-4"></div>
 
                             <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-geo-alt-fill"></i> District</label>
                                   <input
-            type="text"
-            class="form-control"
-            value="<?= esc($district ?? '') ?>"
-            readonly
-        >
+                                        type="text"
+                                        class="form-control"
+                                        value="<?= esc($district ?? '') ?>"
+                                        readonly
+                                    >
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label"><i class="bi bi-pin-map-fill"></i> Constituency</label>
-                                  <input
-            type="text"
-            class="form-control"
-            value="<?= esc($constituency ?? '') ?>"
-            readonly
-        >
+                                    <label class="form-label"><i class="bi bi-pin-map-fill"></i> Constituency</label>
+                                    <input
+                                    type="text"
+                                    class="form-control"
+                                    value="<?= esc($constituency ?? '') ?>"
+                                    readonly
+                                    >
                             </div>
 
                            
@@ -826,11 +930,11 @@
                                     placeholder="Complaint Location / Landmark" required>
                             </div>
 
-                            <div class="col-md-6">
+                            <!--div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-calendar-clock"></i> Submission
                                     Timestamp</label>
                                 <input type="datetime-local" class="form-control bg-light" id="submissionDate" readonly>
-                            </div>
+                            </div-->
 
                             <div class="col-12">
                                 <label class="form-label"><i class="bi bi-chat-text-fill"></i> Complaint
@@ -841,7 +945,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-paperclip"></i> Supporting Evidence</label>
-                                <input type="file" class="form-control" id="evidenceFile" multiple
+                                <input type="file" class="form-control" id="evidenceFile" name="attachment" multiple
                                     accept="image/*,application/pdf">
                                 <small class="text-muted">Max file size: 5MB (Images, PDF)</small>
                             </div>
@@ -882,25 +986,26 @@
                 </div>
                 <div class="card-body">
                    <div class="table-responsive">
-    <table class="table table-hover align-middle">
-        <thead>
-            <tr>
-                <th>Complaint ID</th>
-                <th>Voter ID</th>
-                <th>MLA ID</th>
-                <th>Priority</th>
-                <th>Complaint Title</th>
-                <th>District</th>
-                <th>Constituency</th>
-                <th>Village</th>
-                <th>Location / Landmark</th>
-                <th>Submission Date</th>
-                <th>Description</th>
-                <th>Evidence</th>
-                <th>Status</th>
-                <th>Resolution Date</th>
-            </tr>
-        </thead>
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Complaint ID</th>
+                        <th>Voter ID</th>
+                        <th>MLA ID</th>
+                        <th>Priority</th>
+                        <th>Complaint Title</th>
+                        <!--th>District</th>
+                        <th>Constituency</th-->
+                        <th>Village</th>
+                        <th>Location / Landmark</th>
+                        <th>Submission Date</th>
+                        <th>Description</th>
+                        <th>Evidence</th>
+                        <th>Status</th>
+                       
+                        <th>Action</th>
+                    </tr>
+                </thead>
 
         <tbody id="complaintHistoryBody">
 
@@ -924,7 +1029,7 @@
 
                         <!-- MLA ID -->
                         <td>
-                            <?= esc($complaint['mla_id'] ?? '-') ?>
+                            <?= esc($complaint['mla'] ?? $complaint['mla_id'] ?? '-') ?>
                         </td>
 
                         <!-- Priority -->
@@ -954,13 +1059,13 @@
                         </td>
 
                         <!-- District -->
-                        <td>
-                            <?= esc($complaint['district'] ?? '-') ?>
-                        </td>
+                        <!--td>
+                            <?= esc($complaint['district_name'] ?? '-') ?>
+                        </td-->
 
                         <!-- Constituency -->
-                        <td>
-                            <?= esc($complaint['constituency'] ?? '-') ?>
+                        <!--td>
+                            <?= esc($complaint['constituency_name'] ?? '-') ?>
                         </td>
 
                         <!-- Village -->
@@ -975,15 +1080,10 @@
 
                         <!-- Submission Date -->
                         <td>
-                            <?php
-                                $submittedAt = $complaint['submitted_at']
-                                    ?? $complaint['submission_date']
-                                    ?? null;
-                            ?>
 
-                            <?= !empty($submittedAt)
-                                ? esc($submittedAt)
-                                : '-' ?>
+                         <?= date('d-M-Y', strtotime($complaint['created_at'])) ?><br>
+                                                <small class="text-muted"><?= date('h:i A', strtotime($complaint['created_at'])) ?></small>
+                         
                         </td>
 
                         <!-- Description -->
@@ -1028,11 +1128,25 @@
                             </span>
                         </td>
 
-                        <!-- Resolution Date -->
-                        <td>
-                            <?= !empty($complaint['resolution_date'])
-                                ? esc($complaint['resolution_date'])
-                                : '-' ?>
+                       
+
+                        <!-- Actions -->
+                        <td class="text-nowrap">
+                            <button type="button" class="btn btn-sm btn-outline-primary view-complaint"
+                                data-id="<?= esc($complaint['id']) ?>" title="View">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-primary edit-complaint"
+                                data-id="<?= esc($complaint['id']) ?>" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <form action="<?= site_url('user/complaint/delete/' . $complaint['id']) ?>" method="post"
+                                class="d-inline delete-complaint-form">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
                         </td>
 
                     </tr>
@@ -1042,7 +1156,7 @@
             <?php else: ?>
 
                 <tr>
-                    <td colspan="14" class="text-center py-4 text-muted">
+                    <td colspan="15" class="text-center py-4 text-muted">
                         <i class="bi bi-inbox fs-3 d-block mb-2"></i>
                         No complaints found
                     </td>
@@ -1060,6 +1174,40 @@
           <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
         </footer>
     </main>
+
+    <div class="modal fade" id="viewComplaintModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-info-circle me-2"></i>Complaint Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="viewComplaintBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editComplaintModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Edit Complaint</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editComplaintForm" action="<?= site_url('user/complaint/update') ?>" method="post" enctype="multipart/form-data">
+                    <?= csrf_field() ?>
+                    <input type="hidden" name="id" id="editComplaintId">
+                    <div class="modal-body" id="editComplaintBody"></div>
+                    <div class="modal-footer" id="editComplaintFooter" style="display:none;">
+                       
+                        <button type="submit" class="btn btn-primary">Update Complaint</button>
+
+                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script>
         // =====================================================
@@ -1103,42 +1251,6 @@
             "Washim": ["Washim", "Risod", "Karanja"],
             "Yavatmal": ["Yavatmal", "Wani", "Ralegaon", "Arni", "Pusad", "Umarkhed", "Digras", "Ghatanji"]
         };
-
-        // Populate District Dropdown
-        const districtSelect = document.getElementById("districtSelect");
-        const constituencySelect = document.getElementById("constituencySelect");
-
-        Object.keys(districtData).forEach(district => {
-            let option = document.createElement("option");
-            option.value = district;
-            option.textContent = district;
-            districtSelect.appendChild(option);
-        });
-
-        // Update Constituencies based on selected District
-        districtSelect.addEventListener("change", function () {
-            constituencySelect.innerHTML = '<option value="">Select Constituency</option>';
-            let constituencies = districtData[this.value] || [];
-            constituencies.forEach(item => {
-                let option = document.createElement("option");
-                option.value = item;
-                option.textContent = item;
-                constituencySelect.appendChild(option);
-            });
-        });
-
-        // Auto Fill Current Date & Time
-        function updateDateTime() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('submissionDate').value = `${year}-${month}-${day}T${hours}:${minutes}`;
-        }
-        updateDateTime();
-        setInterval(updateDateTime, 60000);
 
         // Complaint storage & dynamic counters
         // let complaintsHistory = [
@@ -1201,54 +1313,17 @@
 
             // Validate fields
             const title = document.getElementById('complaintTitle').value.trim();
-            const district = districtSelect.value;
-            const constituency = constituencySelect.value;
             const village = document.getElementById('villageInput').value.trim();
             const location = document.getElementById('locationInput').value.trim();
             const description = document.getElementById('complaintDesc').value.trim();
             const priority = document.getElementById('prioritySelect').value;
 
-            if (!title) { alert('Please enter complaint title.'); return; }
-            if (!district) { alert('Please select district.'); return; }
-            if (!constituency) { alert('Please select constituency.'); return; }
-            if (!village) { alert('Please enter village name.'); return; }
-            if (!location) { alert('Please enter complaint location.'); return; }
-            if (!description) { alert('Please enter complaint description.'); return; }
+            if (!title) { e.preventDefault(); alert('Please enter complaint title.'); return; }
+            if (!village) { e.preventDefault(); alert('Please enter village name.'); return; }
+            if (!location) { e.preventDefault(); alert('Please enter complaint location.'); return; }
+            if (!description) { e.preventDefault(); alert('Please enter complaint description.'); return; }
 
-            // Create new complaint object
-            const newId = generateComplaintId();
-            const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, '-');
-
-            const newComplaint = {
-                id: newId,
-                title: title,
-                location: location + `, ${village}, ${constituency}`,
-                status: "Pending",
-                resolutionDate: "-",
-                priority: priority,
-                description: description,
-                submissionDate: today
-            };
-
-            complaintsHistory.unshift(newComplaint);
-
-            // Update UI
-            // renderComplaintHistory();
-            // updateSummaryStats();
-
-            // Show success
-            alert(`✅ Complaint registered successfully!\nComplaint ID: ${newId}\n\nYou will receive updates on your registered mobile number.`);
-
-            // Reset form (keep readonly fields)
-            document.getElementById('complaintTitle').value = '';
-            document.getElementById('villageInput').value = '';
-            document.getElementById('locationInput').value = '';
-            document.getElementById('complaintDesc').value = '';
-            document.getElementById('prioritySelect').value = 'Medium';
-            districtSelect.value = '';
-            constituencySelect.innerHTML = '<option value="">Select Constituency</option>';
-            document.getElementById('evidenceFile').value = '';
-            updateDateTime();
+            // The form submits to the server; do not update the old demo array here.
         });
 
         // Reset button handler
@@ -1258,27 +1333,8 @@
             document.getElementById('locationInput').value = '';
             document.getElementById('complaintDesc').value = '';
             document.getElementById('prioritySelect').value = 'Medium';
-            districtSelect.value = '';
-            constituencySelect.innerHTML = '<option value="">Select Constituency</option>';
             document.getElementById('evidenceFile').value = '';
-            updateDateTime();
             alert('Form has been reset.');
-        });
-
-        // Escalate button handler
-        document.getElementById('escalateBtn').addEventListener('click', function () {
-            const pendingComplaintsList = complaintsHistory.filter(c => c.status === "Pending");
-            if (pendingComplaintsList.length === 0) {
-                alert("ℹ️ No pending complaints to escalate at this moment.");
-                return;
-            }
-            // Simple escalation: mark first pending as escalated (demo)
-            const toEscalate = pendingComplaintsList[0];
-            toEscalate.status = "Escalated";
-            toEscalate.resolutionDate = "-";
-            renderComplaintHistory();
-            updateSummaryStats();
-            alert(`⚠️ Complaint ${toEscalate.id} has been escalated to higher authority. You will receive updates within 48 hours.`);
         });
 
         // Initialize counters with animation
@@ -1305,7 +1361,145 @@
         // updateSummaryStats();
         // setTimeout(animateCounters, 200);
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php if (session()->getFlashdata('success')): ?>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: <?= json_encode(session()->getFlashdata('success')) ?>,
+                confirmButtonColor: '#6B8A22'
+            });
+        </script>
+    <?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const viewModal = new bootstrap.Modal(document.getElementById('viewComplaintModal'));
+            const editModal = new bootstrap.Modal(document.getElementById('editComplaintModal'));
+            const viewBody = document.getElementById('viewComplaintBody');
+            const editBody = document.getElementById('editComplaintBody');
+            const editFooter = document.getElementById('editComplaintFooter');
+            const editId = document.getElementById('editComplaintId');
+            const endpoint = '<?= site_url('user/complaint/getComplaintData') ?>';
+
+            const escapeHtml = value => String(value ?? '-').replace(/[&<>'"]/g, char => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;'
+            }[char]));
+
+            const loadComplaint = id => fetch('<?= base_url('user/complaint/getComplaintData') ?>/' + id)
+                .then(response => response.json());
+
+            document.querySelectorAll('.view-complaint').forEach(button => {
+                button.addEventListener('click', function () {
+                    viewBody.innerHTML = '<div class="text-center py-4"><div class="spinner-border text-primary"></div><p class="mt-2">Loading complaint details...</p></div>';
+                    viewModal.show();
+                    loadComplaint(this.dataset.id).then(result => {
+                        if (!result.success) {
+                            viewBody.innerHTML = `<div class="alert alert-danger">${escapeHtml(result.message)}</div>`;
+                            return;
+                        }
+                        const complaint = result.data;
+                        viewBody.innerHTML = `<div class="row g-3">
+                            <div class="col-md-6"><strong>Complaint ID</strong><p>${escapeHtml(complaint.complaint_id)}</p></div>
+                            <div class="col-md-6"><strong>Status</strong><p><span class="badge bg-warning text-dark">${escapeHtml(complaint.status)}</span></p></div>
+                            <div class="col-md-6"><strong>Title</strong><p>${escapeHtml(complaint.title)}</p></div>
+                            <div class="col-md-6"><strong>Priority</strong><p>${escapeHtml(complaint.priority)}</p></div>
+                            <div class="col-md-6"><strong>Village</strong><p>${escapeHtml(complaint.village)}</p></div>
+                            <div class="col-md-6"><strong>Location</strong><p>${escapeHtml(complaint.location)}</p></div>
+                            <div class="col-md-6">
+                                    <strong>Submitted</strong>
+                                    <p>
+                                        ${complaint.created_at ? (() => {
+                                            const date = new Date(complaint.created_at.replace(' ', 'T'));
+                                            return date.toLocaleDateString('en-GB', {
+                                                day: '2-digit',
+                                                month: 'short',
+                                                year: 'numeric'
+                                            }).replace(/ /g, '-') +
+                                            '<br><small class="text-muted">' +
+                                            date.toLocaleTimeString('en-US', {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                hour12: true
+                                            }) +
+                                            '</small>';
+                                        })() : ''}
+                                    </p>
+                                </div>
+                            <div class="col-12"><strong>Description</strong><p class="border rounded p-3">${escapeHtml(complaint.description)}</p></div>
+                            ${complaint.attachment ? `<div class="col-12"><a href="<?= base_url() ?>${encodeURI(complaint.attachment)}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-paperclip me-1"></i>View Attachment</a></div>` : ''}
+                        </div>`;
+                    }).catch(() => {
+                        viewBody.innerHTML = '<div class="alert alert-danger">Error loading complaint details.</div>';
+                    });
+                });
+            });
+
+            document.querySelectorAll('.edit-complaint').forEach(button => {
+                button.addEventListener('click', function () {
+                    editId.value = this.dataset.id;
+                    editFooter.style.display = 'none';
+                    editBody.innerHTML = '<div class="text-center py-4"><div class="spinner-border text-primary"></div><p class="mt-2">Loading complaint data...</p></div>';
+                    editModal.show();
+                    loadComplaint(this.dataset.id).then(result => {
+                        if (!result.success) {
+                            editBody.innerHTML = `<div class="alert alert-danger">${escapeHtml(result.message)}</div>`;
+                            return;
+                        }
+                        const complaint = result.data;
+                        editBody.innerHTML = `<div class="row g-3">
+                            <div class="col-md-6"><label class="form-label">Complaint ID</label><input class="form-control" value="${escapeHtml(complaint.complaint_id)}" readonly></div>
+                            <div class="col-md-6"><label class="form-label">Status</label><input class="form-control" value="${escapeHtml(complaint.status)}" readonly></div>
+                            <div class="col-md-6"><label class="form-label">Title</label><input name="title" class="form-control" value="${escapeHtml(complaint.title)}" required></div>
+                            <div class="col-md-6">
+                                    <label class="form-label">Priority</label>
+                                    <select name="priority" class="form-select" required>
+                                        ${['Low', 'Medium', 'High', 'Critical']
+                                            .map(priority => `
+                                                <option value="${priority}" ${complaint.priority === priority ? 'selected' : ''}>
+                                                    ${priority}
+                                                </option>
+                                            `).join('')}
+                                    </select>
+                                </div>
+                            <div class="col-md-6"><label class="form-label">Village</label><input name="village" class="form-control" value="${escapeHtml(complaint.village)}" required></div>
+                            <div class="col-md-6"><label class="form-label">Location / Landmark</label><input name="location" class="form-control" value="${escapeHtml(complaint.location)}" required></div>
+                            <div class="col-12"><label class="form-label">Description</label><textarea name="description" class="form-control" rows="4" required>${escapeHtml(complaint.description)}</textarea></div>
+                            <div class="col-12"><label class="form-label">Replace Attachment</label><input type="file" name="attachment" class="form-control"><small class="text-muted">Leave empty to keep the current attachment.</small></div>
+                        </div>`;
+                        editFooter.style.display = 'flex';
+                    }).catch(() => {
+                        editBody.innerHTML = '<div class="alert alert-danger">Error loading complaint data.</div>';
+                    });
+                });
+            });
+
+            document.querySelectorAll('.delete-complaint-form').forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    if (!window.confirm('Are you sure you want to delete this complaint?')) {
+                        event.preventDefault();
+                    }
+                });
+            });
+
+            document.getElementById('editComplaintForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                fetch(this.action, { method: 'POST', body: new FormData(this), headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (!result.success) {
+                            const errors = result.errors ? Object.values(result.errors).join('\n') : result.message;
+                            window.alert(errors || 'Update failed');
+                            return;
+                        }
+                        window.alert(result.message);
+                        window.location.reload();
+                    })
+                    .catch(() => window.alert('Error updating complaint.'));
+            });
+        });
+    </script>
       <script src="<?= base_url('assets/user/js/navbar.js') ?>"></script>
 </body>
 

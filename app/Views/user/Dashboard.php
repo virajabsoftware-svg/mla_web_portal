@@ -129,6 +129,8 @@ if ($user_has_assigned_mla && !empty($mla_data_from_db) && !empty($mla_data_from
 // 4. Total Complaints (FROM MODEL)
 // ==========================
 $total_complaints = $dashboardModel->totalComplaints($user_id);
+$total_feedbacks = $dashboardModel->getFeedbacksGiven($user_id);
+
 
 // ==========================
 // 5. Recent Complaints (FROM MODEL)
@@ -170,7 +172,7 @@ $kpi_data = [
     'total_works' => 0, // STATIC - Keep as is
     'completed' => 0, // STATIC - Keep as is
     'in_progress' => 0, // STATIC - Keep as is
-    'feedbacks' => 0, // STATIC - Keep as is
+    'feedbacks' => $total_feedbacks, // DYNAMIC - From Model
     'complaints' => $total_complaints, // DYNAMIC - From Model
     'surveys' => $total_surveys, // DYNAMIC - From Model
 ];

@@ -149,6 +149,9 @@ $routes->group('user', ['namespace' => 'App\Controllers\User'], function ($route
 
     $routes->get('complaint', 'Complaint::index');
     $routes->post('complaint/save', 'Complaint::save');
+    $routes->get('complaint/getComplaintData/(:num)', 'Complaint::getComplaintData/$1');
+    $routes->post('complaint/update', 'Complaint::update');
+    $routes->post('complaint/delete/(:num)', 'Complaint::delete/$1');
 
 
     // =================================================

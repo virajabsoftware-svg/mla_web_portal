@@ -147,7 +147,6 @@ class DashboardModel extends Model
 
         return round(($completed / count($fields)) * 100);
     }
-
     // ==========================
     // Assigned MLA
     // ==========================
@@ -227,7 +226,6 @@ class DashboardModel extends Model
             'credibility' => $this->calculateCredibility($total_works, $completed_works)
         ];
     }
-
     private function resolveMlaPhoto($photo)
     {
         if (empty($photo)) {
@@ -244,8 +242,7 @@ class DashboardModel extends Model
             ? base_url('uploads/mla/' . $photo)
             : '';
     }
-
-    // ==========================
+        // ==========================
     // Get Complete MLA Details
     // ==========================
     public function getCompleteMLADetails($mla_id, $constituency = null)
@@ -347,7 +344,6 @@ class DashboardModel extends Model
             'image' => 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max'
         ];
     }
-
     // ==========================
     // Get Total Works for MLA
     // ==========================
@@ -622,9 +618,21 @@ class DashboardModel extends Model
             return 0;
         }
 
+        // Get voter_id from voter table
+        $voter = $this->db
+            ->table('voters')
+            ->select('voter_id')
+            ->where('id', $userId)
+            ->get()
+            ->getRowArray();
+
+        if (!$voter || empty($voter['voter_id'])) {
+            return 0;
+        }
+
         return $this->db
             ->table('survey_responses')
-            ->where('user_id', $userId)
+            ->where('voter_id', $voter['voter_id'])
             ->countAllResults();
     }
 
@@ -633,12 +641,12 @@ class DashboardModel extends Model
     // ==========================
     public function getFeedbacksGiven($userId)
     {
-        if (!$this->db->tableExists('feedbacks')) {
+        if (!$this->db->tableExists('feedback')) {
             return 0;
         }
 
         return $this->db
-            ->table('feedbacks')
+            ->table('feedback')
             ->where('user_id', $userId)
             ->countAllResults();
     }
