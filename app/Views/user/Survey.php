@@ -1001,7 +1001,6 @@
         }
     </style>
 </head>
-
 <body>
     <?php include "common/header.php"; ?>
 
@@ -1059,7 +1058,7 @@
             </div>
 
             <!-- ACTIVE SURVEYS TABLE -->
-            <div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
+            <!--div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
                 <div class="card-header bg-white border-0 pt-4 pb-0">
                     <h5 class="mb-0 fw-bold">
                         <i class="bi bi-clipboard-data-fill me-2 text-primary"></i>
@@ -1105,7 +1104,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div-->
 
             <!-- STEPPER SURVEY FORM -->
             <div class="card border-0 shadow-lg dashboard-card mb-4 fade-up" id="responseFormCard">
@@ -1159,6 +1158,8 @@
                             </div>
                         </div>
 
+                        
+
                         <!-- Location Information Row -->
                         <div class="row g-3 mb-4">
                             <div class="col-md-4">
@@ -1166,7 +1167,7 @@
                                     <i class="bi bi-geo-alt-fill"></i> District
                                 </label>
                                 <input type="text" class="form-control" id="districtField" name="district" 
-                                       value="<?= esc($voter['district'] ?? '') ?>" 
+                                       value="<?= esc($voter['district_name'] ?? '') ?>" 
                                        placeholder="Enter your district">
                             </div>
 
@@ -1175,7 +1176,7 @@
                                     <i class="bi bi-pin-map-fill"></i> Constituency
                                 </label>
                                 <input type="text" class="form-control" id="constituencyField" name="constituency" 
-                                       value="<?= esc($voter['constituency'] ?? '') ?>" 
+                                       value="<?= esc($voter['constituency_name'] ?? '') ?>" 
                                        placeholder="Enter your constituency">
                             </div>
 
@@ -1197,19 +1198,11 @@
                                 </label>
                                 <select class="form-select" name="survey_category" id="surveyTypeSelect" required>
                                     <option value="">-- Select Survey Type --</option>
-                                    <option value="Election Survey">Election Survey</option>
-                                    <option value="Road Development Survey">Road Development Survey</option>
-                                    <option value="Water Supply Survey">Water Supply Survey</option>
-                                    <option value="Drainage Survey">Drainage Survey</option>
-                                    <option value="Street Light Survey">Street Light Survey</option>
-                                    <option value="Sanitation Survey">Sanitation Survey</option>
-                                    <option value="Health Survey">Health Survey</option>
-                                    <option value="Agriculture Survey">Agriculture Survey</option>
-                                    <option value="Education Survey">Education Survey</option>
-                                    <option value="Employment Survey">Employment Survey</option>
-                                    <option value="Smart Village Survey">Smart Village Survey</option>
-                                    <option value="MLA Performance Survey">MLA Performance Survey</option>
-                                    <option value="Infrastructure Survey">Infrastructure Survey</option>
+                                    <?php foreach ($activeSurveys ?? [] as $survey): ?>
+                                        <option value="<?= esc($survey['title']) ?>" data-survey-id="<?= esc($survey['id']) ?>">
+                                            <?= esc($survey['title']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
@@ -1262,7 +1255,6 @@
                         </span>
                     </div>
                 </div>
-
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle survey-history-table">
@@ -1533,11 +1525,13 @@
                     <div class="row g-3 mb-4">
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">District</label>
-                            <input type="text" class="form-control" id="editDistrict">
+                            <input type="text" class="form-control" id="editDistrictName" readonly>
+                            <input type="hidden" class="form-control" id="editDistrict">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">Constituency</label>
-                            <input type="text" class="form-control" id="editConstituency">
+                            <input type="text" class="form-control" id="editConstituencyName" readonly>
+                            <input type="hidden" class="form-control" id="editConstituency">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">Village / Town</label>
@@ -1570,9 +1564,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // ================================================================
-        // 1. SURVEY QUESTIONS (All 13 categories)
+        // 1. SURVEY QUESTIONS FROM DATABASE
         // ================================================================
-        const QUESTIONS_BY_CATEGORY = {
+        const QUESTIONS_BY_SURVEY = <?= json_encode($questionsBySurvey ?? [], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+
+        /*
             "Election Survey": [
                 { text: "1. मतदान केंद्रांची व्यवस्था समाधानकारक होती का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "सुधारणा हवी"] },
                 { text: "2. मतदान प्रक्रिया पारदर्शक होती का?", type: "select", options: ["निवडा", "होय, पूर्णपणे", "काही प्रमाणात", "नाही", "माहिती नाही"] },
@@ -1755,18 +1751,21 @@
                 { text: "11. नागरिकांच्या गरजेनुसार सुविधा वाढवल्या जातात का?", type: "select", options: ["निवडा", "होय", "नाही", "काही प्रमाणात"] },
                 { text: "12. एकूण पायाभूत सुविधांबद्दल समाधान आहे का?", type: "select", options: ["निवडा", "खूप समाधानी", "समाधानी", "असमाधानी", "खूप असमाधानी"] }
             ]
-        };
+        */
 
         // ================================================================
         // 2. APPLICATION LOGIC
         // ================================================================
         let currentQIndex = 0;
         let currentCategory = '';
+        let currentSurveyId = '';
         let currentQuestions = [];
         let answersArray = [];
         let surveyHistory = <?= json_encode($responses); ?>;
         let ratingValues = [8, 7];
         let positiveFlags = [true, true];
+
+       
 
         // DOM Elements
         const questionContainer = document.getElementById('questionContainer');
@@ -1780,22 +1779,6 @@
         const totalStepsSpan = document.getElementById('totalSteps');
         const timestampField = document.getElementById('submissionTimestamp');
         const surveyTypeSelect = document.getElementById('surveyTypeSelect');
-
-        const surveyMap = {
-            "Election Survey": 1,
-            "Road Development Survey": 2,
-            "Water Supply Survey": 3,
-            "Drainage Survey": 4,
-            "Street Light Survey": 5,
-            "Sanitation Survey": 6,
-            "Health Survey": 7,
-            "Agriculture Survey": 8,
-            "Education Survey": 9,
-            "Employment Survey": 10,
-            "Smart Village Survey": 11,
-            "MLA Performance Survey": 12,
-            "Infrastructure Survey": 13
-        };
 
         // Helper: timestamp
         function setCurrentTimestamp() {
@@ -1819,14 +1802,36 @@
         }
 
         // Get questions for selected category
-        function getQuestionsForCategory(category) {
-            return QUESTIONS_BY_CATEGORY[category] || [];
+        function getQuestionsForSurvey(surveyId) {
+            return QUESTIONS_BY_SURVEY[String(surveyId)] || [];
         }
 
         // Get questions for history row
         function getQuestionsForHistory(row) {
-            const category = row.survey_category ?? row.category ?? '';
-            return QUESTIONS_BY_CATEGORY[category] || [];
+            return getQuestionsForSurvey(row.survey_id ?? '');
+        }
+
+        function normalizeAnswers(answers) {
+            if (Array.isArray(answers)) {
+                return answers;
+            }
+
+            return answers && typeof answers === 'object' ? Object.values(answers) : [];
+        }
+
+        function getAnswerMap(answers) {
+            if (!answers || typeof answers !== 'object') {
+                return {};
+            }
+
+            if (!Array.isArray(answers)) {
+                return answers;
+            }
+
+            return answers.reduce(function(answerMap, answer, index) {
+                answerMap[index] = answer;
+                return answerMap;
+            }, {});
         }
 
         // Render current question
@@ -1851,14 +1856,17 @@
             let html = `<div class="question-item">
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <span class="fw-bold" style="color: var(--teal-blue);">${currentQIndex + 1}</span>
-                    <h5 class="mb-0 fw-semibold" style="color: var(--teal-blue);">${q.text}</h5>
+                    <h5 class="mb-0 fw-semibold" style="color: var(--teal-blue);">${escapeHtml(q.text)}</h5>
                 </div>`;
 
             if (q.type === "select") {
-                let opts = '';
+                let opts = '<option value="">-- Select an option --</option>';
                 q.options.forEach(function(opt) {
-                    const isSel = (answersArray[currentQIndex] === opt);
-                    opts += `<option value="${opt}" ${isSel ? 'selected' : ''}>${opt}</option>`;
+                    const isSelected = String(answersArray[currentQIndex]) === String(opt.id)
+                        || answersArray[currentQIndex] === opt.text;
+                    const optionId = escapeHtml(opt.id);
+                    const optionText = escapeHtml(opt.text);
+                    opts += `<option value="${optionId}" ${isSelected ? 'selected' : ''}>${optionText}</option>`;
                 });
                 html += `<select class="form-select question-input" data-qidx="${currentQIndex}">${opts}</select>`;
             }
@@ -1869,9 +1877,13 @@
                 html += `<textarea class="form-control question-input" data-qidx="${currentQIndex}" rows="3" placeholder="${q.placeholder || 'आपले सूचन...'}">${escapeHtml(answersArray[currentQIndex] || '')}</textarea>`;
             }
             else if (q.type === "rating") {
-                let ratingHtml = `<select class="form-select question-input" data-qidx="${currentQIndex}">`;
+                let ratingHtml = `<select class="form-select question-input" data-qidx="${currentQIndex}"><option value="">-- Select an option --</option>`;
                 q.options.forEach(function(opt) {
-                    ratingHtml += `<option value="${opt}" ${answersArray[currentQIndex] === opt ? 'selected' : ''}>${opt}</option>`;
+                    const isSelected = String(answersArray[currentQIndex]) === String(opt.id)
+                        || answersArray[currentQIndex] === opt.text;
+                    const optionId = escapeHtml(opt.id);
+                    const optionText = escapeHtml(opt.text);
+                    ratingHtml += `<option value="${optionId}" ${isSelected ? 'selected' : ''}>${optionText}</option>`;
                 });
                 ratingHtml += `</select>`;
                 html += ratingHtml;
@@ -1959,7 +1971,33 @@
                 alert('Survey record not found.');
                 return;
             }
-            viewSurvey(survey);
+
+            const formData = new FormData();
+            formData.append('id', survey.id);
+
+            fetch('<?= base_url("user/survey/view") ?>', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if (!data.status) {
+                    throw new Error(data.message || 'Unable to load survey.');
+                }
+
+                const response = data.response || survey;
+                response.response_answers = data.answers || [];
+                viewSurvey(response);
+            })
+            .catch(function(error) {
+                console.error('View survey error:', error);
+                alert(error.message || 'Something went wrong while loading the survey.');
+            });
         }
 
         function viewSurvey(row) {
@@ -1975,20 +2013,46 @@
             document.getElementById('viewSubmittedAt').value = row.submitted_at ?? '';
             document.getElementById('viewVoterId').value = row.voter_id ?? '';
             document.getElementById('viewMlaId').value = row.mla_id ?? '';
-            document.getElementById('viewDistrict').value = row.district ?? '';
-            document.getElementById('viewConstituency').value = row.constituency ?? '';
+            document.getElementById('viewDistrict').value = row.district_name ?? '';
+            document.getElementById('viewConstituency').value = row.constituency_name ?? '';
             document.getElementById('viewVillage').value = row.village ?? '';
 
-            // Parse answers
+            // Prefer normalized answer rows from survey_responses_answers.
+            if (Array.isArray(row.response_answers) && row.response_answers.length > 0) {
+                const container = document.getElementById('viewAnswersContainer');
+                container.innerHTML = '';
+
+                row.response_answers.forEach(function(answer, index) {
+                    container.insertAdjacentHTML('beforeend', `
+                        <div class="question-item">
+                            <div class="d-flex align-items-start gap-3">
+                                <span class="history-number">${index + 1}</span>
+                                <div class="flex-grow-1">
+                                    <div class="question-text">${escapeHtml(answer.question || `Question ${index + 1}`)}</div>
+                                    <div class="alert alert-light mb-0">
+                                        <strong>Answer:</strong>
+                                        ${escapeHtml(answer.option_text || answer.answers_id || '')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                });
+
+                const modalElement = document.getElementById('viewSurveyModal');
+                const modal = new bootstrap.Modal(modalElement, { backdrop: true, keyboard: true, focus: true });
+                modal.show();
+                return;
+            }
+
+            // Fallback for older responses stored only in the JSON column.
             let answers = [];
             try {
                 answers = row.answers ? JSON.parse(row.answers) : [];
             } catch (error) {
                 answers = [];
             }
-            if (!Array.isArray(answers)) {
-                answers = [];
-            }
+            answers = normalizeAnswers(answers);
 
             const questions = getQuestionsForHistory(row);
             const container = document.getElementById('viewAnswersContainer');
@@ -2000,6 +2064,10 @@
                 answers.forEach(function(answer, index) {
                     const question = questions[index];
                     const questionText = question?.text ?? `Question ${index + 1}`;
+                    const selectedOption = question?.options?.find(function(option) {
+                        return String(option.id) === String(answer) || option.text === answer;
+                    });
+                    const answerText = selectedOption?.text ?? answer;
                     
                     container.insertAdjacentHTML('beforeend', `
                         <div class="question-item">
@@ -2009,7 +2077,7 @@
                                     <div class="question-text">${escapeHtml(questionText)}</div>
                                     <div class="alert alert-light mb-0">
                                         <strong>Answer:</strong>
-                                        ${escapeHtml(String(answer))}
+                                        ${escapeHtml(String(answerText))}
                                     </div>
                                 </div>
                             </div>
@@ -2038,7 +2106,33 @@
                 alert('Survey record not found.');
                 return;
             }
-            editSurvey(survey);
+
+            const formData = new FormData();
+            formData.append('id', survey.id);
+
+            fetch('<?= base_url("user/survey/view") ?>', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if (!data.status) {
+                    throw new Error(data.message || 'Unable to load survey.');
+                }
+
+                const response = data.response || survey;
+                response.response_answers = data.answers || [];
+                editSurvey(response);
+            })
+            .catch(function(error) {
+                console.error('Edit survey load error:', error);
+                alert(error.message || 'Something went wrong while loading the survey.');
+            });
         }
 
         function editSurvey(row) {
@@ -2053,6 +2147,9 @@
             document.getElementById('editSubmittedAt').value = row.submitted_at ?? '';
             document.getElementById('editDistrict').value = row.district ?? '';
             document.getElementById('editConstituency').value = row.constituency ?? '';
+            document.getElementById('editDistrictName').value = row.district_name ?? '';
+            document.getElementById('editConstituencyName').value = row.constituency_name ?? '';
+
             document.getElementById('editVillage').value = row.village ?? '';
 
             let answers = [];
@@ -2061,29 +2158,34 @@
             } catch (error) {
                 answers = [];
             }
-            if (!Array.isArray(answers)) {
-                answers = [];
-            }
-
             const questions = getQuestionsForHistory(row);
+            const answerMap = Array.isArray(row.response_answers) && row.response_answers.length > 0
+                ? row.response_answers.reduce(function(map, answer) {
+                    map[answer.question_id] = answer.answers_id;
+                    return map;
+                }, {})
+                : getAnswerMap(answers);
             const container = document.getElementById('editAnswersContainer');
             container.innerHTML = '';
 
-            answers.forEach(function(answer, index) {
-                const question = questions[index];
-                const questionText = question?.text ?? `Question ${index + 1}`;
+            questions.forEach(function(question, index) {
+                const answer = answerMap[question.id] ?? answerMap[index] ?? '';
+                const questionText = question.text ?? `Question ${index + 1}`;
+                const answerOption = question?.options?.find(function(option) {
+                    return String(option.id) === String(answer) || option.text === answer;
+                });
                 let inputHtml = `
-                    <input type="text" class="form-control edit-answer-input" data-index="${index}" value="${escapeHtml(String(answer))}">
+                    <input type="text" class="form-control edit-answer-input" data-index="${index}" data-question-id="${escapeHtml(question.id)}" value="${escapeHtml(String(answerOption?.text ?? answer))}">
                 `;
 
                 if (question?.type === 'select') {
-                    let optionsHtml = '';
+                    let optionsHtml = '<option value="">-- Select an option --</option>';
                     question.options.forEach(function(option) {
-                        const selected = option === answer ? 'selected' : '';
-                        optionsHtml += `<option value="${escapeHtml(option)}" ${selected}>${escapeHtml(option)}</option>`;
+                        const selected = String(option.id) === String(answer) || option.text === answer ? 'selected' : '';
+                        optionsHtml += `<option value="${escapeHtml(option.id)}" ${selected}>${escapeHtml(option.text)}</option>`;
                     });
                     inputHtml = `
-                        <select class="form-select edit-answer-input" data-index="${index}">
+                        <select class="form-select edit-answer-input" data-index="${index}" data-question-id="${escapeHtml(question?.id ?? '')}">
                             ${optionsHtml}
                         </select>
                     `;
@@ -2091,7 +2193,10 @@
 
                 container.insertAdjacentHTML('beforeend', `
                     <div class="question-item">
-                        <div class="question-text">${escapeHtml(questionText)}</div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <span class="fw-bold" style="color: var(--teal-blue);">${index + 1}</span>
+                            <div class="question-text mb-0">${escapeHtml(questionText)}</div>
+                        </div>
                         ${inputHtml}
                     </div>
                 `);
@@ -2138,9 +2243,9 @@
                 return;
             }
 
-            const answers = [];
+            const answers = {};
             document.querySelectorAll('.edit-answer-input').forEach(function(input) {
-                answers.push(input.value);
+                answers[input.dataset.questionId || input.dataset.index] = input.value;
             });
 
             button.disabled = true;
@@ -2292,21 +2397,25 @@
                 } catch (error) {
                     answers = [];
                 }
-                if (!Array.isArray(answers)) {
-                    answers = [];
-                }
+                answers = normalizeAnswers(answers);
 
                 const surveyId = row.survey_id ?? '';
                 const surveyTitle = row.survey_title ?? 'Survey';
                 const category = row.survey_category ?? row.category ?? 'N/A';
                 const historyId = row.id ?? '';
                 const submittedAt = row.submitted_at ?? 'N/A';
+                const questions = getQuestionsForHistory(row);
 
                 let answerPreview = '';
                 answers.slice(0, 2).forEach(function(answer) {
-                    const shortAnswer = String(answer).substring(0, 25);
+                    const question = questions[answers.indexOf(answer)];
+                    const selectedOption = question?.options?.find(function(option) {
+                        return String(option.id) === String(answer) || option.text === answer;
+                    });
+                    const answerText = String(selectedOption?.text ?? answer);
+                    const shortAnswer = answerText.substring(0, 25);
                     answerPreview += `
-                        <span class="answer-chip" title="${escapeHtml(String(answer))}">
+                        <span class="answer-chip" title="${escapeHtml(answerText)}">
                             ${escapeHtml(shortAnswer)}${String(answer).length > 25 ? '...' : ''}
                         </span>
                     `;
@@ -2406,9 +2515,10 @@
         // LOAD CATEGORY
         // ================================================================
 
-        function loadCategory(category) {
+        function loadCategory(category, surveyId) {
             currentCategory = category;
-            currentQuestions = getQuestionsForCategory(category);
+            currentSurveyId = surveyId || '';
+            currentQuestions = getQuestionsForSurvey(currentSurveyId);
             answersArray = new Array(currentQuestions.length).fill("");
             currentQIndex = 0;
             
@@ -2428,10 +2538,10 @@
         // Survey type change
         surveyTypeSelect.addEventListener('change', function() {
             const category = this.value;
-            const id = surveyMap[category] || '';
+            const id = this.options[this.selectedIndex]?.dataset.surveyId || '';
             document.getElementById('surveyIdHidden').value = id;
             document.getElementById('surveyIdField').value = id;
-            loadCategory(category);
+            loadCategory(category, id);
         });
 
         // Submit handler
@@ -2481,6 +2591,11 @@
                 return;
             }
 
+            const answersByQuestionId = {};
+            currentQuestions.forEach(function(question, index) {
+                answersByQuestionId[question.id] = answersArray[index];
+            });
+
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="bi bi-spinner bi-spin me-2"></i> Submitting...';
@@ -2492,7 +2607,7 @@
             formData.append('constituency', constituency);
             formData.append('village', village);
             formData.append('survey_category', surveyType);
-            formData.append('answers', JSON.stringify(answersArray));
+            formData.append('answers', JSON.stringify(answersByQuestionId));
 
             fetch('<?= base_url("user/survey/save") ?>', {
                 method: 'POST',
@@ -2523,7 +2638,7 @@
                     currentQuestions = [];
                     answersArray = [];
                     currentQIndex = 0;
-                    loadCategory('');
+                    loadCategory('', '');
                     
                     setTimeout(function() {
                         window.location.reload();
@@ -2554,12 +2669,12 @@
         });
 
         // Initialize
-        loadCategory('');
+        loadCategory('', '');
         refreshHistoryUI();
         updateAnalytics();
 
         console.log('✅ Dynamic Survey Module loaded successfully.');
-        console.log('📊 Total categories:', Object.keys(QUESTIONS_BY_CATEGORY).length);
+        console.log('📊 Total surveys:', Object.keys(QUESTIONS_BY_SURVEY).length);
         console.log('📝 Survey history count:', surveyHistory.length);
     </script>
     <script src="<?= base_url('assets/user/js/navbar.js') ?>"></script>

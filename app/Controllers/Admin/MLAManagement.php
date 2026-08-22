@@ -8,6 +8,7 @@ use App\Models\MlaModel;
 use App\Models\StateModel;
 use App\Models\DistrictModel;
 use App\Models\ConstituencyModel;
+use App\Models\PartyModel;
 
 class MLAManagement extends BaseController
 {
@@ -15,6 +16,7 @@ class MLAManagement extends BaseController
     protected $stateModel;
     protected $districtModel;
     protected $constituencyModel;
+    protected $partyModel;
 
     public function __construct()
     {
@@ -22,6 +24,7 @@ class MLAManagement extends BaseController
         $this->stateModel = new StateModel();
         $this->districtModel = new DistrictModel();
         $this->constituencyModel = new ConstituencyModel();
+        $this->partyModel = new partyModel();
     }
 
     public function index()
@@ -50,6 +53,11 @@ class MLAManagement extends BaseController
         ->join('constituencies', 'constituencies.id = mlas.constituency_id')
         ->orderBy('mlas.id', 'DESC')
         ->findAll();
+
+        $data['parties'] = $this->partyModel
+            ->where('status', 'Active')
+            ->orderBy('party_name', 'ASC')
+            ->findAll();
 
         return view('admin/MLAManagement', $data);
     }

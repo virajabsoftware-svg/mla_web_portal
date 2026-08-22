@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use CodeIgniter\Model;
 
+
 class VoterModel extends Model
 {
     protected $table = 'voters';
@@ -18,6 +19,17 @@ class VoterModel extends Model
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
+
+
+    public function getVoterWithLocation($userId)
+    {
+        return $this
+            ->select('voters.*, districts.district_name, constituencies.constituency_name')
+            ->join('districts', 'districts.id = voters.district', 'left')
+            ->join('constituencies', 'constituencies.id = voters.constituency', 'left')
+            ->where('voters.id', $userId)
+            ->first();
+    }
 
     // ==========================================
     // FIND VOTER BY EMAIL

@@ -1087,12 +1087,81 @@
 
                     <!-- FILTER PAVILION -->
                     <div class="filter-astro p-4 shadow-lg mt-2">
-                        <h3 class="mb-4 fw-semibold" style="color:#876b42;"><i class="fas fa-tachometer-alt me-2" style="color: var(--gold-dark);"></i> Constituency Command Center</h3>
+                        <h3 class="mb-4 fw-semibold" style="color:#876b42;"><i class="fas fa-tachometer-alt me-2" style="color: var(--gold-dark);"></i> MLA Management Command Center</h3>
                         <div class="row g-3">
-                            <div class="col-md-3"><label><i class="fas fa-user-tie me-1"></i> MLA Name</label><input type="text" class="form-control" id="mlaName" placeholder="Search leader"></div>
-                            <div class="col-md-3"><label><i class="fas fa-flag-checkered me-1"></i> Party</label><select class="form-select" id="party"><option value="">All Parties</option><option value="Shiv Sena (ES)">Shiv Sena (ES)</option><option value="BJP">BJP</option><option value="NCP">NCP</option><option value="Shiv Sena (UBT)">Shiv Sena (UBT)</option><option value="NCP (Sharad Pawar)">NCP (Sharad Pawar)</option></select></div>
-                            <div class="col-md-3"><label><i class="fas fa-city me-1"></i> District</label><select class="form-select" id="district"><option value="">Select District</option><option value="Thane">Thane</option><option value="Nagpur">Nagpur</option><option value="Satara">Satara</option><option value="Pune">Pune</option><option value="Mumbai">Mumbai</option><option value="Ahmednagar">Ahmednagar</option><option value="Kolhapur">Kolhapur</option><option value="Nashik">Nashik</option></select></div>
-                            <div class="col-md-3"><label><i class="fas fa-map-pin me-1"></i> Constituency</label><select class="form-select" id="constituency"><option value="">Select Constituency</option></select></div>
+                            <div class="col-md-3"><label><i class="fas fa-user-tie me-1"></i> MLA Name</label>
+                            <input type="text" class="form-control" id="mlaName" placeholder="Search leader">
+                        </div>
+                            <div class="col-md-3"><label><i class="fas fa-flag-checkered me-1"></i> Party</label>
+                                <select class="form-select" id="party" name="party" required>
+                                    <option value="">Select Party</option>
+                                    <?php foreach ($parties as $party): ?>
+                                        <option value="<?= esc($party['party_name']); ?>">
+                                            <?= esc($party['party_name']); ?> (<?= esc($party['party_code']); ?>)
+                                        </option>                             
+                                    <?php endforeach; ?>
+                    
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label>
+                                    <i class="fas fa-flag me-1"></i>
+                                    State
+                                </label>
+
+                                <select name="filter_state_id"
+                                        id="filter_state_id"
+                                        class="form-select">
+
+                                    <option value="">All States</option>
+
+                                    <?php if (!empty($states)): ?>
+                                        <?php foreach ($states as $state): ?>
+
+                                            <option value="<?= esc($state['id']); ?>">
+                                                <?= esc($state['state_name']); ?>
+                                            </option>
+
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label>
+                                    <i class="fas fa-city me-1"></i>
+                                    District
+                                </label>
+
+                                <select name="filter_district_id"
+                                        id="filter_district_id"
+                                        class="form-select">
+
+                                    <option value="">All Districts</option>
+
+                                    <?php if (!empty($districts)): ?>
+                                        <?php foreach ($districts as $district): ?>
+
+                                            <option value="<?= esc($district['id']); ?>">
+                                                <?= esc($district['district_name']); ?>
+                                            </option>
+
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label>
+                                    <i class="fas fa-map-pin me-1"></i>
+                                    Constituency
+                                </label>
+
+                                <input type="text"
+                                    id="filter_constituency"
+                                    class="form-control"
+                                    placeholder="Search constituency">
+                            </div>
                             <div class="col-md-3"><label><i class="fas fa-sort-amount-down me-1"></i> Sort by Name</label><select class="form-select" id="sortOrder"><option value="asc">A → Z</option><option value="desc">Z → A</option></select></div>
                         </div>
                         <div class="mt-4 d-flex gap-3 flex-wrap">
@@ -1359,13 +1428,14 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" name="party" required>
+                                            <select class="form-select" id="party" name="party" required>
                                                 <option value="">Select Party</option>
-                                                <option value="Shiv Sena (ES)">Shiv Sena (ES)</option>
-                                                <option value="BJP">BJP</option>
-                                                <option value="NCP">NCP</option>
-                                                <option value="Shiv Sena (UBT)">Shiv Sena (UBT)</option>
-                                                <option value="NCP (Sharad Pawar)">NCP (Sharad Pawar)</option>
+                                                <?php foreach ($parties as $party): ?>
+                                                    <option value="<?= esc($party['party_name']); ?>">
+                                                        <?= esc($party['party_name']); ?> (<?= esc($party['party_code']); ?>)
+                                                    </option>                             
+                                                <?php endforeach; ?>
+                                
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -1500,12 +1570,14 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select id="edit_party" name="party" class="form-select" required>
-                                                <option value="Shiv Sena (ES)" selected>Shiv Sena (ES)</option>
-                                                <option value="BJP">BJP</option>
-                                                <option value="NCP">NCP</option>
-                                                <option value="Shiv Sena (UBT)">Shiv Sena (UBT)</option>
-                                                <option value="NCP (Sharad Pawar)">NCP (Sharad Pawar)</option>
+                                            <select class="form-select" id="party" name="party" required>
+                                                <option value="">Select Party</option>
+                                                <?php foreach ($parties as $party): ?>
+                                                    <option value="<?= esc($party['party_name']); ?>">
+                                                        <?= esc($party['party_name']); ?> (<?= esc($party['party_code']); ?>)
+                                                    </option>                             
+                                                <?php endforeach; ?>
+                                
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -1671,7 +1743,7 @@
                 </script>
                 <script src="header.js">
                 </script>
-
+            
                 <script>
                      function loadDistricts(stateSelector, districtSelector) {
 

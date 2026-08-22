@@ -4,6 +4,7 @@ namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use App\Models\User\SurveyResponseModel;
+use App\Models\User\VoterModel;
 
 class Survey extends BaseController
 {
@@ -33,13 +34,20 @@ class Survey extends BaseController
         }
 
         // Get logged-in voter
-        $voter = $this->db
+            $loggedInVoter = $this->db
             ->table('voters')
-            ->where('voter_id', $voterId)
+            ->select(' voters.*,districts.district_name,constituencies.constituency_name')
+            ->join('districts', 'districts.id = voters.district', 'left')
+            ->join('constituencies', 'constituencies.id = voters.constituency', 'left')
+            ->where('voters.voter_id', $voterId)
             ->get()
             ->getRowArray();
 
-        if (!$voter) {
+           // echo $this->db->getLastQuery();die;
+
+           
+
+        if (!$loggedInVoter) {
             return redirect()
                 ->back()
                 ->with(
@@ -51,10 +59,53 @@ class Survey extends BaseController
         // Get active surveys
         $activeSurveys = $this->db
             ->table('surveys')
+            ->select('id, title, status')
             ->where('status', 'Active')
             ->orderBy('id', 'ASC')
             ->get()
             ->getResultArray();
+
+        $surveyQuestions = $this->db
+            ->table('survey_questions sq')
+            ->select('sq.id, sq.survey_id, sq.question, sq.question_type, sq.is_required, sq.sort_order, sqo.id AS option_id, sqo.option_text, sqo.sort_order AS option_sort_order')
+            ->join(
+                'survey_question_options sqo',
+                'sqo.question_id = sq.id AND sqo.is_active = 1',
+                'left'
+            )
+            ->whereIn('sq.survey_id', array_column($activeSurveys, 'id') ?: [0])
+            ->orderBy('sq.survey_id', 'ASC')
+            ->orderBy('sq.sort_order', 'ASC')
+            ->orderBy('sqo.sort_order', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        $questionsBySurvey = [];
+        foreach ($surveyQuestions as $question) {
+            $surveyId = (string) $question['survey_id'];
+            $questionId = (string) $question['id'];
+
+            if (!isset($questionsBySurvey[$surveyId][$questionId])) {
+                $questionsBySurvey[$surveyId][$questionId] = [
+                    'id'       => $questionId,
+                    'text'     => $question['question'],
+                    'type'     => $question['question_type'],
+                    'required' => (bool) $question['is_required'],
+                    'options'  => []
+                ];
+            }
+
+            if ($question['option_text'] !== null) {
+                $questionsBySurvey[$surveyId][$questionId]['options'][] = [
+                    'id'   => (string) $question['option_id'],
+                    'text' => $question['option_text']
+                ];
+            }
+        }
+
+        foreach ($questionsBySurvey as $surveyId => $questions) {
+            $questionsBySurvey[$surveyId] = array_values($questions);
+        }
 
         // Get voter's survey history with survey titles
         $responses = $this->db
@@ -67,8 +118,9 @@ class Survey extends BaseController
             ->getResultArray();
 
         $data = [
-            'voter'         => $voter,
+            'voter'         => $loggedInVoter,
             'activeSurveys' => $activeSurveys,
+            'questionsBySurvey' => $questionsBySurvey,
             'responses'     => $responses
         ];
 
@@ -138,6 +190,7 @@ class Survey extends BaseController
             ]);
         }
 
+        //var_dump($answers);die;
         $decodedAnswers = json_decode($answers, true);
 
         if (!is_array($decodedAnswers) || empty($decodedAnswers)) {
@@ -163,12 +216,17 @@ class Survey extends BaseController
 
         $now = date('Y-m-d H:i:s');
 
+
+        $voter = (new VoterModel())->where('voter_id', $voterId)->first();
+
+        
+
         $data = [
             'survey_id'       => (int) $surveyId,
             'voter_id'        => $voterId,
             'mla_id'          => !empty($mlaId) ? (int) $mlaId : null,
-            'district'        => !empty($district) ? trim($district) : null,
-            'constituency'    => !empty($constituency) ? trim($constituency) : null,
+            'district'        => $voter['district'] ?? '',
+            'constituency'    => $voter['constituency'] ?? '',
             'village'         => !empty($village) ? trim($village) : null,
             'survey_category' => !empty($surveyCategory) ? trim($surveyCategory) : null,
             'answers'         => json_encode($decodedAnswers, JSON_UNESCAPED_UNICODE),
@@ -193,6 +251,58 @@ class Survey extends BaseController
 
         $responseId = $this->db->insertID();
 
+        $answerRows = [];
+        foreach ($decodedAnswers as $questionId => $answersId) {
+
+            $answerRows[] = [
+                'response_id' => (int) $responseId,
+                'survey_id'   => (int) $surveyId,
+                'question_id' => (int) $questionId,
+                'answers_id'  => (int) $answersId
+            ];
+        }
+
+        if (!empty($answerRows)) {
+
+            $insertAnswers = $this->db
+                ->table('survey_responses_answers')
+                ->insertBatch($answerRows);
+
+            if (!$insertAnswers) {
+
+                $this->db->transRollback();
+
+                $dbError = $this->db->error();
+
+                return $this->response->setJSON([
+                    'status'  => false,
+                    'message' => 'Failed to save survey answers.',
+                    'error'   => $dbError['message'] ?? 'Unknown database error'
+                ]);
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Complete Transaction
+        |--------------------------------------------------------------------------
+        */
+
+        $this->db->transComplete();
+
+        if ($this->db->transStatus() === false) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Failed to save survey.'
+            ]);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get Saved Response
+        |--------------------------------------------------------------------------
+        */
+
         $savedResponse = $this->db
             ->table('survey_responses sr')
             ->select('sr.*, s.title as survey_title')
@@ -216,9 +326,7 @@ class Survey extends BaseController
     public function view($id = null)
     {
         $session = session();
-
         $voterId = $session->get('voter_id');
-
         if (empty($voterId)) {
             return $this->response
                 ->setStatusCode(401)
@@ -243,8 +351,10 @@ class Survey extends BaseController
         // Get the survey response with survey title
         $response = $this->db
             ->table('survey_responses sr')
-            ->select('sr.*, s.title as survey_title')
+            ->select('sr.*, s.title as survey_title,d.district_name,c.constituency_name')
             ->join('surveys s', 's.id = sr.survey_id', 'left')
+            ->join('districts d', 'd.id = sr.district', 'left')
+            ->join('constituencies c', 'c.id = sr.constituency', 'left')
             ->where('sr.id', $id)
             ->where('sr.voter_id', $voterId)
             ->get()
@@ -257,10 +367,21 @@ class Survey extends BaseController
             ]);
         }
 
+        $answers = $this->db
+            ->table('survey_responses_answers sra')
+            ->select('sra.id, sra.response_id, sra.survey_id, sra.question_id, sra.answers_id, sq.question, sq.question_type, sq.is_required, sq.sort_order, sqo.option_text')
+            ->join('survey_questions sq', 'sq.id = sra.question_id', 'left')
+            ->join('survey_question_options sqo', 'sqo.id = sra.answers_id AND sqo.question_id = sra.question_id', 'left')
+            ->where('sra.response_id', $id)
+            ->orderBy('sq.sort_order', 'ASC')
+            ->get()
+            ->getResultArray();
+
         return $this->response->setJSON([
             'status'   => true,
             'message'  => 'Survey retrieved successfully.',
-            'response' => $response
+            'response' => $response,
+            'answers'  => $answers
         ]);
     }
 
@@ -268,8 +389,8 @@ class Survey extends BaseController
     // UPDATE SURVEY RESPONSE - FIXED
     // =========================================================
 
-    public function update()
-    {
+   public function update()
+   {
         if (!$this->request->isAJAX()) {
             return $this->response->setJSON([
                 'status'  => false,
@@ -277,96 +398,165 @@ class Survey extends BaseController
             ]);
         }
 
-        $session = session();
-        $voterId = $session->get('voter_id');
-
-        if (empty($voterId)) {
-            return $this->response
-                ->setStatusCode(401)
-                ->setJSON([
-                    'status'  => false,
-                    'message' => 'Please login first.'
-                ]);
-        }
-
-        $id = $this->request->getPost('id');
-
-        if (empty($id)) {
-            return $this->response->setJSON([
+    $session = session();
+    $voterId = $session->get('voter_id');
+    if (empty($voterId)) {
+        return $this->response
+            ->setStatusCode(401)
+            ->setJSON([
                 'status'  => false,
-                'message' => 'Survey response ID is required.'
+                'message' => 'Please login first.'
             ]);
-        }
-
-        $existing = $this->surveyModel
-            ->where('id', $id)
-            ->where('voter_id', $voterId)
-            ->first();
-
-        if (!$existing) {
-            return $this->response->setJSON([
-                'status'  => false,
-                'message' => 'Survey response not found.'
-            ]);
-        }
-
-        $answers = $this->request->getPost('answers');
-
-        if (empty($answers)) {
-            return $this->response->setJSON([
-                'status'  => false,
-                'message' => 'Survey answers are required.'
-            ]);
-        }
-
-        if (is_string($answers)) {
-            $decodedAnswers = json_decode($answers, true);
-
-            if (json_last_error() !== JSON_ERROR_NONE || !is_array($decodedAnswers)) {
-                return $this->response->setJSON([
-                    'status'  => false,
-                    'message' => 'Invalid answers data.'
-                ]);
-            }
-
-            $answers = json_encode($decodedAnswers, JSON_UNESCAPED_UNICODE);
-        }
-
-        $data = [
-            'district'     => trim((string) $this->request->getPost('district')),
-            'constituency' => trim((string) $this->request->getPost('constituency')),
-            'village'      => trim((string) $this->request->getPost('village')),
-            'answers'      => $answers,
-            'updated_at'   => date('Y-m-d H:i:s')
-        ];
-
-        $updated = $this->surveyModel
-            ->where('id', $id)
-            ->where('voter_id', $voterId)
-            ->set($data)
-            ->update();
-
-        if (!$updated) {
-            return $this->response->setJSON([
-                'status'  => false,
-                'message' => 'Failed to update survey response.'
-            ]);
-        }
-
-        $updatedRecord = $this->db
-            ->table('survey_responses sr')
-            ->select('sr.*, s.title as survey_title')
-            ->join('surveys s', 's.id = sr.survey_id', 'left')
-            ->where('sr.id', $id)
-            ->get()
-            ->getRowArray();
-
+    }
+    $id = $this->request->getPost('id');
+    if (empty($id)) {
         return $this->response->setJSON([
-            'status'  => true,
-            'message' => 'Survey response updated successfully.',
-            'record'  => $updatedRecord
+            'status'  => false,
+            'message' => 'Survey response ID is required.'
         ]);
     }
+
+    $existing = $this->surveyModel
+        ->where('id', $id)
+        ->where('voter_id', $voterId)
+        ->first();
+
+    if (!$existing) {
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'Survey response not found.'
+        ]);
+    }
+
+   
+    $answers = $this->request->getPost('answers');
+    if (empty($answers)) {
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'Survey answers are required.'
+        ]);
+    }
+  
+
+    if (is_string($answers)) {
+
+        $decodedAnswers = json_decode($answers, true);
+        if (
+            json_last_error() !== JSON_ERROR_NONE ||
+            !is_array($decodedAnswers) ||
+            empty($decodedAnswers)
+        ) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Invalid answers data.'
+            ]);
+        }
+
+    } elseif (is_array($answers)) {
+
+        $decodedAnswers = $answers;
+
+    } else {
+
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'Invalid answers format.'
+        ]);
+    }
+
+    $this->db->transStart();
+    $data = [
+        'district'     => trim((string) $this->request->getPost('district')),
+        'constituency' => trim((string) $this->request->getPost('constituency')),
+        'village'      => trim((string) $this->request->getPost('village')),
+        'answers'      => json_encode(
+            $decodedAnswers,
+            JSON_UNESCAPED_UNICODE
+        ),
+        'updated_at'   => date('Y-m-d H:i:s')
+    ];
+
+    $updated = $this->surveyModel
+        ->where('id', $id)
+        ->where('voter_id', $voterId)
+        ->set($data)
+        ->update();
+
+    if (!$updated) {
+
+        $this->db->transRollback();
+
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'Failed to update survey response.'
+        ]);
+    }
+
+    $this->db->table('survey_responses_answers')->where('response_id', $id)->delete();
+    $answerRows = [];
+    foreach ($decodedAnswers as $questionId => $answersId) {
+
+        // Skip empty answer
+        if ($answersId === '' || $answersId === null) {
+            continue;
+        }
+
+        $answerRows[] = [
+            'response_id' => (int) $id,
+            'survey_id'   => (int) $existing['survey_id'],
+            'question_id' => (int) $questionId,
+            'answers_id'  => (int) $answersId
+        ];
+    }
+
+    if (!empty($answerRows)) {
+
+        $insertAnswers = $this->db
+            ->table('survey_responses_answers')
+            ->insertBatch($answerRows);
+
+        if (!$insertAnswers) {
+
+            $this->db->transRollback();
+
+            $dbError = $this->db->error();
+
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Failed to update survey answers.',
+                'error'   => $dbError['message'] ?? 'Unknown database error'
+            ]);
+        }
+    }
+
+    $this->db->transComplete();
+    if ($this->db->transStatus() === false) {
+
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'Failed to update survey.'
+        ]);
+    }
+
+    $updatedRecord = $this->db->table('survey_responses sr')
+        ->select('sr.*, s.title as survey_title')
+        ->join(
+            'surveys s',
+            's.id = sr.survey_id',
+            'left'
+        )
+        ->where('sr.id', $id)
+        ->get()
+        ->getRowArray();
+
+    
+
+    return $this->response->setJSON([
+        'status'  => true,
+        'message' => 'Survey response updated successfully.',
+        'record'  => $updatedRecord
+    ]);
+  }
 
     // =========================================================
     // DELETE SURVEY RESPONSE - UNTOUCHED
@@ -409,6 +599,10 @@ class Survey extends BaseController
                 'message' => 'Survey response not found.'
             ]);
         }
+
+
+         // Delete survey response answers first
+        $this->db->table('survey_responses_answers')->where('response_id', $id)->delete();
 
         $deleted = $this->surveyModel
             ->where('id', $id)
