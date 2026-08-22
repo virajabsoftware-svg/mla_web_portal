@@ -680,7 +680,6 @@
                             <th>Party Code</th>
                             <th>Party Type</th>
                             <th>State</th>
-                            <th>Total MLAs</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -697,8 +696,8 @@
                                     data-status="<?= esc(strtolower(trim($party['status'] ?? ''))) ?>">
                                     <td><?= $index + 1 ?></td>
                                     <td>
-                                        <?php if (!empty($party['logo']) && file_exists(FCPATH . 'uploads/parties/' . $party['logo'])): ?>
-                                            <img src="<?= base_url('uploads/parties/' . $party['logo']) ?>" 
+                                        <?php if (!empty($party['party_logo']) && file_exists(FCPATH . 'uploads/party/' . $party['party_logo'])): ?>
+                                            <img src="<?= base_url('uploads/party/' . $party['party_logo']) ?>" 
                                                  alt="<?= esc($party['party_name']) ?>" 
                                                  class="party-logo-img">
                                         <?php else: ?>
@@ -711,7 +710,6 @@
                                     <td><?= esc($party['party_code'] ?? '-') ?></td>
                                     <td><?= esc($party['party_type']) ?></td>
                                     <td><?= esc($party['state_name'] ?? '-') ?></td>
-                                    <td><?= esc($party['total_mlas'] ?? 0) ?></td>
                                     <td>
                                         <?php if ($party['status'] === 'Active'): ?>
                                             <span class="status-active">Active</span>
@@ -721,23 +719,29 @@
                                     </td>
                                     <td>
                                         <div class="action-btn-group">
-                                            <button class="action-btn view-btn" type="button" 
+                                            <!-- <button class="action-btn view-btn" type="button" 
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#viewPartyModal" 
                                                     data-id="<?= $party['id'] ?>">
                                                 <i class="fas fa-eye"></i> View
-                                            </button>
+                                            </button> -->
                                             <button class="action-btn edit-btn" type="button" 
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#editPartyModal" 
                                                     data-id="<?= $party['id'] ?>">
                                                 <i class="fas fa-edit"></i> Edit
                                             </button>
-                                            <button class="action-btn delete-btn" type="button"
-                                                    data-id="<?= $party['id'] ?>"
-                                                    data-name="<?= esc($party['party_name']) ?>">
-                                                <i class="fas fa-trash"></i> Delete
+                                            <button
+                                                type="button"
+                                                class="action-btn delete-btn"
+                                                onclick="if(confirm('Are you sure you want to delete this party?')) window.location='<?= base_url('admin/party/delete/'.$party['id']); ?>';">
+
+                                                <i class="fas fa-trash"></i>
+                                                Delete
+
                                             </button>
+
+                                        
                                         </div>
                                     </td>
                                 </tr>
@@ -763,7 +767,7 @@
     <!-- ============================================================ -->
     <!-- VIEW PARTY MODAL -->
     <!-- ============================================================ -->
-    <div class="modal fade modal-cream" id="viewPartyModal" tabindex="-1" data-bs-backdrop="static">
+    <!-- <div class="modal fade modal-cream" id="viewPartyModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content modal-cream">
                 <div class="modal-header border-warning">
@@ -859,7 +863,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- ============================================================ -->
     <!-- ADD PARTY MODAL with Logo Upload -->
@@ -929,7 +933,7 @@
                             <div class="col-md-6">
                                 <label class="fw-bold" style="color:#876b42;">
                                     <i class="fas fa-barcode me-1"></i>
-                                    Party Code
+                                    Party Code <span class="text-danger">*</span>
                                 </label>
                                 <input type="text" 
                                        name="party_code" 
@@ -946,7 +950,6 @@
                                     <option value="">Select Party Type</option>
                                     <option value="National">National</option>
                                     <option value="State">State</option>
-                                    <option value="Regional">Regional</option>
                                 </select>
                             </div>
 
@@ -965,40 +968,6 @@
                                         <?php endforeach; ?>
                                     <?php endif; ?>
                                 </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;">
-                                    <i class="fas fa-calendar me-1"></i>
-                                    Founded Year
-                                </label>
-                                <input type="text" 
-                                       name="founded_year" 
-                                       class="form-control" 
-                                       placeholder="e.g., 1980">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;">
-                                    <i class="fas fa-user-tie me-1"></i>
-                                    Party President / Leader
-                                </label>
-                                <input type="text" 
-                                       name="leader" 
-                                       class="form-control" 
-                                       placeholder="Enter leader name">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;">
-                                    <i class="fas fa-users me-1"></i>
-                                    Total MLAs
-                                </label>
-                                <input type="number" 
-                                       name="total_mlas" 
-                                       class="form-control" 
-                                       placeholder="Enter number of MLAs"
-                                       min="0">
                             </div>
 
                             <div class="col-md-6">
@@ -1042,7 +1011,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editPartyForm" enctype="multipart/form-data">
+                    <form action="<?= base_url('admin/party/update') ?>" method="post" id="editPartyForm" enctype="multipart/form-data">
                         <input type="hidden" name="id" id="edit_party_id">
                         <input type="hidden" name="existing_logo" id="edit_existing_logo">
                         
@@ -1108,7 +1077,6 @@
                                 <select name="party_type" id="edit_party_type" class="form-select" required>
                                     <option value="National">National</option>
                                     <option value="State">State</option>
-                                    <option value="Regional">Regional</option>
                                 </select>
                             </div>
 
@@ -1131,40 +1099,6 @@
 
                             <div class="col-md-6">
                                 <label class="fw-bold" style="color:#876b42;">
-                                    <i class="fas fa-calendar me-1"></i>
-                                    Founded Year
-                                </label>
-                                <input type="text" 
-                                       name="founded_year" 
-                                       id="edit_founded_year" 
-                                       class="form-control">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;">
-                                    <i class="fas fa-user-tie me-1"></i>
-                                    Party President / Leader
-                                </label>
-                                <input type="text" 
-                                       name="leader" 
-                                       id="edit_leader" 
-                                       class="form-control">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;">
-                                    <i class="fas fa-users me-1"></i>
-                                    Total MLAs
-                                </label>
-                                <input type="number" 
-                                       name="total_mlas" 
-                                       id="edit_total_mlas" 
-                                       class="form-control"
-                                       min="0">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="fw-bold" style="color:#876b42;">
                                     <i class="fas fa-toggle-on me-1"></i>
                                     Status
                                 </label>
@@ -1174,57 +1108,24 @@
                                 </select>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
+                        <div class="modal-footer">
                     <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-warm-gold px-4" id="updatePartyBtn">
+                    <button type="submit" class="btn btn-warm-gold px-4" id="updatePartyBtn">
                         <i class="fas fa-save me-2"></i>
                         Update Party
                     </button>
+                    
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- DELETE CONFIRMATION MODAL -->
-    <!-- ============================================================ -->
-    <div class="modal fade modal-cream" id="deletePartyModal" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-md modal-dialog-centered">
-            <div class="modal-content modal-cream">
-                <div class="modal-header border-warning">
-                    <h5 class="modal-title fw-bold">
-                        <i class="fas fa-exclamation-triangle me-2" style="color:#c62828;"></i>
-                        Confirm Delete
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center py-4">
-                    <i class="fas fa-trash-alt" style="font-size:3rem;color:#c62828;margin-bottom:15px;"></i>
-                    <h5 class="fw-bold" style="color:#2c2418;">Are you sure?</h5>
-                    <p style="color:#7a5f3a;">You are about to delete <strong id="delete_party_name"></strong>.</p>
-                    <p style="color:#9e6b6b;font-size:0.9rem;">This action cannot be undone.</p>
-                    <form id="deletePartyForm" method="post" style="display:inline;">
-                        <?= csrf_field() ?>
-                        <input type="hidden" name="id" id="delete_party_id">
                     </form>
                 </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">
-                        Cancel
-                    </button>
-                    <button type="button" class="btn btn-danger px-4" id="confirmDeleteBtn">
-                        <i class="fas fa-trash me-2"></i>
-                        Delete Party
-                    </button>
-                </div>
+                
             </div>
         </div>
     </div>
 
+    
     <!-- ============================================================ -->
     <!-- SCRIPTS -->
     <!-- ============================================================ -->
@@ -1386,118 +1287,52 @@
         applyPartyFilters();
 
         // ============================================================
-        // VIEW PARTY
-        // ============================================================
-        $(document).on('click', '.view-btn', function() {
-            let partyId = $(this).data('id');
-
-            $.ajax({
-                url: "<?= base_url('admin/party/get/') ?>" + partyId,
-                type: "GET",
-                dataType: "json",
-                success: function(response) {
-                    if (response.status) {
-                        let data = response.data;
-                        $('#view_party_name').val(data.party_name);
-                        $('#view_party_code').val(data.party_code || '-');
-                        $('#view_party_type').val(data.party_type);
-                        $('#view_state_name').val(data.state_name || '-');
-                        $('#view_founded_year').val(data.founded_year || '-');
-                        $('#view_leader').val(data.leader || '-');
-                        $('#view_total_mlas').val(data.total_mlas || 0);
-                        $('#view_status').val(data.status);
-
-                        if (data.logo) {
-                            const logoPath = "<?= base_url('uploads/parties/') ?>" + data.logo;
-                            $('#view_party_logo_img').attr('src', logoPath).show();
-                            $('#view_party_logo_icon').hide();
-                        } else {
-                            $('#view_party_logo_img').hide();
-                            $('#view_party_logo_icon').show();
-                        }
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function() {
-                    alert('Unable to fetch party details.');
-                }
-            });
-        });
-
-        // ============================================================
         // EDIT PARTY
         // ============================================================
-        $(document).on('click', '.edit-btn', function() {
-            let partyId = $(this).data('id');
+        $(document).on('click', '.edit-btn', function () {
 
-            $.ajax({
-                url: "<?= base_url('admin/party/get/') ?>" + partyId,
-                type: "GET",
-                dataType: "json",
-                success: function(response) {
-                    if (response.status) {
-                        let data = response.data;
-                        $('#edit_party_id').val(data.id);
-                        $('#edit_existing_logo').val(data.logo || '');
-                        $('#edit_party_name').val(data.party_name);
-                        $('#edit_party_code').val(data.party_code || '');
-                        $('#edit_party_type').val(data.party_type);
-                        $('#edit_state_id').val(data.state_id || '');
-                        $('#edit_founded_year').val(data.founded_year || '');
-                        $('#edit_leader').val(data.leader || '');
-                        $('#edit_total_mlas').val(data.total_mlas || 0);
-                        $('#edit_status').val(data.status);
+    let id = $(this).data('id');
 
-                        if (data.logo) {
-                            const logoPath = "<?= base_url('uploads/parties/') ?>" + data.logo;
-                            $('#edit_logo_preview').attr('src', logoPath).show();
-                            $('#edit_logo_placeholder').hide();
-                        } else {
-                            $('#edit_logo_preview').hide();
-                            $('#edit_logo_placeholder').show();
-                        }
+    $.get("<?= base_url('admin/party/get'); ?>/" + id, function (response) {
 
-                        $('#edit_party_logo').val('');
-                        $('#edit_logo_error').hide();
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function() {
-                    alert('Unable to fetch party details.');
-                }
-            });
-        });
+        if (response.status) {
+
+            let party = response.data;
+
+            $('#edit_party_id').val(party.id);
+            $('#edit_party_name').val(party.party_name);
+            $('#edit_party_code').val(party.party_code);
+            $('#edit_party_type').val(party.party_type);
+            $('#edit_state_id').val(party.state_id);
+            $('#edit_status').val(party.status);
+
+            if (party.party_logo) {
+
+                $('#edit_logo_preview')
+                    .attr('src', "<?= base_url('uploads/party'); ?>/" + party.party_logo)
+                    .show();
+
+                $('#edit_logo_placeholder').hide();
+
+            } else {
+
+                $('#edit_logo_preview').hide();
+                $('#edit_logo_placeholder').show();
+
+            }
+
+            $('#editPartyModal').modal('show');
+
+        }
+
+    });
+
+});
 
         // ============================================================
         // UPDATE PARTY
         // ============================================================
-        $('#updatePartyBtn').on('click', function() {
-            var formData = new FormData($('#editPartyForm')[0]);
-
-            $.ajax({
-                url: "<?= base_url('admin/party/update') ?>",
-                type: "POST",
-                data: formData,
-                dataType: "JSON",
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    if (response.status) {
-                        alert(response.message);
-                        $('#editPartyModal').modal('hide');
-                        location.reload();
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function(xhr) {
-                    console.log(xhr.responseText);
-                    alert('Unable to update party.');
-                }
-            });
-        });
+        
 
         // ============================================================
         // DELETE PARTY

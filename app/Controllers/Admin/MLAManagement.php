@@ -11,7 +11,7 @@ use App\Models\ConstituencyModel;
 
 class MLAManagement extends BaseController
 {
-    protected $mlaModel;
+    protected $mlaModel; 
     protected $stateModel;
     protected $districtModel;
     protected $constituencyModel;

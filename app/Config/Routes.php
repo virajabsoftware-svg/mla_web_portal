@@ -31,7 +31,7 @@ $routes->get('logout', 'Auth::logout');
 
     // Management Routes
     $routes->get('mla-management', 'MLAManagement::index');
-      $routes->get('party-management', 'PartyManagement::index');
+    
     $routes->get('constituency-management', 'ConstituencyManagement::index');
     $routes->get('complaint-management', 'ComplaintManagement::index');
     $routes->post('complaint/save', 'Complaint::save');
@@ -104,6 +104,13 @@ $routes->get('logout', 'Auth::logout');
     $routes->post('mla/update', 'MLAManagement::update');
 
     $routes->get('mla/delete/(:num)', 'MLAManagement::delete/$1');
+
+    //party management
+    $routes->get('party-management', 'PartyManagement::index');
+    $routes->post('party/save', 'PartyManagement::save');
+    $routes->get('party/get/(:num)', 'PartyManagement::getParty/$1');
+    $routes->post('party/update', 'PartyManagement::update');
+    $routes->get('party/delete/(:num)', 'PartyManagement::delete/$1');
 });
 
 
