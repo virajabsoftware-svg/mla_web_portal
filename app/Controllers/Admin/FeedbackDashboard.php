@@ -9,29 +9,35 @@ class FeedbackDashboard extends BaseController
 {
     public function index()
     {
-        $model = new FeedbackModel();
-        
-        // Get total feedback count from database
-        $totalFeedbacks = $model->countAll();
-        
+        $feedbackModel = new FeedbackModel();
+
+        // Get statistics
+        $statistics = $feedbackModel->getFeedbackStatistics();
+
+        // Get MLA-wise feedback counts
+        $mlaFeedback = $feedbackModel->getMLAFeedbackCount();
+
         $data = [
-            'totalFeedbacks' => $totalFeedbacks
+            'statistics' => $statistics,
+            'mlaFeedback' => $mlaFeedback
         ];
-        
+
         return view('admin/feedback-dashboard', $data);
     }
-    
+
     /**
      * AJAX endpoint for live count updates
      */
     public function getCount()
     {
         $model = new FeedbackModel();
-        $totalFeedbacks = $model->countAll();
-        
+        $statistics = $model->getFeedbackStatistics();
+
         return $this->response->setJSON([
             'success' => true,
-            'totalFeedbacks' => $totalFeedbacks
+            'total' => $statistics['total'],
+            'pending' => $statistics['pending'],
+            'resolved' => $statistics['resolved']
         ]);
     }
 }

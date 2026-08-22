@@ -150,11 +150,9 @@
             0% {
                 background-position: 0% 50%;
             }
-
             50% {
                 background-position: 100% 50%;
             }
-
             100% {
                 background-position: 0% 50%;
             }
@@ -427,7 +425,6 @@
                 opacity: 0;
                 transform: translateY(8px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -443,11 +440,9 @@
             0% {
                 box-shadow: 0 0 0 0 rgba(195, 200, 72, 0.5);
             }
-
             70% {
                 box-shadow: 0 0 0 8px rgba(195, 200, 72, 0);
             }
-
             100% {
                 box-shadow: 0 0 0 0 rgba(195, 200, 72, 0);
             }
@@ -462,11 +457,9 @@
             .main-content {
                 padding: 1.25rem 1.5rem;
             }
-
             .feedback_dashboard .row.g-4.mb-4 .card-body h3 {
                 font-size: 2rem;
             }
-
             .btn-primary,
             .btn-secondary {
                 padding: 10px 20px;
@@ -479,22 +472,18 @@
                 padding: 1rem 1.25rem;
                 margin-left: 0;
             }
-
             body.sidebar-collapsed .main-content {
                 margin-left: 0;
             }
-
             .feedback_dashboard .row.g-4.mb-4 .card-body h3 {
                 font-size: 1.75rem;
             }
-
             .btn-primary,
             .btn-secondary {
                 width: 100%;
                 margin-right: 0;
                 margin-bottom: 10px;
             }
-
             .col-12 .btn-primary,
             .col-12 .btn-secondary {
                 display: block;
@@ -507,25 +496,20 @@
             .main-content {
                 padding: 0.875rem 1rem;
             }
-
             .feedback_dashboard .card-header {
                 padding: 0.875rem 1rem;
             }
-
             .feedback_dashboard .card-body {
                 padding: 1rem;
             }
-
             .feedback_dashboard .row.g-4.mb-4 .card-body h3 {
                 font-size: 1.5rem;
             }
-
             .table thead th,
             .table tbody td {
                 padding: 8px;
                 font-size: 0.8rem;
             }
-
             .form-label {
                 font-size: 0.85rem;
             }
@@ -542,7 +526,6 @@
         body.sidebar-expanded .main-content {
             margin-left: 280px;
         }
-
         body.sidebar-collapsed .main-content {
             margin-left: 80px;
         }
@@ -585,12 +568,10 @@
                 opacity: 1;
                 transform: translateY(-50%) scale(1);
             }
-
             50% {
                 opacity: 0.3;
                 transform: translateY(-50%) scale(0.8);
             }
-
             100% {
                 opacity: 1;
                 transform: translateY(-50%) scale(1);
@@ -622,18 +603,13 @@
             position: relative;
             margin-top: 2rem;
             padding: 18px 25px;
-
             background: var(--glass-bg);
             backdrop-filter: blur(8px);
-
             border: 1px solid rgba(195, 200, 72, 0.30);
             border-radius: 24px;
-
             box-shadow: var(--shadow-sm);
-
             text-align: center;
             overflow: hidden;
-
             transition: var(--transition-smooth);
         }
 
@@ -642,16 +618,13 @@
             content: "";
             position: absolute;
             inset: -2px;
-
             background: linear-gradient(45deg,
                     var(--lime-gold),
                     var(--olive-green),
                     var(--teal-blue),
                     var(--lime-gold));
-
             background-size: 300% 300%;
             border-radius: 26px;
-
             z-index: -1;
             opacity: 0;
             transition: 0.5s ease;
@@ -690,10 +663,8 @@
             position: absolute;
             left: 0;
             bottom: -3px;
-
             width: 0;
             height: 2px;
-
             background: var(--lime-gold);
             transition: 0.3s ease;
         }
@@ -713,7 +684,6 @@
                 border-radius: 18px;
                 margin-top: 1.5rem;
             }
-
             .footer p {
                 font-size: 0.85rem;
                 line-height: 1.6;
@@ -899,31 +869,28 @@
                         </div>
                     <?php endif; ?>
 
-            <form action="<?= base_url('user/feedback/save'); ?>" method="post"   enctype="multipart/form-data">
+                    <form action="<?= base_url('user/feedback/save'); ?>" method="post" enctype="multipart/form-data">
 
-                    <?= csrf_field(); ?>
+                        <?= csrf_field(); ?>
 
                         <div class="row g-3">
 
                             <!-- Feedback ID -->
                             <div class="col-md-3">
                                 <label class="form-label">Feedback ID</label>
-                                <input  type="text" name="feedback_id" class="form-control" value="<?= esc($feedback_id ?? '') ?>"
-                                    readonly>
+                                <input type="text" name="feedback_id" class="form-control" value="<?= esc($feedback_id ?? '') ?>" readonly>
                             </div>
 
                             <!-- Voter ID -->
                             <div class="col-md-3">
                                 <label class="form-label">Voter ID</label>
-                                <input type="text" name="voter_id" class="form-control" value="<?= esc($voter_id ?? '') ?>"
-                                readonly>
+                                <input type="text" name="voter_id" class="form-control" value="<?= esc($voter_id ?? '') ?>" readonly>
                             </div>
 
-                            <!-- MLA ID -->
+                            <!-- MLA - Display MLA Name instead of ID -->
                             <div class="col-md-3">
-                            <label class="form-label">MLA ID</label>
-                            <input type="text" name="mla_id" class="form-control" value="<?= esc($mla_id ?? '') ?>"
-                            readonly >
+                                <label class="form-label">MLA</label>
+                                <input type="text" name="mla_name" class="form-control" value="<?= esc($mla_name ?? '') ?>" readonly>
                             </div>
 
                             <!-- Work ID -->
@@ -935,21 +902,14 @@
                             <!-- District -->
                             <div class="col-md-4">
                                 <label class="form-label">District</label>
-                                <input
-                                    type="text"
-                                    name="district"
-                                    class="form-control"
-                                    value="<?= esc($district ?? '') ?>"
-                                    readonly>
+                                <input type="text" name="district" class="form-control" value="<?= esc($district ?? '') ?>" readonly>
                             </div>
 
                             <!-- Constituency -->
                             <div class="col-md-4">
                                 <label class="form-label">Constituency</label>
-                                <input
-                                type="text"  name="constituency" class="form-control"  value="<?= esc($constituency ?? '') ?>"
-                                readonly >
-                             </div>
+                                <input type="text" name="constituency" class="form-control" value="<?= esc($constituency ?? '') ?>" readonly>
+                            </div>
 
                             <!-- Village -->
                             <div class="col-md-4">
@@ -981,18 +941,13 @@
                             <!-- Feedback Description -->
                             <div class="col-12">
                                 <label class="form-label">Feedback Description</label>
-                                <textarea
-                                    name="description"
-                                    class="form-control"><?= isset($description) ? $description : '' ?></textarea>
+                                <textarea name="description" class="form-control"><?= isset($description) ? $description : '' ?></textarea>
                             </div>
 
                             <!-- Attachments -->
                             <div class="col-md-6">
                                 <label class="form-label">Upload Attachments</label>
-                                <input
-                                type="file"
-                                name="attachment"
-                                class="form-control">
+                                <input type="file" name="attachment" class="form-control">
                             </div>
 
                             <!-- Auto Date -->
@@ -1040,7 +995,6 @@
                         <table class="table table-hover align-middle" id="feedbackTable">
 
                             <thead class="table-light">
-
                                 <tr>
                                     <th>Feedback ID</th>
                                     <th>Village</th>
@@ -1051,7 +1005,6 @@
                                     <th>Attachment</th>
                                     <th>Action</th>
                                 </tr>
-
                             </thead>
 
                             <tbody id="feedbackTableBody">
@@ -1130,7 +1083,7 @@
 
                     </div>
 
-                    <!-- Pagination - FIXED: Removed invalid 'bootstrap_full' template -->
+                    <!-- Pagination -->
                     <?php if(isset($pager) && $pager): ?>
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <div>
@@ -1285,8 +1238,8 @@
                                                     <div class="detail-value">${f.voter_id || '-'}</div>
                                                 </div>
                                                 <div class="detail-row">
-                                                    <div class="detail-label">MLA ID</div>
-                                                    <div class="detail-value">${f.mla_id || '-'}</div>
+                                                    <div class="detail-label">MLA</div>
+                                                    <div class="detail-value">${f.mla_name || f.mla_id || '-'}</div>
                                                 </div>
                                                 <div class="detail-row">
                                                     <div class="detail-label">Work ID</div>
@@ -1405,8 +1358,8 @@
                                                     <input type="text" name="voter_id" class="form-control" value="${f.voter_id || ''}" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label">MLA ID</label>
-                                                    <input type="text" name="mla_id" class="form-control" value="${f.mla_id || ''}" required>
+                                                    <label class="form-label">MLA</label>
+                                                    <input type="text" name="mla_name" class="form-control" value="${f.mla_name || f.mla_id || ''}" readonly>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">District</label>
@@ -1521,9 +1474,7 @@
                             confirmButtonColor: '#C3C848',
                             confirmButtonText: 'OK'
                         }).then(() => {
-                            // Close modal
                             bootstrap.Modal.getInstance(document.getElementById('editFeedbackModal')).hide();
-                            // Reload page to refresh data
                             location.reload();
                         });
                     } else {
@@ -1615,38 +1566,9 @@
             "Yavatmal": ["Yavatmal", "Wani", "Ralegaon", "Arni", "Pusad", "Umarkhed", "Digras", "Ghatanji"]
         };
 
-        const districtSelect = document.getElementById("district");
-        const constituencySelect = document.getElementById("constituency");
-
-        // Load Districts
-        Object.keys(districtData).forEach(district => {
-            let option = document.createElement("option");
-            option.value = district;
-            option.textContent = district;
-            districtSelect.appendChild(option);
-        });
-
-        // Load Constituencies Based on District
-        districtSelect.addEventListener("change", function () {
-
-            constituencySelect.innerHTML =
-                '<option value="">Select Constituency</option>';
-
-            let constituencies = districtData[this.value] || [];
-
-            constituencies.forEach(item => {
-                let option = document.createElement("option");
-                option.value = item;
-                option.textContent = item;
-                constituencySelect.appendChild(option);
-            });
-
-        });
-
         // Auto Fill Current Date & Time
         function updateDateTime() {
             const now = new Date();
-
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
@@ -1689,7 +1611,7 @@
     </script>
     <?php endif; ?>
 
-      <script src="<?= base_url('assets/user/js/navbar.js') ?>"></script>
+    <script src="<?= base_url('assets/user/js/navbar.js') ?>"></script>
 </body>
 
 </html>

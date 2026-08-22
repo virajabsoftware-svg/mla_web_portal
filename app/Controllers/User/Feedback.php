@@ -34,6 +34,16 @@ class Feedback extends BaseController
         $constituency = (new ConstituencyModel())->find($voter['constituency'] ?? null);
         $count = $model->where('voter_id', $voterId)->countAllResults();
 
+        // Get MLA name for display
+        $mlaName = '';
+        if (!empty($voter['mla_id'])) {
+            $mlaModel = new \App\Models\MlaModel();
+            $mla = $mlaModel->find($voter['mla_id']);
+            if ($mla) {
+                $mlaName = $mla['mla_name'] ?? '';
+            }
+        }
+
         return view('user/Feedback', [
             'feedbacks' => $feedbacks,
             'totalFeedback' => $total,
@@ -41,9 +51,10 @@ class Feedback extends BaseController
             'underReview' => $underReview,
             'resolved' => $resolved,
             'pager' => $model->pager,
-            'feedback_id' => 'FDB-' . $voterId . '-' . str_pad($count + 1, 3, '0', STR_PAD_LEFT),
+            'feedback_id' => $model->generateFeedbackId($voterId),
             'voter_id' => $voterId,
             'mla_id' => $voter['mla_id'] ?? '',
+            'mla_name' => $mlaName,
             'district' => $district['district_name'] ?? '',
             'constituency' => $constituency['constituency_name'] ?? '',
             'full_name' => $voter['full_name'] ?? ''
@@ -73,12 +84,24 @@ class Feedback extends BaseController
 
         $model = new FeedbackModel();
         $voterId = $voter['voter_id'];
-        $count = $model->where('voter_id', $voterId)->countAllResults();
         $filename = $this->uploadAttachment();
+
+        // Get MLA ID from voter record
+        $mlaId = $voter['mla_id'] ?? null;
+
+        // If no mla_id in voter, try to find it via mla_name
+        if (empty($mlaId) && !empty($voter['mla_name'])) {
+            $mlaModel = new \App\Models\MlaModel();
+            $mla = $mlaModel->where('mla_name', $voter['mla_name'])->first();
+            if ($mla) {
+                $mlaId = $mla['id'];
+            }
+        }
+
         $data = [
-            'feedback_id' => 'FDB-' . $voterId . '-' . str_pad($count + 1, 3, '0', STR_PAD_LEFT),
+            'feedback_id' => $model->generateFeedbackId($voterId),
             'voter_id' => $voterId,
-            'mla_id' => $voter['mla_id'] ?? '',
+            'mla_id' => $mlaId, // Store MLA ID consistently
             'district' => $voter['district'] ?? '',
             'constituency' => $voter['constituency'] ?? '',
             'work_id' => $this->request->getPost('work_id'),
@@ -125,7 +148,6 @@ class Feedback extends BaseController
 
         $rules = [
             'voter_id' => 'required',
-            'mla_id' => 'required',
             'village' => 'required',
             'category' => 'required',
             'status' => 'required',
@@ -137,12 +159,17 @@ class Feedback extends BaseController
 
         $data = [
             'voter_id' => $this->request->getPost('voter_id'),
-            'mla_id' => $this->request->getPost('mla_id'),
             'village' => $this->request->getPost('village'),
             'category' => $this->request->getPost('category'),
             'status' => $this->request->getPost('status'),
             'description' => $this->request->getPost('description')
         ];
+
+        // Only update mla_id if provided
+        if ($this->request->getPost('mla_id')) {
+            $data['mla_id'] = $this->request->getPost('mla_id');
+        }
+
         $filename = $this->uploadAttachment();
         if ($filename !== '') {
             $data['attachment'] = $filename;
