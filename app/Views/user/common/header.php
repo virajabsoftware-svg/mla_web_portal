@@ -39,8 +39,7 @@ $userId = $session->get('user_id');
 // ============================================================
 
 $voterModel = new VoterModel();
-
-$voter = $voterModel->find($userId);
+$voter = $voterModel->getVoterWithLocation($userId);
 
 
 // ============================================================
