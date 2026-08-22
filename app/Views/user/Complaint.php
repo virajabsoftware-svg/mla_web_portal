@@ -831,7 +831,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6 fade-up stat-4">
+                <!--div class="col-xl-3 col-md-6 fade-up stat-4">
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
                             <h3 class="stat-number counter-number" id="escalatedComplaints">
@@ -841,7 +841,7 @@
                                 Escalated</p>
                         </div>
                     </div>
-                </div>
+                </div-->
             </div>
 
             <!-- REGISTER COMPLAINT FORM -->
@@ -961,23 +961,8 @@
                 </div>
             </div>
 
-            <!-- ESCALATION SUPPORT -->
-            <div class="card border-0 shadow-sm dashboard-card mb-4 fade-up">
-                <div class="card-header bg-white border-0 pt-4">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-megaphone-fill me-2 text-warning"></i> Escalation Support
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="alert alert-warning d-flex align-items-center">
-                        <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
-                        <div>Complaint unresolved for more than 15 days? You can escalate this complaint for higher
-                            authority review.</div>
-                    </div>
-                    <button class="btn btn-warning-custom" id="escalateBtn"><i class="bi bi-arrow-up-circle me-1"></i>
-                        Escalate Complaint</button>
-                </div>
-            </div>
-
+            
+            
             <!-- COMPLAINT HISTORY -->
             <div class="card border-0 shadow-sm dashboard-card fade-up">
                 <div class="card-header bg-white border-0 pt-4">
@@ -1264,12 +1249,12 @@
             const total = complaintsHistory.length;
             const pending = complaintsHistory.filter(c => c.status === "Pending").length;
             const resolved = complaintsHistory.filter(c => c.status === "Resolved").length;
-            const escalated = complaintsHistory.filter(c => c.status === "Escalated").length;
+            //const escalated = complaintsHistory.filter(c => c.status === "Escalated").length;
 
             document.getElementById('totalComplaints').innerText = total;
             document.getElementById('pendingComplaints').innerText = pending;
             document.getElementById('resolvedComplaints').innerText = resolved;
-            document.getElementById('escalatedComplaints').innerText = escalated;
+            //document.getElementById('escalatedComplaints').innerText = escalated;
         }
 
         // Render complaint history table
