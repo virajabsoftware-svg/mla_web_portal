@@ -18,6 +18,8 @@ class DashboardModel extends Model
             'total_complaints'  => 0,
             'total_feedback'    => 0,
             'total_surveys'     => 0,
+             'total_mla'           => 0,
+            'total_constituency'  => 0,
         ];
 
         // Total Voters
@@ -45,6 +47,19 @@ class DashboardModel extends Model
         if ($db->tableExists('surveys')) {
             $stats['total_surveys'] = $db
                 ->table('surveys')
+                ->countAllResults();
+        }
+
+         if ($db->tableExists('mlas')) {
+            $stats['total_mla'] = $db
+                ->table('mlas')
+                ->countAllResults();
+        }
+
+        // Total Constituency
+        if ($db->tableExists('constituencies')) {
+            $stats['total_constituency'] = $db
+                ->table('constituencies')
                 ->countAllResults();
         }
 

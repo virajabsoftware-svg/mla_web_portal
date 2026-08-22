@@ -525,7 +525,9 @@
                         <i class="fas fa-user-tie"></i>
                     </div>
                     <div class="dash-stat-content">
-                        <div class="dash-stat-count">288</div>
+                        <div class="dash-stat-count">
+    <?= number_format($total_mla ?? 0) ?>
+</div>
                         <div class="dash-stat-title">Total MLA</div>
                         <div class="dash-stat-sub">Legislative Representatives</div>
                     </div>
@@ -558,7 +560,9 @@
                         <i class="fas fa-map-location-dot"></i>
                     </div>
                     <div class="dash-stat-content">
-                        <div class="dash-stat-count">288</div>
+                      <div class="dash-stat-count">
+    <?= number_format($total_constituency ?? 0) ?>
+</div>
                         <div class="dash-stat-title">Total Constituency</div>
                         <div class="dash-stat-sub">Electoral Districts</div>
                     </div>

@@ -22,6 +22,8 @@ class Dashboard extends BaseController
             'total_complaints' => $stats['total_complaints'],
             'total_feedback'   => $stats['total_feedback'],
             'total_surveys'    => $stats['total_surveys'],
+            'total_mla'            => $stats['total_mla'],
+            'total_constituency'   => $stats['total_constituency'],
         ];
 
         return view('admin/dashboard', $data);
