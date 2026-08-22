@@ -15,6 +15,9 @@ class Auth extends BaseController
     {
        
         if (session()->get('admin_logged_in') === true) {
+            
+
+        
             return redirect()->to(base_url('admin/dashboard'));
         }
 
@@ -36,7 +39,7 @@ class Auth extends BaseController
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Email and Password are required.');
+                ->with('error', 'Email aaand Password are required.');
         }
 
         $adminModel = new AdminModel();
