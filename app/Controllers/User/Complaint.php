@@ -4,7 +4,7 @@ namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use App\Models\User\ComplaintModel;
-use App\Models\User\UserModel;
+use App\Models\User\VoterModel;
 use App\Models\DistrictModel;
 use App\Models\ConstituencyModel;
 
@@ -17,23 +17,22 @@ class Complaint extends BaseController
             return redirect()->to('/user/login');
         }
 
-        $voter = (new \App\Models\User\VoterModel())->find($userId);
+        $voterModel = new VoterModel();
+        $voter = $voterModel->find($userId);
         if (!$voter) {
             return redirect()->back()->with('error', 'Voter information not found.');
         }
 
         $model = new ComplaintModel();
 
-        //$complaints = $model->where('user_id', $userId)->orderBy('id', 'DESC')->findAll();
-
         // Complaint + District + Constituency
-         $complaints = $model
-        ->select('complaints.*, districts.district_name, constituencies.constituency_name')
-        ->join('districts', 'districts.id = complaints.district', 'left')
-        ->join('constituencies', 'constituencies.id = complaints.constituency', 'left')
-        ->where('complaints.user_id', $userId)
-        ->orderBy('complaints.id', 'DESC')
-        ->findAll();
+        $complaints = $model
+            ->select('complaints.*, districts.district_name, constituencies.constituency_name')
+            ->join('districts', 'districts.id = complaints.district', 'left')
+            ->join('constituencies', 'constituencies.id = complaints.constituency', 'left')
+            ->where('complaints.user_id', $userId)
+            ->orderBy('complaints.id', 'DESC')
+            ->findAll();
 
         $total = $model->where('user_id', $userId)->countAllResults();
         $pending = $model->where('user_id', $userId)->where('status', 'Pending')->countAllResults();
@@ -43,9 +42,20 @@ class Complaint extends BaseController
         $district = (new DistrictModel())->find($voter['district'] ?? null);
         $constituency = (new ConstituencyModel())->find($voter['constituency'] ?? null);
 
+        // Get MLA name for display
+        $mlaName = '';
+        if (!empty($voter['mla_id'])) {
+            $mlaModel = new \App\Models\MlaModel();
+            $mla = $mlaModel->find($voter['mla_id']);
+            if ($mla) {
+                $mlaName = $mla['mla_name'] ?? '';
+            }
+        }
+
         return view('user/Complaint', [
             'voter_id' => $voter['voter_id'] ?? '',
             'mla_id' => $voter['mla_id'] ?? '',
+            'mla_name' => $mlaName,
             'district' => $district['district_name'] ?? '',
             'constituency' => $constituency['constituency_name'] ?? '',
             'complaints' => $complaints,
@@ -58,14 +68,12 @@ class Complaint extends BaseController
 
     public function save()
     {
-
-         
         $userId = session()->get('user_id');
         if (!$userId) {
             return redirect()->to(base_url('user/login'))->with('error', 'Please login first');
         }
 
-        $voter = (new UserModel())->find($userId);
+        $voter = (new VoterModel())->find($userId);
         if (!$voter) {
             return redirect()->back()->with('error', 'Voter details not found');
         }
@@ -77,30 +85,50 @@ class Complaint extends BaseController
             'priority' => 'required|in_list[Low,Medium,High,Critical]'
         ];
         if (!$this->validate($rules)) {
-
-        
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }    
+        }
+
         $model = new ComplaintModel();
         $village = trim((string) $this->request->getPost('village'));
         $location = trim((string) $this->request->getPost('location'));
         $attachment = $this->uploadAttachment();
+
+        // Get MLA ID from voter record
+        $mlaId = $voter['mla_id'] ?? null;
+
+        // If no mla_id in voter, try to find it via mla_name
+        if (empty($mlaId) && !empty($voter['mla_name'])) {
+            $mlaModel = new \App\Models\MlaModel();
+            $mla = $mlaModel->where('mla_name', $voter['mla_name'])->first();
+            if ($mla) {
+                $mlaId = $mla['id'];
+            }
+        }
+
+        // If still no mla_id, try mla_code
+        if (empty($mlaId) && !empty($voter['mla_code'])) {
+            $mlaModel = new \App\Models\MlaModel();
+            $mla = $mlaModel->where('mla_code', $voter['mla_code'])->first();
+            if ($mla) {
+                $mlaId = $mla['id'];
+            }
+        }
 
         $data = [
             'complaint_id' => $model->generateComplaintId($userId),
             'user_id' => $userId,
             'district' => $voter['district'] ?? '',
             'constituency' => $voter['constituency'] ?? '',
-            'mla' => $voter['mla_name'] ?? ($voter['mla_id'] ?? ''),
+            'mla' => $mlaId, // Store MLA ID consistently
             'title' => trim((string) $this->request->getPost('title')),
             'location' => $location,
-            'village' => $village ,
+            'village' => $village,
             'priority' => $this->request->getPost('priority'),
             'description' => trim((string) $this->request->getPost('description')),
             'attachment' => $attachment,
             'status' => 'Pending',
-            'voter_id' => $voter['voter_id'] ?? ($voter['voter_id'] ?? ''),
-        ];          
+            'voter_id' => $voter['voter_id'] ?? '',
+        ];
 
         if ($model->insert($data)) {
             return redirect()->to(base_url('user/complaint'))->with('success', 'Complaint submitted successfully');
@@ -147,7 +175,7 @@ class Complaint extends BaseController
             'location' => trim((string) $this->request->getPost('location')),
             'priority' => $this->request->getPost('priority'),
             'description' => trim((string) $this->request->getPost('description')),
-            'village' => $village ,
+            'village' => $village,
         ];
 
         $attachment = $this->uploadAttachment();

@@ -29,8 +29,6 @@
         rel="stylesheet">
     <style>
 
-     
-
         /* ===================================================== */
         /* PREMIUM COMPLAINT MANAGEMENT - White + Beige + Gold Theme
            All Animations: Hover Lift, 3D, Glow Border, Shine, Pulse
@@ -109,24 +107,18 @@
         }
 
         @keyframes floatGlow {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: translateY(0px) scale(1);
             }
-
             50% {
                 transform: translateY(20px) scale(1.05);
             }
         }
 
         @keyframes floatGlowDelayed {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: translateY(0px) scale(1);
             }
-
             50% {
                 transform: translateY(-20px) scale(1.08);
             }
@@ -213,13 +205,10 @@
         }
 
         @keyframes pulseGoldBorder {
-
-            0%,
-            100% {
+            0%, 100% {
                 border-color: rgba(255, 255, 255, 0.3);
                 box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
             }
-
             50% {
                 border-color: rgba(255, 255, 255, 0.7);
                 box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
@@ -278,7 +267,6 @@
             0% {
                 background-position: -100% 0;
             }
-
             100% {
                 background-position: 200% 0;
             }
@@ -345,7 +333,6 @@
                 height: 0;
                 opacity: 0.6;
             }
-
             100% {
                 width: 200px;
                 height: 200px;
@@ -421,7 +408,6 @@
         .mla_table tbody tr {
             background: rgba(255, 255, 255, 0.8);
             transition: all var(--transition-base);
-            cursor: pointer;
         }
 
         .mla_table tbody tr:hover {
@@ -477,35 +463,6 @@
             color: var(--success);
         }
 
-        .expand_btn {
-            background: none;
-            border: none;
-            color: var(--gold);
-            font-size: 18px;
-            transition: all var(--transition-fast);
-            cursor: pointer;
-        }
-
-        .expand_btn:hover {
-            transform: scale(1.2);
-            color: var(--gold-dark);
-        }
-
-        .complaint_sub_row {
-            background: rgba(250, 246, 237, 0.6) !important;
-        }
-
-        .complaint_sub_row td {
-            padding: 10px 20px 10px 50px !important;
-            font-size: 13px !important;
-            border-bottom: 1px dashed rgba(212, 175, 55, 0.2) !important;
-        }
-
-        .complaint_sub_row .sub-complaint-id {
-            font-weight: 700;
-            color: var(--gold-dark);
-        }
-
         /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -531,28 +488,22 @@
             .complaint_header {
                 padding: 35px;
             }
-
             .header_content {
                 flex-direction: column;
                 align-items: flex-start;
             }
-
             .header_content h1 {
                 font-size: 32px;
             }
-
             .header_stats {
                 width: 100%;
             }
-
             .stat_card {
                 flex: 1;
             }
-
             .mla_table {
                 font-size: 12px;
             }
-
             .mla_table thead th,
             .mla_table tbody td {
                 padding: 10px 12px;
@@ -563,32 +514,25 @@
             .complaint_header {
                 padding: 25px;
             }
-
             .header_content h1 {
                 font-size: 26px;
             }
-
             .stat_card h2 {
                 font-size: 28px;
             }
-
             .stat_card {
                 padding: 15px;
                 min-width: 120px;
             }
-
             .complaint_filter_box {
                 padding: 20px;
             }
-
             .mla_tracking_section {
                 padding: 15px;
             }
-
             .mla_table thead {
                 display: none;
             }
-
             .mla_table tbody tr {
                 display: block;
                 margin-bottom: 15px;
@@ -597,7 +541,6 @@
                 background: white;
                 box-shadow: var(--shadow-sm);
             }
-
             .mla_table tbody td {
                 display: flex;
                 justify-content: space-between;
@@ -607,20 +550,14 @@
                 border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
                 border-radius: 0 !important;
             }
-
             .mla_table tbody td:last-child {
                 border-bottom: none;
             }
-
             .mla_table tbody td::before {
                 content: attr(data-label);
                 font-weight: 700;
                 color: #64748B;
                 font-size: 12px;
-            }
-
-            .complaint_sub_row td {
-                padding-left: 20px !important;
             }
         }
 
@@ -674,716 +611,331 @@
                 margin: 1.5rem 15px 20px 15px !important;
                 padding: 0.9rem 1rem !important;
             }
-
             .footer p {
                 font-size: 0.8rem;
             }
+        }
+
+        /* Hidden rows for filtering */
+        .mla-row-hidden {
+            display: none !important;
         }
     </style>
 </head>
 
 <body class="inner_page widgets">
    <?php include "common/header.php"?>  
-                <!-- ===================================================== -->
-
-                <div class="container-fluid mt-5">
-
-                    <!-- HEADER -->
-                    <div class="complaint_header shadow-lg">
-                        <div class="header_overlay"></div>
-
-                        <div class="header_content">
-                            <div>
-                                <h1>
-                                    <i class="fas fa-comment-dots me-2"></i> MLA Complaint Monitoring System
-                                </h1>
-
-                                <p>
-                                    Track and monitor complaints assigned to each MLA. View performance metrics and complaint details.
-                                </p>
-                            </div>
-
-                            <div class="header_stats">
-                                <div class="stat_card pulse-stat">
-                                    <h2 id="totalComplaint">
-    <?= $statistics['total']; ?>
-</h2>
-                                    <span><i class="fas fa-chart-line me-1"></i> Total Complaints</span>
-                                </div>
-
-                                <div class="stat_card">
-                                    <h2 id="pendingComplaint">
-    <?= $statistics['pending']; ?>
-</h2>
-                                    <span><i class="fas fa-clock me-1"></i> Pending</span>
-                                </div>
-
-                                <div class="stat_card">
-                                    <h2 id="resolvedComplaint">
-    <?= $statistics['resolved']; ?>
-</h2>
-                                    <span><i class="fas fa-check-circle me-1"></i> Resolved</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- FILTER SECTION -->
-                    <div class="complaint_filter_box mt-4">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 mb-3">
-                                <label><i class="fas fa-search me-1" style="color: var(--gold);"></i> Search</label>
-                                <input type="text" class="form-control complaint_input" id="searchInput"
-                                    placeholder="Search by MLA / Complaint ID / Voter ID">
-                            </div>
-
-                            <div class="col-lg-3 col-md-6 mb-3">
-                                <label><i class="fas fa-flag me-1" style="color: var(--gold);"></i> Priority</label>
-                                <select class="form-select complaint_input" id="priorityFilter">
-                                    <option value="all">All</option>
-                                    <option value="High">High</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Low">Low</option>
-                                </select>
-                            </div>
-
-                            <div class="col-lg-3 col-md-6 mb-3">
-                                <label><i class="fas fa-chart-simple me-1" style="color: var(--gold);"></i> Status</label>
-                                <select class="form-select complaint_input" id="statusFilter">
-                                    <option value="all">All</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="In Progress">In Progress</option>
-                                    <option value="Resolved">Resolved</option>
-                                    <option value="Escalated">Escalated</option>
-                                </select>
-                            </div>
-
-                            <div class="col-lg-2 col-md-12 mb-3 d-flex align-items-end">
-                                <button class="btn complaint_btn w-100" onclick="filterComplaints()">
-                                    <i class="fas fa-filter me-2"></i> Filter
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ===================================================== -->
-                    <!-- MLA TRACKING SECTION -->
-                    <!-- ===================================================== -->
-                    <div class="mla_tracking_section">
-                        <div class="section-title">
-                            <i class="fas fa-users me-2"></i> MLA-wise Complaint Tracker
-                            <span style="font-size: 14px; font-weight: 400; color: #64748B; margin-left: auto;">
-                                <i class="fas fa-info-circle me-1"></i> Click on any MLA to view their complaints
-                            </span>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table class="mla_table" id="mlaTable">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 22%;">MLA Name</th>
-                                        <th style="width: 15%;">Constituency</th>
-                                        <th style="width: 9%;">Total</th>
-                                        <th style="width: 9%;">Pending</th>
-                                        <th style="width: 12%;">In Progress</th>
-                                        <th style="width: 9%;">Resolved</th>
-                                        <th style="width: 18%;">Performance</th>
-                                    
-                                    </tr>
-                                </thead>
-                               <tbody id="mlaTableBody">
-
-<?php if(!empty($mlaComplaints)): ?>
-
-<?php foreach($mlaComplaints as $mla): ?>
-
-<tr>
-
-<td data-label="MLA Name">
-
-<strong style="color:#0F172A;">
-<?= $mla['mla']; ?>
-</strong>
-
-</td>
-
-
-<td data-label="Constituency">
-
-<?= $mla['constituency']; ?>
-
-</td>
-
-
-<td data-label="Total">
-
-<span class="mla_stats_badge"
-style="background:rgba(59,130,246,0.12);color:var(--info);">
-
-<?= $mla['total']; ?>
-
-</span>
-
-</td>
-
-
-<td data-label="Pending">
-
-<span class="mla_stats_badge high">
-
-<?= $mla['pending']; ?>
-
-</span>
-
-</td>
-
-
-<td data-label="In Progress">
-
-<span class="mla_stats_badge medium">
-
-0
-
-</span>
-
-</td>
-
-
-<td data-label="Resolved">
-
-<span class="mla_stats_badge low">
-
-<?= $mla['resolved']; ?>
-
-</span>
-
-</td>
-
-
-<td data-label="Performance">
-
-<?php
-
-$performance = 0;
-
-if($mla['total'] > 0)
-{
-    $performance =
-    round(($mla['resolved']/$mla['total'])*100);
-}
-
-?>
-
-<div class="progress" style="width:80px;height:6px;">
-
-<div class="progress-bar"
-
-style="
-width:<?= $performance ?>%;
-background:var(--success)!important;
-border-radius:20px;
-">
-
-</div>
-
-</div>
-
-
-<span>
-<?= $performance ?>%
-</span>
-
-
-</td>
-
-
-
-
-
-</tr>
-
-
-<?php endforeach; ?>
-
-
-<?php else: ?>
-
-
-<tr>
-
-<td colspan="8" style="text-align:center;">
-
-No complaints found
-
-</td>
-
-</tr>
-
-
-<?php endif; ?>
-
-
-</tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                <!-- footer -->
-                <div class="container-fluid">
-                    <div class="footer">
-                        <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- end dashboard inner -->
-        </div>
-    </div>
-    </div>
-
-    <!-- jQuery -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <!-- wow animation -->
-    <script src="js/animate.js"></script>
-    <!-- select country -->
-    <script src="js/bootstrap-select.js"></script>
-    <!-- owl carousel -->
-    <script src="js/owl.carousel.js"></script>
-    <!-- chart js -->
-    <script src="js/Chart.min.js"></script>
-    <script src="js/Chart.bundle.min.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/analyser.js"></script>
-    <!-- nice scrollbar -->
-   
-    <!-- custom js -->
-    <script src="js/custom.js"></script>
-    <!-- calendar file css -->
-    <script src="js/semantic.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // =====================================================
-        // COMPLAINT DATA
-        // =====================================================
-        // const complaintsData = [
-        //     {
-        //         id: "CMP1001",
-        //         title: "Road Damage Issue",
-        //         priority: "High",
-        //         voterId: "VTR8899",
-        //         mla: "MLA Rajesh Patil",
-        //         constituency: "Karad North",
-        //         department: "Roads Department",
-        //         status: "Pending",
-        //         escalation: "Level 2",
-        //         progress: 60,
-        //         description: "Severe road damage near main market causing traffic congestion and accidents.",
-        //         createdAt: "2025-05-15",
-        //         resolvedDate: null
-        //     },
-        //     {
-        //         id: "CMP1045",
-        //         title: "Water Leakage Problem",
-        //         priority: "Medium",
-        //         voterId: "VTR4521",
-        //         mla: "MLA Sunil Shinde",
-        //         constituency: "Satara",
-        //         department: "Water Supply",
-        //         status: "In Progress",
-        //         escalation: "Level 1",
-        //         progress: 80,
-        //         description: "Continuous water leakage from main pipeline wasting significant water.",
-        //         createdAt: "2025-05-10",
-        //         resolvedDate: null
-        //     },
-        //     {
-        //         id: "CMP1100",
-        //         title: "Street Light Failure",
-        //         priority: "Low",
-        //         voterId: "VTR9921",
-        //         mla: "MLA Ashok Pawar",
-        //         constituency: "Pune",
-        //         department: "Electricity",
-        //         status: "Resolved",
-        //         escalation: "Level 0",
-        //         progress: 100,
-        //         description: "Street lights not working for over a week in the colony area.",
-        //         createdAt: "2025-05-01",
-        //         resolvedDate: "2025-05-20"
-        //     },
-        //     {
-        //         id: "CMP1125",
-        //         title: "Garbage Collection Issue",
-        //         priority: "High",
-        //         voterId: "VTR3344",
-        //         mla: "MLA Meena Tai",
-        //         constituency: "Mumbai South",
-        //         department: "Health",
-        //         status: "In Progress",
-        //         escalation: "Level 1",
-        //         progress: 45,
-        //         description: "Irregular garbage collection leading to unhygienic conditions.",
-        //         createdAt: "2025-05-18",
-        //         resolvedDate: null
-        //     },
-        //     {
-        //         id: "CMP1150",
-        //         title: "School Building Repair",
-        //         priority: "Medium",
-        //         voterId: "VTR7788",
-        //         mla: "MLA Anand Rao",
-        //         constituency: "Nagpur Central",
-        //         department: "Education",
-        //         status: "Pending",
-        //         escalation: "Level 0",
-        //         progress: 20,
-        //         description: "School building requires urgent repairs before monsoon.",
-        //         createdAt: "2025-05-20",
-        //         resolvedDate: null
-        //     },
-        //     {
-        //         id: "CMP1175",
-        //         title: "Power Outage Issue",
-        //         priority: "High",
-        //         voterId: "VTR5566",
-        //         mla: "MLA Vijay Kumar",
-        //         constituency: "Thane",
-        //         department: "Electricity",
-        //         status: "Resolved",
-        //         escalation: "Level 2",
-        //         progress: 100,
-        //         description: "Frequent power outages affecting daily life.",
-        //         createdAt: "2025-05-05",
-        //         resolvedDate: "2025-05-22"
-        //     },
-        //     {
-        //         id: "CMP1180",
-        //         title: "Drainage Blockage",
-        //         priority: "High",
-        //         voterId: "VTR1122",
-        //         mla: "MLA Rajesh Patil",
-        //         constituency: "Karad North",
-        //         department: "Health",
-        //         status: "Pending",
-        //         escalation: "Level 1",
-        //         progress: 30,
-        //         description: "Severe drainage blockage causing water logging in residential area.",
-        //         createdAt: "2025-05-19",
-        //         resolvedDate: null
-        //     },
-        //     {
-        //         id: "CMP1190",
-        //         title: "Electricity Meter Issue",
-        //         priority: "Low",
-        //         voterId: "VTR3345",
-        //         mla: "MLA Sunil Shinde",
-        //         constituency: "Satara",
-        //         department: "Electricity",
-        //         status: "Resolved",
-        //         escalation: "Level 0",
-        //         progress: 100,
-        //         description: "Faulty electricity meter showing incorrect readings.",
-        //         createdAt: "2025-05-12",
-        //         resolvedDate: "2025-05-25"
-        //     },
-        //     {
-        //         id: "CMP1200",
-        //         title: "Road Safety Measures",
-        //         priority: "Medium",
-        //         voterId: "VTR9988",
-        //         mla: "MLA Meena Tai",
-        //         constituency: "Mumbai South",
-        //         department: "Roads Department",
-        //         status: "In Progress",
-        //         escalation: "Level 1",
-        //         progress: 55,
-        //         description: "Need speed bumps and warning signs on accident-prone road.",
-        //         createdAt: "2025-05-21",
-        //         resolvedDate: null
-        //     }
-        // ];
-
-        // =====================================================
-        // COUNTER ANIMATION
-        // =====================================================
-        function animateCounter(elementId, targetValue) {
-            const element = document.getElementById(elementId);
-            if (!element) return;
-            let current = 0;
-            const increment = targetValue / 50;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= targetValue) {
-                    element.textContent = targetValue;
-                    clearInterval(timer);
-                } else {
-                    element.textContent = Math.floor(current);
-                }
-            }, 20);
-        }
-
-        // =====================================================
-        // UPDATE STATISTICS
-        // =====================================================
-        function updateStats() {
-            const total = complaintsData.length;
-            const pending = complaintsData.filter(c => c.status === "Pending" || c.status === "In Progress").length;
-            const resolved = complaintsData.filter(c => c.status === "Resolved").length;
-
-            animateCounter("totalComplaint", total);
-            animateCounter("pendingComplaint", pending);
-            animateCounter("resolvedComplaint", resolved);
-        }
-
-        // =====================================================
-        // RENDER MLA TRACKING TABLE
-        // =====================================================
-        function renderMLATracking(complaints) {
-            const tbody = document.getElementById('mlaTableBody');
-            const dataToUse = complaints || complaintsData;
-            
-            // Group complaints by MLA
-            const mlaMap = new Map();
-            
-            dataToUse.forEach(complaint => {
-                if (!mlaMap.has(complaint.mla)) {
-                    mlaMap.set(complaint.mla, {
-                        mla: complaint.mla,
-                        constituency: complaint.constituency,
-                        complaints: [],
-                        total: 0,
-                        pending: 0,
-                        inProgress: 0,
-                        resolved: 0,
-                        highPriority: 0,
-                        mediumPriority: 0,
-                        lowPriority: 0
-                    });
-                }
-                
-                const mlaData = mlaMap.get(complaint.mla);
-                mlaData.complaints.push(complaint);
-                mlaData.total++;
-                
-                if (complaint.status === "Pending") mlaData.pending++;
-                else if (complaint.status === "In Progress") mlaData.inProgress++;
-                else if (complaint.status === "Resolved") mlaData.resolved++;
-                
-                if (complaint.priority === "High") mlaData.highPriority++;
-                else if (complaint.priority === "Medium") mlaData.mediumPriority++;
-                else if (complaint.priority === "Low") mlaData.lowPriority++;
-            });
-
-            if (mlaMap.size === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="8" style="text-align: center; padding: 40px; color: #64748B;">
-                            <i class="fas fa-inbox" style="font-size: 36px; display: block; margin-bottom: 15px;"></i>
-                            No complaints found matching your filters
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            let html = '';
-            let index = 0;
-            
-            mlaMap.forEach((mlaData) => {
-                const performance = mlaData.total > 0 
-                    ? Math.round((mlaData.resolved / mlaData.total) * 100) 
-                    : 0;
-                
-                let performanceColor = '';
-                if (performance >= 80) performanceColor = 'success';
-                else if (performance >= 50) performanceColor = 'warning';
-                else performanceColor = 'danger';
-                
-                const rowId = `mla-row-${index}`;
-                const subRowId = `mla-sub-${index}`;
-                
-                html += `
-                    <tr id="${rowId}" onclick="toggleMLARow('${rowId}', '${subRowId}')" style="cursor: pointer;">
-                        <td data-label="MLA Name">
-                            <strong style="color: #0F172A;">${mlaData.mla}</strong>
-                        </td>
-                        <td data-label="Constituency">${mlaData.constituency}</td>
-                        <td data-label="Total">
-                            <span class="mla_stats_badge" style="background: rgba(59, 130, 246, 0.12); color: var(--info);">
-                                ${mlaData.total}
-                            </span>
-                        </td>
-                        <td data-label="Pending">
-                            <span class="mla_stats_badge high">${mlaData.pending}</span>
-                        </td>
-                        <td data-label="In Progress">
-                            <span class="mla_stats_badge medium">${mlaData.inProgress}</span>
-                        </td>
-                        <td data-label="Resolved">
-                            <span class="mla_stats_badge low">${mlaData.resolved}</span>
-                        </td>
-                        <td data-label="Performance">
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="progress" style="width: 80px; height: 6px;">
-                                    <div class="progress-bar bg-${performanceColor}" 
-                                         style="width: ${performance}%; border-radius: 20px; 
-                                                background: ${performance >= 80 ? 'var(--success)' : performance >= 50 ? 'var(--warning)' : 'var(--danger)'} !important;">
-                                    </div>
-                                </div>
-                                <span style="font-size: 12px; font-weight: 700; color: #1E293B;">${performance}%</span>
-                            </div>
-                        </td>
-                        <td data-label="Expand">
-                            <button class="expand_btn" onclick="event.stopPropagation(); toggleMLARow('${rowId}', '${subRowId}')">
-                                <i class="fas fa-chevron-down" id="${rowId}-icon"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr id="${subRowId}" style="display: none;" class="complaint_sub_row">
-                        <td colspan="7">
-                            <div style="padding: 5px 0;">
-                                <strong style="color: var(--gold-dark); font-size: 14px;">
-                                    <i class="fas fa-list me-2"></i>Complaints for ${mlaData.mla} (${mlaData.total} complaints)
-                                </strong>
-                                <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">
-                                    ${mlaData.complaints.map(c => `
-                                        <div style="display: flex; justify-content: space-between; align-items: center; 
-                                             padding: 6px 12px; background: rgba(255,255,255,0.7); border-radius: 8px;
-                                             border-left: 3px solid ${c.priority === 'High' ? 'var(--danger)' : c.priority === 'Medium' ? 'var(--warning)' : 'var(--success)'};">
-                                            <div>
-                                                <span class="sub-complaint-id">${c.id}</span>
-                                                <span style="color: #475569; margin-left: 10px;">${c.title}</span>
-                                                <span style="color: #94A3B8; font-size: 11px; margin-left: 10px;">${c.voterId}</span>
-                                            </div>
-                                            <div>
-                                                <span class="status ${c.status === 'Pending' ? 'pending' : c.status === 'In Progress' ? 'progress_status' : 'resolved'}" 
-                                                      style="padding: 3px 10px; border-radius: 50px; font-size: 10px; font-weight: 700;">
-                                                    ${c.status}
-                                                </span>
-                                                <span class="priority_badge ${c.priority === 'High' ? 'high_priority' : c.priority === 'Medium' ? 'medium_priority' : 'low_priority'}" 
-                                                      style="padding: 2px 10px; font-size: 10px; margin-left: 8px; border-radius: 50px;">
-                                                    ${c.priority}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                index++;
-            });
-            
-            tbody.innerHTML = html;
-        }
-
-        // =====================================================
-        // TOGGLE MLA ROW EXPAND
-        // =====================================================
-        function toggleMLARow(rowId, subRowId) {
-            const subRow = document.getElementById(subRowId);
-            const icon = document.getElementById(`${rowId}-icon`);
-            
-            if (subRow.style.display === 'none') {
-                subRow.style.display = 'table-row';
-                icon.className = 'fas fa-chevron-up';
-                document.getElementById(rowId).classList.add('active-row');
-            } else {
-                subRow.style.display = 'none';
-                icon.className = 'fas fa-chevron-down';
-                document.getElementById(rowId).classList.remove('active-row');
-            }
-        }
-
-        // =====================================================
-        // FILTER COMPLAINTS
-        // =====================================================
-       function filterComplaints() {
-
-    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-    const status = document.getElementById("statusFilter").value;
-
-    const rows = document.querySelectorAll("#mlaTableBody tr");
-
-    rows.forEach(row => {
-
-        // Skip complaint sub rows
-        if(row.classList.contains("complaint_sub_row")){
-            return;
-        }
-
-        const mlaName = row.cells[0]?.innerText.toLowerCase() || "";
-        const constituency = row.cells[1]?.innerText.toLowerCase() || "";
-        const pending = row.cells[3]?.innerText || "";
-        const resolved = row.cells[5]?.innerText || "";
-
-        let show = true;
-
-
-        // Search MLA / Constituency
-        if(searchTerm){
-
-            if(
-                !mlaName.includes(searchTerm) &&
-                !constituency.includes(searchTerm)
-            ){
-                show = false;
-            }
-
-        }
-
-
-        // Status filter
-        if(status !== "all"){
-
-            if(status === "Pending" && pending == "0"){
-                show = false;
-            }
-
-            if(status === "Resolved" && resolved == "0"){
-                show = false;
-            }
-
-        }
-
-
-        if(show){
-            row.style.display = "";
-        }
-        else{
-            row.style.display = "none";
-        }
-
-
-    });
-
-}
-        // =====================================================
-        // SEARCH INPUT - LIVE SEARCH
-        // =====================================================
-      document.getElementById('searchInput')
-.addEventListener('keyup', function(){
-    filterComplaints();
-});
-        // =====================================================
-        // FILTER CHANGES - AUTO FILTER
-        // =====================================================
-        document.getElementById('priorityFilter').addEventListener('change', filterComplaints);
-        document.getElementById('statusFilter').addEventListener('change', filterComplaints);
-
-        // =====================================================
-        // INITIALIZATION
-        // =====================================================
-       $(document).ready(function() {
-
-    updateStats();
-
-});
-    </script>
-    <script src="header.js"></script>
+   <!-- ===================================================== -->
+
+   <div class="container-fluid mt-5">
+
+       <!-- HEADER -->
+       <div class="complaint_header shadow-lg">
+           <div class="header_overlay"></div>
+
+           <div class="header_content">
+               <div>
+                   <h1>
+                       <i class="fas fa-comment-dots me-2"></i> MLA Complaint Monitoring System
+                   </h1>
+
+                   <p>
+                       Track and monitor complaints assigned to each MLA. View performance metrics and complaint details.
+                   </p>
+               </div>
+
+               <div class="header_stats">
+                   <div class="stat_card pulse-stat">
+                       <h2 id="totalComplaint">
+                           <?= (int) ($statistics['total'] ?? 0); ?>
+                       </h2>
+                       <span><i class="fas fa-chart-line me-1"></i> Total Complaints</span>
+                   </div>
+
+                   <div class="stat_card">
+                       <h2 id="pendingComplaint">
+                           <?= (int) ($statistics['pending'] ?? 0); ?>
+                       </h2>
+                       <span><i class="fas fa-clock me-1"></i> Pending</span>
+                   </div>
+
+                   <div class="stat_card">
+                       <h2 id="resolvedComplaint">
+                           <?= (int) ($statistics['resolved'] ?? 0); ?>
+                       </h2>
+                       <span><i class="fas fa-check-circle me-1"></i> Resolved</span>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+       <!-- FILTER SECTION -->
+       <div class="complaint_filter_box mt-4">
+           <div class="row">
+               <div class="col-lg-4 col-md-6 mb-3">
+                   <label><i class="fas fa-search me-1" style="color: var(--gold);"></i> Search</label>
+                   <input type="text" class="form-control complaint_input" id="searchInput"
+                       placeholder="Search by MLA Name or Constituency">
+               </div>
+
+               <div class="col-lg-3 col-md-6 mb-3">
+                   <label><i class="fas fa-chart-simple me-1" style="color: var(--gold);"></i> Status Filter</label>
+                   <select class="form-select complaint_input" id="statusFilter">
+                       <option value="all">All MLAs</option>
+                       <option value="pending">Has Pending Complaints</option>
+                       <option value="resolved">Has Resolved Complaints</option>
+                       <option value="no_complaints">No Complaints</option>
+                   </select>
+               </div>
+
+               <div class="col-lg-2 col-md-12 mb-3 d-flex align-items-end">
+                   <button class="btn complaint_btn w-100" onclick="filterTable()">
+                       <i class="fas fa-filter me-2"></i> Filter
+                   </button>
+               </div>
+
+               <div class="col-lg-3 col-md-12 mb-3 d-flex align-items-end justify-content-md-end">
+                   <button class="btn complaint_btn w-100" onclick="resetFilters()" style="background: linear-gradient(135deg, #64748B, #475569);">
+                       <i class="fas fa-undo me-2"></i> Reset
+                   </button>
+               </div>
+           </div>
+       </div>
+
+       <!-- ===================================================== -->
+       <!-- MLA TRACKING SECTION -->
+       <!-- ===================================================== -->
+       <div class="mla_tracking_section">
+
+           <div class="section-title">
+               <i class="fas fa-users me-2"></i>
+               MLA-wise Complaint Tracker
+
+               <span style="
+                   font-size:14px;
+                   font-weight:400;
+                   color:#64748B;
+                   margin-left:auto;
+               ">
+                   <i class="fas fa-info-circle me-1"></i>
+                   Complaint Summary
+               </span>
+           </div>
+
+           <div class="table-responsive">
+
+               <table class="mla_table" id="mlaTable">
+                   <thead>
+                       <tr>
+                           <th style="width:30%;">MLA Name</th>
+                           <th style="width:25%;">Constituency</th>
+                           <th style="width:15%;">Total</th>
+                           <th style="width:15%;">Pending</th>
+                           <th style="width:15%;">Resolved</th>
+                       </tr>
+                   </thead>
+
+                   <tbody id="mlaTableBody">
+                       <?php if (!empty($mlaComplaints)): ?>
+                           <?php foreach ($mlaComplaints as $mla): ?>
+                               <tr data-mla-name="<?= esc(strtolower($mla['mla_name'] ?? '')); ?>"
+                                   data-constituency="<?= esc(strtolower($mla['constituency_name'] ?? '')); ?>"
+                                   data-total="<?= (int) ($mla['total'] ?? 0); ?>"
+                                   data-pending="<?= (int) ($mla['pending'] ?? 0); ?>"
+                                   data-resolved="<?= (int) ($mla['resolved'] ?? 0); ?>">
+                                   <!-- MLA NAME -->
+                                   <td data-label="MLA Name">
+                                       <strong style="color:#0F172A;">
+                                           <?= esc($mla['mla_name'] ?? 'N/A'); ?>
+                                       </strong>
+                                   </td>
+
+                                   <!-- CONSTITUENCY -->
+                                   <td data-label="Constituency">
+                                       <?= esc($mla['constituency_name'] ?? 'N/A'); ?>
+                                   </td>
+
+                                   <!-- TOTAL -->
+                                   <td data-label="Total">
+                                       <span class="mla_stats_badge" style="background:rgba(59,130,246,0.12); color:#2563EB;">
+                                           <?= (int) ($mla['total'] ?? 0); ?>
+                                       </span>
+                                   </td>
+
+                                   <!-- PENDING -->
+                                   <td data-label="Pending">
+                                       <span class="mla_stats_badge high">
+                                           <?= (int) ($mla['pending'] ?? 0); ?>
+                                       </span>
+                                   </td>
+
+                                   <!-- RESOLVED -->
+                                   <td data-label="Resolved">
+                                       <span class="mla_stats_badge low">
+                                           <?= (int) ($mla['resolved'] ?? 0); ?>
+                                       </span>
+                                   </td>
+                               </tr>
+                           <?php endforeach; ?>
+                       <?php else: ?>
+                           <tr>
+                               <td colspan="5" style="text-align:center; padding:40px; color:#64748B;">
+                                   <i class="fas fa-inbox" style="font-size:36px; display:block; margin-bottom:15px;"></i>
+                                   No MLA data found.
+                               </td>
+                           </tr>
+                       <?php endif; ?>
+                   </tbody>
+               </table>
+
+           </div>
+
+           <!-- Results count -->
+           <div class="mt-3 text-muted" style="font-size:14px;">
+               Showing <span id="visibleCount">0</span> MLAs
+           </div>
+
+       </div>
+
+       <!-- footer -->
+       <div class="container-fluid">
+           <div class="footer">
+               <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
+           </div>
+       </div>
+   </div>
+   <!-- end dashboard inner -->
+
+   <!-- jQuery -->
+   <script src="js/jquery.min.js"></script>
+   <script src="js/popper.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <!-- wow animation -->
+   <script src="js/animate.js"></script>
+   <!-- select country -->
+   <script src="js/bootstrap-select.js"></script>
+   <!-- owl carousel -->
+   <script src="js/owl.carousel.js"></script>
+   <!-- chart js -->
+   <script src="js/Chart.min.js"></script>
+   <script src="js/Chart.bundle.min.js"></script>
+   <script src="js/utils.js"></script>
+   <script src="js/analyser.js"></script>
+   <!-- nice scrollbar -->
+   <!-- custom js -->
+   <script src="js/custom.js"></script>
+   <!-- calendar file css -->
+   <script src="js/semantic.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+   <script>
+       // =====================================================
+       // COUNTER ANIMATION
+       // =====================================================
+       function animateCounter(elementId, targetValue) {
+           const element = document.getElementById(elementId);
+           if (!element) return;
+           
+           // Get the numeric value from the element
+           const currentText = element.textContent || '0';
+           let current = parseInt(currentText.replace(/,/g, '')) || 0;
+           
+           if (current === targetValue) return;
+           
+           const increment = (targetValue - current) / 40;
+           const timer = setInterval(() => {
+               current += increment;
+               if (Math.abs(current - targetValue) < 0.5) {
+                   element.textContent = targetValue;
+                   clearInterval(timer);
+               } else {
+                   element.textContent = Math.round(current);
+               }
+           }, 20);
+       }
+
+       // =====================================================
+       // FILTER TABLE
+       // =====================================================
+       function filterTable() {
+           const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+           const statusFilter = document.getElementById('statusFilter').value;
+           
+           const rows = document.querySelectorAll('#mlaTableBody tr');
+           let visibleCount = 0;
+           
+           rows.forEach(row => {
+               // Skip the "no data" row
+               if (row.querySelector('td[colspan]')) {
+                   return;
+               }
+               
+               const mlaName = row.dataset.mlaName || '';
+               const constituency = row.dataset.constituency || '';
+               const total = parseInt(row.dataset.total) || 0;
+               const pending = parseInt(row.dataset.pending) || 0;
+               const resolved = parseInt(row.dataset.resolved) || 0;
+               
+               let show = true;
+               
+               // Search filter
+               if (searchTerm) {
+                   if (!mlaName.includes(searchTerm) && !constituency.includes(searchTerm)) {
+                       show = false;
+                   }
+               }
+               
+               // Status filter
+               if (show && statusFilter !== 'all') {
+                   if (statusFilter === 'pending' && pending === 0) {
+                       show = false;
+                   } else if (statusFilter === 'resolved' && resolved === 0) {
+                       show = false;
+                   } else if (statusFilter === 'no_complaints' && total > 0) {
+                       show = false;
+                   }
+               }
+               
+               if (show) {
+                   row.style.display = '';
+                   visibleCount++;
+               } else {
+                   row.style.display = 'none';
+               }
+           });
+           
+           document.getElementById('visibleCount').textContent = visibleCount;
+       }
+
+       // =====================================================
+       // RESET FILTERS
+       // =====================================================
+       function resetFilters() {
+           document.getElementById('searchInput').value = '';
+           document.getElementById('statusFilter').value = 'all';
+           filterTable();
+       }
+
+       // =====================================================
+       // LIVE SEARCH
+       // =====================================================
+       document.getElementById('searchInput').addEventListener('keyup', filterTable);
+       document.getElementById('statusFilter').addEventListener('change', filterTable);
+
+       // =====================================================
+       // INITIALIZATION
+       // =====================================================
+       document.addEventListener('DOMContentLoaded', function() {
+           // Animate counters
+           animateCounter('totalComplaint', <?= (int) ($statistics['total'] ?? 0); ?>);
+           animateCounter('pendingComplaint', <?= (int) ($statistics['pending'] ?? 0); ?>);
+           animateCounter('resolvedComplaint', <?= (int) ($statistics['resolved'] ?? 0); ?>);
+           
+           // Show initial count
+           filterTable();
+       });
+   </script>
+   <script src="header.js"></script>
 </body>
 
 </html>

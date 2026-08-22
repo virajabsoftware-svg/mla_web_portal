@@ -12,7 +12,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <<link rel="stylesheet" href="<?= base_url('assets/user/css/style.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/user/css/style.css') ?>">
     <!-- Bootstrap 5 Grid & Utilities -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -147,11 +147,9 @@
             0% {
                 background-position: 0% 50%;
             }
-
             50% {
                 background-position: 100% 50%;
             }
-
             100% {
                 background-position: 0% 50%;
             }
@@ -314,11 +312,9 @@
             #editComplaintModal .modal-footer {
                 padding: 1rem;
             }
-
             #editComplaintModal .modal-footer {
                 flex-direction: column-reverse;
             }
-
             #editComplaintModal .modal-footer .btn {
                 width: 100%;
             }
@@ -481,7 +477,6 @@
                 opacity: 0;
                 transform: translateY(8px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -505,15 +500,12 @@
         .stat-1 {
             animation-delay: 0.05s;
         }
-
         .stat-2 {
             animation-delay: 0.1s;
         }
-
         .stat-3 {
             animation-delay: 0.15s;
         }
-
         .stat-4 {
             animation-delay: 0.2s;
         }
@@ -527,11 +519,9 @@
             0% {
                 box-shadow: 0 0 0 0 rgba(195, 200, 72, 0.5);
             }
-
             70% {
                 box-shadow: 0 0 0 8px rgba(195, 200, 72, 0);
             }
-
             100% {
                 box-shadow: 0 0 0 0 rgba(195, 200, 72, 0);
             }
@@ -542,7 +532,6 @@
             .main-content {
                 padding: 1.25rem 1.5rem;
             }
-
             .stat-number {
                 font-size: 2rem;
             }
@@ -553,15 +542,12 @@
                 padding: 1rem 1.25rem;
                 margin-left: 0;
             }
-
             body.sidebar-collapsed .main-content {
                 margin-left: 0;
             }
-
             .stat-number {
                 font-size: 1.75rem;
             }
-
             .btn-danger-custom,
             .btn-secondary-custom,
             .btn-warning-custom {
@@ -575,24 +561,19 @@
             .main-content {
                 padding: 0.875rem 1rem;
             }
-
             .stat-number {
                 font-size: 1.5rem;
             }
-
             .card-header {
                 padding: 0.875rem 1rem;
             }
-
             .card-body {
                 padding: 1rem !important;
             }
-
             .form-control,
             .form-select {
                 padding: 8px 12px;
             }
-
             .table thead th,
             .table tbody td {
                 padding: 8px;
@@ -617,71 +598,55 @@
         .fw-semibold {
             font-weight: 600;
         }
-
         .fw-bold {
             font-weight: 700;
         }
-
         .me-1 {
             margin-right: 0.25rem;
         }
-
         .me-2 {
             margin-right: 0.5rem;
         }
-
         .me-3 {
             margin-right: 1rem;
         }
-
         .mb-0 {
             margin-bottom: 0;
         }
-
         .mb-4 {
             margin-bottom: 1.5rem;
         }
-
         .mt-3 {
             margin-top: 1rem;
         }
-
         .mt-4 {
             margin-top: 1.5rem;
         }
-
         .px-3 {
             padding-left: 1rem;
             padding-right: 1rem;
         }
-
         .px-4 {
             padding-left: 1.5rem;
             padding-right: 1.5rem;
         }
-
         .text-center {
             text-align: center;
         }
-
         .fs-4 {
             font-size: 1.5rem;
         }
-
         .border-0 {
             border: none !important;
         }
-
         .container-fluid {
             padding-left: 0 !important;
             padding-right: 0 !important;
             width: 100% !important;
         }
-
         .d-flex {
             display: flex;
         }
-
         .align-items-center {
             align-items: center;
         }
@@ -690,18 +655,13 @@
             position: relative;
             margin-top: 2rem;
             padding: 18px 25px;
-
             background: var(--glass-bg);
             backdrop-filter: blur(8px);
-
             border: 1px solid rgba(195, 200, 72, 0.30);
             border-radius: 24px;
-
             box-shadow: var(--shadow-sm);
-
             text-align: center;
             overflow: hidden;
-
             transition: var(--transition-smooth);
         }
 
@@ -710,16 +670,13 @@
             content: "";
             position: absolute;
             inset: -2px;
-
             background: linear-gradient(45deg,
                     var(--lime-gold),
                     var(--olive-green),
                     var(--teal-blue),
                     var(--lime-gold));
-
             background-size: 300% 300%;
             border-radius: 26px;
-
             z-index: -1;
             opacity: 0;
             transition: 0.5s ease;
@@ -758,10 +715,8 @@
             position: absolute;
             left: 0;
             bottom: -3px;
-
             width: 0;
             height: 2px;
-
             background: var(--lime-gold);
             transition: 0.3s ease;
         }
@@ -781,7 +736,6 @@
                 border-radius: 18px;
                 margin-top: 1.5rem;
             }
-
             .footer p {
                 font-size: 0.85rem;
                 line-height: 1.6;
@@ -801,9 +755,9 @@
                 <div class="col-xl-3 col-md-6 fade-up stat-1">
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
-                           <h3 class="stat-number counter-number" id="totalComplaints">
-    <?= esc($totalComplaints ?? 0) ?>
-</h3>
+                            <h3 class="stat-number counter-number" id="totalComplaints">
+                                <?= esc($totalComplaints ?? 0) ?>
+                            </h3>
                             <p class="mb-0 text-muted fw-semibold"><i class="bi bi-folder2-open me-1"></i> Total
                                 Complaints</p>
                         </div>
@@ -812,9 +766,9 @@
                 <div class="col-xl-3 col-md-6 fade-up stat-2">
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
-                           <h3 class="stat-number counter-number" id="pendingComplaints">
-    <?= esc($pendingComplaints ?? 0) ?>
-</h3>
+                            <h3 class="stat-number counter-number" id="pendingComplaints">
+                                <?= esc($pendingComplaints ?? 0) ?>
+                            </h3>
                             <p class="mb-0 text-muted fw-semibold"><i class="bi bi-hourglass-split me-1"></i> Pending
                             </p>
                         </div>
@@ -823,9 +777,9 @@
                 <div class="col-xl-3 col-md-6 fade-up stat-3">
                     <div class="card border-0 shadow-sm dashboard-card stat-card text-center p-3">
                         <div class="card-body">
-                           <h3 class="stat-number counter-number" id="resolvedComplaints">
-    <?= esc($resolvedComplaints ?? 0) ?>
-</h3>
+                            <h3 class="stat-number counter-number" id="resolvedComplaints">
+                                <?= esc($resolvedComplaints ?? 0) ?>
+                            </h3>
                             <p class="mb-0 text-muted fw-semibold"><i class="bi bi-check-circle-fill me-1"></i> Resolved
                             </p>
                         </div>
@@ -854,29 +808,14 @@
                     <form id="complaintForm" method="post" action="<?= site_url('user/complaint/save') ?>" enctype="multipart/form-data">
                         <?= csrf_field() ?>
                         <div class="row g-3">
-                            <!--div class="col-md-3">
-                                <label class="form-label"><i class="bi bi-upc-scan"></i> Complaint ID</label>
-                                <input type="text" class="form-control bg-light" id="complaintIdField" value="CMP001245"
-                                    readonly>
-                            </div-->
                             <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-person-badge"></i> Voter ID</label>
-                                 <input
-                                type="text"
-                                class="form-control"
-                                value="<?= esc($voter_id ?? '') ?>"
-                                readonly
-                                >
-                                </div>
-                                <div class="col-md-3">
-                                <label class="form-label"><i class="bi bi-building"></i>MLA ID</label>
-                                <input
-                                type="text"
-                                class="form-control"
-                                value="<?= esc($mla_id ?? '') ?>"
-                                readonly
-                                >
-                                </div>
+                                <input type="text" class="form-control" value="<?= esc($voter_id ?? '') ?>" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label"><i class="bi bi-building"></i> MLA</label>
+                                <input type="text" class="form-control" value="<?= esc($mla_name ?? '') ?>" readonly>
+                            </div>
                             <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-flag-fill"></i> Priority</label>
                                 <select class="form-select" id="prioritySelect" name="priority">
@@ -887,59 +826,38 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-card-heading"></i> Complaint Title</label>
                                 <input type="text" class="form-control" id="complaintTitle" name="title"
                                     placeholder="Enter complaint title" required>
                             </div>
-                            <div class="col-md-4"></div>
 
                             <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-geo-alt-fill"></i> District</label>
-                                  <input
-                                        type="text"
-                                        class="form-control"
-                                        value="<?= esc($district ?? '') ?>"
-                                        readonly
-                                    >
+                                <input type="text" class="form-control" value="<?= esc($district ?? '') ?>" readonly>
                             </div>
 
                             <div class="col-md-4">
-                                    <label class="form-label"><i class="bi bi-pin-map-fill"></i> Constituency</label>
-                                    <input
-                                    type="text"
-                                    class="form-control"
-                                    value="<?= esc($constituency ?? '') ?>"
-                                    readonly
-                                    >
+                                <label class="form-label"><i class="bi bi-pin-map-fill"></i> Constituency</label>
+                                <input type="text" class="form-control" value="<?= esc($constituency ?? '') ?>" readonly>
                             </div>
-
-                           
 
                             <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-house-heart"></i> Village</label>
-                                <input type="text" class="form-control" id="villageInput"
-                                 name="village"
+                                <input type="text" class="form-control" id="villageInput" name="village"
                                     placeholder="Enter Village Name" required>
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-geo-alt"></i> Location / Landmark</label>
-                                <input type="text" class="form-control" id="locationInput"
-                                  name="location"
+                                <input type="text" class="form-control" id="locationInput" name="location"
                                     placeholder="Complaint Location / Landmark" required>
                             </div>
-
-                            <!--div class="col-md-6">
-                                <label class="form-label"><i class="bi bi-calendar-clock"></i> Submission
-                                    Timestamp</label>
-                                <input type="datetime-local" class="form-control bg-light" id="submissionDate" readonly>
-                            </div-->
 
                             <div class="col-12">
                                 <label class="form-label"><i class="bi bi-chat-text-fill"></i> Complaint
                                     Description</label>
-                                <textarea class="form-control" id="complaintDesc"  name="description" rows="4"
+                                <textarea class="form-control" id="complaintDesc" name="description" rows="4"
                                     placeholder="Describe your issue in detail..." required></textarea>
                             </div>
 
@@ -961,8 +879,6 @@
                 </div>
             </div>
 
-            
-            
             <!-- COMPLAINT HISTORY -->
             <div class="card border-0 shadow-sm dashboard-card fade-up">
                 <div class="card-header bg-white border-0 pt-4">
@@ -970,193 +886,182 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                   <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>Complaint ID</th>
-                        <th>Voter ID</th>
-                        <th>MLA ID</th>
-                        <th>Priority</th>
-                        <th>Complaint Title</th>
-                        <!--th>District</th>
-                        <th>Constituency</th-->
-                        <th>Village</th>
-                        <th>Location / Landmark</th>
-                        <th>Submission Date</th>
-                        <th>Description</th>
-                        <th>Evidence</th>
-                        <th>Status</th>
-                       
-                        <th>Action</th>
-                    </tr>
-                </thead>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Complaint ID</th>
+                                    <th>Voter ID</th>
+                                    <th>MLA</th>
+                                    <th>Priority</th>
+                                    <th>Complaint Title</th>
+                                    <th>Village</th>
+                                    <th>Location / Landmark</th>
+                                    <th>Submission Date</th>
+                                    <th>Description</th>
+                                    <th>Evidence</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
 
-        <tbody id="complaintHistoryBody">
+                            <tbody id="complaintHistoryBody">
+                                <?php if (!empty($complaints)): ?>
+                                    <?php foreach ($complaints as $complaint): ?>
+                                        <tr>
+                                            <!-- Complaint ID -->
+                                            <td>
+                                                <strong>
+                                                    <?= esc($complaint['complaint_id'] ?? '-') ?>
+                                                </strong>
+                                            </td>
 
-            <?php if (!empty($complaints)): ?>
+                                            <!-- Voter ID -->
+                                            <td>
+                                                <?= esc($complaint['voter_id'] ?? '-') ?>
+                                            </td>
 
-                <?php foreach ($complaints as $complaint): ?>
+                                            <!-- MLA - Display MLA Name instead of ID -->
+                                            <td>
+                                                <?php
+                                                    $mlaDisplay = '-';
+                                                    if (!empty($complaint['mla'])) {
+                                                        // Try to load MLA name from the mlas table
+                                                        try {
+                                                            $mlaModel = new \App\Models\MlaModel();
+                                                            $mlaData = $mlaModel->find($complaint['mla']);
+                                                            if ($mlaData) {
+                                                                $mlaDisplay = $mlaData['mla_name'] ?? $complaint['mla'];
+                                                            } else {
+                                                                // If not found by ID, check if it's stored as name
+                                                                $mlaData = $mlaModel->where('mla_name', $complaint['mla'])->first();
+                                                                if ($mlaData) {
+                                                                    $mlaDisplay = $mlaData['mla_name'];
+                                                                } elseif (is_numeric($complaint['mla'])) {
+                                                                    $mlaDisplay = 'MLA #' . $complaint['mla'];
+                                                                } else {
+                                                                    $mlaDisplay = $complaint['mla'];
+                                                                }
+                                                            }
+                                                        } catch (\Exception $e) {
+                                                            $mlaDisplay = $complaint['mla'];
+                                                        }
+                                                    }
+                                                    echo esc($mlaDisplay);
+                                                ?>
+                                            </td>
 
-                    <tr>
+                                            <!-- Priority -->
+                                            <td>
+                                                <?php
+                                                    $priority = $complaint['priority'] ?? 'Medium';
+                                                    if ($priority === 'Critical') {
+                                                        $priorityClass = 'bg-danger';
+                                                    } elseif ($priority === 'High') {
+                                                        $priorityClass = 'bg-warning text-dark';
+                                                    } elseif ($priority === 'Medium') {
+                                                        $priorityClass = 'bg-info text-dark';
+                                                    } else {
+                                                        $priorityClass = 'bg-secondary';
+                                                    }
+                                                ?>
+                                                <span class="badge <?= $priorityClass ?>">
+                                                    <?= esc($priority) ?>
+                                                </span>
+                                            </td>
 
-                        <!-- Complaint ID -->
-                        <td>
-                            <strong>
-                                <?= esc($complaint['complaint_id'] ?? '-') ?>
-                            </strong>
-                        </td>
+                                            <!-- Complaint Title -->
+                                            <td>
+                                                <?= esc($complaint['title'] ?? '-') ?>
+                                            </td>
 
-                        <!-- Voter ID -->
-                        <td>
-                            <?= esc($complaint['voter_id'] ?? '-') ?>
-                        </td>
+                                            <!-- Village -->
+                                            <td>
+                                                <?= esc($complaint['village'] ?? '-') ?>
+                                            </td>
 
-                        <!-- MLA ID -->
-                        <td>
-                            <?= esc($complaint['mla'] ?? $complaint['mla_id'] ?? '-') ?>
-                        </td>
+                                            <!-- Location -->
+                                            <td>
+                                                <?= esc($complaint['location'] ?? '-') ?>
+                                            </td>
 
-                        <!-- Priority -->
-                        <td>
-                            <?php
-                                $priority = $complaint['priority'] ?? 'Medium';
-
-                                if ($priority === 'Critical') {
-                                    $priorityClass = 'bg-danger';
-                                } elseif ($priority === 'High') {
-                                    $priorityClass = 'bg-warning text-dark';
-                                } elseif ($priority === 'Medium') {
-                                    $priorityClass = 'bg-info text-dark';
-                                } else {
-                                    $priorityClass = 'bg-secondary';
-                                }
-                            ?>
-
-                            <span class="badge <?= $priorityClass ?>">
-                                <?= esc($priority) ?>
-                            </span>
-                        </td>
-
-                        <!-- Complaint Title -->
-                        <td>
-                            <?= esc($complaint['title'] ?? '-') ?>
-                        </td>
-
-                        <!-- District -->
-                        <!--td>
-                            <?= esc($complaint['district_name'] ?? '-') ?>
-                        </td-->
-
-                        <!-- Constituency -->
-                        <!--td>
-                            <?= esc($complaint['constituency_name'] ?? '-') ?>
-                        </td>
-
-                        <!-- Village -->
-                        <td>
-                            <?= esc($complaint['village'] ?? '-') ?>
-                        </td>
-
-                        <!-- Location -->
-                        <td>
-                            <?= esc($complaint['location'] ?? '-') ?>
-                        </td>
-
-                        <!-- Submission Date -->
-                        <td>
-
-                         <?= date('d-M-Y', strtotime($complaint['created_at'])) ?><br>
+                                            <!-- Submission Date -->
+                                            <td>
+                                                <?= date('d-M-Y', strtotime($complaint['created_at'])) ?><br>
                                                 <small class="text-muted"><?= date('h:i A', strtotime($complaint['created_at'])) ?></small>
-                         
-                        </td>
+                                            </td>
 
-                        <!-- Description -->
-                        <td style="min-width:250px;">
-                            <?= esc($complaint['description'] ?? '-') ?>
-                        </td>
+                                            <!-- Description -->
+                                            <td style="min-width:250px;">
+                                                <?= esc($complaint['description'] ?? '-') ?>
+                                            </td>
 
-                        <!-- Evidence -->
-                        <td>
-                            <?php if (!empty($complaint['attachment'])): ?>
+                                            <!-- Evidence -->
+                                            <td>
+                                                <?php if (!empty($complaint['attachment'])): ?>
+                                                    <a href="<?= base_url($complaint['attachment']) ?>"
+                                                       target="_blank"
+                                                       class="btn btn-sm btn-secondary-custom">
+                                                        <i class="bi bi-paperclip"></i> View
+                                                    </a>
+                                                <?php else: ?>
+                                                    <span class="text-muted">No file</span>
+                                                <?php endif; ?>
+                                            </td>
 
-                                <a href="<?= base_url($complaint['attachment']) ?>"
-                                   target="_blank"
-                                   class="btn btn-sm btn-secondary-custom">
-                                    <i class="bi bi-paperclip"></i>
-                                    View
-                                </a>
+                                            <!-- Status -->
+                                            <td>
+                                                <?php
+                                                    $status = $complaint['status'] ?? 'Pending';
+                                                    if ($status === 'Resolved') {
+                                                        $badgeClass = 'bg-success';
+                                                    } elseif ($status === 'Escalated') {
+                                                        $badgeClass = 'bg-danger';
+                                                    } else {
+                                                        $badgeClass = 'bg-warning text-dark';
+                                                    }
+                                                ?>
+                                                <span class="badge <?= $badgeClass ?>">
+                                                    <?= esc($status) ?>
+                                                </span>
+                                            </td>
 
-                            <?php else: ?>
-
-                                <span class="text-muted">No file</span>
-
-                            <?php endif; ?>
-                        </td>
-
-                        <!-- Status -->
-                        <td>
-                            <?php
-                                $status = $complaint['status'] ?? 'Pending';
-
-                                if ($status === 'Resolved') {
-                                    $badgeClass = 'bg-success';
-                                } elseif ($status === 'Escalated') {
-                                    $badgeClass = 'bg-danger';
-                                } else {
-                                    $badgeClass = 'bg-warning text-dark';
-                                }
-                            ?>
-
-                            <span class="badge <?= $badgeClass ?>">
-                                <?= esc($status) ?>
-                            </span>
-                        </td>
-
-                       
-
-                        <!-- Actions -->
-                        <td class="text-nowrap">
-                            <button type="button" class="btn btn-sm btn-outline-primary view-complaint"
-                                data-id="<?= esc($complaint['id']) ?>" title="View">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-primary edit-complaint"
-                                data-id="<?= esc($complaint['id']) ?>" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <form action="<?= site_url('user/complaint/delete/' . $complaint['id']) ?>" method="post"
-                                class="d-inline delete-complaint-form">
-                                <?= csrf_field() ?>
-                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-
-                    </tr>
-
-                <?php endforeach; ?>
-
-            <?php else: ?>
-
-                <tr>
-                    <td colspan="15" class="text-center py-4 text-muted">
-                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>
-                        No complaints found
-                    </td>
-                </tr>
-
-            <?php endif; ?>
-
-        </tbody>
-    </table>
-</div>
+                                            <!-- Actions -->
+                                            <td class="text-nowrap">
+                                                <button type="button" class="btn btn-sm btn-outline-primary view-complaint"
+                                                    data-id="<?= esc($complaint['id']) ?>" title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-primary edit-complaint"
+                                                    data-id="<?= esc($complaint['id']) ?>" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <form action="<?= site_url('user/complaint/delete/' . $complaint['id']) ?>" method="post"
+                                                    class="d-inline delete-complaint-form">
+                                                    <?= csrf_field() ?>
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="12" class="text-center py-4 text-muted">
+                                            <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                                            No complaints found
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
         <footer class="footer">
-          <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
+            <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
         </footer>
     </main>
 
@@ -1184,10 +1089,8 @@
                     <input type="hidden" name="id" id="editComplaintId">
                     <div class="modal-body" id="editComplaintBody"></div>
                     <div class="modal-footer" id="editComplaintFooter" style="display:none;">
-                       
                         <button type="submit" class="btn btn-primary">Update Complaint</button>
-
-                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -1196,143 +1099,18 @@
 
     <script>
         // =====================================================
-        // DISTRICT + CONSTITUENCY DATA (Maharashtra)
+        // COUNTER ANIMATION
         // =====================================================
-        const districtData = {
-            "Ahmednagar (Ahilyanagar)": ["Akole", "Sangamner", "Shirdi", "Kopargaon", "Rahata", "Shrirampur", "Nevasa", "Shevgaon", "Rahuri", "Parner", "Ahmednagar City", "Shrigonda"],
-            "Akola": ["Akot", "Balapur", "Akola West", "Akola East", "Murtizapur"],
-            "Amravati": ["Daryapur", "Melghat", "Achalpur", "Morshi", "Arvi", "Teosa", "Amravati", "Badnera"],
-            "Chhatrapati Sambhajinagar (Aurangabad)": ["Kannad", "Sillod", "Gangapur", "Vaijapur", "Aurangabad Central", "Aurangabad West", "Aurangabad East", "Paithan", "Phulambri"],
-            "Beed": ["Georai", "Majalgaon", "Beed", "Ashti", "Kaij", "Parli"],
-            "Bhandara": ["Tumsar", "Bhandara", "Sakoli"],
-            "Buldhana": ["Jalgaon Jamod", "Malkapur", "Buldhana", "Chikhli", "Sindkhed Raja", "Mehkar", "Khamgaon"],
-            "Chandrapur": ["Warora", "Chandrapur", "Ballarpur", "Brahmapuri", "Chimur", "Rajura"],
-            "Dhule": ["Shirpur", "Sindkheda", "Dhule Rural", "Dhule City", "Sakri"],
-            "Gadchiroli": ["Armori", "Gadchiroli", "Aheri"],
-            "Gondia": ["Gondiya", "Tirora", "Arjuni Morgaon", "Amgaon"],
-            "Hingoli": ["Basmat", "Kalamnuri", "Hingoli"],
-            "Jalgaon": ["Chopda", "Raver", "Bhusawal", "Jalgaon City", "Jalgaon Rural", "Amalner", "Erandol", "Pachora", "Chalisgaon", "Jamner", "Muktainagar"],
-            "Jalna": ["Bhokardan", "Jafrabad", "Badnapur", "Jalna", "Partur"],
-            "Kolhapur": ["Chandgad", "Radhanagari", "Kagal", "Kolhapur South", "Karvir", "Kolhapur North", "Shahuwadi", "Hatkanangle", "Ichalkaranji", "Shirol"],
-            "Latur": ["Latur Rural", "Latur City", "Ahmedpur", "Udgir", "Nilanga", "Ausa"],
-            "Mumbai City": ["Colaba", "Malabar Hill", "Mumbadevi", "Byculla", "Shivadi", "Worli", "Mahim", "Dharavi", "Sion Koliwada", "Wadala"],
-            "Mumbai Suburban": ["Versova", "Andheri West", "Andheri East", "Vile Parle", "Chandivali", "Ghatkopar West", "Ghatkopar East", "Mankhurd Shivaji Nagar", "Anushakti Nagar", "Borivali", "Dahisar", "Magathane", "Mulund", "Vikhroli", "Bhandup West", "Jogeshwari East", "Dindoshi", "Goregaon", "Kandivali East", "Charkop", "Malad West", "Kurla", "Kalina", "Bandra East", "Bandra West", "Powai"],
-            "Nagpur": ["Katol", "Savner", "Hingna", "Umred", "Nagpur South West", "Nagpur South", "Nagpur East", "Nagpur Central", "Nagpur West", "Nagpur North", "Kamptee", "Ramtek"],
-            "Nanded": ["Nanded North", "Nanded South", "Naigaon", "Bhokar", "Deglur", "Mukhed", "Kinwat", "Hadgaon", "Loha"],
-            "Nandurbar": ["Akkalkuwa", "Shahada", "Nandurbar", "Nawapur"],
-            "Nashik": ["Nandgaon", "Malegaon Central", "Malegaon Outer", "Baglan", "Kalwan", "Chandwad", "Yevla", "Sinnar", "Nashik East", "Nashik Central", "Nashik West", "Deolali", "Igatpuri", "Dindori", "Niphad"],
-            "Dharashiv (Osmanabad)": ["Karmala", "Paranda", "Osmanabad", "Tuljapur", "Umarga"],
-            "Palghar": ["Dahanu", "Vikramgad", "Palghar", "Boisar", "Nalasopara", "Vasai"],
-            "Parbhani": ["Jintur", "Parbhani", "Gangakhed", "Pathri"],
-            "Pune": ["Shirur", "Daund", "Indapur", "Baramati", "Purandar", "Bhor", "Maval", "Chinchwad", "Pimpri", "Bhosari", "Vadgaon Sheri", "Shivajinagar", "Kothrud", "Khadakwasla", "Parvati", "Hadapsar", "Pune Cantonment", "Kasba Peth", "Pune City"],
-            "Raigad": ["Pen", "Alibag", "Shrivardhan", "Mahad", "Karjat", "Uran", "Panvel"],
-            "Ratnagiri": ["Dapoli", "Guhagar", "Chiplun", "Ratnagiri", "Rajapur"],
-            "Sangli": ["Jat", "Kavathe Mahankal", "Tasgaon-Kavathe Mahankal", "Sangli", "Islampur", "Shirala", "Miraj", "Palus-Kadegaon", "Khanapur-Atpadi", "Vita"],
-            "Satara": ["Man", "Karad North", "Karad South", "Patan", "Jaoli", "Wai", "Koregaon", "Phaltan"],
-            "Sindhudurg": ["Kankavli", "Kudal", "Sawantwadi"],
-            "Solapur": ["Akkalkot", "Solapur City North", "Solapur City Central", "Solapur South", "Pandharpur", "Sangole", "Malshiras", "Mohol", "Madha", "Barshi", "Karmala"],
-            "Thane": ["Thane", "Kopri-Pachpakhadi", "Ovala-Majiwada", "Mira Bhayandar", "Bhiwandi East", "Bhiwandi West", "Bhiwandi Rural", "Kalyan West", "Kalyan East", "Dombivli", "Ambernath", "Ulhasnagar", "Mumbra-Kalwa", "Airoli", "Belapur"],
-            "Wardha": ["Wardha", "Hinganghat", "Arvi", "Deoli"],
-            "Washim": ["Washim", "Risod", "Karanja"],
-            "Yavatmal": ["Yavatmal", "Wani", "Ralegaon", "Arni", "Pusad", "Umarkhed", "Digras", "Ghatanji"]
-        };
-
-        // Complaint storage & dynamic counters
-        // let complaintsHistory = [
-        //     { id: "CMP001188", title: "Water Leakage", location: "Satara", status: "Resolved", resolutionDate: "28-May-2026", priority: "Medium" },
-        //     { id: "CMP001150", title: "Street Light Issue", location: "Wai", status: "Resolved", resolutionDate: "12-May-2026", priority: "High" },
-        //     { id: "CMP001200", title: "Drainage Blockage", location: "Karad", status: "Pending", resolutionDate: "-", priority: "Critical" }
-        // ];
-
-        // Helper: Update summary numbers
-        function updateSummaryStats() {
-            const total = complaintsHistory.length;
-            const pending = complaintsHistory.filter(c => c.status === "Pending").length;
-            const resolved = complaintsHistory.filter(c => c.status === "Resolved").length;
-            //const escalated = complaintsHistory.filter(c => c.status === "Escalated").length;
-
-            document.getElementById('totalComplaints').innerText = total;
-            document.getElementById('pendingComplaints').innerText = pending;
-            document.getElementById('resolvedComplaints').innerText = resolved;
-            //document.getElementById('escalatedComplaints').innerText = escalated;
-        }
-
-        // Render complaint history table
-        function renderComplaintHistory() {
-            const tbody = document.getElementById('complaintHistoryBody');
-            tbody.innerHTML = '';
-            complaintsHistory.forEach(comp => {
-                const statusBadge = comp.status === 'Resolved' ? '<span class="badge bg-success badge-status">Resolved</span>' :
-                    (comp.status === 'Pending' ? '<span class="badge bg-warning badge-status">Pending</span>' :
-                        '<span class="badge bg-danger badge-status">Escalated</span>');
-                const row = `<tr data-complaint-id="${comp.id}" data-title="${comp.title}" data-status="${comp.status}">
-                            <td>${comp.id}</td>
-                            <td>${comp.title}</td>
-                            <td>${comp.location}</td>
-                            <td>${statusBadge}</td>
-                            <td>${comp.resolutionDate || '-'}</td>
-                         </tr>`;
-                tbody.insertAdjacentHTML('beforeend', row);
-            });
-            // Add click handlers for rows
-            document.querySelectorAll('#complaintHistoryBody tr').forEach(row => {
-                row.addEventListener('click', function () {
-                    const id = this.cells[0].innerText;
-                    const title = this.cells[1].innerText;
-                    const status = this.querySelector('.badge')?.innerText || 'Unknown';
-                    alert(`🔍 Complaint Details\nID: ${id}\nTitle: ${title}\nStatus: ${status}\n\nFull details available in tracking portal.`);
-                });
-            });
-        }
-
-        // Generate random complaint ID
-        function generateComplaintId() {
-            const randomNum = Math.floor(Math.random() * 9000) + 1000;
-            return `CMP${randomNum}`;
-        }
-
-        // Handle complaint submission
-        const complaintForm = document.getElementById('complaintForm');
-        complaintForm.addEventListener('submit', function (e) {
-            // e.preventDefault();
-
-            // Validate fields
-            const title = document.getElementById('complaintTitle').value.trim();
-            const village = document.getElementById('villageInput').value.trim();
-            const location = document.getElementById('locationInput').value.trim();
-            const description = document.getElementById('complaintDesc').value.trim();
-            const priority = document.getElementById('prioritySelect').value;
-
-            if (!title) { e.preventDefault(); alert('Please enter complaint title.'); return; }
-            if (!village) { e.preventDefault(); alert('Please enter village name.'); return; }
-            if (!location) { e.preventDefault(); alert('Please enter complaint location.'); return; }
-            if (!description) { e.preventDefault(); alert('Please enter complaint description.'); return; }
-
-            // The form submits to the server; do not update the old demo array here.
-        });
-
-        // Reset button handler
-        document.getElementById('resetBtn').addEventListener('click', function () {
-            document.getElementById('complaintTitle').value = '';
-            document.getElementById('villageInput').value = '';
-            document.getElementById('locationInput').value = '';
-            document.getElementById('complaintDesc').value = '';
-            document.getElementById('prioritySelect').value = 'Medium';
-            document.getElementById('evidenceFile').value = '';
-            alert('Form has been reset.');
-        });
-
-        // Initialize counters with animation
         function animateCounters() {
             const counters = document.querySelectorAll('.stat-number');
             counters.forEach(counter => {
-                const target = parseInt(counter.innerText);
+                const target = parseInt(counter.innerText) || 0;
                 let current = 0;
-                const increment = target / 40;
+                const increment = Math.max(1, target / 40);
                 const update = () => {
                     if (current < target) {
                         current += increment;
-                        counter.innerText = Math.round(current);
+                        counter.innerText = Math.round(Math.min(current, target));
                         requestAnimationFrame(update);
                     } else {
                         counter.innerText = target;
@@ -1342,23 +1120,53 @@
             });
         }
 
-        // renderComplaintHistory();
-        // updateSummaryStats();
-        // setTimeout(animateCounters, 200);
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <?php if (session()->getFlashdata('success')): ?>
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: <?= json_encode(session()->getFlashdata('success')) ?>,
-                confirmButtonColor: '#6B8A22'
-            });
-        </script>
-    <?php endif; ?>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+        // =====================================================
+        // RESET FORM
+        // =====================================================
+        document.getElementById('resetBtn').addEventListener('click', function () {
+            document.getElementById('complaintTitle').value = '';
+            document.getElementById('villageInput').value = '';
+            document.getElementById('locationInput').value = '';
+            document.getElementById('complaintDesc').value = '';
+            document.getElementById('prioritySelect').value = 'Medium';
+            document.getElementById('evidenceFile').value = '';
+        });
+
+        // =====================================================
+        // FORM VALIDATION
+        // =====================================================
+        document.getElementById('complaintForm').addEventListener('submit', function (e) {
+            const title = document.getElementById('complaintTitle').value.trim();
+            const village = document.getElementById('villageInput').value.trim();
+            const location = document.getElementById('locationInput').value.trim();
+            const description = document.getElementById('complaintDesc').value.trim();
+
+            if (!title) {
+                e.preventDefault();
+                alert('Please enter complaint title.');
+                return false;
+            }
+            if (!village) {
+                e.preventDefault();
+                alert('Please enter village name.');
+                return false;
+            }
+            if (!location) {
+                e.preventDefault();
+                alert('Please enter complaint location.');
+                return false;
+            }
+            if (!description) {
+                e.preventDefault();
+                alert('Please enter complaint description.');
+                return false;
+            }
+            return true;
+        });
+
+        // =====================================================
+        // VIEW / EDIT / DELETE MODALS
+        // =====================================================
         document.addEventListener('DOMContentLoaded', function () {
             const viewModal = new bootstrap.Modal(document.getElementById('viewComplaintModal'));
             const editModal = new bootstrap.Modal(document.getElementById('editComplaintModal'));
@@ -1366,7 +1174,6 @@
             const editBody = document.getElementById('editComplaintBody');
             const editFooter = document.getElementById('editComplaintFooter');
             const editId = document.getElementById('editComplaintId');
-            const endpoint = '<?= site_url('user/complaint/getComplaintData') ?>';
 
             const escapeHtml = value => String(value ?? '-').replace(/[&<>'"]/g, char => ({
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;'
@@ -1375,6 +1182,7 @@
             const loadComplaint = id => fetch('<?= base_url('user/complaint/getComplaintData') ?>/' + id)
                 .then(response => response.json());
 
+            // View Complaint
             document.querySelectorAll('.view-complaint').forEach(button => {
                 button.addEventListener('click', function () {
                     viewBody.innerHTML = '<div class="text-center py-4"><div class="spinner-border text-primary"></div><p class="mt-2">Loading complaint details...</p></div>';
@@ -1393,25 +1201,25 @@
                             <div class="col-md-6"><strong>Village</strong><p>${escapeHtml(complaint.village)}</p></div>
                             <div class="col-md-6"><strong>Location</strong><p>${escapeHtml(complaint.location)}</p></div>
                             <div class="col-md-6">
-                                    <strong>Submitted</strong>
-                                    <p>
-                                        ${complaint.created_at ? (() => {
-                                            const date = new Date(complaint.created_at.replace(' ', 'T'));
-                                            return date.toLocaleDateString('en-GB', {
-                                                day: '2-digit',
-                                                month: 'short',
-                                                year: 'numeric'
-                                            }).replace(/ /g, '-') +
-                                            '<br><small class="text-muted">' +
-                                            date.toLocaleTimeString('en-US', {
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                                hour12: true
-                                            }) +
-                                            '</small>';
-                                        })() : ''}
-                                    </p>
-                                </div>
+                                <strong>Submitted</strong>
+                                <p>
+                                    ${complaint.created_at ? (() => {
+                                        const date = new Date(complaint.created_at.replace(' ', 'T'));
+                                        return date.toLocaleDateString('en-GB', {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            year: 'numeric'
+                                        }).replace(/ /g, '-') +
+                                        '<br><small class="text-muted">' +
+                                        date.toLocaleTimeString('en-US', {
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: true
+                                        }) +
+                                        '</small>';
+                                    })() : ''}
+                                </p>
+                            </div>
                             <div class="col-12"><strong>Description</strong><p class="border rounded p-3">${escapeHtml(complaint.description)}</p></div>
                             ${complaint.attachment ? `<div class="col-12"><a href="<?= base_url() ?>${encodeURI(complaint.attachment)}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-paperclip me-1"></i>View Attachment</a></div>` : ''}
                         </div>`;
@@ -1421,6 +1229,7 @@
                 });
             });
 
+            // Edit Complaint
             document.querySelectorAll('.edit-complaint').forEach(button => {
                 button.addEventListener('click', function () {
                     editId.value = this.dataset.id;
@@ -1438,16 +1247,16 @@
                             <div class="col-md-6"><label class="form-label">Status</label><input class="form-control" value="${escapeHtml(complaint.status)}" readonly></div>
                             <div class="col-md-6"><label class="form-label">Title</label><input name="title" class="form-control" value="${escapeHtml(complaint.title)}" required></div>
                             <div class="col-md-6">
-                                    <label class="form-label">Priority</label>
-                                    <select name="priority" class="form-select" required>
-                                        ${['Low', 'Medium', 'High', 'Critical']
-                                            .map(priority => `
-                                                <option value="${priority}" ${complaint.priority === priority ? 'selected' : ''}>
-                                                    ${priority}
-                                                </option>
-                                            `).join('')}
-                                    </select>
-                                </div>
+                                <label class="form-label">Priority</label>
+                                <select name="priority" class="form-select" required>
+                                    ${['Low', 'Medium', 'High', 'Critical']
+                                        .map(priority => `
+                                            <option value="${priority}" ${complaint.priority === priority ? 'selected' : ''}>
+                                                ${priority}
+                                            </option>
+                                        `).join('')}
+                                </select>
+                            </div>
                             <div class="col-md-6"><label class="form-label">Village</label><input name="village" class="form-control" value="${escapeHtml(complaint.village)}" required></div>
                             <div class="col-md-6"><label class="form-label">Location / Landmark</label><input name="location" class="form-control" value="${escapeHtml(complaint.location)}" required></div>
                             <div class="col-12"><label class="form-label">Description</label><textarea name="description" class="form-control" rows="4" required>${escapeHtml(complaint.description)}</textarea></div>
@@ -1460,32 +1269,76 @@
                 });
             });
 
+            // Delete Complaint
             document.querySelectorAll('.delete-complaint-form').forEach(form => {
                 form.addEventListener('submit', function (event) {
-                    if (!window.confirm('Are you sure you want to delete this complaint?')) {
+                    if (!confirm('Are you sure you want to delete this complaint?')) {
                         event.preventDefault();
                     }
                 });
             });
 
+            // Edit Form Submit (AJAX)
             document.getElementById('editComplaintForm').addEventListener('submit', function (event) {
                 event.preventDefault();
-                fetch(this.action, { method: 'POST', body: new FormData(this), headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (!result.success) {
-                            const errors = result.errors ? Object.values(result.errors).join('\n') : result.message;
-                            window.alert(errors || 'Update failed');
-                            return;
-                        }
-                        window.alert(result.message);
-                        window.location.reload();
-                    })
-                    .catch(() => window.alert('Error updating complaint.'));
+                const formData = new FormData(this);
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (!result.success) {
+                        const errors = result.errors ? Object.values(result.errors).join('\n') : result.message;
+                        alert(errors || 'Update failed');
+                        return;
+                    }
+                    alert(result.message);
+                    window.location.reload();
+                })
+                .catch(() => alert('Error updating complaint.'));
             });
+
+            // Animate counters
+            setTimeout(animateCounters, 200);
         });
     </script>
-      <script src="<?= base_url('assets/user/js/navbar.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php if (session()->getFlashdata('success')): ?>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: <?= json_encode(session()->getFlashdata('success')) ?>,
+                confirmButtonColor: '#6B8A22'
+            });
+        </script>
+    <?php endif; ?>
+    <?php if (session()->getFlashdata('error')): ?>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: <?= json_encode(session()->getFlashdata('error')) ?>,
+                confirmButtonColor: '#6B8A22'
+            });
+        </script>
+    <?php endif; ?>
+    <?php if (session()->getFlashdata('errors')): ?>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: <?= json_encode(implode("\n", session()->getFlashdata('errors'))) ?>,
+                confirmButtonColor: '#6B8A22'
+            });
+        </script>
+    <?php endif; ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= base_url('assets/user/js/navbar.js') ?>"></script>
 </body>
 
 </html>

@@ -11,15 +11,17 @@ class ComplaintManagement extends BaseController
     {
         $complaintModel = new ComplaintModel();
 
-        $data = [
-            'statistics' => $complaintModel->getComplaintStatistics(),
+        // Get statistics
+        $statistics = $complaintModel->getComplaintStatistics();
 
-            'mlaComplaints' => $complaintModel->getMLAComplaintCount()
+        // Get MLA-wise complaint counts
+        $mlaComplaints = $complaintModel->getMLAComplaintCount();
+
+        $data = [
+            'statistics' => $statistics,
+            'mlaComplaints' => $mlaComplaints
         ];
 
-        return view(
-            'admin/ComplaintManagement',
-            $data
-        );
+        return view('admin/ComplaintManagement', $data);
     }
 }
