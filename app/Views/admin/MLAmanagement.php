@@ -2070,6 +2070,7 @@ $('#edit_district_id').on('change', function () {
 
 });
 </script>
+<script src="<?= base_url('assets/admin/js/header.js') ?>"></script>
 </body>
 
 </html>

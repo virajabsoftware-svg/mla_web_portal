@@ -1090,7 +1090,7 @@
             }
         });
     </script>
-    <script src="header.js"></script>
+    <script src="<?= base_url('assets/admin/js/header.js') ?>"></script>
 </body>
 
 </html>

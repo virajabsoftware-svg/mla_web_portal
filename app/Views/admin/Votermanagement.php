@@ -828,7 +828,7 @@
    <script src="js/custom.js"></script>
    <script src="js/semantic.min.js"></script>
    <script></script>
-   <script src="header.js"></script>
+   <script src="<?= base_url('assets/admin/js/header.js') ?>"></script>
 <script>
     // =====================================================
     // ENHANCED VOTER DATASET — registration workflow
