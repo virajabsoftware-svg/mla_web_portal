@@ -22,8 +22,9 @@ $routes->get('mla', 'Home::mla');
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
 
     // Auth Routes
-    $routes->get('login', 'Auth::login');
-    $routes->post('login', 'Auth::loginCheck');
+   $routes->get('login', 'Auth::login');
+$routes->post('login', 'Auth::loginCheck');
+$routes->get('logout', 'Auth::logout');
 
     // Dashboard
     $routes->get('dashboard', 'Dashboard::index');
