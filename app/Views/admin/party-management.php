@@ -556,28 +556,28 @@
             <div class="col-xl-3 col-md-6">
                 <div class="stat-box">
                     <div class="stat-icon"><i class="fas fa-flag"></i></div>
-                    <div class="stat-number"><?= $totalParties ?? 18 ?></div>
+                    <div class="stat-number"><?= $totalParties ?? 0 ?></div>
                     <div class="stat-label">Total Parties</div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="stat-box">
                     <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div class="stat-number"><?= $nationalParties ?? 4 ?></div>
+                    <div class="stat-number"><?= $nationalParties ?? 0 ?></div>
                     <div class="stat-label">National Parties</div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="stat-box">
                     <div class="stat-icon"><i class="fas fa-building"></i></div>
-                    <div class="stat-number"><?= $stateParties ?? 9 ?></div>
+                    <div class="stat-number"><?= $stateParties ?? 0 ?></div>
                     <div class="stat-label">State Parties</div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="stat-box">
                     <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                    <div class="stat-number"><?= $activeParties ?? 17 ?></div>
+                    <div class="stat-number"><?= $activeParties ?? 0 ?></div>
                     <div class="stat-label">Active Parties</div>
                 </div>
             </div>

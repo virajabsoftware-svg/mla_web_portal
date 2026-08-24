@@ -29,8 +29,30 @@ class PartyManagement extends BaseController
             ->findAll();
             
 
+
+$data['totalParties'] = $this->partyModel
+    ->countAllResults();
+
+
+$data['nationalParties'] = $this->partyModel
+    ->where('party_type', 'National')
+    ->countAllResults();
+
+
+$data['stateParties'] = $this->partyModel
+    ->where('party_type', 'State')
+    ->countAllResults();
+
+
+$data['activeParties'] = $this->partyModel
+    ->where('status', 'active')
+    ->countAllResults();
+
         return view('admin/party-management', $data);
+
+        
     }
+    
 
     public function save()
     {

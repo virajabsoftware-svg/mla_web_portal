@@ -20,6 +20,31 @@ class PartyModel extends Model
         'party_logo',
         'status'
     ];
+     public function getTotalParties(): int
+    {
+        return $this->countAllResults();
+    }
+
+    // National Parties
+    public function getNationalParties(): int
+    {
+        return $this->where('party_type', 'National')
+                    ->countAllResults();
+    }
+
+    // State Parties
+    public function getStateParties(): int
+    {
+        return $this->where('party_type', 'State')
+                    ->countAllResults();
+    }
+
+    // Active Parties
+    public function getActiveParties(): int
+    {
+        return $this->where('status', 'active')
+                    ->countAllResults();
+    }
 
     protected $useTimestamps = true;
 
