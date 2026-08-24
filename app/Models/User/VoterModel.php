@@ -13,7 +13,7 @@ class VoterModel extends Model
         'voter_id', 'full_name', 'dob', 'gender', 'email', 'password',
         'mobile', 'state', 'district', 'constituency', 'locality', 'pincode',
         'profile_photo', 'mla_name', 'mla_party', 'mla_id',
-        'status', 'reset_token', 'reset_token_expiry'  // Added reset fields
+        'status'
     ];
 
     protected $useTimestamps = true;
@@ -40,45 +40,6 @@ class VoterModel extends Model
     }
 
     // ==========================================
-    // FIND VOTER BY RESET TOKEN
-    // ==========================================
-    public function findByResetToken($token)
-    {
-        return $this
-            ->where('reset_token', $token)
-            ->where('reset_token_expiry >', date('Y-m-d H:i:s'))
-            ->first();
-    }
-
-    // ==========================================
-    // SET RESET TOKEN
-    // ==========================================
-    public function setResetToken($voterId, $token, $expiry)
-    {
-        return $this
-            ->where('id', $voterId)
-            ->set([
-                'reset_token' => $token,
-                'reset_token_expiry' => $expiry
-            ])
-            ->update();
-    }
-
-    // ==========================================
-    // CLEAR RESET TOKEN
-    // ==========================================
-    public function clearResetToken($voterId)
-    {
-        return $this
-            ->where('id', $voterId)
-            ->set([
-                'reset_token' => null,
-                'reset_token_expiry' => null
-            ])
-            ->update();
-    }
-
-    // ==========================================
     // UPDATE PASSWORD
     // ==========================================
     public function updatePassword($voterId, $password)
@@ -86,9 +47,7 @@ class VoterModel extends Model
         return $this
             ->where('id', $voterId)
             ->set([
-                'password' => $password,
-                'reset_token' => null,
-                'reset_token_expiry' => null
+                'password' => $password
             ])
             ->update();
     }

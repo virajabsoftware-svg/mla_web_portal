@@ -9,6 +9,12 @@ use App\Models\MlaModel;
 
 class Auth extends BaseController
 {
+    protected $voterModel;
+
+    public function __construct()
+    {
+        $this->voterModel = new VoterModel();
+    }
 
     // =====================================================
     // LOGIN / REGISTER PAGE
@@ -25,15 +31,13 @@ class Auth extends BaseController
         ]);
     }
 
-
     // =====================================================
     // REGISTER
     // =====================================================
 
     public function register()
     {
-        $model = new VoterModel();
-
+        $model = $this->voterModel;
 
         // =========================
         // Profile Photo Upload
@@ -42,7 +46,6 @@ class Auth extends BaseController
         $photoName = '';
 
         $photo = $this->request->getFile('profile_photo');
-
 
         if ($photo && $photo->isValid() && !$photo->hasMoved()) {
 
@@ -56,8 +59,14 @@ class Auth extends BaseController
 
                 $photoName = $photo->getRandomName();
 
+                $uploadPath = FCPATH . 'uploads/profile/';
+
+                if (!is_dir($uploadPath)) {
+                    mkdir($uploadPath, 0777, true);
+                }
+
                 $photo->move(
-                    FCPATH . 'uploads/profile/',
+                    $uploadPath,
                     $photoName
                 );
 
@@ -65,13 +74,13 @@ class Auth extends BaseController
 
                 return redirect()
                     ->back()
+                    ->withInput()
                     ->with(
                         'error',
                         'Only JPG, PNG and WEBP images allowed'
                     );
             }
         }
-
 
         // =========================
         // Insert User Data
@@ -104,19 +113,12 @@ class Auth extends BaseController
 
             'pincode' => $this->request->getPost('pincode'),
 
-            // Photo name save in database
             'profile_photo' => $photoName,
-
-            'mla_name' => $this->request->getPost('mla_name'),
-
-            'mla_party' => $this->request->getPost('mla_party'),
 
             'mla_id' => $this->request->getPost('mla_id'),
 
             'status' => 'pending'
-
         ];
-
 
         if ($model->insert($data)) {
 
@@ -142,14 +144,13 @@ class Auth extends BaseController
         }
     }
 
-
     // =====================================================
     // LOGIN
     // =====================================================
 
     public function login()
     {
-        $model = new VoterModel();
+        $model = $this->voterModel;
 
         $email = trim(
             (string) $this->request->getPost('email')
@@ -157,43 +158,21 @@ class Auth extends BaseController
 
         $password = (string) $this->request->getPost('password');
 
-
-        // =================================================
-        // FIND USER
-        // =================================================
-
         $user = $model
             ->where('email', $email)
             ->first();
 
-
         if ($user) {
-
-            // =================================================
-            // PASSWORD CHECK
-            // =================================================
 
             if (password_verify(
                 $password,
                 $user['password']
             )) {
 
-                // =================================================
-                // LOGIN PROTECTION
-                // =================================================
-
-                // Prevent session fixation
                 session()->regenerate(true);
-
-
-                // =================================================
-                // USER SESSION
-                // =================================================
 
                 session()->set([
 
-                    // IMPORTANT:
-                    // AuthFilter checks this value
                     'user_logged_in' => true,
 
                     'user_id' => $user['id'],
@@ -206,32 +185,18 @@ class Auth extends BaseController
 
                     'profile_photo' => $user['profile_photo'],
 
-                    // Keep existing session key
-                    // so old pages do not break
                     'logged_in' => true,
 
                 ]);
 
-
-                // =================================================
-                // REDIRECT TO USER DASHBOARD
-                // =================================================
-
                 return redirect()
-                    ->to(
-                        base_url('user/dashboard')
-                    )
+                    ->to(base_url('user/dashboard'))
                     ->with(
                         'success',
                         'Login Successfully'
                     );
             }
         }
-
-
-        // =================================================
-        // LOGIN FAILED
-        // =================================================
 
         return redirect()
             ->back()
@@ -242,17 +207,12 @@ class Auth extends BaseController
             );
     }
 
-
     // =====================================================
     // LOGOUT
     // =====================================================
 
     public function logout()
     {
-        // =================================================
-        // REMOVE USER LOGIN SESSION
-        // =================================================
-
         session()->remove([
             'user_logged_in',
             'user_id',
@@ -263,28 +223,15 @@ class Auth extends BaseController
             'logged_in',
         ]);
 
-
-        // =================================================
-        // DESTROY SESSION
-        // =================================================
-
         session()->destroy();
 
-
-        // =================================================
-        // REDIRECT TO LOGIN
-        // =================================================
-
         return redirect()
-            ->to(
-                base_url('user/login')
-            )
+            ->to(base_url('user/login'))
             ->with(
                 'success',
                 'Logout Successfully'
             );
     }
-
 
     // =====================================================
     // CHECK VOTER ID
@@ -293,9 +240,8 @@ class Auth extends BaseController
     public function checkVoterId()
     {
         $voterId = trim(
-            $this->request->getPost('voter_id')
+            (string) $this->request->getPost('voter_id')
         );
-
 
         if ($voterId === '') {
 
@@ -305,14 +251,9 @@ class Auth extends BaseController
             ]);
         }
 
-
-        $model = new VoterModel();
-
-
-        $exists = $model
+        $exists = $this->voterModel
             ->where('voter_id', $voterId)
             ->first();
-
 
         return $this->response->setJSON([
 
@@ -323,7 +264,6 @@ class Auth extends BaseController
                 : 'Voter ID is available.'
         ]);
     }
-
 
     // =====================================================
     // GET MLA
@@ -357,7 +297,6 @@ class Auth extends BaseController
             )
             ->first();
 
-
         return $this->response->setJSON([
 
             'success' => $mla !== null,
@@ -365,5 +304,387 @@ class Auth extends BaseController
             'mla' => $mla,
 
         ]);
+    }
+
+    // =====================================================
+    // FORGOT PASSWORD
+    // Single view is user/login.php
+    // =====================================================
+
+    public function forgotPassword()
+    {
+        /*
+         * No separate view.
+         * Redirect to login page where forgot password
+         * window is already present.
+         */
+
+        return redirect()->to(base_url('user/login'));
+    }
+
+    private function forgotPasswordResponse(
+        string $message,
+        string $step = 'email',
+        bool $success = false
+    )
+    {
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'status' => $success,
+                'message' => $message,
+                'step' => $step,
+                'csrfToken' => csrf_hash(),
+            ]);
+        }
+
+        return redirect()
+            ->to(base_url('user/login'))
+            ->with('forgot_step', $step)
+            ->with($success ? 'success' : 'error', $message);
+    }
+
+    // =====================================================
+    // SEND RESET OTP
+    // =====================================================
+
+    public function sendResetOtp()
+    {
+        $email = trim(
+            (string) $this->request->getPost('email')
+        );
+
+        // -------------------------
+        // Validate Email
+        // -------------------------
+
+        if ($email === '') {
+            return $this->forgotPasswordResponse(
+                'Email address is required.'
+            );
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->forgotPasswordResponse(
+                'Please enter a valid email address.'
+            );
+        }
+
+        // -------------------------
+        // Find User
+        // -------------------------
+
+        $user = $this->voterModel
+            ->where('email', $email)
+            ->first();
+
+        if (!$user) {
+            return $this->forgotPasswordResponse(
+                'No account found with this email address.'
+            );
+        }
+
+        // -------------------------
+        // Generate OTP
+        // -------------------------
+
+        // Temporary local testing OTP. Restore random_int() before production.
+        $otp = '123456';
+
+        $expiresAt = time() + (10 * 60);
+
+        // -------------------------
+        // Store OTP in Session
+        // -------------------------
+
+        session()->set([
+
+            'reset_email' => $email,
+
+            'reset_otp' => (string) $otp,
+
+            'reset_otp_expires' => $expiresAt,
+
+            'reset_otp_verified' => false,
+
+            'forgot_step' => 'otp'
+
+        ]);
+
+        /*
+        // Email sending is temporarily disabled for local testing.
+
+        $emailService = \Config\Services::email();
+
+        $emailService->setTo($email);
+        $emailService->setSubject('Voter Portal - Password Reset OTP');
+        $emailService->setMailType('html');
+        $emailService->setMessage(
+            '<h2>Password Reset Request</h2>' .
+            '<p>Your OTP is: <strong>' . $otp . '</strong></p>' .
+            '<p>This OTP is valid for 10 minutes.</p>'
+        );
+
+        if (!$emailService->send()) {
+            log_message(
+                'error',
+                $emailService->printDebugger(['headers'])
+            );
+
+            session()->remove([
+                'reset_email',
+                'reset_otp',
+                'reset_otp_expires',
+                'reset_otp_verified',
+                'forgot_step'
+            ]);
+
+            return $this->forgotPasswordResponse(
+                'Unable to send OTP. Please try again later.'
+            );
+        }
+        */
+
+        // -------------------------
+        // OTP Sent
+        // -------------------------
+
+        return $this->forgotPasswordResponse(
+            'OTP has been sent to your registered email address.',
+            'otp',
+            true
+        );
+    }
+
+    // =====================================================
+    // VERIFY RESET OTP
+    // =====================================================
+
+    public function verifyResetOtp()
+    {
+        // -------------------------
+        // Check OTP Session
+        // -------------------------
+
+        $email = session()->get('reset_email');
+
+        if (!$email) {
+            return $this->forgotPasswordResponse(
+                'Please request a password reset first.'
+            );
+        }
+
+        // -------------------------
+        // Get OTP
+        // -------------------------
+
+        $otp = trim(
+            (string) $this->request->getPost('otp')
+        );
+
+        if ($otp === '') {
+            return $this->forgotPasswordResponse(
+                'Please enter the OTP.',
+                'otp'
+            );
+        }
+
+        // -------------------------
+        // Session OTP
+        // -------------------------
+
+        $sessionOtp = session()->get('reset_otp');
+
+        $expiresAt = session()->get(
+            'reset_otp_expires'
+        );
+
+        // -------------------------
+        // Check Expiry
+        // -------------------------
+
+        if (
+            !$expiresAt ||
+            time() > $expiresAt
+        ) {
+
+            session()->remove([
+                'reset_otp',
+                'reset_otp_expires',
+                'reset_otp_verified'
+            ]);
+
+            return $this->forgotPasswordResponse(
+                'OTP has expired. Please request a new OTP.'
+            );
+        }
+
+        // -------------------------
+        // Check OTP
+        // -------------------------
+
+        if ((string) $otp !== (string) $sessionOtp) {
+            return $this->forgotPasswordResponse(
+                'Invalid OTP. Please try again.',
+                'otp'
+            );
+        }
+
+        // -------------------------
+        // OTP Verified
+        // -------------------------
+
+        session()->set([
+            'reset_otp_verified' => true,
+            'forgot_step' => 'reset'
+        ]);
+
+        // OTP cannot be reused
+        session()->remove([
+            'reset_otp',
+            'reset_otp_expires'
+        ]);
+
+        return $this->forgotPasswordResponse(
+            'OTP verified successfully. You can now reset your password.',
+            'reset',
+            true
+        );
+    }
+
+    // =====================================================
+    // RESET PASSWORD
+    // =====================================================
+
+    public function resetPassword()
+    {
+        // -------------------------
+        // OTP Verification Required
+        // -------------------------
+
+        if (!session()->get('reset_otp_verified')) {
+            return $this->forgotPasswordResponse(
+                'Please verify the OTP first.'
+            );
+        }
+
+        // -------------------------
+        // Get Email
+        // -------------------------
+
+        $email = session()->get('reset_email');
+
+        if (!$email) {
+            return $this->forgotPasswordResponse(
+                'Password reset session expired.'
+            );
+        }
+
+        // -------------------------
+        // Get Password
+        // -------------------------
+
+        $password = (string) $this->request
+            ->getPost('password');
+
+        $confirmPassword = (string) $this->request
+            ->getPost('confirm_password');
+
+        // -------------------------
+        // Validate Password
+        // -------------------------
+
+        if (
+            empty($password) ||
+            empty($confirmPassword)
+        ) {
+            return $this->forgotPasswordResponse(
+                'Both password fields are required.',
+                'reset'
+            );
+        }
+
+        if (strlen($password) < 8) {
+            return $this->forgotPasswordResponse(
+                'Password must be at least 8 characters.',
+                'reset'
+            );
+        }
+
+        if ($password !== $confirmPassword) {
+            return $this->forgotPasswordResponse(
+                'Passwords do not match.',
+                'reset'
+            );
+        }
+
+        // -------------------------
+        // Find User
+        // -------------------------
+
+        $user = $this->voterModel
+            ->where('email', $email)
+            ->first();
+
+        if (!$user) {
+
+            session()->remove([
+                'reset_email',
+                'reset_otp_verified',
+                'forgot_step'
+            ]);
+
+            return $this->forgotPasswordResponse(
+                'User account not found.'
+            );
+        }
+
+        // -------------------------
+        // Hash Password
+        // -------------------------
+
+        $hashedPassword = password_hash(
+            $password,
+            PASSWORD_DEFAULT
+        );
+
+        // -------------------------
+        // Update Password
+        // -------------------------
+
+        $updated = $this->voterModel
+            ->where('email', $email)
+            ->set([
+                'password' => $hashedPassword
+            ])
+            ->update();
+
+        if (!$updated) {
+            return $this->forgotPasswordResponse(
+                'Unable to reset password. Please try again.',
+                'reset'
+            );
+        }
+
+        // -------------------------
+        // Clear Reset Session
+        // -------------------------
+
+        session()->remove([
+            'reset_email',
+            'reset_otp_verified',
+            'reset_otp',
+            'reset_otp_expires',
+            'forgot_step'
+        ]);
+
+        // -------------------------
+        // Back to Login
+        // -------------------------
+
+        return $this->forgotPasswordResponse(
+            'Password reset successfully. You can now login.',
+            'email',
+            true
+        );
     }
 }

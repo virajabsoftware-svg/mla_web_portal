@@ -153,7 +153,7 @@ foreach ($recent_complaints as &$complaint) {
 // ==========================
 // 6. Total Active Surveys (FROM MODEL)
 // ==========================
-$total_surveys = $dashboardModel->totalSurveys();
+$total_surveys = $dashboardModel->getSurveysParticipated($user_id);
 
 // ==========================
 // 7. Recent Active Surveys (FROM MODEL)

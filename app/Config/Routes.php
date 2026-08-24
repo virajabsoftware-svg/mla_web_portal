@@ -426,8 +426,7 @@ $routes->group(
         // =================================================
         // FORGOT PASSWORD
         // =================================================
-
-        $routes->get(
+        /*$routes->get(
             'forgot-password',
             'Auth::forgotPassword'
         );
@@ -445,7 +444,16 @@ $routes->group(
         $routes->post(
             'reset-password',
             'Auth::updatePassword'
-        );
+        );*/
+        // Sam hack
+        // Open Forgot Password page
+        $routes->get('forgot-password', 'Auth::forgotPassword');
+        // Send OTP to registered email
+        $routes->post('send-reset-otp', 'Auth::sendResetOtp');
+        // Verify OTP
+        $routes->post('verify-reset-otp', 'Auth::verifyResetOtp');
+        // Reset Password
+        $routes->post('reset-password', 'Auth::resetPassword');
 
 
         // =================================================
