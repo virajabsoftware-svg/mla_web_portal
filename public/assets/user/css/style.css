@@ -379,3 +379,149 @@
             .profile-name { font-size: 1.1rem; }
             .btn { padding: 6px 12px; font-size: 0.7rem; }
         }
+
+        /* ============================================
+   FEEDBACK PAGINATION
+    ============================================ */
+
+    .feedback-pagination {
+        width: 100%;
+        gap: 15px;
+        flex-wrap: wrap;
+        padding: 5px 0;
+    }
+
+    .feedback-pagination > div:last-child {
+        margin-left: auto;
+    }
+
+    .feedback-pagination .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin: 0;
+    }
+
+    .feedback-pagination .pagination .page-link {
+        min-width: 40px;
+        height: 40px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 8px 12px;
+        border-radius: 10px !important;
+
+        color: var(--teal-blue);
+        background: #fff;
+        border: 1px solid rgba(195, 200, 72, 0.35);
+
+        font-size: 0.85rem;
+        font-weight: 600;
+
+        transition: all 0.25s ease;
+    }
+
+    .feedback-pagination .pagination .page-link:hover {
+        color: #1F3F3A;
+        background: rgba(195, 200, 72, 0.15);
+        border-color: var(--lime-gold);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(69, 77, 40, 0.12);
+    }
+
+    .feedback-pagination .pagination .page-item.active .page-link {
+        color: #1F3F3A;
+        background: linear-gradient(
+            95deg,
+            var(--lime-gold),
+            #A9B43C
+        );
+        border-color: var(--lime-gold);
+        font-weight: 700;
+        box-shadow: 0 4px 10px rgba(195, 200, 72, 0.25);
+    }
+
+    .feedback-pagination .pagination .page-item.disabled .page-link {
+        color: #aaa;
+        background: #f5f5f5;
+        border-color: #e5e5e5;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* ============================================
+    TABLET
+    ============================================ */
+
+    @media (max-width: 768px) {
+
+        .feedback-pagination {
+            flex-direction: column;
+            align-items: stretch !important;
+            text-align: center;
+            gap: 12px;
+        }
+
+        .feedback-pagination > div:first-child,
+        .feedback-pagination > div:last-child {
+            width: 100%;
+        }
+
+        .feedback-pagination > div:last-child {
+            margin-left: 0;
+        }
+
+        .feedback-pagination .pagination {
+            justify-content: center;
+        }
+    }
+
+    /* ============================================
+    MOBILE
+    ============================================ */
+
+    @media (max-width: 576px) {
+
+        .feedback-pagination {
+            margin-top: 15px !important;
+        }
+
+        .feedback-pagination .pagination {
+            gap: 3px;
+        }
+
+        .feedback-pagination .pagination .page-link {
+            min-width: 34px;
+            height: 34px;
+            padding: 5px 8px;
+            font-size: 0.75rem;
+            border-radius: 8px !important;
+        }
+
+        .feedback-pagination .small {
+            font-size: 0.72rem;
+        }
+    }
+
+    /* ============================================
+    VERY SMALL MOBILE
+    ============================================ */
+
+    @media (max-width: 400px) {
+
+        .feedback-pagination .pagination {
+            gap: 2px;
+        }
+
+        .feedback-pagination .pagination .page-link {
+            min-width: 30px;
+            height: 30px;
+            padding: 4px 6px;
+            font-size: 0.7rem;
+        }
+    }

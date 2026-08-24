@@ -792,6 +792,8 @@
         .pagination .page-item:last-child .page-link {
             border-radius: 8px !important;
         }
+
+        
     </style>
 </head>
 
@@ -1084,8 +1086,8 @@
                     </div>
 
                     <!-- Pagination -->
-                    <?php if(isset($pager) && $pager): ?>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
+                    <?php if(isset($pager) && $pager && $pager->getPageCount() > 1): ?>
+                    <div class="d-flex justify-content-between align-items-center mt-3 feedback-pagination">
                         <div>
                             <span class="text-muted small">
                                 Showing <?= (($pager->getCurrentPage() - 1) * $pager->getPerPage()) + 1 ?> 
