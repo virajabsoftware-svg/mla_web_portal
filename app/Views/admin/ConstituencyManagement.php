@@ -745,31 +745,31 @@
         <!-- STATISTICS BOXES -->
         <!-- ============================================================ -->
         <div class="row g-4 mb-5">
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-3 col-md-6 ms-5">
                 <div class="stat-box">
                     <div class="stat-icon"><i class="fas fa-city"></i></div>
-                    <div class="stat-number">36</div>
+                    <div class="stat-number"><?= $totalDistricts ?></div>
                     <div class="stat-label">Total Districts</div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-3 col-md-6 ms-5">
                 <div class="stat-box">
                     <div class="stat-icon"><i class="fas fa-map-pin"></i></div>
-                    <div class="stat-number">288</div>
+                    <div class="stat-number"><?= $totalConstituencies ?></div>
                     <div class="stat-label">Total Constituencies</div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <!-- <div class="col-xl-3 col-md-6">
                 <div class="stat-box">
                     <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
                     <div class="stat-number">215</div>
                     <div class="stat-label">Developed Constituencies</div>
                 </div>
-            </div>
-            <div class="col-xl-3 col-md-6">
+            </div> -->
+            <div class="col-xl-3 col-md-6 ms-5">
                 <div class="stat-box">
                     <div class="stat-icon"><i class="fas fa-play-circle"></i></div>
-                    <div class="stat-number">288</div>
+                    <div class="stat-number"><?= $activeConstituencies ?></div>
                     <div class="stat-label">Active Constituencies</div>
                 </div>
             </div>

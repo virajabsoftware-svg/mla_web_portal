@@ -36,7 +36,15 @@ class ConstituencyManagement extends BaseController
                     ->join('states', 'states.id = constituencies.state_id')
                     ->join('districts', 'districts.id = constituencies.district_id')
                     ->orderBy('constituencies.constituency_name', 'ASC')
-                    ->findAll();    
+                    ->findAll();  
+                    
+                    $data['totalDistricts'] = $this->districtModel->countAll();
+
+$data['totalConstituencies'] = $this->constituencyModel->countAll();
+
+$data['activeConstituencies'] = $this->constituencyModel
+                                    ->where('status', 'Active')
+                                    ->countAllResults();
                             
         return view('admin/ConstituencyManagement', $data);
     }
