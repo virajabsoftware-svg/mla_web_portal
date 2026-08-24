@@ -16,6 +16,12 @@ $routes->get('leadership', 'Home::leadership');
 $routes->get('mla', 'Home::mla');
 
 
+
+$routes->group('api', [ 'namespace' => 'App\Controllers\Api'], function ($routes) 
+{  
+     $routes->post('login', 'AuthApi::login');
+     $routes->get('test', 'AuthApi::test');
+});
 // =====================================================
 // ADMIN AUTH - PUBLIC
 // =====================================================

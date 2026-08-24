@@ -898,7 +898,7 @@
                         <input type="password"
                                name="confirm_password"
                                class="form-control"
-                               placeholder="Re-enter password"
+                               placeholder="Re-enter password" minlength="8"  maxlength="8"
                                id="confirmPasswordField"
                                required>
 
@@ -1449,6 +1449,14 @@
 
             <div class="text-center mt-3">
 
+                <div id="otpTimer"
+                     class="small text-danger fw-semibold mb-2"
+                     aria-live="polite">
+
+                    OTP expires in 10:00
+
+                </div>
+
                 <button type="button"
                         class="btn-back"
                         onclick="resendResetOtp()">
@@ -1526,7 +1534,7 @@
                            name="password"
                            id="newResetPassword"
                            class="form-control"
-                           placeholder="Enter new password"
+                           placeholder="Enter new password" minlength="8"  maxlength="8"
                            minlength="8"
                            required>
 
@@ -1548,7 +1556,7 @@
                            id="confirmResetPassword"
                            class="form-control"
                            placeholder="Confirm new password"
-                           minlength="8"
+                           minlength="8"  maxlength="8"
                            required>
 
                 </div>
@@ -2225,11 +2233,76 @@ function updateForgotPasswordCsrfToken(token) {
 }
 
 
+let otpTimerInterval = null;
+
+
+function startOtpTimer(expiresAt) {
+
+    const timer = document.getElementById('otpTimer');
+    const verifyButton = document.querySelector(
+        '#verifyOtpForm button[type="submit"]'
+    );
+
+
+    if (otpTimerInterval) {
+        clearInterval(otpTimerInterval);
+    }
+
+
+    if (!timer || !expiresAt) {
+        return;
+    }
+
+
+    const updateTimer = function() {
+
+        const remaining = Math.max(
+            0,
+            Math.ceil(Number(expiresAt) - Date.now() / 1000)
+        );
+
+        const minutes = String(Math.floor(remaining / 60)).padStart(2, '0');
+        const seconds = String(remaining % 60).padStart(2, '0');
+
+
+        if (remaining === 0) {
+            timer.textContent = 'OTP expired. Please resend OTP.';
+            timer.classList.remove('text-danger');
+            timer.classList.add('text-secondary');
+
+            if (verifyButton) {
+                verifyButton.disabled = true;
+            }
+
+            clearInterval(otpTimerInterval);
+            return;
+        }
+
+
+        timer.textContent = `OTP expires in ${minutes}:${seconds}`;
+
+        if (verifyButton) {
+            verifyButton.disabled = false;
+        }
+
+    };
+
+
+    updateTimer();
+    otpTimerInterval = setInterval(updateTimer, 1000);
+
+}
+
+
 /* ============================================
    BACK TO EMAIL
 ============================================ */
 
 function forgotBackToEmail() {
+
+    if (otpTimerInterval) {
+        clearInterval(otpTimerInterval);
+    }
 
     document.getElementById(
         'resetOtp'
@@ -2338,6 +2411,7 @@ document.getElementById(
 
 
                 showForgotStep(2);
+                startOtpTimer(data.expiresAt);
 
             }
 
@@ -2647,6 +2721,8 @@ function resendResetOtp() {
                 data.message ||
                 'New OTP sent successfully.'
             );
+
+            startOtpTimer(data.expiresAt);
 
         }
 

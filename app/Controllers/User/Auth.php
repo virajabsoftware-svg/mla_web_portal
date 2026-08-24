@@ -89,47 +89,55 @@ class Auth extends BaseController
         $data = [
 
             'voter_id' => $this->request->getPost('voter_id'),
-
             'full_name' => $this->request->getPost('full_name'),
-
             'dob' => $this->request->getPost('dob'),
-
             'gender' => $this->request->getPost('gender'),
-
             'email' => $this->request->getPost('email'),
-
             'password' => password_hash(
                 $this->request->getPost('password'),
                 PASSWORD_DEFAULT
             ),
 
             'state' => $this->request->getPost('state_id'),
-
             'district' => $this->request->getPost('district_id'),
-
             'constituency' => $this->request->getPost('constituency_id'),
-
             'locality' => $this->request->getPost('locality'),
-
             'pincode' => $this->request->getPost('pincode'),
-
             'profile_photo' => $photoName,
-
             'mla_id' => $this->request->getPost('mla_id'),
-
             'status' => 'pending'
         ];
 
         if ($model->insert($data)) {
 
+
+           /*
+            // Get newly created user ID
+            $userId = $model->getInsertID();
+            // Regenerate session ID for security
+            session()->regenerate(true);
+            // Set login session
+            session()->set([
+
+                'user_logged_in' => true,
+                'user_id' => $userId,
+                'voter_id' => $data['voter_id'],
+                'full_name' => $data['full_name'],
+                'email' => $data['email'],
+                'profile_photo' => $data['profile_photo'],
+                'logged_in' => true,
+
+            ]);*/
+
             return redirect()
-                ->back()
+                ->to(base_url('user/dashboard'))
                 ->with(
                     'success',
-                    'Registration Successful'
+                    'Registration successful. Welcome!'
                 );
-
-        } else {
+        } 
+        else
+     {
 
             return redirect()
                 ->back()
@@ -174,17 +182,11 @@ class Auth extends BaseController
                 session()->set([
 
                     'user_logged_in' => true,
-
                     'user_id' => $user['id'],
-
                     'voter_id' => $user['voter_id'],
-
                     'full_name' => $user['full_name'],
-
                     'email' => $user['email'],
-
                     'profile_photo' => $user['profile_photo'],
-
                     'logged_in' => true,
 
                 ]);
@@ -322,10 +324,9 @@ class Auth extends BaseController
         return redirect()->to(base_url('user/login'));
     }
 
-    private function forgotPasswordResponse(
-        string $message,
-        string $step = 'email',
-        bool $success = false
+    private function forgotPasswordResponse( string $message, string $step = 'email',
+        bool $success = false,
+        ?int $expiresAt = null
     )
     {
         if ($this->request->isAJAX()) {
@@ -334,6 +335,7 @@ class Auth extends BaseController
                 'message' => $message,
                 'step' => $step,
                 'csrfToken' => csrf_hash(),
+                'expiresAt' => $expiresAt,
             ]);
         }
 
@@ -347,113 +349,105 @@ class Auth extends BaseController
     // SEND RESET OTP
     // =====================================================
 
-    public function sendResetOtp()
-    {
-        $email = trim(
-            (string) $this->request->getPost('email')
-        );
+   public function sendResetOtp()
+{
+    $email = trim(
+        (string) $this->request->getPost('email')
+    );
 
-        // -------------------------
-        // Validate Email
-        // -------------------------
+    // -------------------------
+    // Validate Email
+    // -------------------------
 
-        if ($email === '') {
-            return $this->forgotPasswordResponse(
-                'Email address is required.'
-            );
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return $this->forgotPasswordResponse(
-                'Please enter a valid email address.'
-            );
-        }
-
-        // -------------------------
-        // Find User
-        // -------------------------
-
-        $user = $this->voterModel
-            ->where('email', $email)
-            ->first();
-
-        if (!$user) {
-            return $this->forgotPasswordResponse(
-                'No account found with this email address.'
-            );
-        }
-
-        // -------------------------
-        // Generate OTP
-        // -------------------------
-
-        // Temporary local testing OTP. Restore random_int() before production.
-        $otp = '123456';
-
-        $expiresAt = time() + (10 * 60);
-
-        // -------------------------
-        // Store OTP in Session
-        // -------------------------
-
-        session()->set([
-
-            'reset_email' => $email,
-
-            'reset_otp' => (string) $otp,
-
-            'reset_otp_expires' => $expiresAt,
-
-            'reset_otp_verified' => false,
-
-            'forgot_step' => 'otp'
-
-        ]);
-
-        /*
-        // Email sending is temporarily disabled for local testing.
-
-        $emailService = \Config\Services::email();
-
-        $emailService->setTo($email);
-        $emailService->setSubject('Voter Portal - Password Reset OTP');
-        $emailService->setMailType('html');
-        $emailService->setMessage(
-            '<h2>Password Reset Request</h2>' .
-            '<p>Your OTP is: <strong>' . $otp . '</strong></p>' .
-            '<p>This OTP is valid for 10 minutes.</p>'
-        );
-
-        if (!$emailService->send()) {
-            log_message(
-                'error',
-                $emailService->printDebugger(['headers'])
-            );
-
-            session()->remove([
-                'reset_email',
-                'reset_otp',
-                'reset_otp_expires',
-                'reset_otp_verified',
-                'forgot_step'
-            ]);
-
-            return $this->forgotPasswordResponse(
-                'Unable to send OTP. Please try again later.'
-            );
-        }
-        */
-
-        // -------------------------
-        // OTP Sent
-        // -------------------------
-
+    if ($email === '') {
         return $this->forgotPasswordResponse(
-            'OTP has been sent to your registered email address.',
-            'otp',
-            true
+            'Email address is required.'
         );
     }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return $this->forgotPasswordResponse(
+            'Please enter a valid email address.'
+        );
+    }
+
+    // -------------------------
+    // Find User
+    // -------------------------
+
+    $user = $this->voterModel
+        ->where('email', $email)
+        ->first();
+
+    if (!$user) {
+        return $this->forgotPasswordResponse(
+            'No account found with this email address.'
+        );
+    }
+
+    // -------------------------
+    // Generate OTP
+    // -------------------------
+
+    $otp = (string) random_int(100000, 999999);
+
+    $expiresAt = time() + (10 * 60);
+
+    // -------------------------
+    // Store OTP in Session
+    // -------------------------
+
+    session()->set([
+        'reset_email' => $email,
+        'reset_otp' => $otp,
+        'reset_otp_expires' => $expiresAt,
+        'reset_otp_verified' => false,
+        'forgot_step' => 'otp'
+    ]);
+
+    // Send OTP through the configured SMTP mail service.
+
+    $emailService = \Config\Services::email();
+    $emailService->setTo($email);
+    $emailService->setSubject('Voter Portal - Password Reset OTP');
+    $emailService->setMailType('html');
+    $emailService->setMessage(
+        '<h2>Password Reset Request</h2>' .
+        '<p>Your OTP is: <strong>' . $otp . '</strong></p>' .
+        '<p>This OTP is valid for 10 minutes.</p>'
+    );
+
+    if (!$emailService->send()) {
+        log_message(
+            'error',
+            'OTP email failed: ' .
+            $emailService->printDebugger(['headers', 'subject'])
+        );
+
+        session()->remove([
+            'reset_email',
+            'reset_otp',
+            'reset_otp_expires',
+            'reset_otp_verified',
+            'forgot_step'
+        ]);
+
+        return $this->forgotPasswordResponse(
+            'Unable to send OTP. Please try again later.'
+        );
+    }
+
+    // -------------------------
+    // OTP Sent Successfully
+    // -------------------------
+
+    return $this->forgotPasswordResponse(
+        'OTP has been sent to your registered email address.',
+        'otp',
+            true,
+            $expiresAt
+    );
+}
 
     // =====================================================
     // VERIFY RESET OTP
