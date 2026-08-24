@@ -510,7 +510,7 @@
                        class="form-control"
                        id="email"
                        name="email"
-                       placeholder="Enter your email" minlength="8"  maxlength="8"
+                       placeholder="Enter your email" 
                        required>
 
             </div>
