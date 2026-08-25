@@ -224,7 +224,10 @@ class SurveyManagement extends BaseController
     /**
      * Delete a survey
      */
-    public function delete($id)
+    /**
+ * Delete a survey
+ */
+   public function delete($id)
     {
         if (!$this->request->isAJAX()) {
             return $this->response->setJSON([
@@ -233,24 +236,70 @@ class SurveyManagement extends BaseController
             ])->setStatusCode(405);
         }
 
+        $db = \Config\Database::connect();
+
         try {
-            $result = $this->surveyModel->deleteSurvey($id);
+            // Start transaction
+            $db->transStart();
+
+            // 1. Get all question IDs of this survey
+            $questions = $db->table('survey_questions')
+                ->select('id')
+                ->where('survey_id', $id)
+                ->get()
+                ->getResultArray();
+
+            // 2. Delete options belonging to these questions
+            if (!empty($questions)) {
+                $questionIds = array_column($questions, 'id');
+
+                $db->table('survey_question_options')
+                    ->whereIn('question_id', $questionIds)
+                    ->delete();
+
+                // 3. Delete questions belonging to survey
+                $db->table('survey_questions')
+                    ->where('survey_id', $id)
+                    ->delete();
+            }
+
+            // 4. Delete survey
+            $result = $db->table('surveys')
+                ->where('id', $id)
+                ->delete();
 
             if (!$result) {
                 throw new \Exception('Failed to delete survey');
             }
 
+            // Complete transaction
+            $db->transComplete();
+
+            if ($db->transStatus() === false) {
+                throw new \Exception('Transaction failed');
+            }
+
             return $this->response->setJSON([
                 'status' => true,
-                'message' => 'Survey deleted successfully'
+                'message' => 'Survey, questions and options deleted successfully'
             ]);
 
         } catch (\Throwable $e) {
-            log_message('error', 'Delete Survey Error: ' . $e->getMessage());
-            return $this->response->setJSON([
-                'status' => false,
-                'message' => 'Failed to delete survey: ' . $e->getMessage()
-            ])->setStatusCode(500);
+
+            // Rollback
+            $db->transRollback();
+
+            log_message(
+                'error',
+                'Delete Survey Error: ' . $e->getMessage()
+            );
+
+            return $this->response
+                ->setStatusCode(500)
+                ->setJSON([
+                    'status' => false,
+                    'message' => 'Failed to delete survey: ' . $e->getMessage()
+                ]);
         }
     }
 
