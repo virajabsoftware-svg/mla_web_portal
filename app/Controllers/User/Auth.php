@@ -31,6 +31,131 @@ class Auth extends BaseController
         ]);
     }
 
+    public function googleLogin()
+    {
+        $clientId = (string) getenv('google.clientId');
+        $clientSecret = (string) getenv('google.clientSecret');
+
+        if ($clientId === '' || $clientSecret === '') {
+            return redirect()->to(base_url('user/login'))
+                ->with('error', 'Google login is not configured yet.');
+        }
+
+        $state = bin2hex(random_bytes(32));
+        session()->set('google_oauth_state', $state);
+
+        $query = http_build_query([
+            'client_id' => $clientId,
+            'redirect_uri' => base_url('user/google-callback'),
+            'response_type' => 'code',
+            'scope' => 'openid email profile',
+            'state' => $state,
+            'access_type' => 'online',
+            'prompt' => 'select_account',
+        ]);
+
+        return redirect()->to(
+            'https://accounts.google.com/o/oauth2/v2/auth?' . $query
+        );
+    }
+
+    public function googleCallback()
+    {
+        $state = (string) $this->request->getGet('state');
+        $savedState = (string) session()->get('google_oauth_state');
+        session()->remove('google_oauth_state');
+
+        if ($state === '' || $savedState === '' || !hash_equals($savedState, $state)) {
+            return redirect()->to(base_url('user/login'))
+                ->with('error', 'Invalid Google login request.');
+        }
+
+        if ((string) $this->request->getGet('error') !== '') {
+            return redirect()->to(base_url('user/login'))
+                ->with('error', 'Google login was cancelled.');
+        }
+
+        $code = (string) $this->request->getGet('code');
+        if ($code === '') {
+            return redirect()->to(base_url('user/login'))
+                ->with('error', 'Google authorization code is missing.');
+        }
+
+        $token = $this->googleRequest(
+            'https://oauth2.googleapis.com/token',
+            [
+                'code' => $code,
+                'client_id' => (string) getenv('google.clientId'),
+                'client_secret' => (string) getenv('google.clientSecret'),
+                'redirect_uri' => base_url('user/google-callback'),
+                'grant_type' => 'authorization_code',
+            ]
+        );
+
+        if (empty($token['id_token'])) {
+            return redirect()->to(base_url('user/login'))
+                ->with('error', 'Unable to verify Google login.');
+        }
+
+        $profile = $this->googleRequest(
+            'https://oauth2.googleapis.com/tokeninfo?id_token=' .
+            rawurlencode($token['id_token'])
+        );
+
+        if (
+            ($profile['aud'] ?? '') !== (string) getenv('google.clientId') ||
+            ($profile['email_verified'] ?? '') !== 'true' ||
+            empty($profile['email'])
+        ) {
+            return redirect()->to(base_url('user/login'))
+                ->with('error', 'Google account verification failed.');
+        }
+
+        $user = $this->voterModel->findByEmail(strtolower($profile['email']));
+        if (!$user) {
+            return redirect()->to(base_url('user/login'))
+                ->with('error', 'Please register this email in the voter portal first.');
+        }
+
+        session()->regenerate(true);
+        session()->set([
+            'user_logged_in' => true,
+            'user_id' => $user['id'],
+            'voter_id' => $user['voter_id'],
+            'full_name' => $user['full_name'],
+            'email' => $user['email'],
+            'profile_photo' => $user['profile_photo'],
+            'logged_in' => true,
+        ]);
+
+        return redirect()->to(base_url('user/dashboard'))
+            ->with('success', 'Google login successful.');
+    }
+
+    private function googleRequest(string $url, array $data = []): array
+    {
+        $curl = curl_init($url);
+        curl_setopt_array($curl, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => $data !== [],
+            CURLOPT_POSTFIELDS => $data !== [] ? http_build_query($data) : null,
+            CURLOPT_TIMEOUT => 15,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_HTTPHEADER => ['Accept: application/json'],
+        ]);
+
+        $response = curl_exec($curl);
+        $status = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        if ($response === false || $status < 200 || $status >= 300) {
+            return [];
+        }
+
+        $decoded = json_decode($response, true);
+        return is_array($decoded) ? $decoded : [];
+    }
+
     // =====================================================
     // REGISTER
     // =====================================================

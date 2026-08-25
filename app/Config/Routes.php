@@ -419,6 +419,16 @@ $routes->group(
             'Auth::login'
         );
 
+        $routes->get(
+            'google-login',
+            'Auth::googleLogin'
+        );
+
+        $routes->get(
+            'google-callback',
+            'Auth::googleCallback'
+        );
+
         $routes->post(
             'login/check',
             'Auth::loginCheck'

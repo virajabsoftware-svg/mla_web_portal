@@ -561,6 +561,12 @@
 
             </button>
 
+            <a href="<?= base_url('user/google-login') ?>"
+               class="btn btn-outline-dark w-100 mt-3">
+                <i class="bi bi-google me-2"></i>
+                Continue with Google
+            </a>
+
             <div class="divider-line">
                 OR
             </div>
