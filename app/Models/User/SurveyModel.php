@@ -9,6 +9,24 @@ class SurveyModel extends Model
     protected $table = 'surveys';
     protected $primaryKey = 'id';
     protected $returnType = 'array';
+    protected $allowedFields = [
+        'survey_code',
+        'title',
+        'survey_category',
+        'description',
+        'mla_id',
+        'constituency',
+        'responses',
+        'sentiment',
+        'participation',
+        'status',
+        'start_date',
+        'end_date',
+        'created_by'
+    ];
+    protected $useTimestamps = true;
+    protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
 
     /**
      * Get overall survey statistics
@@ -24,100 +42,239 @@ class SurveyModel extends Model
             ->countAllResults();
 
         $activeSurveys = $db->table('surveys')
-            ->where('status', 'active')
+            ->where('status', 'Active')
             ->countAllResults();
 
+        // Calculate participation rate based on total possible responses
+        // For now, use active surveys as denominator
+        $participationRate = 0;
+        if ($totalSurveys > 0) {
+            $participationRate = round(($totalResponses / ($totalSurveys * 100)) * 100, 2);
+            if ($participationRate > 100) $participationRate = 100;
+        }
+
+        // Calculate satisfaction from survey sentiment
+        $sentimentStats = $db->table('surveys')
+            ->select('sentiment, COUNT(*) as count')
+            ->where('sentiment !=', '')
+            ->groupBy('sentiment')
+            ->get()
+            ->getResultArray();
+
+        $satisfaction = 0;
+        $positiveCount = 0;
+        $totalWithSentiment = 0;
+
+        foreach ($sentimentStats as $row) {
+            $totalWithSentiment += $row['count'];
+            if ($row['sentiment'] === 'Positive') {
+                $positiveCount = $row['count'];
+            }
+        }
+
+        if ($totalWithSentiment > 0) {
+            $satisfaction = round(($positiveCount / $totalWithSentiment) * 100, 2);
+        }
+
+        // Get MLA response count
+        $mlaCount = $this->getMLAResponseWiseCount();
+
         return [
-            'totalSurveys'   => (int) $totalSurveys,
-            'totalResponses' => (int) $totalResponses,
-            'activeSurveys'  => (int) $activeSurveys,
+            'total_surveys'     => (int) $totalSurveys,
+            'total_responses'   => (int) $totalResponses,
+            'active_surveys'    => (int) $activeSurveys,
+            'satisfaction_rate' => $satisfaction,
+            'participation_rate' => $participationRate,
+            'mla_stats'         => $mlaCount
         ];
     }
 
     /**
-     * Get MLA-wise survey and response statistics.
-     *
-     * IMPORTANT:
-     * Every MLA from the `mlas` table is returned,
-     * even if that MLA has 0 surveys / 0 responses.
+     * Get all surveys with MLA names and response counts
+     */
+    public function getAllSurveys()
+    {
+        $db = \Config\Database::connect();
+
+        return $db->table('surveys s')
+            ->select('
+                s.*,
+                m.mla_name,
+                m.mla_code,
+                COUNT(DISTINCT sr.id) as actual_responses,
+                COUNT(DISTINCT sq.id) as question_count
+            ')
+            ->join('mlas m', 'm.id = s.mla_id', 'left')
+            ->join('survey_responses sr', 'sr.survey_id = s.id', 'left')
+            ->join('survey_questions sq', 'sq.survey_id = s.id', 'left')
+            ->groupBy('s.id')
+            ->orderBy('s.created_at', 'DESC')
+            ->get()
+            ->getResultArray();
+    }
+
+    /**
+     * Get a single survey with questions and options
+     */
+    public function getSurveyWithQuestions($surveyId)
+    {
+        $db = \Config\Database::connect();
+
+        $survey = $db->table('surveys s')
+            ->select('
+                s.*,
+                m.mla_name,
+                m.mla_code,
+                COUNT(DISTINCT sr.id) as actual_responses
+            ')
+            ->join('mlas m', 'm.id = s.mla_id', 'left')
+            ->join('survey_responses sr', 'sr.survey_id = s.id', 'left')
+            ->where('s.id', $surveyId)
+            ->groupBy('s.id')
+            ->get()
+            ->getRowArray();
+
+        if (!$survey) {
+            return null;
+        }
+
+        // Get questions
+        $questions = $db->table('survey_questions')
+            ->where('survey_id', $surveyId)
+            ->orderBy('sort_order', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        // Get options for each question
+        foreach ($questions as &$question) {
+            $options = $db->table('survey_question_options')
+                ->where('question_id', $question['id'])
+                ->where('is_active', 1)
+                ->orderBy('sort_order', 'ASC')
+                ->get()
+                ->getResultArray();
+            $question['options'] = $options;
+        }
+
+        $survey['questions'] = $questions;
+        return $survey;
+    }
+
+    /**
+     * Get MLA-wise survey and response statistics
      */
     public function getMLAResponseWiseCount()
     {
         $db = \Config\Database::connect();
 
-        /*
-         * Start from mlas table so every MLA is displayed.
-         *
-         * survey_responses.mla_id should contain the MLA id/code
-         * used when the survey response is submitted.
-         */
-        $builder = $db->table('mlas m');
+        // Get all MLAs
+        $mlas = $db->table('mlas')
+            ->select('id, mla_name, mla_code, constituency_id')
+            ->where('status', 'active')
+            ->orderBy('mla_name', 'ASC')
+            ->get()
+            ->getResultArray();
 
-        $builder->select("
-            m.id AS mla_id,
-            m.mla_code,
-            m.mla_name,
+        $result = [];
 
-            COUNT(DISTINCT sr.survey_id) AS total_surveys,
+        foreach ($mlas as $mla) {
+            // Count surveys for this MLA
+            $totalSurveys = $db->table('surveys')
+                ->where('mla_id', $mla['id'])
+                ->countAllResults();
 
-            COUNT(sr.id) AS total_responses,
+            // Count responses for this MLA
+            $totalResponses = $db->table('survey_responses')
+                ->where('mla_id', $mla['id'])
+                ->countAllResults();
 
-            CASE
-                WHEN COUNT(DISTINCT sr.survey_id) > 0
-                THEN ROUND(
-                    COUNT(sr.id) / COUNT(DISTINCT sr.survey_id),
-                    2
-                )
-                ELSE 0
-            END AS avg_participation
-        ");
-
-        $builder->join(
-            'survey_responses sr',
-            'sr.mla_id = m.id',
-            'left'
-        );
-
-        $builder->groupBy([
-            'm.id',
-            'm.mla_code',
-            'm.mla_name'
-        ]);
-
-        $builder->orderBy('m.mla_name', 'ASC');
-
-        $results = $builder->get()->getResultArray();
-
-        foreach ($results as &$row) {
-
-            $row['mla_id'] = (int) $row['mla_id'];
-
-            $row['total_surveys'] =
-                (int) $row['total_surveys'];
-
-            $row['total_responses'] =
-                (int) $row['total_responses'];
-
-            /*
-             * Participation percentage.
-             *
-             * This is calculated safely so it never exceeds 100%.
-             */
-            if ($row['total_surveys'] > 0) {
-
-                $percentage =
-                    ($row['total_responses'] /
-                    $row['total_surveys']) * 100;
-
-                $row['avg_participation'] =
-                    round(min($percentage, 100), 2);
-
-            } else {
-
-                $row['avg_participation'] = 0;
+            // Calculate average participation
+            $avgParticipation = 0;
+            if ($totalSurveys > 0) {
+                $avgParticipation = round(($totalResponses / ($totalSurveys * 50)) * 100, 2);
+                if ($avgParticipation > 100) $avgParticipation = 100;
             }
+
+            $result[] = [
+                'mla_id'            => (int) $mla['id'],
+                'mla_name'          => $mla['mla_name'],
+                'mla_code'          => $mla['mla_code'],
+                'total_surveys'     => (int) $totalSurveys,
+                'total_responses'   => (int) $totalResponses,
+                'avg_participation' => $avgParticipation
+            ];
         }
 
-        return $results;
+        return $result;
+    }
+
+    /**
+     * Create a new survey
+     */
+    public function createSurvey($data)
+    {
+        // Generate survey code
+        $data['survey_code'] = 'SRV-' . strtoupper(uniqid());
+
+        if (empty($data['status'])) {
+            $data['status'] = 'Active';
+        }
+
+        if (empty($data['sentiment'])) {
+            $data['sentiment'] = 'Neutral';
+        }
+
+        if (empty($data['responses'])) {
+            $data['responses'] = 0;
+        }
+
+        if (empty($data['participation'])) {
+            $data['participation'] = 0;
+        }
+
+        return $this->insert($data);
+    }
+
+    /**
+     * Update a survey
+     */
+    public function updateSurvey($id, $data)
+    {
+        return $this->update($id, $data);
+    }
+
+    /**
+     * Delete a survey (handles cascading via foreign keys)
+     */
+    public function deleteSurvey($id)
+    {
+        // Check if survey exists
+        $survey = $this->find($id);
+        if (!$survey) {
+            return false;
+        }
+
+        // Delete survey (cascade will delete questions, options, responses, answers)
+        return $this->delete($id);
+    }
+
+    /**
+     * Get survey response count
+     */
+    public function getResponseCount($surveyId)
+    {
+        $db = \Config\Database::connect();
+        return (int) $db->table('survey_responses')
+            ->where('survey_id', $surveyId)
+            ->countAllResults();
+    }
+
+    /**
+     * Update survey response count
+     */
+    public function updateResponseCount($surveyId)
+    {
+        $count = $this->getResponseCount($surveyId);
+        return $this->update($surveyId, ['responses' => $count]);
     }
 }

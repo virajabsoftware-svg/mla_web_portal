@@ -108,6 +108,22 @@ $routes->group(
 
 
         // =================================================
+// SURVEY MANAGEMENT ROUTES
+// =================================================
+
+$routes->get('survey-management', 'SurveyManagement::index');
+$routes->get('survey-management/data', 'SurveyManagement::dashboardData');
+$routes->get('survey-management/get/(:num)', 'SurveyManagement::getSurvey/$1');
+$routes->post('survey-management/create', 'SurveyManagement::create');
+$routes->post('survey-management/update/(:num)', 'SurveyManagement::update/$1');
+$routes->post('survey-management/delete/(:num)', 'SurveyManagement::delete/$1');
+$routes->get('survey-management/get-mlas', 'SurveyManagement::getMlas');
+$routes->get('survey-management/get-question-types', 'SurveyManagement::getQuestionTypes');
+$routes->post('survey-management/add-question', 'SurveyManagement::addQuestion');
+$routes->post('survey-management/update-question/(:num)', 'SurveyManagement::updateQuestion/$1');
+$routes->post('survey-management/delete-question/(:num)', 'SurveyManagement::deleteQuestion/$1');
+
+        // =================================================
         // MANAGEMENT ROUTES
         // =================================================
 
