@@ -116,17 +116,13 @@ class MLAManagement extends BaseController
 
 public function get($id)
 {
+    // Fetch complete MLA data with location names
     $mla = $this->mlaModel
-        ->select('
-            mlas.*,
-            states.state_name,
-            districts.district_name,
-            constituencies.constituency_name
-        ')
-        ->join('states', 'states.id = mlas.state_id')
-        ->join('districts', 'districts.id = mlas.district_id')
-        ->join('constituencies', 'constituencies.id = mlas.constituency_id')
-        ->where('mlas.id', $id)
+        ->select(' mlas.*,states.state_name,districts.district_name,constituencies.constituency_name')
+        ->join('states','states.id = mlas.state_id','left')
+        ->join('districts','districts.id = mlas.district_id','left')
+        ->join('constituencies','constituencies.id = mlas.constituency_id','left')
+        ->where('mlas.id', $mla['id'])
         ->first();
 
     if ($mla) {

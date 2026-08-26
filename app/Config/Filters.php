@@ -32,16 +32,17 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
-
         // ========================================================
         // CUSTOM AUTHENTICATION FILTERS
         // ========================================================
-
         // User Login Protection
         'auth'          => \App\Filters\AuthFilter::class,
-
         // Admin Login Protection
         'adminAuth'     => \App\Filters\AdminAuthFilter::class,
+
+        //API Token Authentication
+        'apiToken' => \App\Filters\ApiTokenFilter::class,
+        'mlaToken' => \App\Filters\MlaToken::class,
     ];
 
 

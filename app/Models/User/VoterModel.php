@@ -13,7 +13,7 @@ class VoterModel extends Model
         'voter_id', 'full_name', 'dob', 'gender', 'email', 'password',
         'mobile', 'state', 'district', 'constituency', 'locality', 'pincode',
         'profile_photo', 'mla_name', 'mla_party', 'mla_id',
-        'status'
+        'status','api_token','token_expiry'
     ];
 
     protected $useTimestamps = true;

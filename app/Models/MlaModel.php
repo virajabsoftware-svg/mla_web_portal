@@ -28,7 +28,9 @@ class MlaModel extends Model
         'pincode',
         'aadhaar',
         'joining_date',
-        'status'
+        'status',
+        'api_token',
+        'token_expiry'
     ];
 
     protected $useTimestamps = true;

@@ -17,39 +17,34 @@ $routes->get('mla', 'Home::mla');
 
 
 
-$routes->group('api', [ 'namespace' => 'App\Controllers\Api'], function ($routes) 
-{  
-     $routes->post('login', 'AuthApi::login');
-     $routes->get('test', 'AuthApi::test');
-});
+$routes->group('api',  ['namespace' => 'App\Controllers\Api'],function ($routes) {
+
+        // Public
+        $routes->post('voter/login', 'AuthApi::voterlogin');
+        //$routes->get('test', 'AuthApi::test');
+        // Protected
+        $routes->get('voter/profile','AuthApi::voterprofile',['filter' => 'apiToken']);
+        $routes->post('voter/logout','AuthApi::voterlogout',['filter' => 'apiToken']);
+
+        // Public MLA   
+        $routes->post('login', 'AuthApi::login');
+        $routes->get('profile', 'AuthApi::profile', ['filter' => 'mlaToken']);
+        $routes->post('logout', 'AuthApi::logout', ['filter' => 'mlaToken']);
+    }
+);
 // =====================================================
 // ADMIN AUTH - PUBLIC
 // =====================================================
 
-$routes->group(
-    'admin',
-    [
-        'namespace' => 'App\Controllers\Admin'
-    ],
-    function ($routes) {
+$routes->group('admin',  ['namespace' => 'App\Controllers\Admin'],
+   function ($routes) {
 
         // Login page
-        $routes->get(
-            'login',
-            'Auth::login'
-        );
-
+        $routes->get('login','Auth::login');
         // Login submit
-        $routes->post(
-            'login',
-            'Auth::loginCheck'
-        );
-
+        $routes->post('login','Auth::loginCheck' );
         // Logout
-        $routes->get(
-            'logout',
-            'Auth::logout'
-        );
+        $routes->get('logout','Auth::logout' );
     }
 );
 

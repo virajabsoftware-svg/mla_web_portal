@@ -26,41 +26,41 @@ class Database extends Config
      */
   public array $default = [
 
-'DSN'      => '',
+        'DSN'      => '',
 
-'hostname' => 'localhost',
+        'hostname' => 'localhost',
 
-'username' => 'root',
+        'username' => 'root',
 
-'password' => '',
+        'password' => '',
 
-'database' => 'mla_web_portal',
+        'database' => 'mla_web_portal',
 
-'DBDriver' => 'MySQLi',
+        'DBDriver' => 'MySQLi',
 
-'DBPrefix' => '',
+        'DBPrefix' => '',
 
-'pConnect' => false,
+        'pConnect' => false,
 
-'DBDebug'  => true,
+        'DBDebug'  => true,
 
-'charset'  => 'utf8',
+        'charset'  => 'utf8',
 
-'DBCollat' => 'utf8_general_ci',
+        'DBCollat' => 'utf8_general_ci',
 
-'swapPre'  => '',
+        'swapPre'  => '',
 
-'encrypt'  => false,
+        'encrypt'  => false,
 
-'compress' => false,
+        'compress' => false,
 
-'strictOn' => false,
+        'strictOn' => false,
 
-'failover' => [],
+        'failover' => [],
 
-'port'     => 3306,
+        'port'     => 3306,
 
-];
+        ];
 
     //    /**
     //     * Sample database connection for SQLite3.
