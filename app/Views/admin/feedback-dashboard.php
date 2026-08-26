@@ -4,26 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>MLA Monitoring System - Survey Management</title>
+    <title>MLA Monitoring System - Feedback Dashboard</title>
     <!-- Existing CSS dependencies (preserved) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- jQuery and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="<?= base_url('assets/admin/css/header.css') ?>">
-  
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <style>
         /* ===================================================== */
-        /* PREMIUM SURVEY DASHBOARD - White + Beige + Gold Theme */
-        /* ===================================================== */
+        /* PREMIUM FEEDBACK DASHBOARD - White + Beige + Gold Theme
+           Same as Complaint Management
+           ===================================================== */
 
         :root {
             --pure-white: #ffffff;
@@ -35,6 +40,10 @@
             --gold: #d4af37;
             --gold-dark: #b8960c;
             --gold-glow: rgba(212, 175, 55, 0.35);
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.08);
@@ -56,173 +65,114 @@
             min-height: 100vh;
         }
 
-        .survey_section {
-            padding: 35px;
-        }
+        /* ===================================================== */
+        /* MAIN HEADER - Premium Gold Gradient */
+        /* ===================================================== */
 
-        /* HEADER */
-        .survey_header {
+        .feedback_header {
             position: relative;
             overflow: hidden;
-            padding: 45px;
             border-radius: var(--radius-xxl);
+            padding: 50px;
             background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light), #1e293b);
             box-shadow: var(--shadow-gold-lg);
-            margin-bottom: 35px;
+            isolation: isolate;
         }
 
-        .survey_header::before {
-            content: "";
+        /* Animated Glow Effects */
+        .feedback_header::before {
+            content: '';
             position: absolute;
-            width: 380px;
-            height: 380px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent);
-            border-radius: 50%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 70%);
             top: -180px;
             right: -120px;
             animation: floatGlow 6s ease-in-out infinite;
         }
 
-        .survey_header::after {
-            content: "";
+        .feedback_header::after {
+            content: '';
             position: absolute;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent);
-            border-radius: 50%;
-            bottom: -120px;
-            left: -80px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent 70%);
+            bottom: -180px;
+            left: -100px;
             animation: floatGlowDelayed 8s ease-in-out infinite;
         }
 
         @keyframes floatGlow {
             0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(15px) scale(1.05); }
+            50% { transform: translateY(20px) scale(1.05); }
         }
 
         @keyframes floatGlowDelayed {
             0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-15px) scale(1.08); }
+            50% { transform: translateY(-20px) scale(1.08); }
         }
 
-        .survey_header h2 {
-            color: white;
-            font-size: 36px;
+        .header_content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .header_content h1 {
             font-family: 'Poppins', sans-serif;
+            font-size: 42px;
             font-weight: 800;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-            position: relative;
-            z-index: 2;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .survey_header p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 15px;
-            max-width: 600px;
-            line-height: 1.7;
-            position: relative;
-            z-index: 2;
-        }
-
-        .header_btn {
-            position: relative;
-            overflow: hidden;
-            border: none;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
             color: white;
-            padding: 14px 28px;
-            border-radius: 48px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            transition: all var(--transition-base);
-            box-shadow: var(--shadow-md);
-            z-index: 2;
-            cursor: pointer;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .header_btn i {
-            margin-right: 8px;
+        .header_content p {
+            max-width: 600px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.7;
+            font-size: 15px;
         }
 
-        .header_btn::before {
-            content: "";
-            position: absolute;
-            width: 120%;
-            height: 120%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-            top: -130%;
-            left: -130%;
-            transform: rotate(25deg);
-            transition: 0.6s;
+        /* Header Stats Cards - Glassmorphism */
+        .header_stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
-        .header_btn:hover::before {
-            top: 100%;
-            left: 100%;
-        }
-
-        .header_btn:hover {
-            transform: translateY(-4px);
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: var(--shadow-gold);
-        }
-
-        .header_btn:active {
-            transform: scale(0.97);
-        }
-
-        /* STAT CARDS */
         .stat_card {
             position: relative;
+            min-width: 160px;
+            padding: 22px 20px;
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(12px);
-            border-radius: var(--radius-xl);
-            padding: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: var(--shadow-md);
             transition: all var(--transition-base);
-            height: 100%;
             cursor: pointer;
+            text-align: center;
         }
 
-        .stat_card::before {
-            content: "";
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, var(--gold), var(--gold-light), var(--gold-dark), var(--gold));
-            border-radius: inherit;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: -1;
-        }
-
+        /* Shine Effect */
         .stat_card::after {
-            content: "";
+            content: '';
             position: absolute;
             top: -50%;
             left: -60%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(115deg, transparent 10%, rgba(255, 255, 255, 0.25) 40%, transparent 60%);
+            background: linear-gradient(115deg, transparent 10%, rgba(255, 255, 255, 0.15) 40%, transparent 60%);
             transform: rotate(25deg);
-            transition: transform 0.6s ease;
+            transition: transform 0.5s ease;
             opacity: 0;
             pointer-events: none;
-        }
-
-        .stat_card:hover {
-            transform: translateY(-8px) rotateX(2deg);
-            box-shadow: var(--shadow-gold);
-            border-color: rgba(212, 175, 55, 0.3);
-        }
-
-        .stat_card:hover::before {
-            opacity: 1;
-            animation: borderPulse 1.5s infinite;
         }
 
         .stat_card:hover::after {
@@ -230,54 +180,148 @@
             transform: rotate(25deg) translateX(50%);
         }
 
-        @keyframes borderPulse {
-            0%, 100% { opacity: 0.4; filter: blur(2px); }
-            50% { opacity: 0.8; filter: blur(4px); }
+        .stat_card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.22);
+            box-shadow: var(--shadow-gold);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
-        .stat_icon {
-            width: 65px;
-            height: 65px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            color: white;
-            margin-bottom: 18px;
-            box-shadow: var(--shadow-gold);
+        .stat_card.pulse-stat {
+            animation: pulseGoldBorder 2s infinite;
+        }
+
+        @keyframes pulseGoldBorder {
+            0%, 100% {
+                border-color: rgba(255, 255, 255, 0.3);
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+            }
+            50% {
+                border-color: rgba(255, 255, 255, 0.7);
+                box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
+            }
+        }
+
+        .stat_card h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 38px;
+            color: var(--gold-light);
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stat_card span {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* ===================================================== */
+        /* FILTER BOX - Glassmorphism */
+        /* ===================================================== */
+
+        .feedback_filter_box {
+            position: relative;
+            margin-top: 35px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: var(--shadow-md);
             transition: all var(--transition-base);
         }
 
-        .stat_card:hover .stat_icon {
-            transform: scale(1.05);
+        .feedback_filter_box:hover {
+            box-shadow: var(--shadow-gold);
+            border-color: rgba(212, 175, 55, 0.3);
         }
 
-        .blue { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); }
-        .green { background: linear-gradient(135deg, var(--gold-light), var(--gold)); }
-        .orange { background: linear-gradient(135deg, var(--gold-dark), #b8860b); }
-        .red { background: linear-gradient(135deg, #c0392b, var(--gold-dark)); }
-
-        .stat_card h3 {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 5px;
-            background: linear-gradient(135deg, #0F172A, var(--gold-dark));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
+        .feedback_filter_box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold-dark));
+            animation: borderShimmer 3s linear infinite;
         }
 
-        .stat_card p {
+        @keyframes borderShimmer {
+            0% { background-position: -100% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .feedback_filter_box label {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1e293b;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .feedback_input {
+            height: 52px;
+            border-radius: 48px;
+            border: 1px solid var(--beige-dark);
+            background: var(--pure-white);
+            padding-left: 20px;
             font-size: 14px;
-            font-weight: 600;
-            color: #64748B;
-            margin: 0;
+            transition: all var(--transition-base);
         }
 
-        /* MLA SURVEY TABLE */
-        .mla_survey_section {
+        .feedback_input:focus {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 0 0 4px var(--gold-glow);
+            outline: none;
+        }
+
+        .feedback_btn {
+            height: 52px;
+            border: none;
+            border-radius: 48px;
+            font-weight: 700;
+            font-size: 14px;
+            color: white;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feedback_btn:active::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            animation: rippleEffect 0.5s ease-out;
+        }
+
+        @keyframes rippleEffect {
+            0% { width: 0; height: 0; opacity: 0.6; }
+            100% { width: 200px; height: 200px; opacity: 0; }
+        }
+
+        .feedback_btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-gold-lg);
+            filter: brightness(1.05);
+        }
+
+        /* ===================================================== */
+        /* MLA FEEDBACK TRACKING TABLE - Premium Design */
+        /* ===================================================== */
+
+        .mla_feedback_section {
             margin-top: 40px;
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(15px);
@@ -288,11 +332,11 @@
             transition: all var(--transition-base);
         }
 
-        .mla_survey_section:hover {
+        .mla_feedback_section:hover {
             box-shadow: var(--shadow-gold);
         }
 
-        .mla_survey_section .section-title {
+        .mla_feedback_section .section-title {
             font-family: 'Poppins', sans-serif;
             font-size: 24px;
             font-weight: 700;
@@ -303,17 +347,17 @@
             gap: 12px;
         }
 
-        .mla_survey_section .section-title i {
+        .mla_feedback_section .section-title i {
             color: var(--gold);
         }
 
-        .mla_count_table {
+        .mla_table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0 8px;
         }
 
-        .mla_count_table thead th {
+        .mla_table thead th {
             background: linear-gradient(135deg, var(--gold-dark), var(--gold));
             color: white;
             padding: 15px 20px;
@@ -324,27 +368,26 @@
             border: none;
         }
 
-        .mla_count_table thead th:first-child {
+        .mla_table thead th:first-child {
             border-radius: 12px 0 0 12px;
         }
 
-        .mla_count_table thead th:last-child {
+        .mla_table thead th:last-child {
             border-radius: 0 12px 12px 0;
         }
 
-        .mla_count_table tbody tr {
+        .mla_table tbody tr {
             background: rgba(255, 255, 255, 0.8);
             transition: all var(--transition-base);
-            cursor: default;
         }
 
-        .mla_count_table tbody tr:hover {
+        .mla_table tbody tr:hover {
             transform: scale(1.01);
             box-shadow: var(--shadow-gold);
             background: white;
         }
 
-        .mla_count_table tbody td {
+        .mla_table tbody td {
             padding: 15px 20px;
             border: 1px solid rgba(212, 175, 55, 0.1);
             border-left: none;
@@ -353,281 +396,74 @@
             color: #1E293B;
         }
 
-        .mla_count_table tbody td:first-child {
+        .mla_table tbody td:first-child {
             border-left: 1px solid rgba(212, 175, 55, 0.1);
             border-radius: 12px 0 0 12px;
         }
 
-        .mla_count_table tbody td:last-child {
+        .mla_table tbody td:last-child {
             border-right: 1px solid rgba(212, 175, 55, 0.1);
             border-radius: 0 12px 12px 0;
         }
 
-        .mla_count_badge {
+        .mla_stats_badge {
             display: inline-block;
-            padding: 6px 16px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 700;
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
-            color: var(--gold-dark);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-        }
-
-        .mla_count_badge.high {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(239, 68, 68, 0.05));
-            color: #EF4444;
-            border-color: rgba(239, 68, 68, 0.2);
-        }
-
-        .mla_count_badge.medium {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.05));
-            color: #F59E0B;
-            border-color: rgba(245, 158, 11, 0.2);
-        }
-
-        .mla_count_badge.low {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.05));
-            color: #10B981;
-            border-color: rgba(16, 185, 129, 0.2);
-        }
-
-        /* Survey List Table */
-        .survey_list_section {
-            margin-top: 40px;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(15px);
-            border-radius: var(--radius-xl);
-            padding: 30px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: var(--shadow-md);
-            transition: all var(--transition-base);
-        }
-
-        .survey_list_section:hover {
-            box-shadow: var(--shadow-gold);
-        }
-
-        .survey_list_section .section-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: #0F172A;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .survey_table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 8px;
-        }
-
-        .survey_table thead th {
-            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-            color: white;
-            padding: 12px 15px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: none;
-            white-space: nowrap;
-        }
-
-        .survey_table thead th:first-child {
-            border-radius: 12px 0 0 12px;
-        }
-
-        .survey_table thead th:last-child {
-            border-radius: 0 12px 12px 0;
-        }
-
-        .survey_table tbody tr {
-            background: rgba(255, 255, 255, 0.8);
-            transition: all var(--transition-base);
-        }
-
-        .survey_table tbody tr:hover {
-            transform: scale(1.01);
-            box-shadow: var(--shadow-gold);
-            background: white;
-        }
-
-        .survey_table tbody td {
-            padding: 12px 15px;
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            border-left: none;
-            border-right: none;
-            font-size: 13px;
-            color: #1E293B;
-            vertical-align: middle;
-        }
-
-        .survey_table tbody td:first-child {
-            border-left: 1px solid rgba(212, 175, 55, 0.1);
-            border-radius: 12px 0 0 12px;
-        }
-
-        .survey_table tbody td:last-child {
-            border-right: 1px solid rgba(212, 175, 55, 0.1);
-            border-radius: 0 12px 12px 0;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 14px;
+            padding: 4px 12px;
             border-radius: 50px;
             font-size: 12px;
-            font-weight: 600;
-        }
-
-        .status-badge.active {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .status-badge.pending {
-            background: #fef9c3;
-            color: #854d0e;
-        }
-
-        .status-badge.closed {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .action-btn {
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: none;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all var(--transition-fast);
-            cursor: pointer;
-            margin: 0 2px;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .action-btn.view-btn {
-            background: #e0f2fe;
-            color: #0369a1;
-        }
-
-        .action-btn.view-btn:hover {
-            background: #bae6fd;
-        }
-
-        .action-btn.edit-btn {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .action-btn.edit-btn:hover {
-            background: #fde68a;
-        }
-
-        .action-btn.delete-btn {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .action-btn.delete-btn:hover {
-            background: #fca5a5;
-        }
-
-        /* Modal Styles */
-        .modal-content {
-            border-radius: var(--radius-xl);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: var(--shadow-gold-lg);
-        }
-
-        .modal-header {
-            border-bottom: 2px solid var(--gold-light);
-            background: linear-gradient(135deg, var(--cream), var(--beige-light));
-            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-        }
-
-        .modal-header .modal-title {
             font-weight: 700;
-            color: #0F172A;
         }
 
-        .modal-body {
-            padding: 25px 30px;
+        .mla_stats_badge.high {
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--danger);
         }
 
-        .modal-footer {
-            border-top: 2px solid var(--gold-light);
-            background: var(--beige-light);
-            border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+        .mla_stats_badge.medium {
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--warning);
         }
 
-        .form-control, .form-select {
-            border-radius: var(--radius-sm);
-            border: 1px solid #e2e8f0;
-            padding: 10px 15px;
-            transition: all var(--transition-fast);
+        .mla_stats_badge.low {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--success);
         }
 
-        .form-control:focus, .form-select:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px var(--gold-glow);
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
 
-        .form-label {
-            font-weight: 600;
-            color: #1E293B;
-            margin-bottom: 6px;
+        ::-webkit-scrollbar-track {
+            background: var(--beige);
+            border-radius: 4px;
         }
 
-        .btn-gold {
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: white;
-            border: none;
-            padding: 10px 30px;
-            border-radius: 48px;
-            font-weight: 700;
-            transition: all var(--transition-base);
-        }
-
-        .btn-gold:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-gold);
-            color: white;
-        }
-
-        .btn-gold-outline {
-            background: transparent;
-            color: var(--gold-dark);
-            border: 2px solid var(--gold);
-            padding: 8px 25px;
-            border-radius: 48px;
-            font-weight: 600;
-            transition: all var(--transition-base);
-        }
-
-        .btn-gold-outline:hover {
+        ::-webkit-scrollbar-thumb {
             background: var(--gold);
-            color: white;
+            border-radius: 4px;
         }
 
-        /* Footer */
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold-dark);
+        }
+
         .footer {
             background: rgba(255, 255, 255, 0.08) !important;
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 20px;
             padding: 1rem 2rem !important;
             text-align: center;
             margin: 2rem 20px 25px 20px !important;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            display: none;
         }
 
         .footer p {
@@ -637,772 +473,373 @@
             font-weight: 500;
         }
 
-        /* Responsive */
+        .footer a {
+            color: #b8860b !important;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            color: #d4af37 !important;
+        }
+
+        .mla-row-hidden {
+            display: none !important;
+        }
+
         @media (max-width: 992px) {
-            .survey_section { padding: 20px; }
-            .survey_header { padding: 30px; text-align: center; }
-            .survey_header h2 { font-size: 28px; }
-            .text-lg-end { text-align: center !important; margin-top: 20px; }
+            .feedback_header { padding: 35px; }
+            .header_content { flex-direction: column; align-items: flex-start; }
+            .header_content h1 { font-size: 32px; }
+            .header_stats { width: 100%; }
+            .stat_card { flex: 1; }
+            .mla_table { font-size: 12px; }
+            .mla_table thead th, .mla_table tbody td { padding: 10px 12px; }
         }
 
         @media (max-width: 768px) {
-            .survey_section { padding: 15px; }
-            .survey_header { padding: 25px; }
-            .survey_header h2 { font-size: 24px; }
-            .stat_card h3 { font-size: 26px; }
-            .stat_icon { width: 50px; height: 50px; font-size: 20px; }
-            .mla_survey_section { padding: 15px; }
-            .survey_list_section { padding: 15px; }
-            
-            .survey_table thead { display: none; }
-            .survey_table tbody tr { display: block; margin-bottom: 15px; border-radius: var(--radius-md); padding: 15px; background: white; box-shadow: var(--shadow-sm); }
-            .survey_table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px !important; border: none !important; border-bottom: 1px solid rgba(0,0,0,0.05) !important; border-radius: 0 !important; }
-            .survey_table tbody td:last-child { border-bottom: none; }
-            .survey_table tbody td::before { content: attr(data-label); font-weight: 700; color: #64748B; font-size: 12px; }
-
-            .mla_count_table thead { display: none; }
-            .mla_count_table tbody tr { display: block; margin-bottom: 15px; border-radius: var(--radius-md); padding: 15px; background: white; box-shadow: var(--shadow-sm); }
-            .mla_count_table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px !important; border: none !important; border-bottom: 1px solid rgba(0,0,0,0.05) !important; border-radius: 0 !important; }
-            .mla_count_table tbody td:last-child { border-bottom: none; }
-            .mla_count_table tbody td::before { content: attr(data-label); font-weight: 700; color: #64748B; font-size: 12px; }
-        }
-
-        @media (max-width: 576px) {
-            .survey_header h2 { font-size: 20px !important; }
-            .survey_header p { font-size: 12px; }
-        }
-
-        .floating { animation: floatCard 4s ease-in-out infinite; }
-        @keyframes floatCard { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
-
-        .stat_card, .analytics_box, .mla_survey_section, .survey_list_section {
-            animation: fadeInUp 0.5s ease backwards;
-        }
-        .stat_card:nth-child(1) { animation-delay: 0.05s; }
-        .stat_card:nth-child(2) { animation-delay: 0.1s; }
-        .stat_card:nth-child(3) { animation-delay: 0.15s; }
-        .stat_card:nth-child(4) { animation-delay: 0.2s; }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(25px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: var(--beige); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
-
-        .question-item {
-            background: var(--beige-light);
-            border-radius: var(--radius-sm);
-            padding: 15px;
-            margin-bottom: 10px;
-            border-left: 4px solid var(--gold);
-        }
-
-        .option-item {
-            background: white;
-            padding: 8px 15px;
-            margin: 3px 0;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .counter-number {
-            animation: countPop 0.4s ease-out;
-        }
-        @keyframes countPop {
-            0% { transform: scale(0.8); opacity: 0; }
-            60% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
+            .feedback_header { padding: 25px; }
+            .header_content h1 { font-size: 26px; }
+            .stat_card h2 { font-size: 28px; }
+            .stat_card { padding: 15px; min-width: 120px; }
+            .feedback_filter_box { padding: 20px; }
+            .mla_feedback_section { padding: 15px; }
+            .mla_table thead { display: none; }
+            .mla_table tbody tr {
+                display: block;
+                margin-bottom: 15px;
+                border-radius: var(--radius-md);
+                padding: 15px;
+                background: white;
+                box-shadow: var(--shadow-sm);
+            }
+            .mla_table tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 12px !important;
+                border: none !important;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+                border-radius: 0 !important;
+            }
+            .mla_table tbody td:last-child { border-bottom: none; }
+            .mla_table tbody td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: #64748B;
+                font-size: 12px;
+            }
+            .footer {
+                margin: 1.5rem 15px 20px 15px !important;
+                padding: 0.9rem 1rem !important;
+            }
+            .footer p { font-size: 0.8rem; }
         }
     </style>
 </head>
 
 <body class="inner_page widgets">
-    <?php include "common/header.php"; ?>  
-    <div class="container-fluid survey_section">
+   <?php include "common/header.php"?>  
+   
+   <div class="container-fluid mt-5">
 
-        <!-- HEADER -->
-        <div class="survey_header mb-4">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <h2>
-                        <i class="fa-solid fa-chart-simple me-2"></i> Smart Survey Management Dashboard
-                    </h2>
-                    <p>
-                        AI-based public feedback, sentiment analysis, MLA analytics & participation monitoring system.
-                    </p>
-                </div>
-                <div class="col-lg-4 text-lg-end">
-                    <button class="header_btn" onclick="openCreateSurveyModal()">
-                        <i class="fa-solid fa-plus"></i>
-                        Create New Survey
-                    </button>
-                </div>
-            </div>
-        </div>
+       <!-- HEADER -->
+       <div class="feedback_header shadow-lg">
+           <div class="header_content">
+               <div>
+                   <h1>
+                       <i class="fas fa-comment-dots me-2"></i> MLA Feedback Monitoring System
+                   </h1>
+                   <p>
+                       Track and monitor feedbacks assigned to each MLA. View performance metrics and feedback details.
+                   </p>
+               </div>
 
-        <!-- STATS CARDS -->
-        <div class="row g-4">
-            <div class="col-lg-3 col-md-6">
-                <div class="stat_card pulse-card">
-                    <div class="stat_icon blue">
-                        <i class="fa-solid fa-square-poll-vertical"></i>
-                    </div>
-                    <h3 id="surveyCount">0</h3>
-                    <p><i class="fa-solid fa-chart-line me-1"></i> Total Surveys</p>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="stat_card">
-                    <div class="stat_icon green">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
-                    <h3 id="responseCount">0</h3>
-                    <p><i class="fa-solid fa-message me-1"></i> Total Responses</p>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="stat_card">
-                    <div class="stat_icon orange">
-                        <i class="fa-solid fa-face-smile"></i>
-                    </div>
-                    <h3 id="satisfaction">0%</h3>
-                    <p><i class="fa-solid fa-star me-1"></i> Citizen Satisfaction</p>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="stat_card">
-                    <div class="stat_icon red">
-                        <i class="fa-solid fa-chart-line"></i>
-                    </div>
-                    <h3 id="participation">0%</h3>
-                    <p><i class="fa-solid fa-person-walking-arrow-right me-1"></i> Participation Rate</p>
-                </div>
-            </div>
-        </div>
+               <div class="header_stats">
+                   <div class="stat_card pulse-stat">
+                       <h2 id="totalFeedback">
+                           <?= (int) ($statistics['total'] ?? 0); ?>
+                       </h2>
+                       <span><i class="fas fa-chart-line me-1"></i> Total Feedbacks</span>
+                   </div>
 
-        <!-- SURVEY LIST -->
-        <div class="survey_list_section">
-            <div class="section-title">
-                <i class="fas fa-list me-2"></i> Survey Management
-                <span style="font-size: 14px; font-weight: 400; color: #64748B; margin-left: auto;">
-                    <i class="fas fa-edit me-1"></i> Create, manage, and monitor surveys
-                </span>
-            </div>
+                   <div class="stat_card">
+                       <h2 id="pendingFeedback">
+                           <?= (int) ($statistics['pending'] ?? 0); ?>
+                       </h2>
+                       <span><i class="fas fa-clock me-1"></i> Pending</span>
+                   </div>
 
-            <div class="table-responsive">
-                <table class="survey_table" id="surveyTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%;">Title</th>
-                            <th style="width: 15%;">Category</th>
-                            <th style="width: 15%;">MLA</th>
-                            <th style="width: 10%;">Responses</th>
-                            <th style="width: 12%;">Status</th>
-                            <th style="width: 20%;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="surveyBody">
-                        <!-- Dynamic content -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                   <div class="stat_card">
+                       <h2 id="resolvedFeedback">
+                           <?= (int) ($statistics['resolved'] ?? 0); ?>
+                       </h2>
+                       <span><i class="fas fa-check-circle me-1"></i> Resolved</span>
+                   </div>
+               </div>
+           </div>
+       </div>
 
-        <!-- MLA SURVEY COUNT SECTION -->
-        <div class="mla_survey_section">
-            <div class="section-title">
-                <i class="fas fa-user-tie me-2"></i> MLA-wise Survey Count
-                <span style="font-size: 14px; font-weight: 400; color: #64748B; margin-left: auto;">
-                    <i class="fas fa-chart-bar me-1"></i> Total surveys conducted by each MLA
-                </span>
-            </div>
+       <!-- FILTER SECTION -->
+       <div class="feedback_filter_box mt-4">
+           <div class="row">
+               <div class="col-lg-4 col-md-6 mb-3">
+                   <label><i class="fas fa-search me-1" style="color: var(--gold);"></i> Search</label>
+                   <input type="text" class="form-control feedback_input" id="searchInput"
+                       placeholder="Search by MLA Name or Constituency">
+               </div>
 
-            <div class="table-responsive">
-                <table class="mla_count_table" id="mlaCountTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 30%;">MLA Name</th>
-                            <th style="width: 25%;">Total Surveys</th>
-                            <th style="width: 25%;">Total Responses</th>
-                            <th style="width: 20%;">Avg. Participation</th>
-                        </tr>
-                    </thead>
-                    <tbody id="mlaCountBody">
-                        <!-- Dynamic content -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+               <div class="col-lg-3 col-md-6 mb-3">
+                   <label><i class="fas fa-chart-simple me-1" style="color: var(--gold);"></i> Status Filter</label>
+                   <select class="form-select feedback_input" id="statusFilter">
+                       <option value="all">All MLAs</option>
+                       <option value="pending">Has Pending Feedbacks</option>
+                       <option value="resolved">Has Resolved Feedbacks</option>
+                       <option value="no_feedback">No Feedbacks</option>
+                   </select>
+               </div>
 
-    </div>
+               <div class="col-lg-2 col-md-12 mb-3 d-flex align-items-end">
+                   <button class="btn feedback_btn w-100" onclick="filterTable()">
+                       <i class="fas fa-filter me-2"></i> Filter
+                   </button>
+               </div>
 
-    <!-- Footer -->
-    <div class="container-fluid">
-        <div class="footer">
-            <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
-        </div>
-    </div>
+               <div class="col-lg-3 col-md-12 mb-3 d-flex align-items-end justify-content-md-end">
+                   <button class="btn feedback_btn w-100" onclick="resetFilters()" style="background: linear-gradient(135deg, #64748B, #475569);">
+                       <i class="fas fa-undo me-2"></i> Reset
+                   </button>
+               </div>
+           </div>
+       </div>
 
-    <!-- ===================================================== -->
-    <!-- MODALS -->
-    <!-- ===================================================== -->
+       <!-- ===================================================== -->
+       <!-- MLA FEEDBACK TRACKING SECTION -->
+       <!-- ===================================================== -->
+       <div class="mla_feedback_section">
 
-    <!-- Create/Edit Survey Modal -->
-    <div class="modal fade" id="surveyModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="surveyModalTitle">Create New Survey</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="surveyForm">
-                        <input type="hidden" name="id" id="surveyId" value="">
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Survey Title <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" name="title" id="surveyTitle" required placeholder="Enter survey title">
-                        </div>
+           <div class="section-title">
+               <i class="fas fa-users me-2"></i>
+               MLA-wise Feedback Tracker
 
-                        <div class="mb-3">
-                            <label class="form-label">Category</label>
-                            <input type="text" class="form-control" name="survey_category" id="surveyCategory" placeholder="e.g., Infrastructure, Health, Education">
-                        </div>
+               <span style="font-size:14px; font-weight:400; color:#64748B; margin-left:auto;">
+                   <i class="fas fa-info-circle me-1"></i>
+                   Feedback Summary
+               </span>
+           </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea class="form-control" name="description" id="surveyDescription" rows="3" placeholder="Describe the survey purpose"></textarea>
-                        </div>
+           <div class="table-responsive">
+               <table class="mla_table" id="mlaTable">
+                   <thead>
+                       <tr>
+                           <th style="width:30%;">MLA Name</th>
+                           <th style="width:25%;">Constituency</th>
+                           <th style="width:15%;">Total</th>
+                           <th style="width:15%;">Pending</th>
+                           <th style="width:15%;">Resolved</th>
+                       </tr>
+                   </thead>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">MLA</label>
-                                <select class="form-select" name="mla_id" id="surveyMla">
-                                    <option value="0">No MLA Assigned</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Status</label>
-                                <select class="form-select" name="status" id="surveyStatus">
-                                    <option value="Active">Active</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="Closed">Closed</option>
-                                </select>
-                            </div>
-                        </div>
+                   <tbody id="mlaTableBody">
+                       <?php if (!empty($mlaFeedback)): ?>
+                           <?php foreach ($mlaFeedback as $mla): ?>
+                               <tr data-mla-name="<?= esc(strtolower($mla['mla_name'] ?? '')); ?>"
+                                   data-constituency="<?= esc(strtolower($mla['constituency_name'] ?? '')); ?>"
+                                   data-total="<?= (int) ($mla['total'] ?? 0); ?>"
+                                   data-pending="<?= (int) ($mla['pending'] ?? 0); ?>"
+                                   data-resolved="<?= (int) ($mla['resolved'] ?? 0); ?>">
+                                   <!-- MLA NAME -->
+                                   <td data-label="MLA Name">
+                                       <strong style="color:#0F172A;">
+                                           <?= esc($mla['mla_name'] ?? 'N/A'); ?>
+                                       </strong>
+                                   </td>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Start Date</label>
-                                <input type="date" class="form-control" name="start_date" id="surveyStartDate">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">End Date</label>
-                                <input type="date" class="form-control" name="end_date" id="surveyEndDate">
-                            </div>
-                        </div>
+                                   <!-- CONSTITUENCY -->
+                                   <td data-label="Constituency">
+                                       <?= esc($mla['constituency_name'] ?? 'N/A'); ?>
+                                   </td>
 
-                        <div class="mb-3">
-                            <label class="form-label">Constituency</label>
-                            <input type="text" class="form-control" name="constituency" id="surveyConstituency" placeholder="Constituency name">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-gold-outline" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-gold" id="saveSurveyBtn">Save Survey</button>
-                </div>
-            </div>
-        </div>
-    </div>
+                                   <!-- TOTAL -->
+                                   <td data-label="Total">
+                                       <span class="mla_stats_badge" style="background:rgba(59,130,246,0.12); color:#2563EB;">
+                                           <?= (int) ($mla['total'] ?? 0); ?>
+                                       </span>
+                                   </td>
 
-    <!-- View Survey Modal -->
-    <div class="modal fade" id="viewSurveyModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewSurveyTitle">Survey Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="viewSurveyBody">
-                    <!-- Dynamic content -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-gold-outline" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+                                   <!-- PENDING -->
+                                   <td data-label="Pending">
+                                       <span class="mla_stats_badge high">
+                                           <?= (int) ($mla['pending'] ?? 0); ?>
+                                       </span>
+                                   </td>
 
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirm Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this survey? This action cannot be undone.</p>
-                    <p><strong>Note:</strong> All questions, options, and responses associated with this survey will also be deleted.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-gold-outline" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
+                                   <!-- RESOLVED -->
+                                   <td data-label="Resolved">
+                                       <span class="mla_stats_badge low">
+                                           <?= (int) ($mla['resolved'] ?? 0); ?>
+                                       </span>
+                                   </td>
+                               </tr>
+                           <?php endforeach; ?>
+                       <?php else: ?>
+                           <tr>
+                               <td colspan="5" style="text-align:center; padding:40px; color:#64748B;">
+                                   <i class="fas fa-inbox" style="font-size:36px; display:block; margin-bottom:15px;"></i>
+                                   No MLA data found.
+                               </td>
+                           </tr>
+                       <?php endif; ?>
+                   </tbody>
+               </table>
+           </div>
 
-    <!-- Toast Notification -->
-    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
-        <div id="toastNotification" class="alert" style="display: none; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); min-width: 300px; padding: 15px 20px;">
-            <span id="toastMessage"></span>
-            <button type="button" class="btn-close float-end" onclick="hideToast()"></button>
-        </div>
-    </div>
+           <div class="mt-3 text-muted" style="font-size:14px;">
+               Showing <span id="visibleCount">0</span> MLAs
+           </div>
+       </div>
 
-    <!-- jQuery, Bootstrap JS -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/animate.js"></script>
-    <script src="js/bootstrap-select.js"></script>
-    <script src="js/owl.carousel.js"></script>
-    <script src="js/Chart.min.js"></script>
-    <script src="js/Chart.bundle.min.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/analyser.js"></script>
-    <script src="js/custom.js"></script>
-    <script src="js/semantic.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+       <!-- footer -->
+       <div class="container-fluid">
+           <div class="footer">
+               <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
+           </div>
+       </div>
+   </div>
 
-    <script>
-    // =====================================================
-    // GLOBAL VARIABLES
-    // =====================================================
-    let currentSurveyId = null;
-    let deleteTargetId = null;
-    let isEditMode = false;
+   <!-- jQuery -->
+   <script src="js/jquery.min.js"></script>
+   <script src="js/popper.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <script src="js/animate.js"></script>
+   <script src="js/bootstrap-select.js"></script>
+   <script src="js/owl.carousel.js"></script>
+   <script src="js/Chart.min.js"></script>
+   <script src="js/Chart.bundle.min.js"></script>
+   <script src="js/utils.js"></script>
+   <script src="js/analyser.js"></script>
+   <script src="js/custom.js"></script>
+   <script src="js/semantic.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    // =====================================================
-    // TOAST NOTIFICATION
-    // =====================================================
-    function showToast(message, type = 'success') {
-        const toast = document.getElementById('toastNotification');
-        const msg = document.getElementById('toastMessage');
-        
-        toast.className = 'alert alert-' + type + ' alert-dismissible fade show';
-        toast.style.display = 'block';
-        msg.textContent = message;
-        
-        setTimeout(() => {
-            hideToast();
-        }, 5000);
-    }
+   <script>
+       // =====================================================
+       // COUNTER ANIMATION
+       // =====================================================
+       function animateCounter(elementId, targetValue) {
+           const element = document.getElementById(elementId);
+           if (!element) return;
 
-    function hideToast() {
-        document.getElementById('toastNotification').style.display = 'none';
-    }
+           const currentText = element.textContent || '0';
+           let current = parseInt(currentText.replace(/,/g, '')) || 0;
 
-    // =====================================================
-    // COUNTER ANIMATION
-    // =====================================================
-    function animateCounter(elementId, targetValue, suffix = '') {
-        const element = document.getElementById(elementId);
-        if (!element) return;
+           if (current === targetValue) return;
 
-        let current = 0;
-        const numericValue = typeof targetValue === 'string' ? parseInt(targetValue) : targetValue;
-        const isPercentage = suffix === '%' || targetValue.toString().includes('%');
-        const increment = numericValue / 50;
+           const increment = (targetValue - current) / 40;
+           const timer = setInterval(() => {
+               current += increment;
+               if (Math.abs(current - targetValue) < 0.5) {
+                   element.textContent = targetValue;
+                   clearInterval(timer);
+               } else {
+                   element.textContent = Math.round(current);
+               }
+           }, 20);
+       }
 
-        const timer = setInterval(() => {
-            current += increment;
-            if (current >= numericValue) {
-                element.textContent = targetValue + (isPercentage ? '' : suffix);
-                clearInterval(timer);
-            } else {
-                element.textContent = Math.floor(current) + (isPercentage ? '%' : suffix);
-            }
-        }, 20);
-    }
+       // =====================================================
+       // FILTER TABLE
+       // =====================================================
+       function filterTable() {
+           const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+           const statusFilter = document.getElementById('statusFilter').value;
 
-    // =====================================================
-    // LOAD DASHBOARD DATA
-    // =====================================================
-    function loadDashboard() {
-        fetch("<?= base_url('admin/survey-management/data') ?>")
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    // Update stats
-                    const stats = data.stats;
-                    animateCounter("surveyCount", stats.total_surveys || 0);
-                    animateCounter("responseCount", stats.total_responses || 0);
-                    animateCounter("satisfaction", stats.satisfaction || 0, '%');
-                    animateCounter("participation", stats.participation || 0, '%');
+           const rows = document.querySelectorAll('#mlaTableBody tr');
+           let visibleCount = 0;
 
-                    // Render survey list
-                    renderSurveys(data.surveys || []);
-                    
-                    // Render MLA count
-                    renderMLACount(data.mlaCount || []);
-                } else {
-                    showToast('Failed to load dashboard data', 'danger');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showToast('Error loading dashboard', 'danger');
-            });
-    }
+           rows.forEach(row => {
+               if (row.querySelector('td[colspan]')) {
+                   return;
+               }
 
-    // =====================================================
-    // RENDER SURVEYS
-    // =====================================================
-    function renderSurveys(surveys) {
-        const tbody = document.getElementById("surveyBody");
-        if (!tbody) return;
+               const mlaName = row.dataset.mlaName || '';
+               const constituency = row.dataset.constituency || '';
+               const total = parseInt(row.dataset.total) || 0;
+               const pending = parseInt(row.dataset.pending) || 0;
+               const resolved = parseInt(row.dataset.resolved) || 0;
 
-        if (surveys.length === 0) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="6" class="text-center py-4" style="color: #64748B;">
-                        <i class="fas fa-inbox fa-2x d-block mb-2"></i>
-                        No surveys found. Create your first survey!
-                    </td>
-                </tr>
-            `;
-            return;
-        }
+               let show = true;
 
-        let html = "";
-        surveys.forEach((survey, index) => {
-            const statusClass = survey.status ? survey.status.toLowerCase() : 'pending';
-            const statusLabel = survey.status || 'Pending';
-            const responses = survey.actual_responses || survey.responses || 0;
-            const mlaName = survey.mla_name || 'Not Assigned';
+               if (searchTerm) {
+                   if (!mlaName.includes(searchTerm) && !constituency.includes(searchTerm)) {
+                       show = false;
+                   }
+               }
 
-            html += `
-                <tr>
-                    <td data-label="Title">
-                        <strong>${escapeHtml(survey.title || 'Untitled')}</strong>
-                        <br><small class="text-muted">${escapeHtml(survey.survey_code || '')}</small>
-                    </td>
-                    <td data-label="Category">${escapeHtml(survey.survey_category || '-')}</td>
-                    <td data-label="MLA">${escapeHtml(mlaName)}</td>
-                    <td data-label="Responses">
-                        <span class="mla_count_badge">${responses}</span>
-                    </td>
-                    <td data-label="Status">
-                        <span class="status-badge ${statusClass}">${statusLabel}</span>
-                    </td>
-                    <td data-label="Actions">
-                        <button class="action-btn view-btn" onclick="viewSurvey(${survey.id})" title="View Survey">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="action-btn edit-btn" onclick="editSurvey(${survey.id})" title="Edit Survey">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete-btn" onclick="confirmDelete(${survey.id})" title="Delete Survey">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
-        });
+               if (show && statusFilter !== 'all') {
+                   if (statusFilter === 'pending' && pending === 0) {
+                       show = false;
+                   } else if (statusFilter === 'resolved' && resolved === 0) {
+                       show = false;
+                   } else if (statusFilter === 'no_feedback' && total > 0) {
+                       show = false;
+                   }
+               }
 
-        tbody.innerHTML = html;
-    }
+               if (show) {
+                   row.style.display = '';
+                   visibleCount++;
+               } else {
+                   row.style.display = 'none';
+               }
+           });
 
-    // =====================================================
-    // RENDER MLA COUNT
-    // =====================================================
-    function renderMLACount(data) {
-        const tbody = document.getElementById("mlaCountBody");
-        if (!tbody) return;
+           document.getElementById('visibleCount').textContent = visibleCount;
+       }
 
-        if (!data || data.length === 0) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="4" class="text-center py-4" style="color: #64748B;">
-                        <i class="fas fa-user-tie fa-2x d-block mb-2"></i>
-                        No MLAs found
-                    </td>
-                </tr>
-            `;
-            return;
-        }
+       // =====================================================
+       // RESET FILTERS
+       // =====================================================
+       function resetFilters() {
+           document.getElementById('searchInput').value = '';
+           document.getElementById('statusFilter').value = 'all';
+           filterTable();
+       }
 
-        let html = "";
-        data.forEach((mla, index) => {
-            let badge = "low";
-            if (mla.total_surveys >= 5) badge = "high";
-            else if (mla.total_surveys >= 2) badge = "medium";
+       // =====================================================
+       // LIVE SEARCH
+       // =====================================================
+       document.getElementById('searchInput').addEventListener('keyup', filterTable);
+       document.getElementById('statusFilter').addEventListener('change', filterTable);
 
-            const participation = mla.avg_participation || 0;
+       // =====================================================
+       // INITIALIZATION
+       // =====================================================
+       document.addEventListener('DOMContentLoaded', function() {
+           animateCounter('totalFeedback', <?= (int) ($statistics['total'] ?? 0); ?>);
+           animateCounter('pendingFeedback', <?= (int) ($statistics['pending'] ?? 0); ?>);
+           animateCounter('resolvedFeedback', <?= (int) ($statistics['resolved'] ?? 0); ?>);
 
-            html += `
-                <tr>
-                    <td data-label="MLA Name">
-                        <strong>${index + 1}. ${escapeHtml(mla.mla_name)}</strong>
-                    </td>
-                    <td data-label="Total Surveys">
-                        <span class="mla_count_badge ${badge}">
-                            ${mla.total_surveys} Surveys
-                        </span>
-                    </td>
-                    <td data-label="Total Responses">
-                        <span class="mla_count_badge">
-                            ${mla.total_responses}
-                        </span>
-                    </td>
-                    <td data-label="Avg Participation">
-                        <div class="progress" style="width:100px;height:6px;display:inline-block;margin-right:8px;">
-                            <div class="progress-bar" style="width:${Math.min(participation, 100)}%; background:#d4af37;"></div>
-                        </div>
-                        ${Math.round(participation)}%
-                    </td>
-                </tr>
-            `;
-        });
+           filterTable();
 
-        tbody.innerHTML = html;
-    }
-
-    // =====================================================
-    // LOAD MLAS FOR DROPDOWN
-    // =====================================================
-    function loadMlas() {
-        fetch("<?= base_url('admin/survey-management/get-mlas') ?>")
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    const select = document.getElementById('surveyMla');
-                    select.innerHTML = '<option value="0">No MLA Assigned</option>';
-                    data.data.forEach(mla => {
-                        select.innerHTML += `<option value="${mla.id}">${escapeHtml(mla.mla_name)} (${escapeHtml(mla.mla_code)})</option>`;
-                    });
-                }
-            })
-            .catch(error => console.error('Error loading MLAs:', error));
-    }
-
-    // =====================================================
-    // CREATE NEW SURVEY
-    // =====================================================
-    function openCreateSurveyModal() {
-        isEditMode = false;
-        document.getElementById('surveyModalTitle').textContent = 'Create New Survey';
-        document.getElementById('surveyId').value = '';
-        document.getElementById('surveyForm').reset();
-        document.getElementById('surveyStatus').value = 'Active';
-        currentSurveyId = null;
-        
-        const modal = new bootstrap.Modal(document.getElementById('surveyModal'));
-        modal.show();
-    }
-
-    // =====================================================
-    // EDIT SURVEY
-    // =====================================================
-    function editSurvey(id) {
-        isEditMode = true;
-        currentSurveyId = id;
-        document.getElementById('surveyModalTitle').textContent = 'Edit Survey';
-        
-        // Load survey data
-        fetch(`<?= base_url('admin/survey-management/get/') ?>${id}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    const survey = data.data;
-                    document.getElementById('surveyId').value = survey.id;
-                    document.getElementById('surveyTitle').value = survey.title || '';
-                    document.getElementById('surveyCategory').value = survey.survey_category || '';
-                    document.getElementById('surveyDescription').value = survey.description || '';
-                    document.getElementById('surveyMla').value = survey.mla_id || 0;
-                    document.getElementById('surveyStatus').value = survey.status || 'Active';
-                    document.getElementById('surveyStartDate').value = survey.start_date || '';
-                    document.getElementById('surveyEndDate').value = survey.end_date || '';
-                    document.getElementById('surveyConstituency').value = survey.constituency || '';
-                    
-                    const modal = new bootstrap.Modal(document.getElementById('surveyModal'));
-                    modal.show();
-                } else {
-                    showToast('Failed to load survey data', 'danger');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showToast('Error loading survey data', 'danger');
-            });
-    }
-
-    // =====================================================
-    // SAVE SURVEY
-    // =====================================================
-    document.getElementById('saveSurveyBtn').addEventListener('click', function() {
-        const form = document.getElementById('surveyForm');
-        const formData = new FormData(form);
-        const surveyId = document.getElementById('surveyId').value;
-        
-        const url = surveyId 
-            ? `<?= base_url('admin/survey-management/update/') ?>${surveyId}`
-            : '<?= base_url('admin/survey-management/create') ?>';
-
-        fetch(url, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status) {
-                showToast(data.message || 'Survey saved successfully', 'success');
-                bootstrap.Modal.getInstance(document.getElementById('surveyModal')).hide();
-                loadDashboard();
-            } else {
-                let errorMsg = data.message || 'Failed to save survey';
-                if (data.errors) {
-                    errorMsg = Object.values(data.errors).join(', ');
-                }
-                showToast(errorMsg, 'danger');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showToast('Error saving survey', 'danger');
-        });
-    });
-
-    // =====================================================
-    // VIEW SURVEY
-    // =====================================================
-    function viewSurvey(id) {
-        fetch(`<?= base_url('admin/survey-management/get/') ?>${id}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    const survey = data.data;
-                    document.getElementById('viewSurveyTitle').textContent = survey.title || 'Survey Details';
-                    
-                    let html = `
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <p><strong>Title:</strong> ${escapeHtml(survey.title)}</p>
-                                <p><strong>Code:</strong> ${escapeHtml(survey.survey_code)}</p>
-                                <p><strong>Category:</strong> ${escapeHtml(survey.survey_category || '-')}</p>
-                                <p><strong>Status:</strong> <span class="status-badge ${survey.status ? survey.status.toLowerCase() : 'pending'}">${survey.status || 'Pending'}</span></p>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>MLA:</strong> ${escapeHtml(survey.mla_name || 'Not Assigned')}</p>
-                                <p><strong>Constituency:</strong> ${escapeHtml(survey.constituency || '-')}</p>
-                                <p><strong>Responses:</strong> ${survey.response_count || 0}</p>
-                                <p><strong>Dates:</strong> ${survey.start_date || 'N/A'} to ${survey.end_date || 'N/A'}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <h6><strong>Description:</strong></h6>
-                        <p>${escapeHtml(survey.description || 'No description provided.')}</p>
-                        <hr>
-                        <h6><strong>Questions (${survey.questions ? survey.questions.length : 0})</strong></h6>
-                    `;
-
-                    if (survey.questions && survey.questions.length > 0) {
-                        survey.questions.forEach((q, index) => {
-                            html += `
-                                <div class="question-item">
-                                    <strong>Q${index + 1}:</strong> ${escapeHtml(q.question)}
-                                    <br><small class="text-muted">Type: ${escapeHtml(q.question_type)} | Required: ${q.is_required ? 'Yes' : 'No'}</small>
-                                    ${q.options && q.options.length > 0 ? `
-                                        <br><small><strong>Options:</strong></small>
-                                        <div class="mt-1">
-                                            ${q.options.map(opt => `<span class="option-item">${escapeHtml(opt.option_text)}</span>`).join(' ')}
-                                        </div>
-                                    ` : ''}
-                                </div>
-                            `;
-                        });
-                    } else {
-                        html += `<p class="text-muted">No questions added yet.</p>`;
-                    }
-
-                    document.getElementById('viewSurveyBody').innerHTML = html;
-                    const modal = new bootstrap.Modal(document.getElementById('viewSurveyModal'));
-                    modal.show();
-                } else {
-                    showToast('Failed to load survey details', 'danger');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showToast('Error loading survey details', 'danger');
-            });
-    }
-
-    // =====================================================
-    // DELETE SURVEY
-    // =====================================================
-    function confirmDelete(id) {
-        deleteTargetId = id;
-        const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-        modal.show();
-    }
-
-    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-        if (!deleteTargetId) return;
-
-        fetch(`<?= base_url('admin/survey-management/delete/') ?>${deleteTargetId}`, {
-            method: 'POST',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status) {
-                showToast(data.message || 'Survey deleted successfully', 'success');
-                bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
-                deleteTargetId = null;
-                loadDashboard();
-            } else {
-                showToast(data.message || 'Failed to delete survey', 'danger');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showToast('Error deleting survey', 'danger');
-        });
-    });
-
-    // =====================================================
-    // UTILITY FUNCTIONS
-    // =====================================================
-    function escapeHtml(text) {
-        if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    // =====================================================
-    // INITIALIZATION
-    // =====================================================
-    document.addEventListener("DOMContentLoaded", function() {
-        loadMlas();
-        loadDashboard();
-    });
-    </script>
-    <script src="<?= base_url('assets/admin/js/header.js') ?>"></script>
+           // Auto-refresh every 30 seconds
+           setInterval(function() {
+               $.ajax({
+                   url: '<?= base_url('admin/feedback-dashboard/count') ?>',
+                   type: 'GET',
+                   dataType: 'json',
+                   success: function(response) {
+                       if (response.success) {
+                           animateCounter('totalFeedback', response.total);
+                           animateCounter('pendingFeedback', response.pending);
+                           animateCounter('resolvedFeedback', response.resolved);
+                       }
+                   }
+               });
+           }, 30000);
+       });
+   </script>
+   <script src="<?= base_url('assets/admin/js/header.js') ?>"></script>
 </body>
 
 </html>
