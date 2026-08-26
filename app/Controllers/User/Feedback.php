@@ -111,6 +111,7 @@ class Feedback extends BaseController
             'description' => $this->request->getPost('description'),
             'attachment' => $filename,
             'status' => 'Pending',
+            'user_id' => $userId,
             'submitted_at' => date('Y-m-d H:i:s')
         ];
 

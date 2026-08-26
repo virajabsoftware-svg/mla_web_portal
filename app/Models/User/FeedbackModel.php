@@ -15,6 +15,7 @@ class FeedbackModel extends Model
     protected $allowedFields = [
         'feedback_id',
         'voter_id',
+        'user_id',
         'mla_id',
         'work_id',
         'district',

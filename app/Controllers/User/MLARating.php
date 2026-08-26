@@ -4,6 +4,7 @@ namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use App\Models\User\MlaRatingModel;
+use App\Models\User\VoterModel;
 
 class MlaRating extends BaseController
 {
@@ -84,6 +85,19 @@ class MlaRating extends BaseController
     public function save()
     {
         try {
+
+
+            $userId = session()->get('user_id');
+            if (!$userId) {
+                return redirect()->to(base_url('user/login'))->with('error', 'Please login first');
+            }
+
+            $voter = (new VoterModel())->find($userId);
+            if (!$voter) 
+            {
+              return redirect()->back()->with('error', 'Voter details not found');
+            }
+
             // Get JSON input
             $json = $this->request->getJSON(true);
             
@@ -144,17 +158,29 @@ class MlaRating extends BaseController
                 ])->setStatusCode(400);
             }
 
+
+          
+
             // Prepare data for insertion
             $insertData = [
-                'respondent_name' => isset($json['respondent_name']) ? trim(strip_tags($json['respondent_name'])) : null,
-                'constituency' => isset($json['constituency']) ? trim(strip_tags($json['constituency'])) : null,
+                'respondent_name' => isset($json['respondent_name']) ? trim(strip_tags($json['respondent_name'])) : null,                
                 'question_data' => $validatedQuestions,
                 'overall_rating' => $overallRating,
-                'submitted_at' => date('Y-m-d H:i:s')
+                'submitted_at' => date('Y-m-d H:i:s'),
+                'user_id' => $userId,
+                'voter_id' => $voter['voter_id'] ?? '',
+                'mla_id' => $voter['mla_id'] ?? '',              
+                'state' => $voter['state']?? '',
+                'district' => $voter['district'] ?? '',
+                'constituency' => $voter['constituency'] ?? '',             
+               
             ];
+
+             
 
             // Insert into database
             $insertId = $this->mlaRatingModel->insertRating($insertData);
+            
 
             if ($insertId === false) {
                 $errors = $this->mlaRatingModel->errors();

@@ -124,7 +124,6 @@ if ($user_has_assigned_mla && !empty($mla_data_from_db) && !empty($mla_data_from
         'mla_image' => 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max'
     ];
 }
-
 // ==========================
 // 4. Total Complaints (FROM MODEL)
 // ==========================

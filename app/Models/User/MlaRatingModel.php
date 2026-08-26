@@ -13,11 +13,18 @@ class MlaRatingModel extends Model
 
     protected $allowedFields = [
         'respondent_name',
-        'constituency',
+        'voter_id',
+        'user_id',
+        'mla_id',
+        'state',
+        'district',
+        'constituency',        
         'question_data',
         'overall_rating',
         'submitted_at'
     ];
+
+     
 
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
