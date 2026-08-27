@@ -1,6 +1,0 @@
-$kind: collection
-name: MlA
-variables:
-  - key: bearer_token_02ib
-    secret: true
-    disabled: false

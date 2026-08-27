@@ -1,8 +1,0 @@
-$kind: http-request
-name: district
-url: http://localhost/mla_web_portal/public/api/master/district
-method: GET
-order: 5000
-body:
-  type: json
-  content: "{\r\n    \"state_id\": \"14\"\r\n}"
