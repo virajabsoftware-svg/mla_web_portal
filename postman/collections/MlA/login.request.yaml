@@ -1,13 +1,14 @@
 $kind: http-request
-url: http://localhost/mla_web_portal/public/api/login
+name: login
+url: http://localhost/mla_web_portal/public/api/voter/login
 method: POST
 body:
   type: json
   content: "{\r
 
-    \    \"email\": \"salmanpalkar06@gmail.com\",\r
+    \    \"email\": \"salmanpalkar25@gmail.com\",\r
 
     \    \"password\": \"12345678\"\r
 
     }"
-order: 1787726873358
+order: 1000

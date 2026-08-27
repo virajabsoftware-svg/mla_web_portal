@@ -1,0 +1,14 @@
+$kind: http-request
+name: constituency
+url: http://localhost/mla_web_portal/public/api/master/constituency
+method: GET
+body:
+  type: json
+  content: "{\r
+
+    \    \"state_id\": \"14\",\r
+
+    \    \"district_id\": \"30\"\r
+
+    }"
+order: 2000

@@ -1,0 +1,8 @@
+$kind: http-request
+name: survey-categories
+url: http://localhost/mla_web_portal/public/api/master/survey-categories
+method: GET
+body:
+  type: json
+  content: ""
+order: 4204

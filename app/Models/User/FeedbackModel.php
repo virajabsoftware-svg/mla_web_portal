@@ -109,6 +109,7 @@ class FeedbackModel extends Model
             SUM(CASE WHEN feedback.status = 'Under Review' THEN 1 ELSE 0 END) AS under_review,
             SUM(CASE WHEN feedback.status = 'Reviewed' THEN 1 ELSE 0 END) AS reviewed
         ");
+        
 
         $builder->join('constituencies', 'constituencies.id = mlas.constituency_id', 'left');
         

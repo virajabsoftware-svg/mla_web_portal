@@ -1,0 +1,5 @@
+$kind: http-request
+name: state
+url: http://localhost/mla_web_portal/public/api/master/state
+method: GET
+order: 3000

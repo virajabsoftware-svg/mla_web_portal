@@ -14,10 +14,18 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 $routes->get('leadership', 'Home::leadership');
 $routes->get('mla', 'Home::mla');
+$routes->get('mla_bkup', 'Home::mla_bkup');
 
 
 
 $routes->group('api',  ['namespace' => 'App\Controllers\Api'],function ($routes) {
+
+
+        
+        $routes->get('master/state', 'Master::state');
+        $routes->get('master/district', 'Master::district');
+        $routes->get('master/constituency', 'Master::constituency');
+        $routes->get('master/survey-categories', 'Master::surveyCategories');
 
         // Public
         $routes->post('voter/login', 'AuthApi::voterlogin');
@@ -25,6 +33,7 @@ $routes->group('api',  ['namespace' => 'App\Controllers\Api'],function ($routes)
         // Protected
         $routes->get('voter/profile','AuthApi::voterprofile',['filter' => 'apiToken']);
         $routes->post('voter/logout','AuthApi::voterlogout',['filter' => 'apiToken']);
+        $routes->get('voter/dashboard','Voter::dashboard',['filter' => 'apiToken']);
 
         // Public MLA   
         $routes->post('login', 'AuthApi::login');
@@ -56,11 +65,7 @@ $routes->group('admin',  ['namespace' => 'App\Controllers\Admin'],
 // No admin login required.
 // =====================================================
 
-$routes->group(
-    'admin',
-    [
-        'namespace' => 'App\Controllers\Admin'
-    ],
+$routes->group('admin', ['namespace' => 'App\Controllers\Admin' ],
     function ($routes) {
 
         // State -> District
@@ -699,6 +704,7 @@ $routes->group(
 // =====================================================
 // 404 OVERRIDE
 // =====================================================
+
 
 $routes->set404Override(function () {
     return view('errors/html/error_404');
