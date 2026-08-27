@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voter Registration Portal</title>
+    <title>Leader Tracker | Secure Login</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,10 +11,15 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <style>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
         /* ============================================
-           COMPLETE STYLING
+           COMPLETE STYLING - Premium Design
         ============================================ */
 
         * {
@@ -23,8 +28,22 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --soft-white: #F4F2F5;
+            --lime-gold: #C3C848;
+            --lime-gold-light: #D8DD7A;
+            --olive-green: #6B8A22;
+            --teal-blue: #225661;
+            --teal-blue-light: #3A7A8A;
+            --dark-olive: #454D28;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --shadow-sm: 0 8px 20px rgba(0,0,0,0.04);
+            --shadow-lift: 0 16px 32px -8px rgba(0,0,0,0.08);
+            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             min-height: 100vh;
             display: flex;
@@ -34,16 +53,43 @@
         }
 
         .auth-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--glass-bg);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
+            border-radius: 28px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
             padding: 2.5rem 2rem;
             max-width: 600px;
             width: 100%;
             position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            border: 1px solid rgba(195,200,72,0.20);
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(135deg, rgba(195,200,72,0.15), rgba(34,86,97,0.08), rgba(195,200,72,0.15));
+            background-size: 200% 200%;
+            border-radius: 29px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .auth-card:hover::before {
+            opacity: 1;
+            animation: gradientShiftLight 4s ease infinite;
+        }
+
+        @keyframes gradientShiftLight {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .auth-card:hover {
@@ -56,31 +102,34 @@
             margin-bottom: 1.5rem;
         }
 
-        .brand-icon-wrap i {
-            font-size: 4rem;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .brand-logo {
+            max-width: 180px;
+            height: auto;
+            transition: var(--transition-smooth);
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.03);
         }
 
         .auth-title {
             font-weight: 700;
-            color: #1a1a2e;
+            color: var(--teal-blue);
             font-size: 1.8rem;
             margin-bottom: 0.3rem;
         }
 
         .auth-subtitle {
-            color: #6b7280;
+            color: var(--dark-olive);
             font-size: 0.95rem;
             margin-bottom: 1.8rem;
+            opacity: 0.7;
         }
 
         .form-label {
             font-weight: 600;
-            color: #374151;
-            font-size: 0.9rem;
+            color: var(--teal-blue);
+            font-size: 0.85rem;
             margin-bottom: 0.3rem;
         }
 
@@ -88,14 +137,7 @@
             color: #ef4444;
         }
 
-        .optional {
-            color: #9ca3af;
-            font-weight: 400;
-            font-size: 0.8rem;
-        }
-
-        .form-control,
-        .form-select {
+        .form-control {
             border: 2px solid #e5e7eb;
             border-radius: 12px;
             padding: 0.7rem 1rem;
@@ -104,40 +146,59 @@
             background: #f9fafb;
         }
 
-        .form-control:focus,
-        .form-select:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        .form-control:focus {
+            border-color: var(--lime-gold);
+            box-shadow: 0 0 0 4px rgba(195,200,72,0.12);
             background: #ffffff;
         }
 
         .btn-gradient {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            background: linear-gradient(135deg, var(--lime-gold), #B5BA4A);
+            color: #2A3A2A;
             border: none;
-            border-radius: 12px;
+            border-radius: 40px;
             padding: 0.75rem 1.5rem;
-            font-weight: 600;
+            font-weight: 700;
             width: 100%;
-            transition: all 0.3s ease;
+            transition: all 0.25s;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 16px rgba(195,200,72,0.20);
+        }
+
+        .btn-gradient::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(115deg, rgba(255,255,255,0) 10%, rgba(255,255,240,0.4) 50%, rgba(255,255,255,0) 90%);
+            transform: rotate(25deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .btn-gradient:hover::after {
+            left: 100%;
+            opacity: 1;
         }
 
         .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -10px rgba(102, 126, 234, 0.5);
-            color: white;
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 8px 24px rgba(195,200,72,0.30);
+            background: linear-gradient(135deg, #D0D55A, #B0B844);
+            color: #2A3A2A;
         }
 
         .btn-gradient:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
 
         .btn-outline-teal {
-            border: 2px solid #667eea;
-            color: #667eea;
-            border-radius: 12px;
+            border: 2px solid var(--teal-blue);
+            color: var(--teal-blue);
+            border-radius: 40px;
             padding: 0.75rem 1.5rem;
             font-weight: 600;
             width: 100%;
@@ -146,9 +207,26 @@
         }
 
         .btn-outline-teal:hover {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: var(--teal-blue);
             color: white;
-            border-color: transparent;
+            border-color: var(--teal-blue);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-dark {
+            border: 2px solid #333;
+            color: #333;
+            border-radius: 40px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            width: 100%;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-dark:hover {
+            background: #333;
+            color: white;
             transform: translateY(-2px);
         }
 
@@ -157,15 +235,16 @@
             align-items: center;
             text-align: center;
             margin: 1.5rem 0;
-            color: #9ca3af;
+            color: var(--dark-olive);
             font-size: 0.85rem;
+            opacity: 0.6;
         }
 
         .divider-line::before,
         .divider-line::after {
             content: '';
             flex: 1;
-            border-bottom: 2px solid #e5e7eb;
+            border-bottom: 1px solid rgba(195,200,72,0.20);
         }
 
         .divider-line::before {
@@ -177,7 +256,7 @@
         }
 
         .auth-link {
-            color: #667eea;
+            color: var(--teal-blue);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.9rem;
@@ -185,21 +264,22 @@
         }
 
         .auth-link:hover {
-            color: #764ba2;
+            color: var(--lime-gold);
             text-decoration: underline;
         }
 
         .footer-secure {
             text-align: center;
             margin-top: 1.5rem;
-            color: #9ca3af;
+            color: var(--dark-olive);
             font-size: 0.8rem;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid rgba(195,200,72,0.12);
             padding-top: 1rem;
+            opacity: 0.6;
         }
 
         .footer-secure i {
-            color: #10b981;
+            color: var(--lime-gold);
         }
 
         /* ============================================
@@ -244,18 +324,18 @@
         .btn-back {
             background: none;
             border: none;
-            color: #6b7280;
+            color: var(--dark-olive);
             font-weight: 500;
             transition: color 0.3s ease;
             padding: 0;
         }
 
         .btn-back:hover {
-            color: #374151;
+            color: var(--teal-blue);
         }
 
         .completion-badge {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, var(--lime-gold), var(--olive-green));
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
@@ -300,15 +380,15 @@
         }
 
         .step-dot.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-color: #667eea;
+            background: linear-gradient(135deg, var(--lime-gold), var(--olive-green));
+            border-color: var(--lime-gold);
             transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 0 20px rgba(195,200,72,0.3);
         }
 
         .step-dot.completed {
-            background: #10b981;
-            border-color: #10b981;
+            background: var(--olive-green);
+            border-color: var(--olive-green);
         }
 
         .step-dot.completed::after {
@@ -335,17 +415,14 @@
         }
 
         @keyframes fadeIn {
-
             from {
                 opacity: 0;
                 transform: translateX(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
             }
-
         }
 
         /* ============================================
@@ -363,13 +440,13 @@
         }
 
         .profile-photo-upload:hover {
-            border-color: #667eea;
+            border-color: var(--lime-gold);
             background: #f3f4f6;
         }
 
         .profile-photo-upload i {
             font-size: 2rem;
-            color: #667eea;
+            color: var(--lime-gold);
             display: block;
             margin-bottom: 0.5rem;
         }
@@ -398,8 +475,8 @@
         }
 
         .otp-input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            border-color: var(--lime-gold);
+            box-shadow: 0 0 0 4px rgba(195,200,72,0.12);
         }
 
         /* ============================================
@@ -407,9 +484,9 @@
         ============================================ */
 
         .alert-info {
-            background: #e0e7ff;
-            border-color: #c7d2fe;
-            color: #4f46e5;
+            background: rgba(195,200,72,0.10);
+            border-color: rgba(195,200,72,0.20);
+            color: var(--dark-olive);
             border-radius: 12px;
         }
 
@@ -424,7 +501,7 @@
             min-width: 320px;
             max-width: 420px;
             padding: 18px 20px;
-            border-radius: 10px;
+            border-radius: 16px;
             color: #fff;
             font-size: 15px;
             font-weight: 600;
@@ -433,6 +510,7 @@
             transform: translateX(450px);
             opacity: 0;
             transition: .5s;
+            border-left: 4px solid;
         }
 
         .popup.show {
@@ -441,11 +519,13 @@
         }
 
         .popup.success {
-            background: #28a745;
+            background: var(--olive-green);
+            border-left-color: var(--lime-gold);
         }
 
         .popup.error {
             background: #dc3545;
+            border-left-color: #ff6b6b;
         }
 
         /* ============================================
@@ -453,9 +533,9 @@
         ============================================ */
 
         @media (max-width: 576px) {
-
             .auth-card {
                 padding: 1.5rem 1rem;
+                border-radius: 20px;
             }
 
             .step-dot {
@@ -469,6 +549,13 @@
                 font-size: 1.2rem;
             }
 
+            .brand-logo {
+                max-width: 140px;
+            }
+
+            .auth-title {
+                font-size: 1.4rem;
+            }
         }
 
     </style>
@@ -485,7 +572,10 @@
     <div class="login-wrap" id="loginWrap">
 
         <div class="brand-icon-wrap">
-            <i class="bi bi-shield-fill-check"></i>
+            <img src="<?= base_url('assets/user/images/LOGO.png') ?>" 
+                 alt="Leader Tracker Logo" 
+                 class="brand-logo"
+                 onerror="this.src='<?= base_url('public/assets/user/images/LOGO.png') ?>'">
         </div>
 
         <h3 class="auth-title text-center">
@@ -493,6 +583,7 @@
         </h3>
 
         <p class="auth-subtitle text-center">
+            <i class="fas fa-shield-alt me-1" style="color: var(--lime-gold);"></i>
             Secure Government Portal Login
         </p>
 
@@ -503,6 +594,7 @@
             <div class="mb-3">
 
                 <label for="email" class="form-label">
+                    <i class="fas fa-envelope me-1" style="color: var(--lime-gold);"></i>
                     Email Address <span class="required">*</span>
                 </label>
 
@@ -518,13 +610,16 @@
             <div class="mb-3">
 
                 <label for="loginPassword" class="form-label">
+                    <i class="fas fa-lock me-1" style="color: var(--lime-gold);"></i>
                     Password <span class="required">*</span>
                 </label>
 
                 <input type="password"
                        name="password"
                        id="loginPassword"
-                       class="form-control" minlength="8"  maxlength="8"
+                       class="form-control"
+                       minlength="8"
+                       maxlength="8"
                        required
                        placeholder="Enter your password">
 
@@ -537,7 +632,8 @@
                     <input class="form-check-input"
                            type="checkbox"
                            id="rememberMe"
-                           name="remember_me">
+                           name="remember_me"
+                           style="border-color: var(--lime-gold);">
 
                     <label class="form-check-label small text-muted"
                            for="rememberMe">
@@ -556,14 +652,14 @@
 
             <button type="submit" class="btn btn-gradient">
 
-                <i class="bi bi-box-arrow-in-right me-2"></i>
+                <i class="fas fa-sign-in-alt me-2"></i>
                 Secure Login
 
             </button>
 
             <a href="<?= base_url('user/google-login') ?>"
                class="btn btn-outline-dark w-100 mt-3">
-                <i class="bi bi-google me-2"></i>
+                <i class="fab fa-google me-2"></i>
                 Continue with Google
             </a>
 
@@ -575,14 +671,14 @@
                     class="btn btn-outline-teal"
                     onclick="switchToRegister()">
 
-                <i class="bi bi-person-plus me-2"></i>
+                <i class="fas fa-user-plus me-2"></i>
                 Register New Account
 
             </button>
 
             <div class="footer-secure">
 
-                <i class="bi bi-shield-lock-fill"></i>
+                <i class="fas fa-shield-alt me-1"></i>
                 Protected by 256-bit SSL Encryption
 
             </div>
@@ -604,7 +700,7 @@
                     class="btn-back me-3"
                     onclick="switchToLogin()">
 
-                <i class="bi bi-arrow-left-circle-fill me-1"></i>
+                <i class="fas fa-arrow-left me-1"></i>
                 Back
 
             </button>
@@ -662,7 +758,7 @@
 
                 <h6 class="fw-bold text-dark mb-3">
 
-                    <i class="bi bi-person-badge me-2 text-primary"></i>
+                    <i class="fas fa-id-card me-2" style="color: var(--lime-gold);"></i>
                     Identity Core
 
                 </h6>
@@ -799,7 +895,7 @@
                              src=""
                              style="display:none; max-height:80px; border-radius:8px;">
 
-                        <i class="bi bi-camera"
+                        <i class="fas fa-camera"
                            id="cameraIcon"></i>
 
                         <p class="mb-0 text-muted small"
@@ -828,7 +924,7 @@
                             onclick="nextStep(1)">
 
                         Next
-                        <i class="bi bi-arrow-right ms-2"></i>
+                        <i class="fas fa-arrow-right ms-2"></i>
 
                     </button>
 
@@ -846,7 +942,7 @@
 
                 <h6 class="fw-bold text-dark mb-3">
 
-                    <i class="bi bi-key me-2 text-warning"></i>
+                    <i class="fas fa-key me-2" style="color: var(--lime-gold);"></i>
                     Login & Verification
 
                 </h6>
@@ -886,7 +982,9 @@
                                name="password"
                                class="form-control"
                                placeholder="Min 8 chars"
-                               id="passwordField" minlength="8"  maxlength="8"
+                               id="passwordField"
+                               minlength="8"
+                               maxlength="8"
                                required>
 
                     </div>
@@ -904,7 +1002,9 @@
                         <input type="password"
                                name="confirm_password"
                                class="form-control"
-                               placeholder="Re-enter password" minlength="8"  maxlength="8"
+                               placeholder="Re-enter password"
+                               minlength="8"
+                               maxlength="8"
                                id="confirmPasswordField"
                                required>
 
@@ -931,7 +1031,7 @@
                             onclick="nextStep(2)">
 
                         Next
-                        <i class="bi bi-arrow-right ms-2"></i>
+                        <i class="fas fa-arrow-right ms-2"></i>
 
                     </button>
 
@@ -949,7 +1049,7 @@
 
                 <h6 class="fw-bold text-dark mb-3">
 
-                    <i class="bi bi-geo-alt me-2 text-success"></i>
+                    <i class="fas fa-map-marker-alt me-2" style="color: var(--lime-gold);"></i>
                     Address & Location Mapping
 
                 </h6>
@@ -1098,7 +1198,7 @@
                             onclick="nextStep(3)">
 
                         Next
-                        <i class="bi bi-arrow-right ms-2"></i>
+                        <i class="fas fa-arrow-right ms-2"></i>
 
                     </button>
 
@@ -1116,7 +1216,7 @@
 
                 <h6 class="fw-bold text-dark mb-3">
 
-                    <i class="bi bi-person-vcard me-2 text-info"></i>
+                    <i class="fas fa-user-tie me-2" style="color: var(--lime-gold);"></i>
                     MLA Mapping & Verification
 
                 </h6>
@@ -1124,7 +1224,7 @@
 
                 <div class="alert alert-info py-2 small">
 
-                    <i class="bi bi-info-circle me-1"></i>
+                    <i class="fas fa-info-circle me-1"></i>
 
                     Based on your constituency,
                     your assigned MLA will be auto-mapped.
@@ -1246,7 +1346,7 @@
                             class="btn btn-gradient"
                             style="width:auto; padding:0.6rem 1.8rem;">
 
-                        <i class="bi bi-check2-circle me-2"></i>
+                        <i class="fas fa-check-circle me-2"></i>
 
                         Submit Registration
 
@@ -1282,8 +1382,9 @@
 
             <div class="brand-icon-wrap">
 
-                <i class="bi bi-key-fill"
-                   id="forgotIcon"></i>
+                <i class="fas fa-key"
+                   id="forgotIcon"
+                   style="font-size: 4rem; color: var(--lime-gold);"></i>
 
             </div>
 
@@ -1332,7 +1433,7 @@
                 <button type="submit"
                         class="btn btn-gradient">
 
-                    <i class="bi bi-send-fill me-2"></i>
+                    <i class="fas fa-paper-plane me-2"></i>
 
                     Send OTP
 
@@ -1347,7 +1448,7 @@
                    onclick="switchToLogin()"
                    class="auth-link">
 
-                    <i class="bi bi-arrow-left me-1"></i>
+                    <i class="fas fa-arrow-left me-1"></i>
 
                     Back to Login
 
@@ -1358,7 +1459,7 @@
 
             <div class="footer-secure">
 
-                <i class="bi bi-shield-lock-fill"></i>
+                <i class="fas fa-shield-alt me-1"></i>
 
                 Your account is securely protected
 
@@ -1377,8 +1478,9 @@
 
             <div class="brand-icon-wrap">
 
-                <i class="bi bi-shield-check"
-                   id="otpIcon"></i>
+                <i class="fas fa-shield-check"
+                   id="otpIcon"
+                   style="font-size: 4rem; color: var(--lime-gold);"></i>
 
             </div>
 
@@ -1429,7 +1531,7 @@
                 <button type="submit"
                         class="btn btn-gradient">
 
-                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <i class="fas fa-check-circle me-2"></i>
 
                     Verify OTP
 
@@ -1444,7 +1546,7 @@
                    onclick="forgotBackToEmail()"
                    class="auth-link">
 
-                    <i class="bi bi-arrow-left me-1"></i>
+                    <i class="fas fa-arrow-left me-1"></i>
 
                     Change Email
 
@@ -1467,7 +1569,7 @@
                         class="btn-back"
                         onclick="resendResetOtp()">
 
-                    <i class="bi bi-arrow-clockwise me-1"></i>
+                    <i class="fas fa-redo me-1"></i>
 
                     Resend OTP
 
@@ -1478,7 +1580,7 @@
 
             <div class="footer-secure">
 
-                <i class="bi bi-shield-lock-fill"></i>
+                <i class="fas fa-shield-alt me-1"></i>
 
                 OTP is valid for 10 minutes
 
@@ -1497,7 +1599,8 @@
 
             <div class="brand-icon-wrap">
 
-                <i class="bi bi-lock-fill"></i>
+                <i class="fas fa-lock"
+                   style="font-size: 4rem; color: var(--lime-gold);"></i>
 
             </div>
 
@@ -1540,8 +1643,9 @@
                            name="password"
                            id="newResetPassword"
                            class="form-control"
-                           placeholder="Enter new password" minlength="8"  maxlength="8"
+                           placeholder="Enter new password"
                            minlength="8"
+                           maxlength="8"
                            required>
 
                 </div>
@@ -1562,7 +1666,8 @@
                            id="confirmResetPassword"
                            class="form-control"
                            placeholder="Confirm new password"
-                           minlength="8"  maxlength="8"
+                           minlength="8"
+                           maxlength="8"
                            required>
 
                 </div>
@@ -1571,7 +1676,7 @@
                 <button type="submit"
                         class="btn btn-gradient">
 
-                    <i class="bi bi-key-fill me-2"></i>
+                    <i class="fas fa-key me-2"></i>
 
                     Reset Password
 
@@ -1586,7 +1691,7 @@
                    onclick="switchToLogin()"
                    class="auth-link">
 
-                    <i class="bi bi-arrow-left me-1"></i>
+                    <i class="fas fa-arrow-left me-1"></i>
 
                     Back to Login
 
@@ -1597,7 +1702,7 @@
 
             <div class="footer-secure">
 
-                <i class="bi bi-shield-lock-fill"></i>
+                <i class="fas fa-shield-alt me-1"></i>
 
                 Your account is securely protected
 
@@ -1644,12 +1749,13 @@
 
 
 <!-- Bootstrap JS -->
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Font Awesome -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 
 
 <script>
-
 
 /* ============================================
    POPUP HANDLING
@@ -2114,7 +2220,7 @@ function showForgotStep(step) {
     if (step === 1) {
 
         icon.className =
-            'bi bi-key-fill';
+            'fas fa-key';
 
         title.textContent =
             'Forgot Password';
