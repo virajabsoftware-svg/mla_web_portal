@@ -70,6 +70,7 @@ class Master extends ResourceController
                 'data'    => []
             ]);
         }
+        
 
         $data = $model
             ->select([

@@ -20,7 +20,6 @@ $routes->get('mla_bkup', 'Home::mla_bkup');
 
 $routes->group('api',  ['namespace' => 'App\Controllers\Api'],function ($routes) {
 
-
         
         $routes->get('master/state', 'Master::state');
         $routes->get('master/district', 'Master::district');
@@ -29,11 +28,14 @@ $routes->group('api',  ['namespace' => 'App\Controllers\Api'],function ($routes)
 
         // Public
         $routes->post('voter/login', 'AuthApi::voterlogin');
+        $routes->post('voter/register', 'AuthApi::voterRegister');
         //$routes->get('test', 'AuthApi::test');
         // Protected
         $routes->get('voter/profile','AuthApi::voterprofile',['filter' => 'apiToken']);
+        $routes->post('voter/profile-photo','AuthApi::voterProfilePhoto',['filter' => 'apiToken']);
         $routes->post('voter/logout','AuthApi::voterlogout',['filter' => 'apiToken']);
         $routes->get('voter/dashboard','Voter::dashboard',['filter' => 'apiToken']);
+        $routes->get('voter/complaints','Voter::complaints',['filter' => 'apiToken']);
 
         // Public MLA   
         $routes->post('login', 'AuthApi::login');
