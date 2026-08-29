@@ -921,35 +921,8 @@
                                                 <?= esc($complaint['voter_id'] ?? '-') ?>
                                             </td>
 
-                                            <!-- MLA - Display MLA Name instead of ID -->
-                                            <td>
-                                                <?php
-                                                    $mlaDisplay = '-';
-                                                    if (!empty($complaint['mla'])) {
-                                                        // Try to load MLA name from the mlas table
-                                                        try {
-                                                            $mlaModel = new \App\Models\MlaModel();
-                                                            $mlaData = $mlaModel->find($complaint['mla']);
-                                                            if ($mlaData) {
-                                                                $mlaDisplay = $mlaData['mla_name'] ?? $complaint['mla'];
-                                                            } else {
-                                                                // If not found by ID, check if it's stored as name
-                                                                $mlaData = $mlaModel->where('mla_name', $complaint['mla'])->first();
-                                                                if ($mlaData) {
-                                                                    $mlaDisplay = $mlaData['mla_name'];
-                                                                } elseif (is_numeric($complaint['mla'])) {
-                                                                    $mlaDisplay = 'MLA #' . $complaint['mla'];
-                                                                } else {
-                                                                    $mlaDisplay = $complaint['mla'];
-                                                                }
-                                                            }
-                                                        } catch (\Exception $e) {
-                                                            $mlaDisplay = $complaint['mla'];
-                                                        }
-                                                    }
-                                                    echo esc($mlaDisplay);
-                                                ?>
-                                            </td>
+                                            <!-- MLA name is resolved once in the controller. -->
+                                            <td><?= esc($complaint['mla_display'] ?? '-') ?></td>
 
                                             <!-- Priority -->
                                             <td>

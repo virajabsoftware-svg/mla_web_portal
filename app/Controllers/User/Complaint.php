@@ -34,6 +34,20 @@ class Complaint extends BaseController
             ->orderBy('complaints.id', 'DESC')
             ->findAll();
 
+        // Resolve MLA names in one query for the entire list (avoids one query per row in the view).
+        $mlaIds = array_values(array_unique(array_filter(array_column($complaints, 'mla'), 'is_numeric')));
+        $mlaNames = [];
+        if ($mlaIds !== []) {
+            $mlaRows = (new \App\Models\MlaModel())->whereIn('id', $mlaIds)->findAll();
+            $mlaNames = array_column($mlaRows, 'mla_name', 'id');
+        }
+        foreach ($complaints as &$complaint) {
+            $mlaValue = $complaint['mla'] ?? '';
+            $complaint['mla_display'] = $mlaNames[$mlaValue]
+                ?? ($mlaValue !== '' ? (is_numeric($mlaValue) ? 'MLA #' . $mlaValue : $mlaValue) : '-');
+        }
+        unset($complaint);
+
         $total = $model->where('user_id', $userId)->countAllResults();
         $pending = $model->where('user_id', $userId)->where('status', 'Pending')->countAllResults();
         $resolved = $model->where('user_id', $userId)->where('status', 'Resolved')->countAllResults();

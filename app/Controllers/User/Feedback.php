@@ -32,8 +32,6 @@ class Feedback extends BaseController
         $resolved = $model->where('voter_id', $voterId)->where('status', 'Resolved')->countAllResults();
         $district = (new DistrictModel())->find($voter['district'] ?? null);
         $constituency = (new ConstituencyModel())->find($voter['constituency'] ?? null);
-        $count = $model->where('voter_id', $voterId)->countAllResults();
-
         // Get MLA name for display
         $mlaName = '';
         if (!empty($voter['mla_id'])) {

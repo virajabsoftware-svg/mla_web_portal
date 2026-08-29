@@ -1,235 +1,3 @@
-<?php
-// At the very top of your file, before any HTML
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Redirect if not logged in
-if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
-    header('Location: ' . base_url('auth/login'));
-    exit();
-}
-
-// Load the DashboardModel
-$dashboardModel = new \App\Models\User\DashboardModel();
-$user_id = $_SESSION['user_id'];
-
-// ==========================
-// 1. Get User Profile (FROM MODEL)
-// ==========================
-$user_data = $dashboardModel->getUserProfile($user_id);
-
-if (!$user_data) {
-    session_destroy();
-    header('Location: ' . base_url('auth/login'));
-    exit();
-}
-
-// ==========================
-// FIX: PROFILE PHOTO HANDLING
-// ==========================
-$profile_photo = $user_data['profile_photo'] ?? '';
-
-// If no profile photo in database, generate a default
-if (empty($profile_photo)) {
-    // Generate default based on gender
-    $gender = strtolower($user_data['gender'] ?? 'male');
-    $seed = $user_data['id'] ?? $user_id;
-    
-    if ($gender === 'female' || $gender === 'f') {
-        $profile_photo = "https://randomuser.me/api/portraits/women/" . ($seed % 99) . ".jpg";
-    } else {
-        $profile_photo = "https://randomuser.me/api/portraits/men/" . ($seed % 99) . ".jpg";
-    }
-} else {
-    // If it's a relative path, convert to full URL
-    if (!filter_var($profile_photo, FILTER_VALIDATE_URL)) {
-        // Check if file exists in uploads folder
-        $file_path = FCPATH . 'uploads/profile/' . $profile_photo;
-        if (file_exists($file_path)) {
-            $profile_photo = base_url('uploads/profile/' . $profile_photo);
-        } else {
-            // File doesn't exist, use default
-            $gender = strtolower($user_data['gender'] ?? 'male');
-            $seed = $user_data['id'] ?? $user_id;
-            
-            if ($gender === 'female' || $gender === 'f') {
-                $profile_photo = "https://randomuser.me/api/portraits/women/" . ($seed % 99) . ".jpg";
-            } else {
-                $profile_photo = "https://randomuser.me/api/portraits/men/" . ($seed % 99) . ".jpg";
-            }
-        }
-    }
-}
-
-// Set session variables from database
-$_SESSION['user_name'] = $user_data['full_name'] ?? $user_data['name'] ?? 'User';
-$_SESSION['user_email'] = $user_data['email'] ?? '';
-$_SESSION['user_role'] = $user_data['role'] ?? 'Voter';
-$_SESSION['user_image'] = $profile_photo; // ✅ Now this will have a value
-$_SESSION['voter_id'] = $user_data['voter_id'] ?? 'Not Available';
-
-$district = $user_data['district_name'] ?? $user_data['district'] ?? 'Not Available';
-$booth = $user_data['booth_name'] ?? $user_data['locality'] ?? $user_data['ward_booth'] ?? $user_data['booth'] ?? 'Not Available';
-$mla_constituency = $user_data['constituency_name'] ?? $user_data['constituency'] ?? $district ?? 'Not Available';
-
-$_SESSION['district'] = $district;
-$_SESSION['booth'] = $booth;
-
-// ==========================
-// 2. Profile Completion (FROM MODEL)
-// ==========================
-$profile_completion = $dashboardModel->profileCompletion($user_id);
-$_SESSION['profile_completion'] = $profile_completion;
-
-// Assign variables for view
-$user_name = $_SESSION['user_name'];
-$user_email = $_SESSION['user_email'];
-$user_role = $_SESSION['user_role'];
-$user_image = $_SESSION['user_image'];
-$voter_id = $_SESSION['voter_id'];
-
-// ==========================
-// 3. Assigned MLA (FROM LOGIN USER'S mla_id)
-// ==========================
-$mla_data_from_db = $dashboardModel->getAssignedMLA($user_id);
-
- // Debugging line to check the structure of $mla_data_from_db
-$user_has_assigned_mla = !empty($user_data['mla_id']) || !empty($user_data['mla_name']);
-
-if ($user_has_assigned_mla && !empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
-    $mla_image = $mla_data_from_db['mla_image'] ?? '';
-    if (empty($mla_image)) {
-        $mla_image = 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max';
-    }
-
-    $mla_data = [
-        'name' => $mla_data_from_db['mla_name'] ?? 'Not Assigned',
-        'constituency' => $mla_data_from_db['constituency'] ?? $mla_constituency,
-        'total_works' => $mla_data_from_db['total_works'] ?? 0,
-        'completed_works' => $mla_data_from_db['completed_works'] ?? 0,
-        'rating' => $mla_data_from_db['rating'] ?? '0★',
-        'credibility' => $mla_data_from_db['credibility'] ?? '0%',
-        'mla_image' => $mla_data_from_db['mla_image'] ,
-    ];
-} else {
-    // Fallback static MLA data only if the user truly has no MLA assigned
-    $mla_data = [
-        'name' => 'Chh. Shivendrasinh Bhosale',
-        'constituency' => 'Satara Constituency',
-        'total_works' => 145,
-        'completed_works' => 118,
-        'rating' => '4.6★',
-        'credibility' => '91%',
-        'mla_image' => 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max'
-    ];
-}
-// ==========================
-// 4. Total Complaints (FROM MODEL)
-// ==========================
-$total_complaints = $dashboardModel->totalComplaints($user_id);
-$total_feedbacks = $dashboardModel->getFeedbacksGiven($user_id);
-
-
-// ==========================
-// 5. Recent Complaints (FROM MODEL)
-// ==========================
-$recent_complaints = $dashboardModel->recentComplaints($user_id);
-
-foreach ($recent_complaints as &$complaint) {
-    $complaint['title'] = $complaint['title'] ?? $complaint['subject'] ?? 'Complaint';
-    $complaint['status'] = ucfirst($complaint['status'] ?? 'pending');
-    
-    $status_classes = [
-        'resolved' => 'success',
-        'in_progress' => 'info',
-        'pending' => 'warning',
-        'rejected' => 'danger'
-    ];
-    $complaint['status_class'] = $status_classes[strtolower($complaint['status'])] ?? 'warning';
-}
-
-// ==========================
-// 6. Total Active Surveys (FROM MODEL)
-// ==========================
-$total_surveys = $dashboardModel->getSurveysParticipated($user_id);
-
-// ==========================
-// 7. Recent Active Surveys (FROM MODEL)
-// ==========================
-$active_surveys = $dashboardModel->recentSurveys();
-
-foreach ($active_surveys as &$survey) {
-    $survey['title'] = $survey['title'] ?? 'Survey';
-    $survey['days_left'] = $survey['days_left'] ?? 5;
-}
-
-// ==========================
-// KPI DATA - Using model methods
-// ==========================
-$kpi_data = [
-    'total_works' => 0, // STATIC - Keep as is
-    'completed' => 0, // STATIC - Keep as is
-    'in_progress' => 0, // STATIC - Keep as is
-    'feedbacks' => $total_feedbacks, // DYNAMIC - From Model
-    'complaints' => $total_complaints, // DYNAMIC - From Model
-    'surveys' => $total_surveys, // DYNAMIC - From Model
-];
-
-// ==========================
-// RECENT WORKS - STATIC
-// ==========================
-$recent_works = [
-    [
-        'title' => 'Road Construction',
-        'category' => 'Infrastructure',
-        'status' => 'Completed',
-        'status_class' => 'success',
-        'progress' => 100
-    ],
-    [
-        'title' => 'School Building',
-        'category' => 'Education',
-        'status' => 'In Progress',
-        'status_class' => 'warning',
-        'progress' => 75
-    ],
-    [
-        'title' => 'Water Supply',
-        'category' => 'Utilities',
-        'status' => 'Pending',
-        'status_class' => 'info',
-        'progress' => 30
-    ],
-    [
-        'title' => 'Hospital Renovation',
-        'category' => 'Healthcare',
-        'status' => 'Completed',
-        'status_class' => 'success',
-        'progress' => 100
-    ],
-    [
-        'title' => 'Street Lighting',
-        'category' => 'Infrastructure',
-        'status' => 'In Progress',
-        'status_class' => 'warning',
-        'progress' => 60
-    ]
-];
-
-// ==========================
-// NOTIFICATIONS - STATIC
-// ==========================
-$notifications = [
-    ['message' => 'New survey available', 'time' => '2 hours ago'],
-    ['message' => 'Your complaint has been resolved', 'time' => '5 hours ago'],
-    ['message' => 'MLA visited your locality', 'time' => '1 day ago'],
-    ['message' => 'New development work started', 'time' => '2 days ago'],
-    ['message' => 'Feedback requested for completed work', 'time' => '3 days ago']
-];
-$notification_count = 3; // STATIC
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -674,7 +442,7 @@ $notification_count = 3; // STATIC
                                             <small>Completed</small>
                                         </div>
                                         <div class="col-md-3">
-                                            <h5><?= $mla_data['rating'] ?? '0★' ?></h5>
+                                            <h5><?= $mla_data['rating'] ?? '0â˜…' ?></h5>
                                             <small>Rating</small>
                                         </div>
                                         <div class="col-md-3">
@@ -881,7 +649,7 @@ $notification_count = 3; // STATIC
             const counters = document.querySelectorAll('.dashboard_home .row.g-4.mb-4 h3');
             counters.forEach(counter => {
                 const text = counter.innerText;
-                if (text.includes('★') || text.includes('/')) return;
+                if (text.includes('â˜…') || text.includes('/')) return;
                 let target = parseFloat(text);
                 if (isNaN(target)) return;
                 let current = 0;
@@ -903,7 +671,7 @@ $notification_count = 3; // STATIC
                 card.addEventListener('click', function() {
                     const title = this.querySelector('p').innerText;
                     const value = this.querySelector('h3').innerText;
-                    alert(`📊 ${title}: ${value}\n\nDetailed analytics available in the reports section.`);
+                    alert(`ðŸ“Š ${title}: ${value}\n\nDetailed analytics available in the reports section.`);
                 });
             });
         });
@@ -912,3 +680,4 @@ $notification_count = 3; // STATIC
 
 </body>
 </html>
+

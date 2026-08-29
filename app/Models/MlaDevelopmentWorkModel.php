@@ -49,7 +49,7 @@ class MlaDevelopmentWorkModel extends Model
         return $builder
             ->select('id, status_name')
             ->where('is_active', 1)
-            ->orderBy('status_name', 'ASC')
+            ->orderBy('sort_order', 'ASC')
             ->get()
             ->getResultArray();
     }
@@ -63,5 +63,50 @@ class MlaDevelopmentWorkModel extends Model
             ->orderBy('category_name', 'ASC')
             ->get()
             ->getResultArray();
+    }
+
+
+    public function getTotalWorks(int $mlaId): int
+    {
+        return $this->where('mla_id', $mlaId)
+            ->countAllResults();
+    }
+
+    public function getCompletedWorks(int $mlaId): int
+    {
+        return $this->select('mla_developmentworks.id')
+            ->join(
+                'mla_work_statuses',
+                'mla_work_statuses.id = mla_developmentworks.status_id',
+                'inner'
+            )
+            ->where('mla_developmentworks.mla_id', $mlaId)
+            ->where('LOWER(mla_work_statuses.status_name)', 'completed')
+            ->countAllResults();
+    }
+
+    public function getInProgressWorks(int $mlaId): int
+    {
+        return $this->select('mla_developmentworks.id')
+            ->join(
+                'mla_work_statuses',
+                'mla_work_statuses.id = mla_developmentworks.status_id',
+                'inner'
+            )
+            ->where('mla_developmentworks.mla_id', $mlaId)
+            ->where('LOWER(mla_work_statuses.status_name)', 'in progress')
+            ->countAllResults();
+    }
+
+    public function getOngoingWorks(int $mlaId): int
+    {
+        return $this->select('mla_developmentworks.id')
+            ->join('mla_work_statuses', 'mla_work_statuses.id = mla_developmentworks.status_id', 'inner')
+            ->where('mla_developmentworks.mla_id', $mlaId)
+            ->groupStart()
+                ->where('LOWER(mla_work_statuses.status_name)', 'ongoing')
+                ->orWhere('LOWER(mla_work_statuses.status_name)', 'in progress')
+            ->groupEnd()
+            ->countAllResults();
     }
 }

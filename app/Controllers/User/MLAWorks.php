@@ -10,11 +10,18 @@ class MLAWorks extends BaseController
 {
     public function index()
     {
+
+        $userId = session()->get('user_id');
+
+        $voter = db_connect()->table('voters')->select('mla_id')->where('id', $userId)->get()->getRowArray();
+
+        $mlaId = $voter['mla_id'] ?? null;
+
         $filters = ['search' => trim((string) $this->request->getGet('search')), 
         'status' => trim((string) $this->request->getGet('status')),
         'category' => trim((string) $this->request->getGet('category'))];
         $model = new MlaDevelopmentWorkModel();
-        $works = $model->getFilteredWorks(session()->get('mla_id'), $filters)->paginate(10, 'works');
+        $works = $model->getFilteredWorks($mlaId, $filters)->paginate(10, 'works');
 
         
         $images = (new MlaDevelopmentWorkImageModel())->getImagesByWorkIds(array_column($works, 'id'));
@@ -29,3 +36,5 @@ class MLAWorks extends BaseController
          'categories' => $categories]);
     }
 }
+
+

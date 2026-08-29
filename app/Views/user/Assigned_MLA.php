@@ -1,48 +1,3 @@
-<?php 
-
-
-// Redirect if not logged in
-$session = session();
-if (!$session->get('logged_in') || !$session->get('user_id')) {
-    return redirect()->to(base_url('user/login'));
-}
-
-$dashboardModel = new \App\Models\User\DashboardModel();
-$user_id = $session->get('user_id');
-$mla_data_from_db = $dashboardModel->getAssignedMLA($user_id);
-
-
-if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
-    $mla_image = $mla_data_from_db['mla_image'] ?? '';
-    
-    /*if (empty($mla_image)) {
-        $mla_image = 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max';
-    }*/
-
-    $mla_data = [
-        'name' => $mla_data_from_db['mla_name'] ?? 'Not Assigned',
-        'constituency' => $mla_data_from_db['constituency'] ?? $mla_constituency,
-        'total_works' => $mla_data_from_db['total_works'] ?? 0,
-        'completed_works' => $mla_data_from_db['completed_works'] ?? 0,
-        'rating' => $mla_data_from_db['rating'] ?? '0★',
-        'credibility' => $mla_data_from_db['credibility'] ?? '0%',
-        'mla_image' => $mla_data_from_db['mla_image'] ,
-    ];
-} else {
-    // Fallback static MLA data only if the user truly has no MLA assigned
-    $mla_data = [
-        'name' => '',
-        'constituency' => '',
-        'total_works' => '',
-        'completed_works' => '',
-        'rating' => '',
-        'credibility' => '',
-        'mla_image' => ''
-    ];
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -865,7 +820,7 @@ if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
                         <div class="col-lg-3 text-center">
 
                             <h4 class="text-warning">
-                                ★ 4.8 / 5
+                                <?= esc($mla_stats['average_rating'] ?? 0) ?> / 5
                             </h4>
 
                             <span class="badge bg-success">
@@ -888,7 +843,7 @@ if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
                     <div class="card border-0 shadow text-center h-100">
                         <div class="card-body">
                             <i class="fas fa-road fa-2x text-primary mb-2"></i>
-                            <h3>145</h3>
+                            <h3><?= esc($mla_stats['total_works'] ?? 0) ?></h3>
                             <p>Total Works</p>
                         </div>
                     </div>
@@ -898,7 +853,7 @@ if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
                     <div class="card border-0 shadow text-center h-100">
                         <div class="card-body">
                             <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
-                            <h3>118</h3>
+                            <h3><?= esc($mla_stats['completed_works'] ?? 0) ?></h3>
                             <p>Completed Works</p>
                         </div>
                     </div>
@@ -908,7 +863,7 @@ if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
                     <div class="card border-0 shadow text-center h-100">
                         <div class="card-body">
                             <i class="fas fa-clock fa-2x text-warning mb-2"></i>
-                            <h3>27</h3>
+                            <h3><?= esc($mla_stats['ongoing_works'] ?? 0) ?></h3>
                             <p>Ongoing Works</p>
                         </div>
                     </div>
@@ -918,7 +873,7 @@ if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
                     <div class="card border-0 shadow text-center h-100">
                         <div class="card-body">
                             <i class="fas fa-exclamation-circle fa-2x text-danger mb-2"></i>
-                            <h3>15</h3>
+                            <h3><?= esc($mla_stats['pending_complaints'] ?? 0) ?></h3>
                             <p>Pending Complaints</p>
                         </div>
                     </div>
@@ -928,7 +883,7 @@ if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
                     <div class="card border-0 shadow text-center h-100">
                         <div class="card-body">
                             <i class="fas fa-check-double fa-2x text-success mb-2"></i>
-                            <h3>420</h3>
+                            <h3><?= esc($mla_stats['resolved_complaints'] ?? 0) ?></h3>
                             <p>Resolved Complaints</p>
                         </div>
                     </div>
@@ -938,7 +893,7 @@ if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
                     <div class="card border-0 shadow text-center h-100">
                         <div class="card-body">
                             <i class="fas fa-star fa-2x text-warning mb-2"></i>
-                            <h3>4.8</h3>
+                            <h3><?= esc(number_format((float) ($mla_stats['average_rating'] ?? 0), 1)) ?></h3>
                             <p>Average Rating</p>
                         </div>
                     </div>
@@ -1195,7 +1150,7 @@ if (!empty($mla_data_from_db) && !empty($mla_data_from_db['mla_name'])) {
             counters.forEach(counter => {
                 const text = counter.innerText;
                 // Skip if it contains rating stars or non-numeric
-                if (text.includes('★') || text.includes('/')) return;
+                if (text.includes('â˜…') || text.includes('/')) return;
 
                 let target = parseFloat(text.replace(/,/g, ''));
                 if (isNaN(target)) return;
