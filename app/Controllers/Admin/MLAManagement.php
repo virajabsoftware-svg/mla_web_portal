@@ -122,7 +122,7 @@ public function get($id)
         ->join('states','states.id = mlas.state_id','left')
         ->join('districts','districts.id = mlas.district_id','left')
         ->join('constituencies','constituencies.id = mlas.constituency_id','left')
-        ->where('mlas.id', $mla['id'])
+        ->where('mlas.id', $id)
         ->first();
 
     if ($mla) {
