@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
@@ -328,17 +329,41 @@
       <div class="header-actions">
         <div class="search-bar">
           <i class="fas fa-search"></i>
-          <input type="text" placeholder="Search projects..." id="globalSearch" />
+          <input type="text" placeholder="Search projects..." id="globalSearch" value="<?= esc($filters['search']) ?>" />
         </div>
         <div class="filter-group">
-          <select id="statusFilter"><option value="all">All Status</option><option value="Completed">Completed</option><option value="Ongoing">Ongoing</option><option value="Pending">Pending</option><option value="Delayed">Delayed</option></select>
-          <select id="categoryFilter"><option value="all">All Categories</option><option value="Road">Road</option><option value="Bridge">Bridge</option><option value="Hospital">Hospital</option><option value="School">School</option><option value="Water">Water</option><option value="Electricity">Electricity</option><option value="Health">Health</option><option value="Agriculture">Agriculture</option><option value="Sports">Sports</option><option value="Women">Women Safety</option><option value="Digital">Digital</option><option value="Tourism">Tourism</option><option value="Smart">Smart Village</option></select>
+          <select id="statusFilter" name="status">
+            <option value="">All Status</option>
+
+            <?php foreach ($statuses as $status): ?>
+                <option value="<?= esc($status['id']) ?>"
+                    <?= $filters['status'] === (string) $status['id'] ? 'selected' : '' ?>>
+                    <?= esc($status['status_name']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+          <select id="categoryFilter" name="category">
+          <option value="">All Categories</option>
+
+          <?php foreach ($categories as $category): ?>
+              <option value="<?= esc($category['id']) ?>"
+                  <?= $filters['category'] === (string) $category['id'] ? 'selected' : '' ?>>
+                  <?= esc($category['category_name']) ?>
+              </option>
+          <?php endforeach; ?>
+      </select>
         </div>
       </div>
     </div>
 
     <!-- PROJECT GRID -->
     <div class="projects-grid" id="projectsGrid"></div>
+    <?php if (empty($works)): ?>
+      <div style="text-align:center;padding:32px;color:#5B6F87;">No development works found.</div>
+    <?php endif; ?>
+    <?php if (!empty($works)): ?>
+      <div class="d-flex justify-content-center mt-3"><?= $pager->links('works', 'default_full') ?></div>
+    <?php endif; ?>
 
   </div>
 </div>
@@ -407,145 +432,28 @@
     "use strict";
 
     // ===== DATA =====
-    const projectsData = [{
-      id: 101,
-      title: "Village Road Connectivity",
-      dept: "Public Works",
-      desc: "Construction of 4.2 km road connecting rural hamlets to state highway with drainage and street lights.",
-      category: "Road",
-      subCategory: "Rural Road",
-      status: "Completed",
-      progress: 100,
-      cost: "₹1.25 Cr",
-      start: "01-Jan-2026",
-      end: "31-May-2026",
-      mla: "Vedant Patil",
-      party: "BJP",
-      constituency: "Satara",
-      district: "Satara",
-      taluka: "Satara",
-      village: "Wadhe",
-      pincode: "415001",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      cover: [
-        "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?w=600&h=300&fit=crop",
-        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=300&fit=crop",
-        "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=300&fit=crop"
-      ],
-      fundTotal: 12500000,
-      fundUsed: 12500000,
-      gallery: [
-        "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?w=100&h=100&fit=crop",
-        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=100&h=100&fit=crop",
-        "https://images.unsplash.com/photo-1518770660439-4636190af475?w=100&h=100&fit=crop"
-      ],
-      timeline: [
-        { stage: "Proposal", date: "10-Dec-2025", done: true },
-        { stage: "Approval", date: "20-Dec-2025", done: true },
-        { stage: "Tender", date: "28-Dec-2025", done: true },
-        { stage: "Started", date: "01-Jan-2026", done: true },
-        { stage: "25%", date: "10-Feb-2026", done: true },
-        { stage: "50%", date: "15-Mar-2026", done: true },
-        { stage: "75%", date: "20-Apr-2026", done: true },
-        { stage: "Completed", date: "31-May-2026", done: true }
-      ],
-      documents: [
-        { name: "Work Order", icon: "fa-file-pdf" },
-        { name: "Tender PDF", icon: "fa-file-pdf" },
-        { name: "Completion Certificate", icon: "fa-file-alt" }
-      ],
-      reviews: [
-        { name: "Ramesh S.", village: "Wadhe", rating: 5, desc: "Excellent road quality!", date: "01-Jun-2026", images: ["https://images.unsplash.com/photo-1581093588401-fbb62a02f120?w=60&h=60&fit=crop"] },
-        { name: "Sneha M.", village: "Wadhe", rating: 4, desc: "Good but need street lights.", date: "02-Jun-2026", images: [] }
-      ]
-    }, {
-      id: 102,
-      title: "Water Pipeline Project",
-      dept: "Water Supply",
-      desc: "Installation of 8 km pipeline for clean drinking water in Wai region.",
-      category: "Water",
-      subCategory: "Drinking Water",
-      status: "Ongoing",
-      progress: 75,
-      cost: "₹80 Lakh",
-      start: "15-Feb-2026",
-      end: "15-Aug-2026",
-      mla: "Vedant Patil",
-      party: "BJP",
-      constituency: "Wai",
-      district: "Satara",
-      taluka: "Wai",
-      village: "Wai",
-      pincode: "412803",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      cover: [
-        "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&h=300&fit=crop",
-        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=300&fit=crop"
-      ],
-      fundTotal: 8000000,
-      fundUsed: 6000000,
-      gallery: [
-        "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=100&h=100&fit=crop",
-        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=100&h=100&fit=crop"
-      ],
-      timeline: [
-        { stage: "Proposal", date: "01-Jan-2026", done: true },
-        { stage: "Approval", date: "15-Jan-2026", done: true },
-        { stage: "Tender", date: "25-Jan-2026", done: true },
-        { stage: "Started", date: "15-Feb-2026", done: true },
-        { stage: "25%", date: "01-Mar-2026", done: true },
-        { stage: "50%", date: "01-Apr-2026", done: true },
-        { stage: "75%", date: "15-May-2026", done: false },
-        { stage: "Completed", date: "15-Aug-2026", done: false }
-      ],
-      documents: [
-        { name: "Work Order", icon: "fa-file-pdf" },
-        { name: "Inspection Report", icon: "fa-file-alt" }
-      ],
-      reviews: [
-        { name: "Anil K.", village: "Wai", rating: 4, desc: "Water quality improved.", date: "10-May-2026", images: [] }
-      ]
-    }, {
-      id: 103,
-      title: "Electricity Grid Upgrade",
-      dept: "Energy",
-      desc: "Upgrading transformers and lines in industrial zone.",
-      category: "Electricity",
-      subCategory: "Grid",
-      status: "Pending",
-      progress: 20,
-      cost: "₹2.0 Cr",
-      start: "01-Apr-2026",
-      end: "30-Sep-2026",
-      mla: "Vedant Patil",
-      party: "BJP",
-      constituency: "Satara",
-      district: "Satara",
-      taluka: "Satara",
-      village: "Koregaon",
-      pincode: "415002",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      cover: [
-        "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=300&fit=crop",
-        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=300&fit=crop"
-      ],
-      fundTotal: 20000000,
-      fundUsed: 4000000,
-      gallery: [
-        "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=100&h=100&fit=crop",
-        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=100&h=100&fit=crop"
-      ],
-      timeline: [
-        { stage: "Proposal", date: "01-Feb-2026", done: true },
-        { stage: "Approval", date: "15-Feb-2026", done: true },
-        { stage: "Tender", date: "01-Mar-2026", done: false },
-        { stage: "Started", date: "01-Apr-2026", done: false }
-      ],
-      documents: [
-        { name: "Tender PDF", icon: "fa-file-pdf" }
-      ],
-      reviews: []
-    }];
+    const projectsData = <?= json_encode(array_map(static function ($work) {
+      $images = array_map(static fn($image) => filter_var($image, FILTER_VALIDATE_URL) ? $image : base_url('uploads/developmentworks/' . ltrim($image, '/')), $work['images'] ?? []);
+      if ($images === []) $images = [base_url('assets/user/images/placeholder-work.jpg')];
+      return ['id'=>(int)$work['id'],'title'=>$work['work_title'],'dept'=>$work['department_name'],
+      'desc'=>$work['work_description'],'category'=>$work['category_name'],
+      'subCategory'=>$work['sub_category_name'],'status'=>$work['status_name'],
+      'progress'=>(float)$work['physical_progress'],
+      'financialProgress'=>(float)$work['financial_progress'],'cost'=>$work['total_amount'],
+      'start' => !empty($work['start_date'])? date('d-m-Y', strtotime($work['start_date'])) : '',
+      'end' => !empty($work['expected_completion_date']) ? date('d-m-Y', strtotime($work['expected_completion_date'])): '',
+
+      'actualCompletion'=>$work['actual_completion_date'],'contractor'=>$work['contractor_name'],
+      'remarks'=>$work['remarks'],'mla'=>$work['mla_name'] ?? '',
+      'party'=>$work['party'] ?? '',
+      'constituency'=>$work['constituency_name'] ?? '','district'=>$work['district_name'],
+      'taluka'=>$work['taluka_id'],'village'=>$work['village'],'pincode'=>$work['pincode'],
+      'avatar'=>!empty($work['profile_photo']) ? base_url('uploads/mla/' . ltrim($work['profile_photo'], '/')) 
+      : base_url('assets/user/images/default-avatar.png'),
+      'cover'=>$images,'fundTotal'=>(float)$work['total_amount'],
+      'fundUsed'=>(float)$work['used_amount'],'fundRemain'=>(float)$work['remaining_amount'],
+      'gallery'=>$images,'timeline'=>[],'documents'=>[],'reviews'=>[]];
+    }, $works), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
 
     const feedbackStore = {};
 
@@ -617,15 +525,15 @@
       const locationHtml = `
         <div class="location-compact">
           <span><i class="fas fa-map-marker-alt"></i> ${proj.district}</span>
-          <span><i class="fas fa-city"></i> ${proj.taluka}</span>
-          <span><i class="fas fa-home"></i> ${proj.village}</span>
+          <!--span><i class="fas fa-city"></i> ${proj.taluka}</span-->
+          <span><i class="fas fa-home"></i> ${proj.village}</span-->
           <span><i class="fas fa-code"></i> ${proj.pincode}</span>
         </div>
       `;
 
       const fundUsed = proj.fundUsed;
-      const fundRemain = proj.fundTotal - fundUsed;
-      const fundPercent = Math.round((fundUsed / proj.fundTotal) * 100);
+      const fundRemain = proj.fundRemain;
+      const fundPercent = proj.financialProgress;
 
       const fundHtml = `
         <div class="fund-compact">
@@ -891,13 +799,22 @@
 
     document.getElementById('statusFilter').addEventListener('change', applyFilters);
     document.getElementById('categoryFilter').addEventListener('change', applyFilters);
-    document.getElementById('globalSearch').addEventListener('input', applyFilters);
+    let searchTimer;
+    document.getElementById('globalSearch').addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(applyFilters, 350);
+    });
 
     function applyFilters() {
+      const params = new URLSearchParams(window.location.search);
       const status = document.getElementById('statusFilter').value;
-      const cat = document.getElementById('categoryFilter').value;
-      const search = document.getElementById('globalSearch').value;
-      renderProjects(status, cat, search);
+      const category = document.getElementById('categoryFilter').value;
+      const search = document.getElementById('globalSearch').value.trim();
+      status ? params.set('status', status) : params.delete('status');
+      category ? params.set('category', category) : params.delete('category');
+      search ? params.set('search', search) : params.delete('search');
+      params.delete('page_works');
+      window.location.search = params.toString();
     }
 
     renderProjects('all', 'all', '');
