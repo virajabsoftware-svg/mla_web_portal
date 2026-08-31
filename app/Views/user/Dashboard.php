@@ -425,7 +425,7 @@
                                 <div class="col-md-2 text-center">
                                   
                                     <img src="<?= !empty($mla_data['mla_image']) ? htmlspecialchars($mla_data['mla_image']) : 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max' ?>" 
-                                         class="rounded-circle" width="90" 
+                                         class="rounded-circle img-thumbnail" width="120"
                                          alt="MLA"
                                          onerror="this.onerror=null; this.src='https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max';">
                                 </div>
@@ -547,6 +547,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php if (empty($recent_works)): ?>
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted">No development works found for your assigned MLA.</td>
+                                        </tr>
+                                        <?php else: ?>
                                         <?php foreach ($recent_works as $work): ?>
                                         <tr>
                                             <td><?= htmlspecialchars($work['title']) ?></td>
@@ -559,6 +564,7 @@
                                             <td><?= $work['progress'] ?>%</td>
                                         </tr>
                                         <?php endforeach; ?>
+                                        <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -680,4 +686,3 @@
 
 </body>
 </html>
-

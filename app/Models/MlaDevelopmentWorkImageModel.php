@@ -9,6 +9,7 @@ class MlaDevelopmentWorkImageModel extends Model
     protected $returnType = 'array';
     protected $allowedFields = ['developmentwork_id', 'image'];
     protected $useTimestamps = true;
+    
 
     public function getImagesByWorkIds(array $workIds): array
     {

@@ -168,6 +168,8 @@ class DashboardModel extends Model
         $mla_party = $voter['mla_party'] ?? null;
         $constituency = $voter['constituency'] ?? null;
         $mla_image = '';
+        $mla_code = null;
+        $district = null;
 
         if (!empty($constituency) && $this->db->tableExists('constituencies')) {
             $constituencyRow = $this->db
@@ -193,6 +195,20 @@ class DashboardModel extends Model
                 $mla_name = $mla_name ?? ($mlaRecord['mla_name'] ?? $mlaRecord['name'] ?? null);
                 $mla_party = $mla_party ?? ($mlaRecord['party'] ?? $mlaRecord['mla_party'] ?? null);
                 $mla_image = $this->resolveMlaPhoto($mlaRecord['profile_photo'] ?? '');
+                $mla_code = $mlaRecord['mla_code'] ?? null;
+
+                
+
+                if (!empty($mlaRecord['district_id']) && $this->db->tableExists('districts')) {
+                    $districtRow = $this->db
+                        ->table('districts')
+                        ->select('district_name')
+                        ->where('id', $mlaRecord['district_id'])
+                        ->get()
+                        ->getRowArray();
+
+                    $district = $districtRow['district_name'] ?? null;
+                }
                    
                 if (empty($constituency) && !empty($mlaRecord['constituency_id']) && $this->db->tableExists('constituencies')) {
                     $constituencyRow = $this->db
@@ -218,6 +234,8 @@ class DashboardModel extends Model
             'mla_id' => $mla_id,
             'mla_name' => $mla_name ?? 'Not Assigned',
             'mla_party' => $mla_party ?? 'Not Available',
+            'mla_code' => $mla_code ?? 'Not Available',
+            'district' => $district ?? 'Not Available',
             'constituency' => $constituency ?? 'Not Available',
             'mla_image' => $mla_image ?? '',
             'total_works' => $total_works,
@@ -235,11 +253,16 @@ class DashboardModel extends Model
         if (filter_var($photo, FILTER_VALIDATE_URL)) {
             return $photo;
         }
-      
-        $photoPath = FCPATH . 'uploads/mla/' . $photo;
-          
+
+        // Photos are stored in public/uploads/mla. Older records may contain
+        // either only the filename or the uploads/mla/ prefixed path.
+        $photoName = basename(str_replace('\\', '/', $photo));
+        $photoPath = FCPATH . 'uploads/mla/' . $photoName;
+
+         
+           
         return file_exists($photoPath)
-            ? base_url('uploads/mla/' . $photo)
+            ? base_url('uploads/mla/' . rawurlencode($photoName))
             : '';
     }
         // ==========================
@@ -260,25 +283,28 @@ class DashboardModel extends Model
                 ->get()
                 ->getRowArray();
 
+               
+
             if ($mla) {
 
-                // Handle MLA image
-                $mla_image = $mla['profile_photo']
-                    ?? $mla['image']
-                    ?? $mla['photo']
-                    ?? '';
+                 // Handle MLA image
+                $mla_image = $this->resolveMlaPhoto(
+                    $mla['profile_photo'] ?? $mla['profile_photo'] ?? $mla['photo'] ?? ''
+                );
 
-                if (
-                    empty($mla_image) ||
-                    !filter_var($mla_image, FILTER_VALIDATE_URL)
-                ) {
-                    $mla_image = 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max';
+                
+
+                $mla_constituency = $constituency;
+                if (empty($mla_constituency) && !empty($mla['constituency_id']) && $this->db->tableExists('constituencies')) {
+                    $constituencyRow = $this->db
+                        ->table('constituencies')
+                        ->select('constituency_name')
+                        ->where('id', $mla['constituency_id'])
+                        ->get()
+                        ->getRowArray();
+
+                    $mla_constituency = $constituencyRow['constituency_name'] ?? null;
                 }
-
-                $mla_constituency =
-                    $mla['constituency']
-                    ?? $constituency
-                    ?? null;
 
                 $total_works = $this->getTotalWorksForMLA($mla_id);
 
@@ -288,7 +314,8 @@ class DashboardModel extends Model
                     'mla_id' => $mla_id,
 
                     'name' =>
-                        $mla['name']
+                        $mla['mla_name']
+                        ?? $mla['name']
                         ?? $mla['full_name']
                         ?? 'Not Available',
 
@@ -317,6 +344,7 @@ class DashboardModel extends Model
                     ),
 
                     'image' => $mla_image
+                        ?: 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max'
                 ];
             }
         }
@@ -402,7 +430,7 @@ class DashboardModel extends Model
         |--------------------------------------------------------------------------
         */
 
-        if (empty($constituency)) {
+        if (empty($mla_id)) {
             return '0★';
         }
 
@@ -414,7 +442,7 @@ class DashboardModel extends Model
         $result = $this->db
             ->table('mla_ratings')
             ->select('AVG(overall_rating) AS avg_rating, COUNT(*) AS total_ratings')
-            ->where('constituency', $constituency)
+            ->where('mla_id', $mla_id)
             ->get()
             ->getRowArray();
 
@@ -534,7 +562,7 @@ class DashboardModel extends Model
     // ==========================
     // Recent Active Surveys
     // ==========================
-    public function recentSurveys()
+    public function recentSurveys(?int $mlaId = null)
     {
         if (!$this->db->tableExists('surveys')) {
             return [];
@@ -542,10 +570,16 @@ class DashboardModel extends Model
 
         $today = date('Y-m-d');
 
-        $surveys = $this->db
+        $builder = $this->db
             ->table('surveys')
             ->where('status', 'Active')
-            ->where('end_date >=', $today)
+            ->where('end_date >=', $today);
+
+        if (!empty($mlaId)) {
+            $builder->where('mla_id', $mlaId);
+        }
+
+        $surveys = $builder
             ->orderBy('created_at', 'DESC')
             ->limit(5)
             ->get()

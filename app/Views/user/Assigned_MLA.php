@@ -792,6 +792,8 @@
 
                     <div class="row align-items-center">
 
+                       
+
                         <div class="col-lg-2 text-center">
                             <img src="<?= !empty($mla_data['mla_image']) ? htmlspecialchars($mla_data['mla_image']) : 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max' ?>"
                                 class="rounded-circle img-thumbnail" width="120">
@@ -810,10 +812,12 @@
                             <p class="mb-1">
                                 <strong>Constituency ID :</strong> CON-102
                             </p-->
-
                             <p class="mb-0">
                                 <strong>Constituency : <?= htmlspecialchars($mla_data['constituency'] ?? $mla_constituency) ?></strong> 
                             </p>
+                            <p class="mb-0"><strong>MLA Code:</strong> <?= esc($mla_data['mla_code'] ?? 'Not Available') ?></p>
+                            <p class="mb-0"><strong>Party:</strong> <?= esc($mla_data['party'] ?? 'Not Available') ?></p>
+                            <p class="mb-0"><strong>District:</strong> <?= esc($mla_data['district'] ?? 'Not Available') ?></p>
 
                         </div>
 
@@ -824,7 +828,7 @@
                             </h4>
 
                             <span class="badge bg-success">
-                                High Performance
+                                <?= ($mla_stats['satisfaction_percentage'] ?? 0) >= 70 ? 'High Performance' : 'Performance Tracking' ?>
                             </span>
 
                         </div>
@@ -922,11 +926,11 @@
 
                                 <div class="d-flex justify-content-between">
                                     <span>Completed Works</span>
-                                    <span>81%</span>
+                                    <span><?= esc($mla_stats['completed_percentage'] ?? 0) ?>%</span>
                                 </div>
 
                                 <div class="progress">
-                                    <div class="progress-bar bg-success" style="width:81%">
+                                    <div class="progress-bar bg-success" style="width:<?= esc($mla_stats['completed_percentage'] ?? 0) ?>%">
                                     </div>
                                 </div>
 
@@ -936,11 +940,11 @@
 
                                 <div class="d-flex justify-content-between">
                                     <span>Ongoing Works</span>
-                                    <span>19%</span>
+                                    <span><?= esc($mla_stats['ongoing_percentage'] ?? 0) ?>%</span>
                                 </div>
 
                                 <div class="progress">
-                                    <div class="progress-bar bg-warning" style="width:19%">
+                                    <div class="progress-bar bg-warning" style="width:<?= esc($mla_stats['ongoing_percentage'] ?? 0) ?>%">
                                     </div>
                                 </div>
 
@@ -968,22 +972,22 @@
 
                                 <tr>
                                     <th>Average Rating</th>
-                                    <td>4.8 / 5</td>
+                                    <td><?= esc(number_format((float) ($mla_stats['average_rating'] ?? 0), 1)) ?> / 5</td>
                                 </tr>
 
                                 <tr>
                                     <th>Total Reviews</th>
-                                    <td>3,245</td>
+                                    <td><?= esc(number_format((int) ($mla_stats['total_reviews'] ?? 0))) ?></td>
                                 </tr>
 
                                 <tr>
                                     <th>Positive Ratings</th>
-                                    <td>91%</td>
+                                    <td><?= esc($mla_stats['positive_rating_percentage'] ?? 0) ?>%</td>
                                 </tr>
 
                                 <tr>
                                     <th>Citizen Satisfaction</th>
-                                    <td>89%</td>
+                                    <td><?= esc($mla_stats['satisfaction_percentage'] ?? 0) ?>%</td>
                                 </tr>
 
                             </table>
@@ -1014,11 +1018,11 @@
                         <div class="card-body text-center">
 
                             <h1 class="display-4 text-success">
-                                91%
+                                <?= esc($mla_stats['completed_percentage'] ?? 0) ?>%
                             </h1>
 
                             <div class="progress">
-                                <div class="progress-bar bg-success" style="width:91%">
+                                <div class="progress-bar bg-success" style="width:<?= esc($mla_stats['completed_percentage'] ?? 0) ?>%">
                                 </div>
                             </div>
 
@@ -1034,18 +1038,18 @@
 
                         <div class="card-header bg-white">
                             <h5 class="mb-0">
-                                Engagement Score
+                                Complaint Resolution Rate
                             </h5>
                         </div>
 
                         <div class="card-body text-center">
 
                             <h1 class="display-4 text-primary">
-                                88%
+                                <?= esc($mla_stats['resolution_percentage'] ?? 0) ?>%
                             </h1>
 
                             <div class="progress">
-                                <div class="progress-bar bg-primary" style="width:88%">
+                                <div class="progress-bar bg-primary" style="width:<?= esc($mla_stats['resolution_percentage'] ?? 0) ?>%">
                                 </div>
                             </div>
 
@@ -1080,7 +1084,7 @@
                                     <th>Pending Complaints</th>
                                     <td>
                                         <span class="badge bg-danger">
-                                            15
+                                            <?= esc($mla_stats['pending_complaints'] ?? 0) ?>
                                         </span>
                                     </td>
                                 </tr>
@@ -1089,7 +1093,7 @@
                                     <th>Resolved Complaints</th>
                                     <td>
                                         <span class="badge bg-success">
-                                            420
+                                            <?= esc($mla_stats['resolved_complaints'] ?? 0) ?>
                                         </span>
                                     </td>
                                 </tr>
@@ -1115,16 +1119,16 @@
                         <div class="card-body">
 
                             <h3 class="text-primary">
-                                12,450 Responses
+                                <?= esc(number_format((int) ($mla_stats['survey_response_count'] ?? 0))) ?> Responses
                             </h3>
 
                             <p>
-                                Citizens actively participated in constituency surveys.
+                                <?= esc($mla_stats['active_survey_count'] ?? 0) ?> active surveys and <?= esc($mla_stats['survey_count'] ?? 0) ?> total surveys for this MLA.
                             </p>
 
                             <div class="progress">
-                                <div class="progress-bar bg-info" style="width:78%">
-                                    78%
+                                <div class="progress-bar bg-info" style="width:<?= esc($mla_stats['active_survey_percentage'] ?? 0) ?>%">
+                                    <?= esc($mla_stats['active_survey_percentage'] ?? 0) ?>%
                                 </div>
                             </div>
 

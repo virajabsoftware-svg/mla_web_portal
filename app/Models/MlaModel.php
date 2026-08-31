@@ -76,4 +76,36 @@ class MlaModel extends Model
 
             ->first();
     }
+
+    public function getPublicMlas(): array
+    {
+        $mlas = $this->db
+            ->table('mlas')
+            ->select('mlas.*, districts.district_name, constituencies.constituency_name')
+            ->select('(SELECT COUNT(*) FROM mla_developmentworks dw WHERE dw.mla_id = mlas.id) AS total_works', false)
+            ->select('(SELECT COUNT(*) FROM mla_developmentworks dw INNER JOIN mla_work_statuses ws ON ws.id = dw.status_id WHERE dw.mla_id = mlas.id AND LOWER(ws.status_name) = "completed") AS completed_works', false)
+            ->select('(SELECT COUNT(*) FROM mla_ratings mr WHERE mr.mla_id = mlas.id) AS ratings', false)
+            ->select('(SELECT AVG(mr.overall_rating) FROM mla_ratings mr WHERE mr.mla_id = mlas.id) AS rating_score', false)
+            ->join('districts', 'districts.id = mlas.district_id', 'left')
+            ->join('constituencies', 'constituencies.id = mlas.constituency_id', 'left')
+            ->where('mlas.status', 'Active')
+            ->orderBy('mlas.mla_name', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        foreach ($mlas as &$mla) {
+            $totalWorks = (int) ($mla['total_works'] ?? 0);
+            $completedWorks = (int) ($mla['completed_works'] ?? 0);
+            $mla['rating_score'] = round((float) ($mla['rating_score'] ?? 0), 1);
+            $mla['approval'] = $totalWorks > 0
+                ? round(($completedWorks / $totalWorks) * 100) . '%'
+                : '0%';
+            $mla['manifesto_fulfilled'] = $totalWorks > 0
+                ? (int) round(($completedWorks / $totalWorks) * 100)
+                : 0;
+        }
+        unset($mla);
+
+        return $mlas;
+    }
 }

@@ -18,10 +18,7 @@ class Home extends BaseController
     {
         $mlaModel = new MlaModel();
 
-        $data['mlas'] = $mlaModel
-            ->where('status', 'Active')
-            ->orderBy('mla_name', 'ASC')
-            ->findAll();
+        $data['mlas'] = $mlaModel->getPublicMlas();
 
         return view('mla', $data);
     }

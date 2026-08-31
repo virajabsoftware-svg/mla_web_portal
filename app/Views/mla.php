@@ -1,4 +1,4 @@
-```php
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1617,7 +1617,7 @@
                  * If profile_photo already contains full URL,
                  * use it directly.
                  *
-                 * Otherwise use uploads/mlas/
+                     * Otherwise use public/uploads/mla/
                  */
 
                 if (!empty($profilePhoto)) {
@@ -1634,7 +1634,7 @@
                     } else {
 
                         $image = base_url(
-                            'uploads/mlas/' . $profilePhoto
+                            'uploads/mla/' . rawurlencode(basename(str_replace('\\', '/', $profilePhoto)))
                         );
 
                     }
@@ -2290,6 +2290,7 @@
                             !district ||
                             mla.district === district
                         )
+
 
                     );
 
@@ -4549,4 +4550,4 @@
 </body>
 
 </html>
-```
+

@@ -109,4 +109,22 @@ class MlaDevelopmentWorkModel extends Model
             ->groupEnd()
             ->countAllResults();
     }
+
+    public function getRecentWorks(int $mlaId, int $limit = 5): array
+    {
+        if ($mlaId <= 0) {
+            return [];
+        }
+
+        return $this->db
+            ->table('mla_developmentworks')
+            ->select('mla_developmentworks.work_title, mla_developmentworks.physical_progress, categories.category_name, mla_work_statuses.status_name')
+            ->join('categories', 'categories.id = mla_developmentworks.category_id', 'left')
+            ->join('mla_work_statuses', 'mla_work_statuses.id = mla_developmentworks.status_id', 'left')
+            ->where('mla_developmentworks.mla_id', $mlaId)
+            ->orderBy('mla_developmentworks.id', 'DESC')
+            ->limit($limit)
+            ->get()
+            ->getResultArray();
+    }
 }

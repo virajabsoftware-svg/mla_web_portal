@@ -110,6 +110,7 @@ class Dashboard extends BaseController
         $totalWorks = 0;
         $completedWorks = 0;
         $inProgressWorks = 0;
+        $recentWorks = [];
 
         // ==========================
         // GET MLA DEVELOPMENT WORK COUNTS
@@ -117,10 +118,26 @@ class Dashboard extends BaseController
         if ($mlaId > 0) {
 
             $totalWorks = $mlaWorkModel->getTotalWorks($mlaId);
-
             $completedWorks = $mlaWorkModel->getCompletedWorks($mlaId);
-
             $inProgressWorks = $mlaWorkModel->getInProgressWorks($mlaId);
+            $recentWorks = array_map(static function (array $work): array {
+                $status = $work['status_name'] ?? 'Pending';
+                $normalizedStatus = strtolower(trim($status));
+                $statusClasses = [
+                    'completed' => 'success',
+                    'in progress' => 'warning',
+                    'ongoing' => 'primary',
+                    'pending' => 'info',
+                ];
+
+                return [
+                    'title' => $work['work_title'] ?? 'Untitled Work',
+                    'category' => $work['category_name'] ?? 'Not Available',
+                    'status' => $status,
+                    'status_class' => $statusClasses[$normalizedStatus] ?? 'secondary',
+                    'progress' => (int) ($work['physical_progress'] ?? 0),
+                ];
+            }, $mlaWorkModel->getRecentWorks($mlaId));
         }
 
         // ==========================
@@ -132,7 +149,10 @@ class Dashboard extends BaseController
         ) {
 
             // Get complete MLA details
-            $mla_complete = $model->getCompleteMLADetails($mlaId);
+            $mla_complete = $model->getCompleteMLADetails(
+                $mlaId,
+                $mla_data_from_db['constituency'] ?? null
+            );
 
             if ($mla_complete) {
 
@@ -188,7 +208,8 @@ class Dashboard extends BaseController
         // MLA IMAGE
         // ==========================
         $mla_data['mla_image'] =
-            $mla_data['image']
+            $mla_data_from_db['mla_image']
+            ?? $mla_data['image']
             ?? $mla_data['mla_image']
             ?? 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max';
 
@@ -219,7 +240,7 @@ class Dashboard extends BaseController
         // ==========================
         // GET ACTIVE SURVEYS
         // ==========================
-        $active_surveys = $model->recentSurveys();
+        $active_surveys = $model->recentSurveys($mlaId);
 
         foreach ($active_surveys as &$survey) {
 
@@ -332,50 +353,10 @@ class Dashboard extends BaseController
             ],
 
             // ==========================
-            // STATIC RECENT WORKS
+            // RECENT WORKS FOR THE ASSIGNED MLA
             // ==========================
-            'recent_works' => [
 
-                [
-                    'title' => 'Road Construction',
-                    'category' => 'Infrastructure',
-                    'status' => 'Completed',
-                    'status_class' => 'success',
-                    'progress' => 100
-                ],
-
-                [
-                    'title' => 'School Building',
-                    'category' => 'Education',
-                    'status' => 'In Progress',
-                    'status_class' => 'warning',
-                    'progress' => 75
-                ],
-
-                [
-                    'title' => 'Water Supply',
-                    'category' => 'Utilities',
-                    'status' => 'Pending',
-                    'status_class' => 'info',
-                    'progress' => 30
-                ],
-
-                [
-                    'title' => 'Hospital Renovation',
-                    'category' => 'Healthcare',
-                    'status' => 'Completed',
-                    'status_class' => 'success',
-                    'progress' => 100
-                ],
-
-                [
-                    'title' => 'Street Lighting',
-                    'category' => 'Infrastructure',
-                    'status' => 'In Progress',
-                    'status_class' => 'warning',
-                    'progress' => 60
-                ]
-            ],
+            'recent_works' => $recentWorks,
 
             // ==========================
             // DYNAMIC COMPLAINTS
