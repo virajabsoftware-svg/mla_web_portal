@@ -1231,9 +1231,7 @@
                  MLA RESULT
             ==================================================== -->
 
-            <div
-                class="row g-4"
-                id="mlaResult">
+            <div  class="row g-4"   id="mlaResult">
             </div>
 
 
@@ -2480,10 +2478,7 @@
 
 
             document
-                .getElementById(
-                    'premiumModalBody'
-                )
-                .innerHTML = `
+                .getElementById('premiumModalBody').innerHTML = `
 
 
                     <div class="row">

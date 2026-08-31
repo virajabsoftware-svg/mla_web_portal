@@ -1217,7 +1217,7 @@
                                                 </td>
 
                                                 <td>
-                                                    <?= esc($mla['party']) ?>
+                                                    <?= esc($mla['party_name'] ?? 'Not Available') ?>
                                                 </td>
 
                                                 <td>
@@ -1306,83 +1306,205 @@
                 VIEW MLA MODALS — detailed information form-style (read-only)
                 ============================================================ -->
                 
+                <!-- VIEW MLA MODAL -->
                 <div class="modal fade modal-cream" id="viewMlaModal" tabindex="-1" data-bs-backdrop="static">
                     <div class="modal-dialog modal-xl modal-dialog-scrollable">
                         <div class="modal-content modal-cream">
+
                             <div class="modal-header border-warning">
-                                <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>View MLA Details</h5>
+                                <h5 class="modal-title fw-bold">
+                                    <i class="fas fa-eye me-2"></i>View MLA Details
+                                </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
+
                             <div class="modal-body">
                                 <form>
                                     <div class="row g-3">
+
+                                        <!-- Profile Photo -->
                                         <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-camera me-1"></i> Profile Photo</label>
-                                            <div><img id="view_photo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1NGljE8Ngab0V6mQkSMycyNgBuQ8jKzUhV-lEJbcUiw&s=10" style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);"></div>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-camera me-1"></i> Profile Photo
+                                            </label>
+                                            <div>
+                                                <img id="view_photo" src="" alt="MLA Profile Photo"
+                                                    style="width:100px;height:100px;object-fit:cover;border-radius:16px;border:2px solid var(--gold-light);">
+                                            </div>
                                         </div>
+
+                                        <!-- Basic Information -->
                                         <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-user me-1"></i> Full Name</label>
-                                            <input type="text" id="view_mla_name" class="form-control view-field-readonly" value="Eknath Shinde" readonly>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-user me-1"></i> Full Name
+                                            </label>
+                                            <input type="text" id="view_mla_name" class="form-control view-field-readonly" readonly>
                                         </div>
+
                                         <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-phone me-1"></i> Mobile Number</label>
-                                            <input type="tel" id="view_mobile" class="form-control view-field-readonly" value="+91 98765 43210" readonly>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-phone me-1"></i> Mobile Number
+                                            </label>
+                                            <input type="tel" id="view_mobile" class="form-control view-field-readonly" readonly>
                                         </div>
+
                                         <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-envelope me-1"></i> Username (email)</label>
-                                            <input type="email" id="view_email" class="form-control view-field-readonly" value="eknath.shinde@maharashtra.gov" readonly>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-envelope me-1"></i> Username (email)
+                                            </label>
+                                            <input type="email" id="view_email" class="form-control view-field-readonly" readonly>
                                         </div>
+
                                         <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-venus-mars me-1"></i> Gender</label>
-                                            <input type="text" id="view_gender" class="form-control view-field-readonly" value="Male" readonly>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-venus-mars me-1"></i> Gender
+                                            </label>
+                                            <input type="text" id="view_gender" class="form-control view-field-readonly" readonly>
                                         </div>
+
                                         <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <input type="text" id="view_party" class="form-control view-field-readonly" value="Shiv Sena (ES)" readonly>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-flag me-1"></i> Party
+                                            </label>
+                                            <input type="text" id="view_party" class="form-control view-field-readonly" readonly>
                                         </div>
+
+                                        <!-- Professional & Political Information -->
+                                        <div class="col-12 mt-4">
+                                            <h6 class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-user-tie me-2"></i>
+                                                Professional & Political Information
+                                            </h6>
+                                            <hr>
+                                        </div>
+
                                         <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
-                                            <input type="text" id="view_state" class="form-control view-field-readonly" value="Maharashtra" readonly>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-graduation-cap me-1"></i> Education
+                                            </label>
+                                            <input type="text" id="view_education" class="form-control view-field-readonly" readonly>
                                         </div>
+
                                         <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-city me-1"></i> District</label>
-                                            <input type="text" id="view_district" class="form-control view-field-readonly" value="Thane" readonly>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-briefcase me-1"></i> Profession
+                                            </label>
+                                            <input type="text" id="view_profession" class="form-control view-field-readonly" readonly>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-pin me-1"></i> Constituency</label>
-                                            <input type="text" id="view_constituency" class="form-control view-field-readonly" value="Kopri-Pachpakhadi" readonly>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-calendar-alt me-1"></i> Date of Birth
+                                            </label>
+                                            <input type="text" id="view_dob" class="form-control view-field-readonly" readonly>
                                         </div>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-calendar-check me-1"></i> First Elected
+                                            </label>
+                                            <input type="text" id="view_first_elected" class="form-control view-field-readonly" readonly>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-landmark me-1"></i> Current Term
+                                            </label>
+                                            <input type="text" id="view_current_term" class="form-control view-field-readonly" readonly>
+                                        </div>
+
                                         <div class="col-12">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-home me-1"></i> Address</label>
-                                            <textarea id="view_address" class="form-control view-field-readonly" rows="2" readonly>Thane, Maharashtra</textarea>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-users me-1"></i> Committees
+                                            </label>
+                                            <input type="text" id="view_committees" class="form-control view-field-readonly" readonly>
                                         </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-mailbox me-1"></i> Pincode</label>
-                                            <input type="text" id="view_pincode" class="form-control view-field-readonly" value="400601" readonly>
+
+                                        <div class="col-12">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-align-left me-1"></i> Biography
+                                            </label>
+                                            <textarea id="view_biography" class="form-control view-field-readonly" rows="5" readonly></textarea>
                                         </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-id-card me-1"></i> Aadhaar</label>
-                                            <input type="text" id="view_aadhaar" class="form-control view-field-readonly" value="1234-5678-9012" readonly>
+
+                                        <!-- Location Information -->
+                                        <div class="col-12 mt-4">
+                                            <h6 class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-map-marker-alt me-2"></i>
+                                                Location Information
+                                            </h6>
+                                            <hr>
                                         </div>
-                                        <div class="col-md-4">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i> Joining Date</label>
-                                            <input type="text" id="view_joining_date" class="form-control view-field-readonly" value="2019-11-01" readonly>
-                                        </div>
+
                                         <div class="col-md-6">
-                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
-                                            <input type="text" id="view_status" class="form-control view-field-readonly" value="Active" readonly>
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-map-marker-alt me-1"></i> State
+                                            </label>
+                                            <input type="text" id="view_state" class="form-control view-field-readonly" readonly>
                                         </div>
+
+                                        <div class="col-md-6">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-city me-1"></i> District
+                                            </label>
+                                            <input type="text" id="view_district" class="form-control view-field-readonly" readonly>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-map-pin me-1"></i> Constituency
+                                            </label>
+                                            <input type="text" id="view_constituency" class="form-control view-field-readonly" readonly>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-home me-1"></i> Address
+                                            </label>
+                                            <textarea id="view_address" class="form-control view-field-readonly" rows="2" readonly></textarea>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-mailbox me-1"></i> Pincode
+                                            </label>
+                                            <input type="text" id="view_pincode" class="form-control view-field-readonly" readonly>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-id-card me-1"></i> Aadhaar
+                                            </label>
+                                            <input type="text" id="view_aadhaar" class="form-control view-field-readonly" readonly>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-calendar-alt me-1"></i> Joining Date
+                                            </label>
+                                            <input type="text" id="view_joining_date" class="form-control view-field-readonly" readonly>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-toggle-on me-1"></i> Status
+                                            </label>
+                                            <input type="text" id="view_status" class="form-control view-field-readonly" readonly>
+                                        </div>
+
                                     </div>
                                 </form>
                             </div>
+
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-outline-cream px-4" data-bs-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
+
                         </div>
                     </div>
                 </div>
-
-
                 <!-- ============================================================
                 ADD MLA MODAL (unchanged)
                 ============================================================ -->
@@ -1428,16 +1550,90 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" id="party" name="party" required>
+                                            <select class="form-select" id="add_party" name="party" required>
                                                 <option value="">Select Party</option>
                                                 <?php foreach ($parties as $party): ?>
-                                                    <option value="<?= esc($party['party_name']); ?>">
+                                                    <option value="<?= esc($party['id']); ?>">
                                                         <?= esc($party['party_name']); ?> (<?= esc($party['party_code']); ?>)
                                                     </option>                             
                                                 <?php endforeach; ?>
                                 
                                             </select>
                                         </div>
+                                      
+                                        <!-- MLA Professional Details -->
+                                        <div class="col-md-6">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-graduation-cap me-1"></i> Education
+                                            </label>
+                                            <input type="text"
+                                                name="education"
+                                                class="form-control"
+                                                placeholder="e.g. B.E. Civil">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-briefcase me-1"></i> Profession
+                                            </label>
+                                            <input type="text"
+                                                name="profession"
+                                                class="form-control"
+                                                placeholder="e.g. Politician, Social Worker">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-calendar-alt me-1"></i> Date of Birth
+                                            </label>
+                                            <input type="date"
+                                                name="dob"
+                                                class="form-control">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-calendar-check me-1"></i> First Elected
+                                            </label>
+                                            <input type="number"
+                                                name="first_elected"
+                                                class="form-control"
+                                                placeholder="e.g. 2004"
+                                                min="1900"
+                                                max="2100">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-landmark me-1"></i> Current Term
+                                            </label>
+                                            <input type="text"
+                                                name="current_term"
+                                                class="form-control"
+                                                placeholder="e.g. 5th">
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-users me-1"></i> Committees
+                                            </label>
+                                            <input type="text"
+                                                name="committees"
+                                                class="form-control"
+                                                placeholder="e.g. Public Works, Energy">
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="fw-bold" style="color:#876b42;">
+                                                <i class="fas fa-align-left me-1"></i> Biography
+                                            </label>
+                                            <textarea name="biography"
+                                                    class="form-control"
+                                                    rows="5"
+                                                    placeholder="Enter MLA biography"></textarea>
+                                        </div> 
+
+
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;">
                                                 <i class="fas fa-map-marker-alt me-1"></i> State
@@ -1570,16 +1766,60 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-flag me-1"></i> Party</label>
-                                            <select class="form-select" id="party" name="party" required>
+                                            <select class="form-select" id="edit_party" name="party" required>
                                                 <option value="">Select Party</option>
                                                 <?php foreach ($parties as $party): ?>
-                                                    <option value="<?= esc($party['party_name']); ?>">
+                                                    <option value="<?= esc($party['id']); ?>">
                                                         <?= esc($party['party_name']); ?> (<?= esc($party['party_code']); ?>)
                                                     </option>                             
                                                 <?php endforeach; ?>
                                 
                                             </select>
                                         </div>
+
+                                         <!-- Professional Information -->
+                                        <div class="col-12 mt-4">
+                                            <h6 class="fw-bold" style="color:#876b42;"><i class="fas fa-user-tie me-2"></i>Professional & Political Information</h6>
+                                            <hr>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-graduation-cap me-1"></i>Education</label>
+                                            <input type="text" id="edit_education" name="education" class="form-control" placeholder="e.g. B.E. Civil">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-briefcase me-1"></i>Profession</label>
+                                            <input type="text" id="edit_profession" name="profession" class="form-control" placeholder="e.g. Politician, Social Worker">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-alt me-1"></i>Date of Birth</label>
+                                            <input type="date" id="edit_dob" name="dob" class="form-control">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-calendar-check me-1"></i>First Elected</label>
+                                            <input type="number" id="edit_first_elected" name="first_elected" class="form-control" placeholder="e.g. 2004" min="1900" max="2100">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-landmark me-1"></i>Current Term</label>
+                                            <input type="text" id="edit_current_term" name="current_term" class="form-control" placeholder="e.g. 5th">
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-users me-1"></i>Committees</label>
+                                            <input type="text" id="edit_committees" name="committees" class="form-control" placeholder="e.g. Public Works, Energy">
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="fw-bold" style="color:#876b42;"><i class="fas fa-align-left me-1"></i>Biography</label>
+                                            <textarea id="edit_biography" name="biography" class="form-control" rows="5" placeholder="Enter MLA biography"></textarea>
+                                        </div>
+
+
+
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-map-marker-alt me-1"></i> State</label>
                                             <select id="edit_state_id" name="state_id" class="form-select" required>
@@ -1881,7 +2121,7 @@
                 $('#view_mobile').val(data.mobile);
                 $('#view_email').val(data.email);
                 $('#view_gender').val(data.gender);
-                $('#view_party').val(data.party);
+                $('#view_party').val(data.party_name || 'Not Available');
                 $('#view_state').val(data.state_name);
                 $('#view_district').val(data.district_name);
                 $('#view_constituency').val(data.constituency_name);
@@ -1890,6 +2130,13 @@
                 $('#view_aadhaar').val(data.aadhaar);
                 $('#view_joining_date').val(data.joining_date);
                 $('#view_status').val(data.status);
+                $('#view_education').val(data.education || '');
+                $('#view_profession').val(data.profession || '');
+                $('#view_dob').val(data.dob || '');
+                $('#view_first_elected').val(data.first_elected || '');
+                $('#view_current_term').val(data.current_term || '');
+                $('#view_committees').val(data.committees || '');
+                $('#view_biography').val(data.biography || '');
 
                 $('#viewMlaModal').modal('show');
 
@@ -1936,7 +2183,7 @@ $(document).on('click', '.edit-btn', function () {
                 $('#edit_mla_name').val(data.mla_name);
                 $('#edit_mobile').val(data.mobile);
                 $('#edit_email').val(data.email);
-                $('#edit_password').val();
+                $('#edit_password').val('');
                 $('#edit_gender').val(data.gender);
                 $('#edit_party').val(data.party);
                 $('#edit_address').val(data.address);
@@ -1944,6 +2191,14 @@ $(document).on('click', '.edit-btn', function () {
                 $('#edit_aadhaar').val(data.aadhaar);
                 $('#edit_joining_date').val(data.joining_date);
                 $('#edit_status').val(data.status);
+
+                $('#edit_education').val(data.education || '');
+                $('#edit_profession').val(data.profession || '');
+                $('#edit_dob').val(data.dob || '');
+                $('#edit_first_elected').val(data.first_elected || '');
+                $('#edit_current_term').val(data.current_term || '');
+                $('#edit_committees').val(data.committees || '');
+                $('#edit_biography').val(data.biography || '');
 
                 $('#edit_state_id').val(data.state_id);
 

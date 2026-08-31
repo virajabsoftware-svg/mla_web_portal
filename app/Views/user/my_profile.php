@@ -713,7 +713,7 @@ if (!$imageFound) {
                             </div>
                             <div class="col-md-3 col-6">
                                 <div class="info-label"><i class="fas fa-building"></i> Party</div>
-                                <div class="value-display-readonly"><?= esc($mla['party'] ?? '-') ?></div>
+                                <div class="value-display-readonly"><?= esc($mla['party_name'] ?? $mla['party'] ?? '-') ?></div>
                             </div>
                             <div class="col-md-3 col-6">
                                 <div class="info-label"><i class="fas fa-landmark"></i> Constituency</div>

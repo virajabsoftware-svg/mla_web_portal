@@ -206,6 +206,13 @@ $session->set('profile_photo', $profile_image);
 
         $mla_data['in_progress_works'] = $inProgressWorks;
 
+        // Keep credibility aligned with the work counts displayed on this dashboard.
+        // These counts come from mla_developmentworks and its status master.
+        $mla_data['credibility'] = $model->calculateCredibility(
+            $totalWorks,
+            $completedWorks
+        );
+
         // ==========================
         // MLA IMAGE
         // ==========================

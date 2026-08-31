@@ -30,8 +30,19 @@ class MlaModel extends Model
         'joining_date',
         'status',
         'api_token',
-        'token_expiry'
+        'token_expiry',       
+        'education',
+        'profession',
+        'dob',
+        'first_elected',
+        'current_term',
+        'committees',
+        'biography',
+
     ];
+
+
+    
 
     protected $useTimestamps = true;
 
@@ -51,7 +62,8 @@ class MlaModel extends Model
                 'mlas.*,
                  states.state_name,
                  districts.district_name,
-                 constituencies.constituency_name'
+                 constituencies.constituency_name,
+                 parties.party_name'
             )
 
             ->join(
@@ -71,6 +83,7 @@ class MlaModel extends Model
                 'constituencies.id = mlas.constituency_id',
                 'left'
             )
+            ->join('parties', 'parties.id = mlas.party', 'left')
 
             ->where('mlas.id', $mlaId)
 
@@ -81,13 +94,15 @@ class MlaModel extends Model
     {
         $mlas = $this->db
             ->table('mlas')
-            ->select('mlas.*, districts.district_name, constituencies.constituency_name')
+            ->select('mlas.*, districts.district_name, constituencies.constituency_name, parties.party_name, parties.party_logo')
             ->select('(SELECT COUNT(*) FROM mla_developmentworks dw WHERE dw.mla_id = mlas.id) AS total_works', false)
-            ->select('(SELECT COUNT(*) FROM mla_developmentworks dw INNER JOIN mla_work_statuses ws ON ws.id = dw.status_id WHERE dw.mla_id = mlas.id AND LOWER(ws.status_name) = "completed") AS completed_works', false)
+            ->select('(SELECT COUNT(*) FROM mla_developmentworks dw INNER JOIN mla_work_statuses ws ON ws.id = dw.status_id 
+             WHERE dw.mla_id = mlas.id AND LOWER(ws.status_name) = "completed") AS completed_works', false)
             ->select('(SELECT COUNT(*) FROM mla_ratings mr WHERE mr.mla_id = mlas.id) AS ratings', false)
             ->select('(SELECT AVG(mr.overall_rating) FROM mla_ratings mr WHERE mr.mla_id = mlas.id) AS rating_score', false)
             ->join('districts', 'districts.id = mlas.district_id', 'left')
             ->join('constituencies', 'constituencies.id = mlas.constituency_id', 'left')
+            ->join('parties', 'parties.id = mlas.party', 'left')
             ->where('mlas.status', 'Active')
             ->orderBy('mlas.mla_name', 'ASC')
             ->get()
@@ -97,6 +112,7 @@ class MlaModel extends Model
             $totalWorks = (int) ($mla['total_works'] ?? 0);
             $completedWorks = (int) ($mla['completed_works'] ?? 0);
             $mla['rating_score'] = round((float) ($mla['rating_score'] ?? 0), 1);
+            $mla['party'] = $mla['party_name'] ?? 'Independent';
             $mla['approval'] = $totalWorks > 0
                 ? round(($completedWorks / $totalWorks) * 100) . '%'
                 : '0%';

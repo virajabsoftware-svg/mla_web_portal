@@ -17,10 +17,11 @@ class MlaDevelopmentWorkModel extends Model
 
     public function getFilteredWorks($mlaId, array $filters): self
     {
-        $this->select('mla_developmentworks.*, mlas.mla_name, mlas.profile_photo, mlas.party,
+        $this->select('mla_developmentworks.*, mlas.mla_name, mlas.profile_photo, parties.party_name AS party,
                 constituencies.constituency_name,categories.category_name,sub_categories.sub_category_name,
                 departments.department_name, districts.district_name,mla_work_statuses.status_name')
             ->join('mlas', 'mlas.id = mla_developmentworks.mla_id', 'left')
+            ->join('parties', 'parties.id = mlas.party', 'left')
             ->join('constituencies', 'constituencies.id = mlas.constituency_id', 'left')
             ->join('categories', 'categories.id = mla_developmentworks.category_id', 'left')
             ->join('sub_categories', 'sub_categories.id = mla_developmentworks.subcategory_id', 'left')
