@@ -102,18 +102,22 @@ class DashboardModel extends Model
     // ==========================
     // Get Default Profile Photo
     // ==========================
-    private function getDefaultProfilePhoto($user)
-    {
-        $gender = strtolower($user['gender'] ?? 'male');
-        $seed = $user['id'] ?? rand(1, 99);
+  private function getDefaultProfilePhoto($user)
+{
+    $gender = strtolower(trim($user['gender'] ?? ''));
 
-        if ($gender === 'female' || $gender === 'f') {
-            return "https://randomuser.me/api/portraits/women/" . ($seed % 99) . ".jpg";
-        }
+    // Default images
+    $male_default = base_url('uploads/profile/men.webp');
+    $female_default = base_url('uploads/profile/women.avif');
 
-        return "https://randomuser.me/api/portraits/men/" . ($seed % 99) . ".jpg";
+    // Female
+    if ($gender === 'female' || $gender === 'f' || $gender === 'woman') {
+        return $female_default;
     }
 
+    // Male / default
+    return $male_default;
+}
     // ==========================
     // Profile Completion
     // ==========================

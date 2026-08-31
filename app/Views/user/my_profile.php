@@ -475,31 +475,75 @@
                         <div class="col-md-3 col-lg-2 text-center text-md-start mb-3 mb-md-0">
                             <div style="position: relative; display: inline-block;">
                                 
-                                <?php
-                                $firstLetter = !empty($user['full_name']) ? strtoupper(substr($user['full_name'], 0, 1)) : 'U';
-                                $defaultAvatar = base_url('assets/user/images/default-avatar.png');
-                                $profilePhoto = $defaultAvatar;
-                                $imageFound = false;
-                                
-                                if (!empty($user['profile_photo'])) {
-                                    $photoFilename = $user['profile_photo'];
-                                    $pathsToCheck = [
-                                        FCPATH . 'uploads/profile/' . $photoFilename,
-                                        FCPATH . 'public/uploads/profile/' . $photoFilename,
-                                        FCPATH . 'assets/uploads/profile/' . $photoFilename,
-                                        ROOTPATH . 'public/uploads/profile/' . $photoFilename,
-                                        ROOTPATH . 'uploads/profile/' . $photoFilename,
-                                    ];
-                                    
-                                    foreach ($pathsToCheck as $path) {
-                                        if (file_exists($path) && is_file($path)) {
-                                            $profilePhoto = base_url('uploads/profile/' . $photoFilename);
-                                            $imageFound = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                                ?>
+                               <?php
+
+$firstLetter = !empty($user['full_name'])
+    ? strtoupper(substr($user['full_name'], 0, 1))
+    : 'U';
+
+$profilePhoto = '';
+$imageFound = false;
+
+// User gender
+$gender = strtolower(trim($user['gender'] ?? ''));
+
+// Default images
+$male_default = base_url('uploads/profile/men.webp');
+$female_default = base_url('uploads/profile/women.avif');
+
+
+// ==========================================
+// 1. USER HAS UPLOADED PROFILE PHOTO
+// ==========================================
+
+if (!empty($user['profile_photo'])) {
+
+    $photoFilename = basename($user['profile_photo']);
+
+    $pathsToCheck = [
+        FCPATH . 'uploads/profile/' . $photoFilename,
+        FCPATH . 'public/uploads/profile/' . $photoFilename,
+        ROOTPATH . 'public/uploads/profile/' . $photoFilename,
+        ROOTPATH . 'uploads/profile/' . $photoFilename,
+    ];
+
+    foreach ($pathsToCheck as $path) {
+
+        if (file_exists($path) && is_file($path)) {
+
+            $profilePhoto = base_url('uploads/profile/' . $photoFilename);
+
+            $imageFound = true;
+
+            break;
+        }
+    }
+}
+
+
+// ==========================================
+// 2. USER PHOTO NOT UPLOADED
+//    SHOW DEFAULT IMAGE BASED ON GENDER
+// ==========================================
+
+if (!$imageFound) {
+
+    if ($gender === 'female' || $gender === 'f') {
+
+        $profilePhoto = $female_default;
+
+    } elseif ($gender === 'male' || $gender === 'm') {
+
+        $profilePhoto = $male_default;
+
+    } else {
+
+        // Other / unknown gender
+        $profilePhoto = $male_default;
+    }
+}
+
+?>
                                 <img src="<?= esc($profilePhoto) ?>" 
                                      alt="Profile Photo" 
                                      class="profile-avatar-large" 

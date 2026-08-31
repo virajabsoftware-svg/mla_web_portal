@@ -376,6 +376,23 @@
 </head>
 
 <body>
+    <?php
+$gender = strtolower(trim($user['gender'] ?? ''));
+
+// Default images
+$male_default = base_url('uploads/profile/men.webp');
+$female_default = base_url('uploads/profile/women.avif');
+
+// User uploaded image असेल तर ती दाखवा
+if (!empty($user_image)) {
+    $profile_image = $user_image;
+} else {
+    // Gender नुसार default image
+    $profile_image = ($gender === 'female' || $gender === 'woman')
+        ? $female_default
+        : $male_default;
+}
+?>
  <?php include "common/header.php"?>
 
     <main class="main-content fade-page-transition">
@@ -390,10 +407,12 @@
                     <div class="card shadow border-0 h-100">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
-                                <img src="<?= !empty($user_image) ? htmlspecialchars($user_image) : 'https://randomuser.me/api/portraits/men/32.jpg' ?>" 
-                                     class="rounded-circle me-3" width="80" height="80" 
-                                     alt="Profile"
-                                     onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/men/32.jpg';">
+                               <img src="<?= htmlspecialchars($profile_image) ?>"
+     class="rounded-circle me-3"
+     width="80"
+     height="80"
+     alt="Profile"
+     onerror="this.onerror=null; this.src='<?= $male_default ?>';">
                                 <div>
                                     <h4 class="mb-1"><?= htmlspecialchars($user_name) ?></h4>
                                     <p class="text-muted mb-1">Voter ID : <?= htmlspecialchars($voter_id) ?></p>

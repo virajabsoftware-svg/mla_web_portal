@@ -130,27 +130,66 @@ switch (strtolower(trim($userStatus))) {
 // PROFILE PHOTO
 // ============================================================
 
+$gender = strtolower(trim($voter['gender'] ?? ''));
+
+// Default profile images
+$male_default = base_url('uploads/profile/men.webp');
+$female_default = base_url('uploads/profile/women.avif');
+
+$profilePhoto = '';
+$imageFound = false;
+
+
+// ============================================================
+// 1. USER UPLOADED PHOTO
+// ============================================================
+
 if (!empty($userPhoto)) {
 
-    /*
-     * Database मध्ये जर फक्त filename असेल:
-     *
-     * profile_photo = abc.jpg
-     *
-     * तर:
-     *
-     * /uploads/profile/abc.jpg
-     */
+    $photoFilename = basename($userPhoto);
 
-    $profilePhoto = base_url(
-        'uploads/profile/' . $userPhoto
-    );
+    $pathsToCheck = [
+        FCPATH . 'uploads/profile/' . $photoFilename,
+        ROOTPATH . 'public/uploads/profile/' . $photoFilename,
+        ROOTPATH . 'uploads/profile/' . $photoFilename,
+    ];
 
-} else {
+    foreach ($pathsToCheck as $path) {
 
-    $profilePhoto = base_url(
-        'assets/user/images/default-user.png'
-    );
+        if (is_file($path)) {
+
+            $profilePhoto = base_url(
+                'uploads/profile/' . $photoFilename
+            );
+
+            $imageFound = true;
+
+            break;
+        }
+    }
+}
+
+
+// ============================================================
+// 2. USER PHOTO NOT UPLOADED
+//    SHOW GENDER-BASED DEFAULT
+// ============================================================
+
+if (!$imageFound) {
+
+    if ($gender === 'female' || $gender === 'f') {
+
+        $profilePhoto = $female_default;
+
+    } elseif ($gender === 'male' || $gender === 'm') {
+
+        $profilePhoto = $male_default;
+
+    } else {
+
+        // Other / unknown gender
+        $profilePhoto = $male_default;
+    }
 }
 
 

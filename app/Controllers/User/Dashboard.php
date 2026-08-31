@@ -46,54 +46,56 @@ class Dashboard extends BaseController
         $session->set('constituency', $user_data['constituency'] ?? 'Not Available');
         $session->set('role', $user_data['role'] ?? 'Voter');
 
-        // ==========================
-        // PROFILE PHOTO HANDLING
-        // ==========================
-        $profile_photo = $user_data['profile_photo'] ?? '';
+      // ==========================
+// PROFILE PHOTO HANDLING
+// ==========================
 
-        if (empty($profile_photo)) {
+$profile_photo = trim($user_data['profile_photo'] ?? '');
 
-            $gender = strtolower($user_data['gender'] ?? 'male');
-            $seed = $user_data['id'] ?? $user_id;
+$gender = strtolower(trim($user_data['gender'] ?? ''));
 
-            $profile_photo =
-                "https://randomuser.me/api/portraits/" .
-                ($gender === 'female' ? 'women' : 'men') .
-                "/" .
-                ($seed % 99) .
-                ".jpg";
+// Default images
+$male_default = base_url('uploads/profile/men.webp');
+$female_default = base_url('uploads/profile/women.avif');
+
+// If user has uploaded profile image
+if (!empty($profile_photo)) {
+
+    // If database contains full URL
+    if (filter_var($profile_photo, FILTER_VALIDATE_URL)) {
+
+        $profile_image = $profile_photo;
+
+    } else {
+
+        // If database contains only filename
+        $file_path = FCPATH . 'uploads/profile/' . $profile_photo;
+
+        if (file_exists($file_path)) {
+
+            $profile_image = base_url(
+                'uploads/profile/' . $profile_photo
+            );
 
         } else {
 
-            // If relative path
-            if (!filter_var($profile_photo, FILTER_VALIDATE_URL)) {
-
-                $file_path = FCPATH . 'uploads/profile/' . $profile_photo;
-
-                if (file_exists($file_path)) {
-
-                    $profile_photo = base_url(
-                        'uploads/profile/' . $profile_photo
-                    );
-
-                } else {
-
-                    $gender = strtolower($user_data['gender'] ?? 'male');
-                    $seed = $user_data['id'] ?? $user_id;
-
-                    $profile_photo =
-                        "https://randomuser.me/api/portraits/" .
-                        ($gender === 'female' ? 'women' : 'men') .
-                        "/" .
-                        ($seed % 99) .
-                        ".jpg";
-                }
-            }
+            // Uploaded image does not exist
+            $profile_image = ($gender === 'female' || $gender === 'woman')
+                ? $female_default
+                : $male_default;
         }
+    }
 
-        // Save profile photo to session
-        $session->set('profile_photo', $profile_photo);
+} else {
 
+    // No uploaded image → gender based default
+    $profile_image = ($gender === 'female' || $gender === 'woman')
+        ? $female_default
+        : $male_default;
+}
+
+// Save final image to session
+$session->set('profile_photo', $profile_image);
         // ==========================
         // GET ASSIGNED MLA
         // ==========================
