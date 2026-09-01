@@ -9,7 +9,7 @@
           content="width=device-width, initial-scale=1.0">
 
     <title>ÆTHERIS | Admin Login</title>
-
+     <link rel="icon" type="image/png" href="<?= base_url('assets/user/images/LOGO.png') ?>">
 
     <!-- Font Awesome -->
     <link rel="stylesheet"

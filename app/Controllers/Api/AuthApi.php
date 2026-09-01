@@ -16,12 +16,9 @@ class AuthApi extends ResourceController
         $this->voterModel = new VoterModel();
         $this->mlaModel   = new MlaModel();
     }
-
-
     // =====================================================
     // TEST API
     // =====================================================
-
     public function test()
     {
         return $this->respond([
@@ -485,8 +482,6 @@ class AuthApi extends ResourceController
             'data'       => $mla
         ], 200);
     }
-
-
     // =====================================================
     // MLA PROFILE API
     // =====================================================

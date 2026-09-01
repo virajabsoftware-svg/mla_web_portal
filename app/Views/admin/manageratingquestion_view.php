@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>View Rating Question</title>
-    
+    <link rel="icon" type="image/png" href="<?= base_url('assets/user/images/LOGO.png') ?>">
     <!-- ============================================================
          REFERENCE HEADER DEPENDENCIES
          ============================================================ -->

@@ -36,7 +36,6 @@ $routes->group('api',  ['namespace' => 'App\Controllers\Api'],function ($routes)
         $routes->post('voter/logout','AuthApi::voterlogout',['filter' => 'apiToken']);
         $routes->get('voter/dashboard','Voter::dashboard',['filter' => 'apiToken']);
         $routes->get('voter/complaints','Voter::complaints',['filter' => 'apiToken']);
-
         // Public MLA   
         $routes->post('login', 'AuthApi::login');
         $routes->get('profile', 'AuthApi::profile', ['filter' => 'mlaToken']);

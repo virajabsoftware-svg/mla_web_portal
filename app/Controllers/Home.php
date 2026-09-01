@@ -7,7 +7,9 @@ class Home extends BaseController
     {
         $mlaModel = new MlaModel();
         $mlas = $mlaModel->getPublicMlas();
+        
 
+        //Top Rated MLAs Sort Data on the basis of rating_score in descending order
         usort($mlas, static function (array $first, array $second): int {
             return ($second['rating_score'] ?? 0) <=> ($first['rating_score'] ?? 0);
         });
