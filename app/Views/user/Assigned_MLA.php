@@ -816,7 +816,9 @@
                                 <strong>Constituency : <?= htmlspecialchars($mla_data['constituency'] ?? $mla_constituency) ?></strong> 
                             </p>
                             <p class="mb-0"><strong>MLA Code:</strong> <?= esc($mla_data['mla_code'] ?? 'Not Available') ?></p>
-                            <p class="mb-0"><strong>Party:</strong> <?= esc($mla_data['party'] ?? 'Not Available') ?></p>
+                          <p class="mb-0">
+    <strong>Party:</strong> <?= esc($mla_data['party'] ?? 'Not Available') ?>
+</p>
                             <p class="mb-0"><strong>District:</strong> <?= esc($mla_data['district'] ?? 'Not Available') ?></p>
 
                         </div>

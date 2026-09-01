@@ -16,11 +16,26 @@ class AssignedMLA extends BaseController
         }
         
 
-        $dashboardModel = new DashboardModel();
-        $mlaData = $dashboardModel->getAssignedMLA($userId) ?? [];
+       $dashboardModel = new DashboardModel();
+$mlaData = $dashboardModel->getAssignedMLA($userId) ?? [];
 
-        
-        $mlaId = (int) ($mlaData['mla_id'] ?? 0);
+// Get party code from party ID
+$partyCode = 'Not Available';
+
+if (!empty($mlaData['mla_party'])) {
+    $party = db_connect()
+        ->table('parties')
+        ->select('party_code')
+        ->where('id', (int) $mlaData['mla_party'])
+        ->get()
+        ->getRowArray();
+
+    if (!empty($party['party_code'])) {
+        $partyCode = $party['party_code'];
+    }
+}
+
+$mlaId = (int) ($mlaData['mla_id'] ?? 0);
         $workModel = new MlaDevelopmentWorkModel();
         $db = db_connect();
 
@@ -97,7 +112,7 @@ class AssignedMLA extends BaseController
                 'constituency' => $mlaData['constituency'] ?? 'Not Available',
                 'mla_image' => $mlaData['mla_image'] ?? '',
                 'mla_code' => $mlaData['mla_code'] ?? 'Not Available',
-                'party' => $mlaData['mla_party'] ?? 'Not Available',
+               'party' => $partyCode,
                 'district' => $mlaData['district'] ?? 'Not Available',
             ],
             'mla_stats' => $stats,
