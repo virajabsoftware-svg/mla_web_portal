@@ -119,9 +119,24 @@ class MlaModel extends Model
             $mla['manifesto_fulfilled'] = $totalWorks > 0
                 ? (int) round(($completedWorks / $totalWorks) * 100)
                 : 0;
-        }
-        unset($mla);
 
+            // Calculate age from DOB
+            if (!empty($mla['dob'])) 
+            {               
+                    $dob = new \DateTime($mla['dob']);
+                    $today = new \DateTime(); 
+                    $mla['age'] = $today->diff($dob)->y;
+                    
+            } else {
+                $mla['age'] = null;
+            }
+
+        }
+         
+        
+        unset($mla);
+        //var_dump($mlas[0]); // Debugging line to check the calculated age
+           
         return $mlas;
     }
 }

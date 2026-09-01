@@ -1288,6 +1288,47 @@
   };
   const FALLBACK_LOGO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%23e8dccc'/%3E%3Ctext x='50' y='50' font-size='12' text-anchor='middle' dy='.3em' fill='%237a5a2a'%3EParty%3C/text%3E%3C/svg%3E";
 
+  const topRatedMLAData = <?= json_encode(array_map(function ($mla) {
+      $profilePhoto = $mla['profile_photo'] ?? '';
+      $image = '';
+
+      if (!empty($profilePhoto)) {
+          $image = filter_var($profilePhoto, FILTER_VALIDATE_URL)
+              ? $profilePhoto
+              : base_url('uploads/mla/' . rawurlencode(basename(str_replace('\\', '/', $profilePhoto))));
+      }
+
+      $joiningYear = '';
+      if (!empty($mla['joining_date'])) {
+          $timestamp = strtotime($mla['joining_date']);
+          if ($timestamp) {
+              $joiningYear = date('Y', $timestamp);
+          }
+      }
+
+      return [
+          'id' => (int) ($mla['id'] ?? 0),
+          'name' => $mla['mla_name'] ?? '',
+          'marathiName' => $mla['marathi_name'] ?? $mla['mla_name'] ?? '',
+          'district' => $mla['district_name'] ?? '',
+          'constituency' => $mla['constituency_name'] ?? '',
+          'party' => $mla['party_name'] ?? $mla['party'] ?? 'Independent',
+          'image' => $image,
+          'firstElected' => $joiningYear ?: ($mla['first_elected'] ?? 'N/A'),
+          'ratings' => (int) ($mla['ratings'] ?? 0),
+          'ratingScore' => round((float) ($mla['rating_score'] ?? 0), 1),
+          'manifestoFulfilled' => (int) ($mla['manifesto_fulfilled'] ?? 0),
+          'education' => $mla['education'] ?? 'N/A',
+          'profession' => $mla['profession'] ?? 'Politician',
+          'age' => $mla['age'] ?? 'N/A',
+          'currentTerm' => $mla['current_term'] ?? 'N/A',
+          'committees' => $mla['committees'] ?? 'N/A',
+          'contact' => $mla['mobile'] ?? 'N/A',
+          'bio' => $mla['biography'] ?? 'N/A',
+      ];
+  }, $top_rated_mlas ?? []), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+
+
   const geography = {
     "Thane": ["Thane", "Kopri-Pachpakhadi", "Ovala-Majiwada", "Mira Bhayandar", "Bhiwandi East", "Bhiwandi West", "Kalyan West", "Kalyan East", "Dombivli", "Ambernath", "Ulhasnagar", "Mumbra-Kalwa", "Airoli", "Belapur"],
     "Nagpur": ["Katol", "Savner", "Hingna", "Umred", "Nagpur South West", "Nagpur South", "Nagpur East", "Nagpur Central", "Nagpur West", "Nagpur North", "Kamptee", "Ramtek"],
@@ -1557,7 +1598,30 @@
   function renderTopMLAs() {
     const container = document.getElementById("topMlaContainer");
     if (!container) return;
-    const sorted = [...mlaAssembly].sort((a, b) => (b.ratingScore || 0) - (a.ratingScore || 0));
+
+    const sourceData = Array.isArray(topRatedMLAData) && topRatedMLAData.length ? topRatedMLAData : mlaAssembly;
+    const normalized = sourceData.map((mla) => ({
+      ...mla,
+      id: Number(mla.id ?? 0),
+      name: mla.name || mla.mla_name || '',
+      marathiName: mla.marathiName || mla.marathi_name || mla.name || '',
+      district: mla.district || mla.district_name || '',
+      constituency: mla.constituency || mla.constituency_name || '',
+      party: mla.party || mla.party_name || 'Independent',
+      firstElected: mla.firstElected || mla.first_elected || 'N/A',
+      ratings: Number(mla.ratings ?? 0),
+      ratingScore: Number(mla.ratingScore ?? mla.rating_score ?? 0),
+      manifestoFulfilled: Number(mla.manifestoFulfilled ?? mla.manifesto_fulfilled ?? 0),
+      education: mla.education || 'N/A',
+      profession: mla.profession || 'Politician',
+      age: mla.age || 'N/A',
+      currentTerm: mla.currentTerm || mla.current_term || 'N/A',
+      committees: mla.committees || 'N/A',
+      contact: mla.contact || mla.mobile || 'N/A',
+      image: mla.image || ''
+    }));
+
+    const sorted = [...normalized].sort((a, b) => (Number(b.ratingScore || 0) - Number(a.ratingScore || 0)));
     const top5 = sorted.slice(0, 5);
     container.innerHTML = top5.map((m, idx) => buildTopMLACard(m, idx)).join('');
   }

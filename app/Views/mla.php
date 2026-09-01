@@ -1610,14 +1610,6 @@
             array_map(function ($mla) {
 
                 $profilePhoto = $mla['profile_photo'] ?? '';
-
-                /*
-                 * If profile_photo already contains full URL,
-                 * use it directly.
-                 *
-                     * Otherwise use public/uploads/mla/
-                 */
-
                 if (!empty($profilePhoto)) {
 
                     if (
@@ -1667,9 +1659,7 @@
                 return [
 
                     'id' => (int)($mla['id'] ?? 0),
-
                     'name' => $mla['mla_name'] ?? '',
-
                     /*
                      * If Marathi name is not stored separately,
                      * English name will be displayed.
@@ -1679,25 +1669,15 @@
                         ?? '',
 
                     'district' => $mla['district_name'] ?? '',
-
                     'constituency' => $mla['constituency_name'] ?? '',
-
                     'party' => $mla['party'] ?? '',
-
                     'mobile' => $mla['mobile'] ?? '',
-
                     'email' => $mla['email'] ?? '',
-
                     'gender' => $mla['gender'] ?? '',
-
                     'address' => $mla['address'] ?? '',
-
                     'pincode' => $mla['pincode'] ?? '',
-
                     'image' => $image,
-
                     'firstElected' => $joiningYear ?: 'N/A',
-
                     /*
                      * Existing UI fields.
                      * Later these can also be connected
@@ -1735,15 +1715,11 @@
                         ?? 0
                     ),
 
-                    'education' => $mla['education']
-                        ?? 'N/A',
+                    'education' => $mla['education']?? 'N/A','profession' => $mla['profession']?? 'Politician',
 
-                    'profession' => $mla['profession']
-                        ?? 'Politician',
+                    'age' => $mla['age']?? 'N/A',
 
-                    'age' => $mla['age']
-                        ?? 'N/A',
-
+                    
                     'currentTerm' => $mla['currentTerm']
                         ?? $mla['current_term']
                         ?? 'N/A',
@@ -2402,301 +2378,51 @@
            PROFILE MODAL
         ============================================================ */
 
-        window.showProfile = function(id) {
-
-            const mla =
-                mlaAssembly.find(
-                    item =>
-                        Number(item.id) === Number(id)
-                );
-
-
-            if (!mla) {
-                return;
-            }
-
-
-            document
-                .getElementById(
-                    'premiumModalTitle'
-                )
-                .innerHTML = `
-
-                    <i class="bi bi-person-badge me-2"></i>
-
-                    ${mla.name} · MLA Profile
-
-                `;
-
-
-            const imageHtml =
-                mla.image
-                    ? `
-
-                        <img
-                            src="${mla.image}"
-                            style="
-                                width:120px;
-                                height:120px;
-                                object-fit:cover;
-                                border-radius:50%;
-                                border:4px solid var(--accent);
-                                box-shadow:
-                                    0 8px 24px
-                                    rgba(0,0,0,0.06);
-                            "
-                            onerror="
-                                this.style.display='none';
-                            "
-                        >
-
-                    `
-                    : `
-
-                        <div
-                            style="
-                                width:120px;
-                                height:120px;
-                                border-radius:50%;
-                                background:${getAvatarColor(
-                                    mla.party
-                                )};
-                                color:#fff;
-                                display:flex;
-                                align-items:center;
-                                justify-content:center;
-                                margin:auto;
-                                font-size:2rem;
-                                font-weight:700;
-                            ">
-
-                            ${getInitials(mla.name)}
-
-                        </div>
-
-                    `;
-
-
-            document
-                .getElementById('premiumModalBody').innerHTML = `
-
-
-                    <div class="row">
-
-
-                        <div class="col-md-4 text-center">
-
-                            ${imageHtml}
-
-
-                            <h3
-                                class="mt-3"
-                                style="
-                                    font-family:
-                                    'Playfair Display',
-                                    serif;
-                                ">
-
-                                ${mla.name}
-
-                            </h3>
-
-
-                            <span
-                                class="badge"
-                                style="
-                                    background:var(--accent);
-                                    color:#fff;
-                                    padding:4px 16px;
-                                    border-radius:
-                                    var(--radius-full);
-                                ">
-
-                                ${mla.party || 'N/A'}
-
-                            </span>
-
-
-                            <p
-                                class="mt-2 text-muted">
-
-                                <i
-                                    class="bi bi-geo-alt">
-                                </i>
-
-                                ${mla.constituency || 'N/A'}
-                                ,
-                                ${mla.district || 'N/A'}
-
-                            </p>
-
-                        </div>
-
-
-                        <div class="col-md-8">
-
-
-                            <div class="row g-2">
-
-
-                                <div class="col-6">
-
-                                    <strong>
-                                        MLA Code:
-                                    </strong>
-
-                                    ${mla.mla_code || 'N/A'}
-
-                                </div>
-
-
-                                <div class="col-6">
-
-                                    <strong>
-                                        Gender:
-                                    </strong>
-
-                                    ${mla.gender || 'N/A'}
-
-                                </div>
-
-
-                                <div class="col-6">
-
-                                    <strong>
-                                        Education:
-                                    </strong>
-
-                                    ${mla.education || 'N/A'}
-
-                                </div>
-
-
-                                <div class="col-6">
-
-                                    <strong>
-                                        Profession:
-                                    </strong>
-
-                                    ${mla.profession || 'N/A'}
-
-                                </div>
-
-
-                                <div class="col-6">
-
-                                    <strong>
-                                        First Elected:
-                                    </strong>
-
-                                    ${mla.firstElected || 'N/A'}
-
-                                </div>
-
-
-                                <div class="col-6">
-
-                                    <strong>
-                                        Current Term:
-                                    </strong>
-
-                                    ${mla.currentTerm || 'N/A'}
-
-                                </div>
-
-
-                                <div class="col-6">
-
-                                    <strong>
-                                        Mobile:
-                                    </strong>
-
-                                    ${mla.mobile || 'N/A'}
-
-                                </div>
-
-
-                                <div class="col-6">
-
-                                    <strong>
-                                        Email:
-                                    </strong>
-
-                                    ${mla.email || 'N/A'}
-
-                                </div>
-
-
-                                <div class="col-12">
-
-                                    <strong>
-                                        Address:
-                                    </strong>
-
-                                    ${mla.address || 'N/A'}
-
-                                </div>
-
-
-                            </div>
-
-
-                            <div
-                                class="mt-3 p-3"
-                                style="
-                                    background:
-                                    var(--gray-50);
-                                    border-radius:
-                                    var(--radius-md);
-                                ">
-
-                                <strong>
-                                    Biography:
-                                </strong>
-
-                                ${mla.bio || 'No biography available.'}
-
-                            </div>
-
-
-                            <div
-                                class="mt-3 d-flex gap-2 flex-wrap">
-
-
-                                <button
-                                    class="btn-rate"
-                                    onclick="
-                                        openRatingModal(
-                                            ${mla.id}
-                                        )
-                                    ">
-
-                                    <i
-                                        class="bi bi-star-fill">
-                                    </i>
-
-                                    Rate MLA
-
-                                </button>
-
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-
-                `;
-
-
-            new bootstrap.Modal(
-                document.getElementById(
-                    'premiumModal'
-                )
-            ).show();
-
+       window.showProfile=function(id)
+       {
+
+        const mla=mlaAssembly.find(item=>Number(item.id)===Number(id));
+        if(!mla)return;
+        document.getElementById('premiumModalTitle').innerHTML=`<i class="bi bi-person-badge me-2"></i>${mla.name} · MLA Profile`;
+        const imageHtml=mla.image?`<img src="${mla.image}" style="width:120px;height:120px;object-fit:cover;border-radius:50%;border:4px solid var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.06);" onerror="this.style.display='none';">`:`<div style="width:120px;height:120px;border-radius:50%;background:${getAvatarColor(mla.party)};color:#fff;display:flex;align-items:center;justify-content:center;margin:auto;font-size:2rem;font-weight:700;">${getInitials(mla.name)}</div>`;
+
+        document.getElementById('premiumModalBody').innerHTML=`
+            <div class="row">
+                <div class="col-md-4 text-center">
+                ${imageHtml}
+                <h3 class="mt-3" style="font-family:'Playfair Display',serif;">${mla.name}</h3>
+                <span class="badge" style="background:var(--accent);color:#fff;padding:4px 16px;border-radius:var(--radius-full);">${mla.party||'N/A'}</span>
+                <p class="mt-2 text-muted"><i class="bi bi-geo-alt"></i>${mla.constituency||'N/A'}, ${mla.district||'N/A'}</p>
+                </div>
+
+                <div class="col-md-8">
+                <div class="row g-2">
+
+                <div class="col-6"><strong>MLA Code:</strong> ${mla.mla_code||'N/A'}</div>
+                <div class="col-6"><strong>Gender:</strong> ${mla.gender||'N/A'}</div>
+                <div class="col-6"><strong>Age:</strong> ${mla.age||'N/A'} Years</div>
+                <div class="col-6"><strong>Education:</strong> ${mla.education||'N/A'}</div>
+                <div class="col-6"><strong>Profession:</strong> ${mla.profession||'N/A'}</div>
+                <div class="col-6"><strong>First Elected:</strong> ${mla.firstElected||'N/A'}</div>
+                <div class="col-6"><strong>Current Term:</strong> ${mla.currentTerm||'N/A'}</div>
+                <div class="col-6"><strong>Mobile:</strong> ${mla.mobile||'N/A'}</div>
+                <div class="col-6"><strong>Email:</strong> ${mla.email||'N/A'}</div>
+                <div class="col-12"><strong>Address:</strong> ${mla.address||'N/A'}</div>
+
+                </div>
+
+                <div class="mt-3 p-3" style="background:var(--gray-50);border-radius:var(--radius-md);">
+                <strong>Biography:</strong> ${mla.bio||'No biography available.'}
+                </div>
+
+                <div class="mt-3 d-flex gap-2 flex-wrap">
+                <button class="btn-rate" onclick="openRatingModal(${mla.id})"><i class="bi bi-star-fill"></i> Rate MLA</button>
+                </div>
+
+                </div>
+            </div>`;
+
+          new bootstrap.Modal(document.getElementById('premiumModal')).show();
         };
 
 

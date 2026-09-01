@@ -2,7 +2,7 @@
 
 namespace App\Filters;
 
-use App\Models\User\MlaModel;
+use App\Models\MlaModel;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Filters\FilterInterface;
@@ -68,4 +68,5 @@ class MlaToken implements FilterInterface
     ) {
         // Nothing required
     }
+    
 }
