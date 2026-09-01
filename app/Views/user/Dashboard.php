@@ -433,47 +433,91 @@ if (!empty($user_image)) {
                         </div>
                     </div>
                 </div>
+<div class="col-xl-8">
+    <div class="card shadow border-0 h-100">
+        <div class="card-body">
 
-                <div class="col-xl-8">
-                    <div class="card shadow border-0 h-100">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h4><i class="fas fa-user-tie text-primary"></i> Assigned MLA</h4>
-                            </div>
-                            <div class="row align-items-center">
-                                <div class="col-md-2 text-center">
-                                  
-                                    <img src="<?= !empty($mla_data['mla_image']) ? htmlspecialchars($mla_data['mla_image']) : 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max' ?>" 
-                                         class="rounded-circle img-thumbnail" width="120"
-                                         alt="MLA"
-                                         onerror="this.onerror=null; this.src='https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max';">
-                                </div>
-                                <div class="col-md-10">
-                                    <h4><?= htmlspecialchars($mla_data['name'] ?? 'Not Assigned') ?></h4>
-                                    <p class="mb-2"><?= htmlspecialchars($mla_data['constituency'] ?? $mla_constituency) ?></p>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <h5><?= $mla_data['total_works'] ?? 0 ?></h5>
-                                            <small>Total Works</small>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <h5><?= $mla_data['completed_works'] ?? 0 ?></h5>
-                                            <small>Completed</small>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <h5><?= $mla_data['rating'] ?? '0â˜…' ?></h5>
-                                            <small>Rating</small>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <h5><?= $mla_data['credibility'] ?? '0%' ?></h5>
-                                            <small>Credibility</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4>
+                    <i class="fas fa-user-tie text-primary"></i>
+                    Assigned MLA
+                </h4>
+            </div>
+
+            <div class="row align-items-center">
+
+                <!-- MLA IMAGE -->
+                <div class="col-md-2 text-center">
+
+                    <?php
+                    $mla_image = !empty($mla_data['mla_image'])
+                        ? $mla_data['mla_image']
+                        : base_url('uploads/mla/mla_icon.jpg');
+                    ?>
+
+                    <img
+                        src="<?= htmlspecialchars($mla_image, ENT_QUOTES, 'UTF-8') ?>"
+                        class="rounded-circle img-thumbnail"
+                        width="120"
+                        height="120"
+                        alt="MLA Profile"
+                        onerror="this.onerror=null; this.src='<?= base_url('uploads/mla/mla_icon.jpg') ?>';"
+                    >
+
                 </div>
+
+                <!-- MLA DETAILS -->
+                <div class="col-md-10">
+
+                    <h4>
+                        <?= htmlspecialchars($mla_data['name'] ?? 'Not Assigned') ?>
+                    </h4>
+
+                    <p class="mb-2">
+                        <?= htmlspecialchars(
+                            $mla_data['constituency'] ?? $mla_constituency
+                        ) ?>
+                    </p>
+
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <h5>
+                                <?= $mla_data['total_works'] ?? 0 ?>
+                            </h5>
+                            <small>Total Works</small>
+                        </div>
+
+                        <div class="col-md-3">
+                            <h5>
+                                <?= $mla_data['completed_works'] ?? 0 ?>
+                            </h5>
+                            <small>Completed</small>
+                        </div>
+
+                        <div class="col-md-3">
+                            <h5>
+                                <?= $mla_data['rating'] ?? '0★' ?>
+                            </h5>
+                            <small>Rating</small>
+                        </div>
+
+                        <div class="col-md-3">
+                            <h5>
+                                <?= $mla_data['credibility'] ?? '0%' ?>
+                            </h5>
+                            <small>Credibility</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
             </div>
 

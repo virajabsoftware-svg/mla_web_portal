@@ -142,59 +142,61 @@ $session->set('profile_photo', $profile_image);
             }, $mlaWorkModel->getRecentWorks($mlaId));
         }
 
-        // ==========================
-        // PREPARE MLA DATA
-        // ==========================
-        if (
-            !empty($mla_data_from_db) &&
-            !empty($mla_data_from_db['mla_name'])
-        ) {
+      // ==========================
+// PREPARE MLA DATA
+// ==========================
+$mla_default_image = base_url('uploads/mla/mla_icon.jpg');
 
-            // Get complete MLA details
-            $mla_complete = $model->getCompleteMLADetails(
-                $mlaId,
-                $mla_data_from_db['constituency'] ?? null
-            );
+if (
+    !empty($mla_data_from_db) &&
+    !empty($mla_data_from_db['mla_name'])
+) {
 
-            if ($mla_complete) {
+    // Get complete MLA details
+    $mla_complete = $model->getCompleteMLADetails(
+        $mlaId,
+        $mla_data_from_db['constituency'] ?? null
+    );
 
-                $mla_data = $mla_complete;
+    if ($mla_complete) {
 
-            } else {
+        $mla_data = $mla_complete;
 
-                $mla_data = [
-                    'name' => $mla_data_from_db['mla_name'] ?? 'Not Assigned',
+    } else {
 
-                    'constituency' =>
-                        $mla_data_from_db['constituency']
-                        ?? $user_data['district']
-                        ?? 'Not Available',
+        $mla_data = [
+            'name' => $mla_data_from_db['mla_name'] ?? 'Not Assigned',
 
-                    'rating' => '0★',
+            'constituency' =>
+                $mla_data_from_db['constituency']
+                ?? $user_data['district']
+                ?? 'Not Available',
 
-                    'credibility' => '0%',
+            'rating' => '0★',
 
-                    'image' =>
-                        'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max'
-                ];
-            }
+            'credibility' => '0%',
 
-        } else {
+            'image' => $mla_default_image
+        ];
+    }
 
-            // No MLA assigned
-            $mla_data = [
-                'name' => '',
+} else {
 
-                'constituency' => '',
+    // ==========================
+    // NO MLA ASSIGNED
+    // ==========================
+    $mla_data = [
+        'name' => 'Not Assigned',
 
-                'rating' => '0★',
+        'constituency' => '',
 
-                'credibility' => '0%',
+        'rating' => '0★',
 
-                'image' =>
-                    'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max'
-            ];
-        }
+        'credibility' => '0%',
+
+        'image' => $mla_default_image
+    ];
+}
 
         // ==========================
         // IMPORTANT
@@ -213,14 +215,19 @@ $session->set('profile_photo', $profile_image);
             $completedWorks
         );
 
-        // ==========================
-        // MLA IMAGE
-        // ==========================
-        $mla_data['mla_image'] =
-            $mla_data_from_db['mla_image']
-            ?? $mla_data['image']
-            ?? $mla_data['mla_image']
-            ?? 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max';
+       
+// ==========================
+// ==========================
+// MLA PROFILE IMAGE
+// ==========================
+
+$mla_default_image = base_url('uploads/mla/mla_icon.jpg');
+
+$mla_data['image'] = !empty($mla_data['image'])
+    ? $mla_data['image']
+    : $mla_default_image;
+
+$mla_data['mla_image'] = $mla_data['image'];
 
         // ==========================
         // GET RECENT COMPLAINTS

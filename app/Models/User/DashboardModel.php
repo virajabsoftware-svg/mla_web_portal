@@ -248,27 +248,43 @@ class DashboardModel extends Model
             'credibility' => $this->calculateCredibility($total_works, $completed_works)
         ];
     }
-    private function resolveMlaPhoto($photo)
-    {
-        if (empty($photo)) {
-            return '';
-        }
+   // ==========================
+// Resolve MLA Profile Photo
+// ==========================
+private function resolveMlaPhoto($photo)
+{
+    // Default MLA image
+    $defaultImage = base_url('uploads/mla/mla_icon.jpg');
 
-        if (filter_var($photo, FILTER_VALIDATE_URL)) {
-            return $photo;
-        }
-
-        // Photos are stored in public/uploads/mla. Older records may contain
-        // either only the filename or the uploads/mla/ prefixed path.
-        $photoName = basename(str_replace('\\', '/', $photo));
-        $photoPath = FCPATH . 'uploads/mla/' . $photoName;
-
-         
-           
-        return file_exists($photoPath)
-            ? base_url('uploads/mla/' . rawurlencode($photoName))
-            : '';
+    // No photo in database
+    if (empty($photo)) {
+        return $defaultImage;
     }
+
+    $photo = trim($photo);
+
+    // If database contains full URL
+    if (filter_var($photo, FILTER_VALIDATE_URL)) {
+        return $photo;
+    }
+
+    // Database contains filename/path
+    $photoName = basename(
+        str_replace('\\', '/', $photo)
+    );
+
+    $photoPath = FCPATH . 'uploads/mla/' . $photoName;
+
+    // Uploaded image exists
+    if (is_file($photoPath)) {
+        return base_url(
+            'uploads/mla/' . rawurlencode($photoName)
+        );
+    }
+
+    // Image does not exist → default MLA icon
+    return $defaultImage;
+}
         // ==========================
     // Get Complete MLA Details
     // ==========================
@@ -292,10 +308,9 @@ class DashboardModel extends Model
             if ($mla) {
 
                  // Handle MLA image
-                $mla_image = $this->resolveMlaPhoto(
-                    $mla['profile_photo'] ?? $mla['profile_photo'] ?? $mla['photo'] ?? ''
-                );
-
+              $mla_image = $this->resolveMlaPhoto(
+    $mla['profile_photo'] ?? $mla['photo'] ?? ''
+);
                 
 
                 $mla_constituency = $constituency;
@@ -347,8 +362,7 @@ class DashboardModel extends Model
                         $completed_works
                     ),
 
-                    'image' => $mla_image
-                        ?: 'https://cf-images.assettype.com/pudharinews%2F2025-01-20%2Fulf9t6ec%2F13.jpg?w=480&auto=format%2Ccompress&fit=max'
+                  'image' => $mla_image
                 ];
             }
         }
