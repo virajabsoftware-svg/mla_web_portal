@@ -605,6 +605,9 @@
     });
 
     // ========== LOAD QUESTIONS FROM DATABASE ==========
+  
+    const BASE_URL = "<?= base_url(); ?>";
+
     let surveyQuestions = [];
     let formDataStore = {};
     let savedReportData = null;
@@ -615,7 +618,7 @@
     // Fetch questions from server
     async function loadQuestions() {
         try {
-            const response = await fetch('/mla_web_portal/public/user/mla-rating/get-questions');
+            const response = await fetch(BASE_URL + 'user/mla-rating/get-questions');
             const data = await response.json();
             if (data.success) {
                 surveyQuestions = data.questions;

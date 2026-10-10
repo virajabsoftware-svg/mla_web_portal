@@ -102,6 +102,15 @@
     'tooltip' => 'Rating Questions',
     'segments' => ['rating-question', 'ratingquestion']
 ],
+
+'mla-work-report' => [
+    'url' => base_url('admin/mla-work-report'),
+    'icon' => 'fa fa-file-text',
+    'label' => 'MLA Work Report',
+    'tooltip' => 'MLA Work Report',
+    'segments' => ['mla-work-report', 'mlaworkreport']
+], 
+
      'logout' => [
    'url' => base_url('admin/logout'),
     'icon' => 'fa fa-sign-out',

@@ -572,10 +572,10 @@
     <div class="login-wrap" id="loginWrap">
 
         <div class="brand-icon-wrap">
-            <img src="<?= base_url('assets/user/images/LOGO.png') ?>" 
+            <img src="<?= base_url('assets/user/images/logo.jpeg') ?>" 
                  alt="Leader Tracker Logo" 
                  class="brand-logo"
-                 onerror="this.src='<?= base_url('public/assets/user/images/LOGO.png') ?>'">
+                 onerror="this.src='<?= base_url('public/assets/user/images/logo.jpeg') ?>'">
         </div>
 
         <h3 class="auth-title text-center">

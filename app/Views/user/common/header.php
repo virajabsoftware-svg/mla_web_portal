@@ -423,6 +423,21 @@ if (!function_exists('isActiveMenuItem')) {
 }
 
 ?>
+<style>
+    .logo-img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      border-radius: 50%;
+      border: 2px solid rgba(232, 122, 42, 0.15);
+      padding: 2px;
+      transition: var(--transition);
+    }
+    .logo-img:hover {
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+</style>
 
 
 <!-- ============================================================
@@ -464,23 +479,18 @@ if (!function_exists('isActiveMenuItem')) {
 
         <div class="logo-wrapper">
 
-            <div class="logo-icon">
+            <div class="">
 
-                <i class="fas fa-landmark"></i>
-
+            <img src="<?= base_url('assets/user/images/logo.jpeg'); ?>"
+             class="logo-img" alt="Maharashtra MLA Watch Logo">
+             
             </div>
 
 
             <div class="logo-text">
 
-                <h3>
-                LEADER
-                </h3>
-
-                <p>
-                    Tracker
-                </p>
-
+        <img src="<?= base_url('assets/user/images/leaderTracker.PNG'); ?>"
+              style="width:100%; height:50px;" alt="Maharashtra MLA Watch Logo">     
             </div>
 
         </div>

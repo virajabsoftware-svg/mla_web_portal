@@ -187,7 +187,11 @@ $routes->post('survey-management/delete-question/(:num)', 'SurveyManagement::del
             'notification-center',
             'NotificationCenter::index'
         );
+        //=================================================
+        //MLA WORK REPORT
+        //=================================================
 
+        $routes->get('mla-work-report', 'MlaWorkReport::index');
 
         // =================================================
         // RATING QUESTION ROUTES
@@ -197,6 +201,7 @@ $routes->post('survey-management/delete-question/(:num)', 'SurveyManagement::del
             'ratingquestion',
             'RatingQuestionController::index'
         );
+        
 
         $routes->get(
             'ratingquestion/create',

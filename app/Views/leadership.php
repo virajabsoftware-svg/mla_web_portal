@@ -221,8 +221,8 @@
       flex-shrink: 0;
     }
     .logo-img {
-      width: 46px;
-      height: 46px;
+      width: 50px;
+      height: 50px;
       object-fit: contain;
       border-radius: 50%;
       border: 2px solid rgba(232, 122, 42, 0.15);
@@ -741,11 +741,10 @@
   <div class="container">
     <div class="header-inner">
       <a href="#" class="logo-wrapper">
-        <img src="https://png.pngtree.com/png-clipart/20250222/original/pngtree-vibrant-watercolor-painting-of-the-ashoka-chakra-indian-flag-emblem-png-image_20495965.png" class="logo-img" alt="Maharashtra MLA Watch Logo">
-        <div class="logo-content">
-          <div class="logo-title">Leader</div>
-          <div class="logo-subtitle">Tracker</div>
-        </div>
+        <img src="<?= base_url('assets/user/images/logo.jpeg'); ?>"
+             class="logo-img" alt="Maharashtra MLA Watch Logo">
+        <img src="<?= base_url('assets/user/images/leaderTracker.png'); ?>"
+              style="width:100%; height:70px;" alt="Maharashtra MLA Watch Logo">     
       </a>
       <nav class="nav-links d-none d-lg-flex">
         <a href="<?= base_url('/') ?>">Home</a>

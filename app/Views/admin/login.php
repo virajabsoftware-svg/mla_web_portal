@@ -8,8 +8,8 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>ÆTHERIS | Admin Login</title>
-     <link rel="icon" type="image/png" href="<?= base_url('assets/user/images/LOGO.png') ?>">
+    <title>Admin Login</title>
+     <link rel="icon" type="image/png" href="<?= base_url('assets/user/images/logo.jpeg') ?>">
 
     <!-- Font Awesome -->
     <link rel="stylesheet"
@@ -551,7 +551,7 @@
                 <div class="logo_login">
 
                     <div class="logo_icon">
-                        <img src="<?= base_url('assets/user/images/LOGO.png') ?>" alt="ÆTHERIS Logo">
+                        <img src="<?= base_url('assets/user/images/logo.jpeg') ?>" alt="ÆTHERIS Logo">
                     </div>
 
                     <!-- ÆTHERIS title hidden, only logo visible -->
