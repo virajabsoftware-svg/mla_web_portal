@@ -706,6 +706,22 @@ $routes->group(
     }
 );
 
+// =====================================================
+// MLA API'S
+// =====================================================
+
+$routes->get('api/mla/dashboard', 'Api\MLA\Dashboard::index');
+$routes->get('api/mla/works/recent', 'Api\MLA\DevelopmentWorks::recentWorks');
+$routes->get('api/mla/complaints/recent', 'Api\MLA\Complaints::recentComplaints');
+
+
+// =====================================================
+// VOTER COMPLAINT API'S
+// =====================================================
+
+$routes->post('api/complaints', 'Api\Complaints::addComplaint');
+$routes->get('api/voter/complaint-list', 'Api\Complaints::complaintList');
+
 
 // =====================================================
 // 404 OVERRIDE

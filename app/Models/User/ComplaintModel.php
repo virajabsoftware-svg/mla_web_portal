@@ -197,4 +197,28 @@ class ComplaintModel extends Model
             'resolved' => (int) ($result['resolved'] ?? 0),
         ];
     }
+
+        public function getRecentComplaintsByMLA($mlaId, $limit = 5)
+    {
+        return $this->select('
+                complaints.complaint_id,
+                complaints.title,
+                complaints.description,
+                complaints.status,
+                complaints.priority,
+                complaints.location,
+                complaints.created_at
+            ')
+            ->groupStart()
+                ->where('complaints.mla', $mlaId)
+                ->orWhere('complaints.mla', function($builder) use ($mlaId) {
+                    return $builder->select('mla_name')
+                        ->from('mlas')
+                        ->where('id', $mlaId);
+                })
+            ->groupEnd()
+            ->orderBy('complaints.id', 'DESC')
+            ->limit($limit)
+            ->findAll();
+    }
 }

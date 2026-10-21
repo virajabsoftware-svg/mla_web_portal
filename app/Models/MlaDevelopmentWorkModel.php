@@ -111,6 +111,19 @@ class MlaDevelopmentWorkModel extends Model
             ->countAllResults();
     }
 
+    public function getPendingWorks(int $mlaId): int
+{
+    return $this->select('mla_developmentworks.id')
+        ->join(
+            'mla_work_statuses',
+            'mla_work_statuses.id = mla_developmentworks.status_id',
+            'inner'
+        )
+        ->where('mla_developmentworks.mla_id', $mlaId)
+        ->where('LOWER(mla_work_statuses.status_name)', 'pending')
+        ->countAllResults();
+}
+
     public function getRecentWorks(int $mlaId, int $limit = 5): array
     {
         if ($mlaId <= 0) {
