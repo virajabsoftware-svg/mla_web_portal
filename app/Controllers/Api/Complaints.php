@@ -23,7 +23,6 @@ class Complaints extends BaseController
 
       $token = str_replace('Bearer ', '', $token);
 
-
       $voter = $voterModel
           ->where('api_token', $token)
           ->first();
@@ -130,5 +129,70 @@ class Complaints extends BaseController
     'status_filter' => $status,
     'complaints' => $complaints
 ]);
+}
+
+public function uploadComplaintImage($complaintId)
+{
+    $voterModel = new VoterModel();
+
+    $token = $this->request->getHeaderLine('Authorization');
+
+    if (empty($token)) {
+        return $this->response->setJSON([
+            'status' => false,
+            'message' => 'Authorization token is required.'
+        ]);
+    }
+
+    $token = str_replace('Bearer ', '', $token);
+
+    $voter = $voterModel
+        ->where('api_token', $token)
+        ->first();
+
+    if (!$voter) {
+        return $this->response->setJSON([
+            'status' => false,
+            'message' => 'Invalid voter token.'
+        ]);
+    }
+
+    $complaintModel = new ComplaintModel();
+
+    $complaint = $complaintModel
+        ->where('complaint_id', $complaintId)
+        ->where('user_id', $voter['id'])
+        ->first();
+
+    if (!$complaint) {
+        return $this->response->setJSON([
+            'status' => false,
+            'message' => 'Complaint not found or access denied.'
+        ]);
+    }
+
+    $image = $this->request->getFile('image');
+
+    if (!$image || !$image->isValid()) {
+        return $this->response->setJSON([
+            'status' => false,
+            'message' => 'Please select a valid image.'
+        ]);
+    }
+
+    $fileName = $complaintId . '_' . time() . '.' . $image->getExtension();
+
+    $image->move(FCPATH . 'uploads/complaints', $fileName);
+
+    $complaintModel->update($complaint['id'], [
+        'attachment' => $fileName
+    ]);
+
+    return $this->response->setJSON([
+        'status' => true,
+        'message' => 'Image uploaded successfully',
+        'complaint_id' => $complaintId,
+        'attachment' => $fileName
+    ]);
 }
 }

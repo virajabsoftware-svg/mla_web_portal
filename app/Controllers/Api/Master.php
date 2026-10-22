@@ -7,7 +7,7 @@ use App\Models\StateModel;
 use App\Models\ConstituencyModel;
 use App\Models\DistrictModel;
 use App\Models\User\SurveyModel;
-
+use App\Models\MlaModel;
 
 class Master extends ResourceController
 {
@@ -96,6 +96,54 @@ class Master extends ResourceController
         'status'  => true,
         'message' => 'Constituency list fetched successfully',
         'data'    => $data
+    ]);
+}
+
+public function constituencyMLA()
+{
+    $constituencyId = $this->request->getGet('constituencyId');
+
+    if (empty($constituencyId)) {
+        return $this->response->setJSON([
+            'status'  => false,
+            'message' => 'constituencyId is required',
+            'data'    => []
+        ]);
+    }
+
+    $mlaModel = new MlaModel();
+
+    $mla = $mlaModel
+    ->select([
+        'mlas.id',
+        'mlas.mla_code',
+        'mlas.mla_name',
+        'parties.party_name as party',
+        'mlas.profile_photo',
+        'mlas.constituency_id'
+    ])
+    ->join('parties', 'parties.id = mlas.party', 'left')
+    ->where('mlas.constituency_id', $constituencyId)
+    ->where('mlas.status', 'Active')
+    ->first();
+
+    //if we want profile photo url
+    if (!empty($mla['profile_photo'])) {
+    $mla['profile_photo'] = base_url('uploads/mla/' . $mla['profile_photo']);
+    }
+
+    if (!$mla) {
+    return $this->response->setJSON([
+        'status' => false,
+        'message' => 'No MLA found for this constituency.',
+        'data' => []
+    ]);
+}
+
+    return $this->response->setJSON([
+        'status' => true,
+        'message' => 'MLA fetched successfully',
+        'data' => $mla
     ]);
 }
 

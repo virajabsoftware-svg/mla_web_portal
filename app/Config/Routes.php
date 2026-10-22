@@ -721,7 +721,10 @@ $routes->get('api/mla/complaints/recent', 'Api\MLA\Complaints::recentComplaints'
 
 $routes->post('api/complaints', 'Api\Complaints::addComplaint');
 $routes->get('api/voter/complaint-list', 'Api\Complaints::complaintList');
+$routes->post('api/complaints/(:segment)/images', 'Api\Complaints::uploadComplaintImage/$1');
 
+
+$routes->get('api/master/constituencyMLA', 'Api\Master::constituencyMLA');
 
 // =====================================================
 // 404 OVERRIDE
