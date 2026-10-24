@@ -726,6 +726,8 @@ $routes->post('api/complaints/(:segment)/images', 'Api\Complaints::uploadComplai
 
 $routes->get('api/master/constituencyMLA', 'Api\Master::constituencyMLA');
 
+$routes->post('api/mla/complaints/(:segment)/reply', 'Api\MLA\Complaints::reply/$1');
+
 // =====================================================
 // 404 OVERRIDE
 // =====================================================
