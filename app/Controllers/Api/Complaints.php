@@ -51,6 +51,7 @@ class Complaints extends BaseController
             'title'        => $data['title'] ?? null,
             'description'  => $data['description'] ?? null,
             'location'     => $data['location'] ?? null,
+            'village'      => $data['village'] ?? null,
             'priority'     => $data['priority'] ?? 'Medium',
             'district'     => $voter['district'],
             'constituency' => $voter['constituency'],

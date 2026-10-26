@@ -340,8 +340,32 @@ class MLAManagement extends BaseController
             'joining_date'    => $this->request->getPost('joining_date') ?: null,
 
             // Status
-            'status'          => $this->request->getPost('status') ?: 'Active'
+            'status'          => $this->request->getPost('status') ?: ''
         ];
+
+        // Generate MLA Code & API Token on first approval
+if (
+    $mla['status'] == 'Pending' &&
+    $data['status'] == 'Approved'
+) {
+
+    // Generate MLA Code
+    $lastMla = $this->mlaModel
+        ->where('mla_code IS NOT NULL')
+        ->orderBy('id', 'DESC')
+        ->first();
+
+    if ($lastMla && !empty($lastMla['mla_code'])) {
+        $mlaCode = (int)$lastMla['mla_code'] + 1;
+    } else {
+        $mlaCode = 1001;
+    }
+
+    $data['mla_code'] = $mlaCode;
+
+    // Generate API Token
+    $data['api_token'] = bin2hex(random_bytes(32));
+}
 
         // -----------------------------
         // Password

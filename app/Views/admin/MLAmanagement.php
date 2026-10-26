@@ -1228,17 +1228,21 @@
 
                                                 <td>
 
-                                                    <?php if ($mla['status'] == 'Active'): ?>
+    <?php if ($mla['status'] == 'Pending'): ?>
 
-                                                        <span class="status-active">Active</span>
+        <span class="badge bg-warning text-dark">Pending</span>
 
-                                                    <?php else: ?>
+    <?php elseif ($mla['status'] == 'Approved'): ?>
 
-                                                        <span class="status-inactive">Inactive</span>
+        <span class="badge bg-success">Approved</span>
 
-                                                    <?php endif; ?>
+    <?php elseif ($mla['status'] == 'Rejected'): ?>
 
-                                                </td>
+        <span class="badge bg-danger">Rejected</span>
+
+    <?php endif; ?>
+
+</td>
 
                                                 <td>
 
@@ -1871,9 +1875,10 @@
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
                                             <select id="edit_status" name="status" class="form-select">
-                                                <option value="Active" selected>Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
+    </select>
                                         </div>
                                     </div>
                                     <div class="modal-footer">

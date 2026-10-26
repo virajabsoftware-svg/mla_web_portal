@@ -376,7 +376,81 @@ class AuthApi extends ResourceController
         ], 200);
     }
 
+    // =====================================================
+    // MLA RAGISTRATION API
+    // =====================================================
 
+    public function mlaRegister()
+{
+    $data = $this->request->getJSON(true);
+    $mlaModel = new MlaModel();
+
+// Email Check
+if ($mlaModel->where('email', $data['email'])->first()) {
+    return $this->respond([
+        'status' => false,
+        'message' => 'Email already registered.'
+    ], 400);
+}
+
+// Mobile Check
+if ($mlaModel->where('mobile', $data['mobile'])->first()) {
+    return $this->respond([
+        'status' => false,
+        'message' => 'Mobile number already registered.'
+    ], 400);
+}
+
+// Aadhaar Check
+if ($mlaModel->where('aadhaar', $data['aadhaar'])->first()) {
+    return $this->respond([
+        'status' => false,
+        'message' => 'Aadhaar already registered.'
+    ], 400);
+}
+
+$insertData = [
+    'mla_name'        => trim($data['mla_name']),
+    'profile_photo'   => null, // आत्ता upload API नंतर करू
+
+    'education'       => trim($data['education']),
+    'profession'      => trim($data['profession']),
+    'dob'             => $data['dob'] ?? null,
+    'first_elected'   => $data['first_elected'] ?? null,
+    'current_term'    => $data['current_term'] ?? null,
+    'committees'      => $data['committees'] ?? null,
+    'biography'       => $data['biography'] ?? null,
+
+    'mobile'          => trim($data['mobile']),
+    'email'           => trim($data['email']),
+    'password'        => password_hash($data['password'], PASSWORD_DEFAULT),
+    'gender'          => $data['gender'],
+
+    'party'           => $data['party'] ?? null,
+
+    'state_id'        => (int)$data['state_id'],
+    'district_id'     => (int)$data['district_id'],
+    'constituency_id' => (int)$data['constituency_id'],
+
+    'address'         => trim($data['address']),
+    'pincode'         => trim($data['pincode']),
+    'aadhaar'         => trim($data['aadhaar']),
+    'joining_date'    => $data['joining_date'] ?? null,
+
+    // Registration defaults
+    'mla_code'        => null,
+    'status'          => 'Pending',
+    'api_token'       => null,
+    'token_expiry'    => null
+];
+
+    $mlaModel->insert($insertData);
+
+    return $this->respond([
+        'status'  => true,
+        'message' => 'MLA registration submitted successfully. Waiting for admin approval.'
+    ], 200);
+}
     // =====================================================
     // MLA LOGIN API
     // =====================================================
@@ -416,31 +490,39 @@ class AuthApi extends ResourceController
             ], 401);
         }
 
-        // Generate token
-        $token = bin2hex(random_bytes(32));
-
-        $hashedToken = hash('sha256', $token);
-
-        $tokenExpiry = date(
-            'Y-m-d H:i:s',
-            strtotime('+7 days')
-        );
-
-        // Update token
-        $updated = $this->mlaModel->update(
-            $mla['id'],
-            [
-                'api_token'    => $hashedToken,
-                'token_expiry' => $tokenExpiry
-            ]
-        );
-
-        if (!$updated) {
+        // Check approval status
+        if ($mla['status'] != 'Approved') {
             return $this->respond([
                 'status'  => false,
-                'message' => 'Failed to generate login token'
-            ], 500);
+                'message' => 'Your registration is pending admin approval.'
+            ], 403);
         }
+
+        // Generate token
+        // $token = bin2hex(random_bytes(32));
+
+        // $hashedToken = hash('sha256', $token);
+
+        // $tokenExpiry = date(
+        //     'Y-m-d H:i:s',
+        //     strtotime('+7 days')
+        // );
+
+        // Update token
+        // $updated = $this->mlaModel->update(
+        //     $mla['id'],
+        //     [
+        //         'api_token'    => $hashedToken,
+        //         'token_expiry' => $tokenExpiry
+        //     ]
+        // );
+
+        // if (!$updated) {
+        //     return $this->respond([
+        //         'status'  => false,
+        //         'message' => 'Failed to generate login token'
+        //     ], 500);
+        // }
 
         // Fetch complete MLA data with location names
         $mla = $this->mlaModel
@@ -470,15 +552,15 @@ class AuthApi extends ResourceController
 
         // Remove sensitive data
         unset($mla['password']);
-        unset($mla['api_token']);
-        unset($mla['token_expiry']);
+        // unset($mla['api_token']);
+        // unset($mla['token_expiry']);
 
         return $this->respond([
             'status'     => true,
             'message'    => 'MLA login successful',
-            'token'      => $token,
+            'token'      => $mla['api_token'],
             'token_type' => 'Bearer',
-            'expires_in' => '7 days',
+            //'expires_in' => '7 days',
             'data'       => $mla
         ], 200);
     }

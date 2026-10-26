@@ -37,7 +37,7 @@ $routes->group('api',  ['namespace' => 'App\Controllers\Api'],function ($routes)
         $routes->get('voter/dashboard','Voter::dashboard',['filter' => 'apiToken']);
         $routes->get('voter/complaints','Voter::complaints',['filter' => 'apiToken']);
         // Public MLA   
-        $routes->post('login', 'AuthApi::login');
+        $routes->post('mla/login', 'AuthApi::login');
         $routes->get('profile', 'AuthApi::profile', ['filter' => 'mlaToken']);
         $routes->post('logout', 'AuthApi::logout', ['filter' => 'mlaToken']);
     }
@@ -719,7 +719,7 @@ $routes->get('api/mla/complaints/recent', 'Api\MLA\Complaints::recentComplaints'
 // VOTER COMPLAINT API'S
 // =====================================================
 
-$routes->post('api/complaints', 'Api\Complaints::addComplaint');
+$routes->post('api/addComplaints', 'Api\Complaints::addComplaint');
 $routes->get('api/voter/complaint-list', 'Api\Complaints::complaintList');
 $routes->post('api/complaints/(:segment)/images', 'Api\Complaints::uploadComplaintImage/$1');
 
@@ -727,6 +727,8 @@ $routes->post('api/complaints/(:segment)/images', 'Api\Complaints::uploadComplai
 $routes->get('api/master/constituencyMLA', 'Api\Master::constituencyMLA');
 
 $routes->post('api/mla/complaints/(:segment)/reply', 'Api\MLA\Complaints::reply/$1');
+
+$routes->post('api/mla/register', 'Api\AuthApi::mlaRegister');
 
 // =====================================================
 // 404 OVERRIDE
