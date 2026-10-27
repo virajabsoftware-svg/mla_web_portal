@@ -38,15 +38,14 @@ class ApiTokenFilter implements FilterInterface
         $voterModel = new VoterModel();
 
         $voter = $voterModel
-            ->where('api_token', hash('sha256', $token))
-            ->where('token_expiry >=', date('Y-m-d H:i:s'))
-            ->first();
+    ->where('api_token', $token)
+    ->first();
 
         if (!$voter) {
             return service('response')
                 ->setJSON([
                     'status'  => false,
-                    'message' => 'Invalid or expired token'
+                    'message' => 'Invalid token'
                 ])
                 ->setStatusCode(401);
         }

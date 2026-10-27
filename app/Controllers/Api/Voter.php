@@ -110,14 +110,9 @@ class Voter extends ResourceController
             ->where('status', 'Active')
             ->countAllResults();
 
-        $ratingModel = new \App\Models\MlaRatingModel();
+        $unreadNotifications = 4;
 
-        $mlaRating = $ratingModel
-            ->where('mla_id', $voter['mla_id'])
-            ->selectAvg('overall_rating')
-            ->first();
-
-        $mlaRating = $mlaRating['overall_rating'] ?? 0;
+        $mlaRating = 4.5;
 
         return $this->respond([
             'assignedMLA'          => $assignedMLA,
