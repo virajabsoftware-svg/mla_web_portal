@@ -69,22 +69,55 @@ class Voter extends ResourceController
         // Dashboard Statistics
         // -------------------------------------------------
 
-        $totalWorks = 25;
-        $completedWorks = 15;
-        $inProgressWorks = 7;
-        $pendingWorks = 3;
+        $workModel = new \App\Models\MlaDevelopmentWorkModel();
 
-        $totalComplaints = 8;
-        $pendingComplaints = 3;
-        $resolvedComplaints = 5;
+        $totalWorks = $workModel
+            ->where('mla_id', $voter['mla_id'])
+            ->countAllResults();
+
+        $pendingWorks = $workModel
+            ->where('mla_id', $voter['mla_id'])
+            ->where('status_id', 1)
+            ->countAllResults();
+
+        $inProgressWorks = $workModel
+            ->where('mla_id', $voter['mla_id'])
+            ->where('status_id', 5)
+            ->countAllResults();
+
+        $completedWorks = $workModel
+            ->where('mla_id', $voter['mla_id'])
+            ->where('status_id', 6)
+            ->countAllResults();
+
+        $complaintModel = new \App\Models\User\ComplaintModel();
+
+        $totalComplaints = $complaintModel
+            ->where('user_id', $voter['id'])
+            ->countAllResults();
+
+        $pendingComplaints = $complaintModel
+            ->where('user_id', $voter['id'])
+            ->where('status', 'Pending')
+            ->countAllResults();
+
+        $resolvedComplaints = $complaintModel
+            ->where('user_id', $voter['id'])
+            ->where('status', 'Resolved')
+            ->countAllResults();
 
         $activeSurveys = $this->surveyModel
             ->where('status', 'Active')
             ->countAllResults();
 
-        $unreadNotifications = 4;
+        $ratingModel = new \App\Models\MlaRatingModel();
 
-        $mlaRating = 4.5;
+        $mlaRating = $ratingModel
+            ->where('mla_id', $voter['mla_id'])
+            ->selectAvg('overall_rating')
+            ->first();
+
+        $mlaRating = $mlaRating['overall_rating'] ?? 0;
 
         return $this->respond([
             'assignedMLA'          => $assignedMLA,
