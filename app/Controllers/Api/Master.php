@@ -8,6 +8,7 @@ use App\Models\ConstituencyModel;
 use App\Models\DistrictModel;
 use App\Models\User\SurveyModel;
 use App\Models\MlaModel;
+use App\Models\PartyModel;
 
 class Master extends ResourceController
 {
@@ -30,6 +31,23 @@ class Master extends ResourceController
             'data'    => $data
         ]);
     }
+
+    public function party()
+{
+    $model = new PartyModel();
+
+    $data = $model
+        ->select(['id', 'party_name'])
+        ->where('status', 'Active')
+        ->orderBy('party_name', 'ASC')
+        ->findAll();
+
+    return $this->response->setJSON([
+        'status'  => true,
+        'message' => 'Party list fetched successfully',
+        'data'    => $data
+    ]);
+}
 
     public function district()
 {

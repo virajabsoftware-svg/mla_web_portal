@@ -22,6 +22,7 @@ $routes->group('api',  ['namespace' => 'App\Controllers\Api'],function ($routes)
 
         
         $routes->get('master/state', 'Master::state');
+        $routes->get('master/party', 'Master::party');
         $routes->get('master/district', 'Master::district');
         $routes->get('master/constituency', 'Master::constituency');
         $routes->get('master/survey-categories', 'Master::surveyCategories');
