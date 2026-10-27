@@ -46,11 +46,19 @@ class AuthApi extends ResourceController
 
         // Find voter
         $voter = $this->voterModel
-        ->select('voters.*, districts.district_name, constituencies.constituency_name')
-        ->join('districts', 'districts.id = voters.district', 'left')
-        ->join('constituencies', 'constituencies.id = voters.constituency', 'left')
-        ->where('voters.email', $email)
-        ->first();
+    ->select('
+        voters.*,
+        districts.district_name,
+        constituencies.constituency_name,
+        mlas.mla_name,
+        parties.party_name AS mla_party
+    ')
+    ->join('districts', 'districts.id = voters.district', 'left')
+    ->join('constituencies', 'constituencies.id = voters.constituency', 'left')
+    ->join('mlas', 'mlas.id = voters.mla_id', 'left')
+    ->join('parties', 'parties.id = mlas.party', 'left')
+    ->where('voters.email', $email)
+    ->first();
 
 
 
@@ -79,29 +87,36 @@ class AuthApi extends ResourceController
             ], 401);
         }
 
+        if ($voter['status'] != 'approved') {
+            return $this->respond([
+                'status'  => false,
+                'message' => 'Your account is not approved.'
+            ], 403);
+        }
+
         // Generate token
-        $token = bin2hex(random_bytes(32));
+        // $token = bin2hex(random_bytes(32));
 
         // Save hashed token
-        $this->voterModel->update($voter['id'], [
-            'api_token' => hash('sha256', $token),
-            'token_expiry' => date(
-                'Y-m-d H:i:s',
-                strtotime('+7 days')
-            )
-        ]);
+        // $this->voterModel->update($voter['id'], [
+        //     'api_token' => hash('sha256', $token),
+        //     'token_expiry' => date(
+        //         'Y-m-d H:i:s',
+        //         strtotime('+7 days')
+        //     )
+        // ]);
 
         // Remove sensitive data
         unset($voter['password']);
-        unset($voter['api_token']);
-        unset($voter['token_expiry']);
+        // unset($voter['api_token']);
+        // unset($voter['token_expiry']);
 
         return $this->respond([
             'status'     => true,
             'message'    => 'Login successful',
-            'token'      => $token,
+            'token'      => $voter['api_token'],
             'token_type' => 'Bearer',
-            'expires_in' => '7 days',
+            //'expires_in' => '7 days',
             'data'       => $voter
         ], 200);
     }
@@ -236,7 +251,7 @@ class AuthApi extends ResourceController
         // =========================
         // Insert
         // =========================
-
+        $token = bin2hex(random_bytes(32));
         $insertData = [
             'voter_id'     => $voterId,
             'full_name'    => $fullName,
@@ -253,7 +268,8 @@ class AuthApi extends ResourceController
             'locality'     => $locality,
             'pincode'      => $pincode,
             'mla_id'       => $mlaId,
-            'status'       => 'pending'
+            'api_token'    => $token,
+            'status'       => 'Approved',
         ];
 
         $userId = $this->voterModel->insert($insertData);
@@ -274,7 +290,9 @@ class AuthApi extends ResourceController
                 'voter_id' => $voterId,
                 'full_name'=> $fullName,
                 'email'    => $email,
-                'status'   => 'pending'
+                'token'    => $token,
+                'status'   => 'Approved'
+
             ]
         ], 201);
     }
