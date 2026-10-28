@@ -111,6 +111,7 @@ class Complaints extends BaseController
     $offset = ($page - 1) * $limit;
 
 $status = strtolower(trim($status ?? ''));
+$search = trim($this->request->getGet('search') ?? '');
 
 $statusMap = [
     'pending'     => 'Pending',
@@ -126,7 +127,8 @@ $complaints = $complaintModel->getComplaintListByVoter(
     $voter['id'],
     $limit,
     $offset,
-    $status
+    $status,
+    $search
 );
 
 
@@ -136,7 +138,8 @@ $complaints = $complaintModel->getComplaintListByVoter(
     'page' => $page,
     'limit' => $limit,
     'status_filter' => $status ?: 'all',
-    'complaints' => $complaints
+    'complaints' => $complaints,
+    'search' => $search,
 ]);
 }
 

@@ -42,6 +42,7 @@ class Complaints extends BaseController
     $page = (int) ($this->request->getGet('page') ?? 1);
     $limit = (int) ($this->request->getGet('limit') ?? 20);
     $status = trim($this->request->getGet('status') ?? '');
+    $search = trim($this->request->getGet('search') ?? '');
 
     if ($page < 1) {
         $page = 1;
@@ -57,7 +58,8 @@ class Complaints extends BaseController
     $mla['id'],
     $limit,
     $offset,
-    $status
+    $status,
+    $search
 );
 
     return $this->response->setJSON([
@@ -65,7 +67,8 @@ class Complaints extends BaseController
     'page'          => $page,
     'limit'         => $limit,
     'status_filter' => $status ?: 'all',
-    'data'          => $complaints
+    'data'          => $complaints,
+    'search' => $search,
 ]);
 }
 

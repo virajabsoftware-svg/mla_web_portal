@@ -223,28 +223,42 @@ class ComplaintModel extends Model
     }
 
 
-    public function getComplaintListByMLA($mlaId, $limit, $offset, $status = '')
+    public function getComplaintListByMLA($mlaId, $limit, $offset, $status = '',$search='')
 {
     $builder = $this->db->table($this->table);
 
     $builder->select('
-    id,
-    complaint_id,
-    user_id,
-    voter_id,
-    district,
-    constituency,
-    village,
-    title,
-    description,
-    attachment,
-    location,
-    priority,
-    status,
-    mla,
-    created_at,
-    resolution_date
+    complaints.id,
+    complaints.complaint_id,
+    complaints.user_id,
+    complaints.voter_id,
+    complaints.district,
+    districts.district_name,
+    complaints.constituency,
+    constituencies.constituency_name,
+    complaints.village,
+    complaints.title,
+    complaints.description,
+    complaints.attachment,
+    complaints.location,
+    complaints.priority,
+    complaints.status,
+    complaints.mla,
+    complaints.created_at,
+    complaints.resolution_date
 ');
+
+$builder->join(
+    'districts',
+    'districts.id = complaints.district',
+    'left'
+);
+
+$builder->join(
+    'constituencies',
+    'constituencies.id = complaints.constituency',
+    'left'
+);
 
     $builder->where('mla', $mlaId);
 
@@ -252,35 +266,61 @@ class ComplaintModel extends Model
         $builder->where('LOWER(status)', strtolower($status));
     }
 
-    $builder->orderBy('created_at', 'DESC');
+    if (!empty($search)) {
+
+    $builder->groupStart()
+
+        ->like('complaints.complaint_id', $search)
+        ->orLike('complaints.title', $search)
+        ->orLike('complaints.description', $search)
+        ->orLike('complaints.village', $search)
+        ->orLike('districts.district_name', $search)
+        ->orLike('constituencies.constituency_name', $search)
+
+    ->groupEnd();
+}
+
+    $builder->orderBy('complaints.created_at', 'DESC');
 
     $builder->limit($limit, $offset);
 
     return $builder->get()->getResultArray();
 }
 
-public function getComplaintListByVoter($userId, $limit, $offset, $status = '')
+public function getComplaintListByVoter($userId, $limit, $offset, $status = '',$search='')
 {
     $builder = $this->db->table($this->table);
 
     $builder->select('
-        id,
-        complaint_id,
-        user_id,
-        voter_id,
-        district,
-        constituency,
-        village,
-        title,
-        description,
-        attachment,
-        location,
-        priority,
-        status,
-        mla,
-        created_at,
-        resolution_date
+        complaints.id,
+        complaints.complaint_id,
+        complaints.user_id,
+        complaints.voter_id,
+        complaints.district,
+        complaints.constituency,
+        complaints.village,
+        complaints.title,
+        complaints.description,
+        complaints.attachment,
+        complaints.location,
+        complaints.priority,
+        complaints.status,
+        complaints.mla,
+        complaints.created_at,
+        complaints.resolution_date
     ');
+
+    $builder->join(
+    'districts',
+    'districts.id = complaints.district',
+    'left'
+);
+
+$builder->join(
+    'constituencies',
+    'constituencies.id = complaints.constituency',
+    'left'
+);
 
     $builder->where('user_id', $userId);
 
@@ -288,7 +328,21 @@ public function getComplaintListByVoter($userId, $limit, $offset, $status = '')
         $builder->where('status', $status);
     }
 
-    $builder->orderBy('created_at', 'DESC');
+    if (!empty($search)) {
+
+    $builder->groupStart()
+
+        ->like('complaints.complaint_id', $search)
+        ->orLike('complaints.title', $search)
+        ->orLike('complaints.description', $search)
+        ->orLike('complaints.village', $search)
+        ->orLike('districts.district_name', $search)
+        ->orLike('constituencies.constituency_name', $search)
+
+    ->groupEnd();
+}
+
+    $builder->orderBy('complaints.created_at', 'DESC');
 
     $builder->limit($limit, $offset);
 
