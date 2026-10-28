@@ -138,7 +138,7 @@ $complaints = $complaintModel->getComplaintListByVoter(
     'page' => $page,
     'limit' => $limit,
     'status_filter' => $status ?: 'all',
-    'complaints' => $complaints,
+    'data' => $complaints,
     'search' => $search,
 ]);
 }

@@ -135,4 +135,120 @@ public function reply($complaintId)
         'complaint_id' => $complaint['complaint_id']
     ]);
 }
+
+public function updateStatus($complaintId)
+{
+    $mlaModel = new MlaModel();
+
+    // =========================
+    // MLA Token Verify
+    // =========================
+
+    $token = $this->request->getHeaderLine('Authorization');
+
+    if (empty($token)) {
+        return $this->response->setJSON([
+            'status' => false,
+            'message' => 'Authorization token is required.'
+        ]);
+    }
+
+    $token = str_replace('Bearer ', '', $token);
+
+    $mla = $mlaModel
+        ->where('api_token', $token)
+        ->first();
+
+    if (!$mla) {
+        return $this->response->setJSON([
+            'status' => false,
+            'message' => 'Invalid MLA token.'
+        ]);
+    }
+
+
+    // =========================
+    // Get Request Data
+    // =========================
+
+    $data = $this->request->getJSON(true);
+
+    $status = trim($data['status'] ?? '');
+
+
+    if (empty($status)) {
+        return $this->response->setJSON([
+            'status' => false,
+            'message' => 'Status is required.'
+        ]);
+    }
+
+
+    // =========================
+    // Status Validation
+    // =========================
+
+    $allowedStatus = [
+        'Pending',
+        'Resolved'
+    ];
+
+    if (!in_array($status, $allowedStatus)) {
+
+        return $this->response->setJSON([
+            'status' => false,
+            'message' => 'Invalid status value.'
+        ]);
+    }
+
+
+    // =========================
+    // Check Complaint
+    // =========================
+
+    $complaintModel = new ComplaintModel();
+
+    $complaint = $complaintModel
+        ->where('complaint_id', $complaintId)
+        ->where('mla', $mla['id'])
+        ->first();
+
+
+    if (!$complaint) {
+
+        return $this->response->setJSON([
+            'status' => false,
+            'message' => 'Complaint not found or access denied.'
+        ]);
+    }
+
+
+    // =========================
+    // Update Status
+    // =========================
+
+    $updated = $complaintModel->update(
+        $complaint['id'],
+        [
+            'status' => $status
+        ]
+    );
+
+
+    if (!$updated) {
+
+        return $this->response->setJSON([
+            'status' => false,
+            'message' => 'Failed to update complaint status.'
+        ]);
+    }
+
+
+    return $this->response->setJSON([
+        'status' => true,
+        'message' => 'Complaint status updated successfully.',
+        'complaint_id' => $complaintId,
+        'new_status' => $status
+    ]);
+}
 }
