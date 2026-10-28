@@ -221,4 +221,41 @@ class ComplaintModel extends Model
             ->limit($limit)
             ->findAll();
     }
+
+
+    public function getComplaintListByMLA($mlaId, $limit, $offset, $status = '')
+{
+    $builder = $this->db->table($this->table);
+
+    $builder->select('
+    id,
+    complaint_id,
+    user_id,
+    voter_id,
+    district,
+    constituency,
+    village,
+    title,
+    description,
+    attachment,
+    location,
+    priority,
+    status,
+    mla,
+    created_at,
+    resolution_date
+');
+
+    $builder->where('mla', $mlaId);
+
+    if (!empty($status)) {
+        $builder->where('LOWER(status)', strtolower($status));
+    }
+
+    $builder->orderBy('created_at', 'DESC');
+
+    $builder->limit($limit, $offset);
+
+    return $builder->get()->getResultArray();
+}
 }

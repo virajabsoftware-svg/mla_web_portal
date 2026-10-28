@@ -9,7 +9,7 @@ use App\Models\ComplaintReplyModel;
 
 class Complaints extends BaseController
 {
-    public function recentComplaints()
+    public function complaintList()
 {
     $mlaModel = new MlaModel();
 
@@ -39,13 +39,34 @@ class Complaints extends BaseController
 
     $complaintModel = new ComplaintModel();
 
-    $recentComplaints = $complaintModel->getRecentComplaintsByMLA($mla['id']);
+    $page = (int) ($this->request->getGet('page') ?? 1);
+    $limit = (int) ($this->request->getGet('limit') ?? 20);
+    $status = trim($this->request->getGet('status') ?? '');
+
+    if ($page < 1) {
+        $page = 1;
+    }
+
+    if ($limit < 1) {
+        $limit = 20;
+    }
+
+    $offset = ($page - 1) * $limit;
+
+    $complaints = $complaintModel->getComplaintListByMLA(
+    $mla['id'],
+    $limit,
+    $offset,
+    $status
+);
 
     return $this->response->setJSON([
-    'status' => true,
-    'mla_id' => $mla['id'],
-    'recent_complaints' => $recentComplaints
-   ]);
+    'status'        => true,
+    'page'          => $page,
+    'limit'         => $limit,
+    'status_filter' => $status ?: 'all',
+    'data'          => $complaints
+]);
 }
 
 public function reply($complaintId)

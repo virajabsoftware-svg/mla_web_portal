@@ -110,9 +110,16 @@ class Voter extends ResourceController
             ->where('status', 'Active')
             ->countAllResults();
 
-        $unreadNotifications = 4;
+        // $unreadNotifications = 4;
 
-        $mlaRating = 4.5;
+        $ratingModel = new \App\Models\User\MlaRatingModel();
+
+        $mlaRating = $ratingModel
+            ->where('mla_id', $voter['mla_id'])
+            ->selectAvg('overall_rating')
+            ->first();
+
+        $mlaRating = $mlaRating['overall_rating'] ?? 0;
 
         return $this->respond([
             'assignedMLA'          => $assignedMLA,
@@ -124,7 +131,7 @@ class Voter extends ResourceController
             'pendingComplaints'    => $pendingComplaints,
             'resolvedComplaints'   => $resolvedComplaints,
             'activeSurveys'        => $activeSurveys,
-            'unreadNotifications'  => $unreadNotifications,
+            // 'unreadNotifications'  => $unreadNotifications,
             'mlaRating'            => $mlaRating
         ]);
     }
