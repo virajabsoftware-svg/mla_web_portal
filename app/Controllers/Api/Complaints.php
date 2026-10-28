@@ -108,18 +108,26 @@ class Complaints extends BaseController
 
     $status = $this->request->getGet('status');
 
-    $complaintModel
-    ->where('user_id', $voter['id']);
+    $offset = ($page - 1) * $limit;
 
+$status = strtolower(trim($status ?? ''));
 
-    if (!empty($status)) {
-        $complaintModel->where('status', ucfirst($status));
-    }
+$statusMap = [
+    'pending'     => 'Pending',
+    // 'in_progress' => 'In Progress',
+    'resolved'    => 'Resolved'
+];
 
+if (!empty($status) && isset($statusMap[$status])) {
+    $status = $statusMap[$status];
+}
 
-    $complaints = $complaintModel
-    ->orderBy('id', 'DESC')
-    ->paginate($limit, 'default', $page);
+$complaints = $complaintModel->getComplaintListByVoter(
+    $voter['id'],
+    $limit,
+    $offset,
+    $status
+);
 
 
     return $this->response->setJSON([
@@ -127,7 +135,7 @@ class Complaints extends BaseController
     'voter_id' => $voter['id'],
     'page' => $page,
     'limit' => $limit,
-    'status_filter' => $status,
+    'status_filter' => $status ?: 'all',
     'complaints' => $complaints
 ]);
 }

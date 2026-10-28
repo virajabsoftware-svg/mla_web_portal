@@ -258,4 +258,40 @@ class ComplaintModel extends Model
 
     return $builder->get()->getResultArray();
 }
+
+public function getComplaintListByVoter($userId, $limit, $offset, $status = '')
+{
+    $builder = $this->db->table($this->table);
+
+    $builder->select('
+        id,
+        complaint_id,
+        user_id,
+        voter_id,
+        district,
+        constituency,
+        village,
+        title,
+        description,
+        attachment,
+        location,
+        priority,
+        status,
+        mla,
+        created_at,
+        resolution_date
+    ');
+
+    $builder->where('user_id', $userId);
+
+    if (!empty($status)) {
+        $builder->where('status', $status);
+    }
+
+    $builder->orderBy('created_at', 'DESC');
+
+    $builder->limit($limit, $offset);
+
+    return $builder->get()->getResultArray();
+}
 }
