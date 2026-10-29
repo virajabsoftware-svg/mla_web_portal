@@ -10,7 +10,7 @@ class MlaDevelopmentWorkModel extends Model
     protected $returnType = 'array';
     protected $allowedFields = ['mla_id','work_code','work_title',
     'department_id','category_id','subcategory_id','work_description','district_id',
-    'taluka_id','village','pincode','total_amount','used_amount','remaining_amount',
+    'constituency_id','village','pincode','total_amount','used_amount','remaining_amount',
     'physical_progress','financial_progress','start_date','expected_completion_date',
     'actual_completion_date','status_id','contractor_name','remarks'];
     protected $useTimestamps = true;
@@ -140,5 +140,23 @@ class MlaDevelopmentWorkModel extends Model
             ->limit($limit)
             ->get()
             ->getResultArray();
+    }
+
+
+    public function generateWorkCode($mlaId)
+    {
+        $lastWork = $this->where('mla_id', $mlaId)
+            ->orderBy('id', 'DESC')
+            ->first();
+
+        if ($lastWork) {
+            $lastNumber = (int) substr($lastWork['work_code'], -2);
+            $newNumber = $lastNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+
+        return 'MLA-' . str_pad($mlaId, 2, '0', STR_PAD_LEFT)
+            . str_pad($newNumber, 2, '0', STR_PAD_LEFT);
     }
 }
