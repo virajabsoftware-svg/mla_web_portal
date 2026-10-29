@@ -726,6 +726,9 @@ $routes->post('api/complaints/(:segment)/images', 'Api\Complaints::uploadComplai
 
 
 $routes->get('api/master/constituencyMLA', 'Api\Master::constituencyMLA');
+$routes->get('api/master/departments', 'Api\Master::departments');
+$routes->get('api/master/categories', 'Api\Master::categories');
+$routes->get('api/master/sub-categories', 'Api\Master::subCategories');
 
 $routes->post('api/mla/complaints/(:segment)/reply', 'Api\MLA\Complaints::reply/$1');
 

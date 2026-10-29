@@ -222,7 +222,7 @@ class ComplaintModel extends Model
             ->findAll();
     }
 
-
+// mla complaint list
     public function getComplaintListByMLA($mlaId, $limit, $offset, $status = '',$search='')
 {
     $builder = $this->db->table($this->table);
@@ -263,8 +263,8 @@ $builder->join(
     $builder->where('mla', $mlaId);
 
     if (!empty($status)) {
-        $builder->where('LOWER(status)', strtolower($status));
-    }
+    $builder->where('LOWER(complaints.status)', strtolower($status));
+}
 
     if (!empty($search)) {
 
@@ -286,6 +286,8 @@ $builder->join(
 
     return $builder->get()->getResultArray();
 }
+
+// voter complaint list
 
 public function getComplaintListByVoter($userId, $limit, $offset, $status = '',$search='')
 {
@@ -325,8 +327,8 @@ $builder->join(
     $builder->where('user_id', $userId);
 
     if (!empty($status)) {
-        $builder->where('status', $status);
-    }
+    $builder->where('LOWER(complaints.status)', strtolower($status));
+}
 
     if (!empty($search)) {
 

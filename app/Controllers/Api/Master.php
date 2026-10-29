@@ -9,6 +9,9 @@ use App\Models\DistrictModel;
 use App\Models\User\SurveyModel;
 use App\Models\MlaModel;
 use App\Models\PartyModel;
+use App\Models\DepartmentModel;
+use App\Models\CategoryModel;
+use App\Models\SubCategoryModel;
 
 class Master extends ResourceController
 {
@@ -177,6 +180,77 @@ public function constituencyMLA()
         return $this->response->setJSON([
             'status'  => true,
             'message' => 'Survey categories fetched successfully',
+            'data'    => $data
+        ]);
+    }
+
+    public function departments()
+    {
+        $model = new DepartmentModel();
+
+        $data = $model
+            ->select(['id', 'department_name'])
+            ->where('is_active', 1)
+            ->orderBy('department_name', 'ASC')
+            ->findAll();
+
+        return $this->response->setJSON([
+            'status'  => true,
+            'message' => 'Department list fetched successfully',
+            'data'    => $data
+        ]);
+    }
+
+    public function categories()
+    {
+        $departmentId = $this->request->getGet('department_id');
+
+        if (empty($departmentId)) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Department ID is required'
+            ]);
+        }
+
+        $model = new CategoryModel();
+
+        $data = $model
+            ->select(['id', 'category_name'])
+            ->where('department_id', $departmentId)
+            ->where('is_active', 1)
+            ->orderBy('category_name', 'ASC')
+            ->findAll();
+
+        return $this->response->setJSON([
+            'status'  => true,
+            'message' => 'Category list fetched successfully',
+            'data'    => $data
+        ]);
+    }
+
+    public function subCategories()
+    {
+        $categoryId = $this->request->getGet('category_id');
+
+        if (empty($categoryId)) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Category ID is required'
+            ]);
+        }
+
+        $model = new SubCategoryModel();
+
+        $data = $model
+            ->select(['id', 'sub_category_name'])
+            ->where('category_id', $categoryId)
+            ->where('is_active', 1)
+            ->orderBy('sub_category_name', 'ASC')
+            ->findAll();
+
+        return $this->response->setJSON([
+            'status'  => true,
+            'message' => 'Sub Category list fetched successfully',
             'data'    => $data
         ]);
     }
