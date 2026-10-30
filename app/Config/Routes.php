@@ -729,6 +729,7 @@ $routes->get('api/master/constituencyMLA', 'Api\Master::constituencyMLA');
 $routes->get('api/master/departments', 'Api\Master::departments');
 $routes->get('api/master/categories', 'Api\Master::categories');
 $routes->get('api/master/sub-categories', 'Api\Master::subCategories');
+$routes->get('api/master/work-statuses', 'Api\Master::workStatuses');
 
 $routes->post('api/mla/complaints/(:segment)/reply', 'Api\MLA\Complaints::reply/$1');
 

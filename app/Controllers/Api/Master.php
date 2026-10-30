@@ -12,6 +12,7 @@ use App\Models\PartyModel;
 use App\Models\DepartmentModel;
 use App\Models\CategoryModel;
 use App\Models\SubCategoryModel;
+use App\Models\WorkStatusModel;
 
 class Master extends ResourceController
 {
@@ -252,6 +253,19 @@ public function constituencyMLA()
             'status'  => true,
             'message' => 'Sub Category list fetched successfully',
             'data'    => $data
+        ]);
+    }
+
+    public function workStatuses()
+    {
+        $workStatusModel = new WorkStatusModel();
+
+        $statuses = $workStatusModel->getWorkStatuses();
+
+        return $this->response->setJSON([
+            'status'  => true,
+            'message' => 'Work status list fetched successfully.',
+            'data'    => $statuses
         ]);
     }
 }
