@@ -143,6 +143,104 @@ class DevelopmentWorks extends BaseController
         ]);
     }
 
+    public function uploadImages()
+    {
+        $mlaModel = new MlaModel();
+
+        $token = $this->request->getHeaderLine('Authorization');
+
+        if (empty($token)) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Authorization token is required.'
+            ]);
+        }
+
+        $token = str_replace('Bearer ', '', $token);
+
+        $mla = $mlaModel
+            ->where('api_token', $token)
+            ->first();
+
+        if (!$mla) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Invalid MLA token.'
+            ]);
+        }
+
+        $workId = $this->request->getPost('work_id');
+
+        if (empty($workId)) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Work ID is required.'
+            ]);
+        }
+
+        $workModel = new MlaDevelopmentWorkModel();
+
+        $work = $workModel
+            ->where('id', $workId)
+            ->where('mla_id', $mla['id'])
+            ->first();
+
+        if (!$work) {
+            return $this->response->setJSON([
+                'status' => false,
+                'message' => 'Development work not found.'
+            ]);
+        }
+
+        $files = $this->request->getFileMultiple('images');
+
+if ($files === null || empty($files)) {
+    return $this->response->setJSON([
+        'status' => false,
+        'message' => 'Please select at least one image.'
+    ]);
+}
+
+$uploadedImages = [];
+
+foreach ($files as $file) {
+
+    if ($file->isValid() && !$file->hasMoved()) {
+
+        $newName = $file->getRandomName();
+
+        $file->move(
+            FCPATH . 'uploads/development-works/',
+            $newName
+        );
+
+        $uploadedImages[] = $newName;
+    }
+}
+
+        $existingImages = [];
+
+        if (!empty($work['images'])) {
+            $existingImages = json_decode($work['images'], true);
+
+            if (!is_array($existingImages)) {
+                $existingImages = [];
+            }
+        }
+
+        $allImages = array_merge($existingImages, $uploadedImages);
+
+        $workModel->update($workId, [
+            'images' => json_encode($allImages)
+        ]);
+
+            return $this->response->setJSON([
+            'status' => true,
+            'message' => 'Images uploaded successfully.',
+            'images' => $allImages
+        ]);
+    }
+
 
     public function recentWorks()
 {

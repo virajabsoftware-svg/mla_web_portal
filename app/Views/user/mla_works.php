@@ -324,7 +324,7 @@
     <div class="top-header">
       <div class="header-left">
         <h1><i class="fas fa-hard-hat"></i> MLA Development Work</h1>
-        <div class="breadcrumb">Dashboard <i class="fas fa-chevron-right" style="margin:0 6px;font-size:10px;"></i> <span>Development Work</span></div>
+        <div class="breadcrumb">Dashboard<i class="fas fa-chevron-right" style="margin:0 6px;font-size:10px;"></i> <span>Development Work</span></div>
       </div>
       <div class="header-actions">
         <div class="search-bar">
@@ -447,7 +447,7 @@
       'remarks'=>$work['remarks'],'mla'=>$work['mla_name'] ?? '',
       'party'=>$work['party'] ?? '',
       'constituency'=>$work['constituency_name'] ?? '','district'=>$work['district_name'],
-      'taluka'=>$work['taluka_id'],'village'=>$work['village'],'pincode'=>$work['pincode'],
+      'constituency'=>$work['constituency_id'],'village'=>$work['village'],'pincode'=>$work['pincode'],
       'avatar'=>!empty($work['profile_photo']) ? base_url('uploads/mla/' . ltrim($work['profile_photo'], '/')) 
       : base_url('assets/user/images/default-avatar.png'),
       'cover'=>$images,'fundTotal'=>(float)$work['total_amount'],

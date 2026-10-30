@@ -12,7 +12,7 @@ class MlaDevelopmentWorkModel extends Model
     'department_id','category_id','subcategory_id','work_description','district_id',
     'constituency_id','village','pincode','total_amount','used_amount','remaining_amount',
     'physical_progress','financial_progress','start_date','expected_completion_date',
-    'actual_completion_date','status_id','contractor_name','remarks'];
+    'actual_completion_date','status_id','contractor_name','remarks','images'];
     protected $useTimestamps = true;
 
     public function getFilteredWorks($mlaId, array $filters): self

@@ -745,6 +745,11 @@ $routes->put(
 
 $routes->post('api/mla/development-work/add', 'Api\MLA\DevelopmentWorks::addDevelopmentWork');
 
+$routes->post(
+    'api/mla/development-work/upload-images',
+    'Api\MLA\DevelopmentWorks::uploadImages'
+);
+
 // =====================================================
 // 404 OVERRIDE
 // =====================================================
