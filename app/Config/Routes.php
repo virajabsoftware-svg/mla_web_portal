@@ -751,6 +751,8 @@ $routes->post(
     'Api\MLA\DevelopmentWorks::uploadImages'
 );
 
+$routes->put('api/mla/development-work/(:num)', 'Api\MLA\DevelopmentWorks::updateDevelopmentWork/$1');
+
 // =====================================================
 // 404 OVERRIDE
 // =====================================================
