@@ -753,6 +753,11 @@ $routes->post(
 
 $routes->put('api/mla/development-work/(:num)', 'Api\MLA\DevelopmentWorks::updateDevelopmentWork/$1');
 
+$routes->get(
+    'api/voter/development-work-list',
+    'Api\DevelopmentWorks::developmentWorkList'
+);
+
 // =====================================================
 // 404 OVERRIDE
 // =====================================================
