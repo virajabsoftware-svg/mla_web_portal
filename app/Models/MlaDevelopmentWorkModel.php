@@ -124,22 +124,118 @@ class MlaDevelopmentWorkModel extends Model
         ->countAllResults();
 }
 
-    public function getRecentWorks(int $mlaId, int $limit = 5): array
+        public function getDevelopmentWorkList(int $mlaId,int $limit,int $offset,string $status = '',
+        string $search = ''
+        ): array
     {
         if ($mlaId <= 0) {
             return [];
         }
 
-        return $this->db
-            ->table('mla_developmentworks')
-            ->select('mla_developmentworks.work_title, mla_developmentworks.physical_progress, categories.category_name, mla_work_statuses.status_name')
-            ->join('categories', 'categories.id = mla_developmentworks.category_id', 'left')
-            ->join('mla_work_statuses', 'mla_work_statuses.id = mla_developmentworks.status_id', 'left')
-            ->where('mla_developmentworks.mla_id', $mlaId)
-            ->orderBy('mla_developmentworks.id', 'DESC')
-            ->limit($limit)
-            ->get()
-            ->getResultArray();
+        $builder = $this->db->table('mla_developmentworks');
+
+$builder->select('
+    mla_developmentworks.id,
+    mla_developmentworks.work_code,
+    mla_developmentworks.work_title,
+    mla_developmentworks.work_description,
+    mla_developmentworks.department_id,
+    departments.department_name,
+    mla_developmentworks.category_id,
+    categories.category_name,
+    mla_developmentworks.subcategory_id,
+    sub_categories.sub_category_name,
+    mla_developmentworks.district_id,
+    districts.district_name,
+    mla_developmentworks.constituency_id,
+    constituencies.constituency_name,
+    mla_developmentworks.village,
+    mla_developmentworks.pincode,
+    mla_developmentworks.total_amount,
+    mla_developmentworks.used_amount,
+    mla_developmentworks.remaining_amount,
+    mla_developmentworks.physical_progress,
+    mla_developmentworks.financial_progress,
+    mla_developmentworks.start_date,
+    mla_developmentworks.expected_completion_date,
+    mla_developmentworks.actual_completion_date,
+    mla_developmentworks.status_id,
+    mla_work_statuses.status_name,
+    mla_work_statuses.status_color,
+    mla_developmentworks.contractor_name,
+    mla_developmentworks.remarks,
+    mla_developmentworks.images,
+    mla_developmentworks.created_at,
+    mla_developmentworks.updated_at
+');
+
+$builder->join(
+    'departments',
+    'departments.id = mla_developmentworks.department_id',
+    'left'
+);
+
+$builder->join(
+    'categories',
+    'categories.id = mla_developmentworks.category_id',
+    'left'
+);
+
+$builder->join(
+    'sub_categories',
+    'sub_categories.id = mla_developmentworks.subcategory_id',
+    'left'
+);
+
+$builder->join(
+    'districts',
+    'districts.id = mla_developmentworks.district_id',
+    'left'
+);
+
+$builder->join(
+    'constituencies',
+    'constituencies.id = mla_developmentworks.constituency_id',
+    'left'
+);
+
+$builder->join(
+    'mla_work_statuses',
+    'mla_work_statuses.id = mla_developmentworks.status_id',
+    'left'
+);
+
+$builder->where('mla_developmentworks.mla_id', $mlaId);
+    if (!empty($status)) {
+        $builder->where(
+            'LOWER(mla_work_statuses.status_name)',
+            strtolower($status)
+        );
+    }
+
+    if (!empty($search)) {
+
+    $builder->groupStart();
+
+    $builder->like('mla_developmentworks.work_code', $search);
+    $builder->orLike('mla_developmentworks.work_title', $search);
+    $builder->orLike('mla_developmentworks.work_description', $search);
+    $builder->orLike('mla_developmentworks.village', $search);
+
+    $builder->orLike('departments.department_name', $search);
+    $builder->orLike('categories.category_name', $search);
+    $builder->orLike('sub_categories.sub_category_name', $search);
+    $builder->orLike('districts.district_name', $search);
+    $builder->orLike('constituencies.constituency_name', $search);
+
+    $builder->groupEnd();
+}
+
+$builder->orderBy('mla_developmentworks.id', 'DESC');
+
+$builder->limit($limit, $offset);
+
+return $builder->get()->getResultArray();
     }
 
 

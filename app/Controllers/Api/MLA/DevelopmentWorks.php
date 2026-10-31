@@ -242,7 +242,7 @@ foreach ($files as $file) {
     }
 
 
-    public function recentWorks()
+    public function developmentWorkList()
 {
     $mlaModel = new MlaModel();
 
@@ -269,16 +269,45 @@ foreach ($files as $file) {
         ]);
     }
 
+    $page = (int) ($this->request->getGet('page') ?? 1);
+$limit = (int) ($this->request->getGet('limit') ?? 20);
+$status = trim($this->request->getGet('status') ?? '');
+$search = trim($this->request->getGet('search') ?? '');
 
-    $workModel = new MlaDevelopmentWorkModel();
+if ($page < 1) {
+    $page = 1;
+}
 
-    $recentWorks = $workModel->getRecentWorks($mla['id']);
+if ($limit < 1) {
+    $limit = 20;
+}
 
+$offset = ($page - 1) * $limit;
 
-  return $this->response->setJSON([
-      'status' => true,
-      'mla_id' => $mla['id'],
-      'recent_works' => $recentWorks
-  ]);
+ $workModel = new MlaDevelopmentWorkModel();
+
+$developmentWorks = $workModel->getDevelopmentWorkList(
+    $mla['id'],
+    $limit,
+    $offset,
+    $status,
+    $search
+);
+
+foreach ($developmentWorks as &$work) {
+
+    $work['images'] = !empty($work['images'])
+        ? json_decode($work['images'], true)
+        : [];
+}
+return $this->response->setJSON([
+    'status'        => true,
+    'mla_id'        => $mla['id'],
+    'page'          => $page,
+    'limit'         => $limit,
+    'status_filter' => $status ?: 'all',
+    'search'        => $search,
+    'data'          => $developmentWorks,
+]);
 }
 }

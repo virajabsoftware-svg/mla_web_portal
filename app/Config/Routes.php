@@ -712,7 +712,7 @@ $routes->group(
 // =====================================================
 
 $routes->get('api/mla/dashboard', 'Api\MLA\Dashboard::index');
-$routes->get('api/mla/works/recent', 'Api\MLA\DevelopmentWorks::recentWorks');
+$routes->get('api/mla/development-work-list', 'Api\MLA\DevelopmentWorks::developmentWorkList');
 $routes->get('api/mla/complaint-list', 'Api\MLA\Complaints::complaintList');
 
 
