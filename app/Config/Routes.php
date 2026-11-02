@@ -836,6 +836,12 @@ $routes->get(
     'api/rating-questions',
     'Api\RatingQuestionApi::index'
 );
+
+$routes->post(
+    'api/mla-rating',
+    'Api\MlaRatingApi::store',
+    ['filter' => 'apiToken']
+);
 // =====================================================
 // 404 OVERRIDE
 // =====================================================
