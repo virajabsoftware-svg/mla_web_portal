@@ -919,20 +919,23 @@
                                 <input type="text" class="form-control" placeholder="Enter Village Name" name="village" value="<?= isset($village) ? $village : '' ?>">
                             </div>
 
-                            <!-- Feedback Category -->
-                            <div class="col-md-6">
-                                <label class="form-label">Feedback Category</label>
-                                <select class="form-select" name="category">
-                                    <option value="">Select Category</option>
-                                    <option value="MLA Performance">MLA Performance</option>
-                                    <option value="Road Development">Road Development</option>
-                                    <option value="Water Supply">Water Supply</option>
-                                    <option value="Health Services">Health Services</option>
-                                    <option value="Education">Education</option>
-                                    <option value="Public Services">Public Services</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
+                      <!-- Feedback Category -->
+<div class="col-md-6">
+    <label class="form-label">Feedback Category</label>
+
+    <select class="form-select" name="category_id" id="category_id" required>
+        <option value="">Select Category</option>
+
+        <?php if (!empty($categories)): ?>
+            <?php foreach ($categories as $category): ?>
+                <option value="<?= esc($category['id']) ?>">
+                    <?= esc($category['category_name']) ?>
+                </option>
+            <?php endforeach; ?>
+        <?php endif; ?>
+
+    </select>
+</div>
 
                             <!-- Source -->
                             <div class="col-md-6">
@@ -1172,10 +1175,13 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
         // Delete confirmation function
         function confirmDelete(event) {
             event.preventDefault();
@@ -1198,8 +1204,26 @@
             return false;
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            // View Feedback Modal
+
+// Dynamic Feedback Categories from Admin
+const feedbackCategories = <?= json_encode(
+    array_column($categories ?? [], 'category_name'),
+    JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+) ?>;
+
+function escapeCategory(value) {
+    return String(value).replace(/[&<>"']/g, function (char) {
+        return {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        }[char];
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {           // View Feedback Modal
             const viewModal = new bootstrap.Modal(document.getElementById('viewFeedbackModal'));
             const viewModalBody = document.getElementById('viewModalBody');
             
@@ -1377,18 +1401,19 @@
                                                     <label class="form-label">Village</label>
                                                     <input type="text" name="village" class="form-control" value="${f.village || ''}" required>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Category</label>
-                                                    <select name="category" class="form-select" required>
-                                                        <option value="MLA Performance" ${f.category == 'MLA Performance' ? 'selected' : ''}>MLA Performance</option>
-                                                        <option value="Road Development" ${f.category == 'Road Development' ? 'selected' : ''}>Road Development</option>
-                                                        <option value="Water Supply" ${f.category == 'Water Supply' ? 'selected' : ''}>Water Supply</option>
-                                                        <option value="Health Services" ${f.category == 'Health Services' ? 'selected' : ''}>Health Services</option>
-                                                        <option value="Education" ${f.category == 'Education' ? 'selected' : ''}>Education</option>
-                                                        <option value="Public Services" ${f.category == 'Public Services' ? 'selected' : ''}>Public Services</option>
-                                                        <option value="Other" ${f.category == 'Other' ? 'selected' : ''}>Other</option>
-                                                    </select>
-                                                </div>
+     <div class="mb-3">
+    <label class="form-label">Category</label>
+
+    <select name="category_id" class="form-select" required>
+        <option value="">Select Category</option>
+
+        <?php foreach ($categories ?? [] as $category): ?>
+            <option value="<?= esc($category['id']) ?>">
+                <?= esc($category['category_name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Status</label>
                                                     <select name="status" class="form-select" required>
@@ -1569,25 +1594,31 @@
         };
 
         // Auto Fill Current Date & Time
-        function updateDateTime() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
+      function updateDateTime() {
+    const dateField = document.getElementById('submissionDate');
 
-            document.getElementById('submissionDate').value =
-                `${year}-${month}-${day}T${hours}:${minutes}`;
-        }
+    if (!dateField) return;
 
-        updateDateTime();
-        setInterval(updateDateTime, 60000);
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    dateField.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    updateDateTime();
+    setInterval(updateDateTime, 60000);
+});
 
     </script>
 
     <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
 
     <?php if(session()->getFlashdata('success')): ?>
     <script>

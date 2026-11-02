@@ -107,7 +107,27 @@ $routes->group(
             'dashboard',
             'Dashboard::index'
         );
+// =================================================
+// FEEDBACK CATEGORY MANAGEMENT
+// =================================================
 
+$routes->post(
+    'feedback-categories/store',
+    'FeedbackCategories::store'
+);
+
+$routes->post(
+    'feedback-categories/update/(:num)',
+    'FeedbackCategories::update/$1'
+);
+
+$routes->post(
+    'feedback-categories/status/(:num)',
+    'FeedbackCategories::changeStatus/$1'
+);
+$routes->post
+('feedback-categories/delete/(:num)', 
+'FeedbackCategories::delete/$1');
 
         // =================================================
 // SURVEY MANAGEMENT ROUTES
@@ -757,6 +777,60 @@ $routes->get(
     'api/voter/development-work-list',
     'Api\DevelopmentWorks::developmentWorkList'
 );
+
+
+// =====================================================
+// VOTER FEEDBACK API
+// =====================================================
+
+// $routes->group(
+//     'api',
+//     ['namespace' => 'App\Controllers\Api'],
+//     function ($routes) {
+
+//         $routes->post('feedback/add', 'FeedbackApi::add');
+
+//         $routes->get('feedback/list', 'FeedbackApi::listing');
+
+//         $routes->put('feedback/update/(:num)', 'FeedbackApi::update/$1');
+
+//         $routes->delete('feedback/delete/(:num)', 'FeedbackApi::delete/$1');
+
+//         $routes->get('feedback/categories', 'FeedbackApi::categories');
+
+//            $routes->get('voter/feedback/list', 'FeedbackApi::listing');
+// // MLA Feedback List
+// $routes->get('mla/feedback/list','FeedbackApi::mlaListing',['filter' => 'mlaToken']);
+//     }
+// );   
+
+$routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
+
+    
+   // Voter Feedback APIs
+$routes->post('feedback/add', 'FeedbackApi::add');
+
+// Existing route
+$routes->get('feedback/list', 'FeedbackApi::listing');
+
+// New route - Voter Feedback Listing
+$routes->get(
+    'voter/feedback/listing',
+    'FeedbackApi::listing'
+);
+
+$routes->put('feedback/update/(:num)', 'FeedbackApi::update/$1');
+$routes->delete('feedback/delete/(:num)', 'FeedbackApi::delete/$1');
+$routes->get('feedback/categories', 'FeedbackApi::categories');
+
+    // MLA Feedback API
+    $routes->get(
+        'mla/feedback/list',
+        'FeedbackApi::mlaListing',
+        ['filter' => 'mlaToken']
+    );
+
+});
 
 // =====================================================
 // 404 OVERRIDE

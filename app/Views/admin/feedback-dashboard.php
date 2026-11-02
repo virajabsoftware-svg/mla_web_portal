@@ -536,6 +536,532 @@
             }
             .footer p { font-size: 0.8rem; }
         }
+   
+/* ==========================================
+   FEEDBACK CATEGORY MANAGEMENT
+   Premium White + Gold Design
+========================================== */
+
+.category_management_section {
+    margin-top: 35px;
+    padding: 35px;
+    background: #ffffff;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 28px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.category_management_section .section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.category_management_section .section-title i {
+    color: #c49b16;
+}
+
+/* Add Category Form */
+
+.category_management_section label {
+    color: #263247;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.category_management_section .form-control {
+    height: 50px;
+    border: 1px solid #e8dccc;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 15px;
+    color: #263247;
+    background: #fff;
+    box-shadow: none;
+    transition: all 0.3s ease;
+}
+
+.category_management_section .form-control:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.13);
+}
+
+/* Add Button */
+
+.category_management_section .feedback_btn {
+    height: 50px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #d4af37, #b8960c);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+    transition: all 0.3s ease;
+}
+
+.category_management_section .feedback_btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+/* Table Wrapper */
+
+.category_management_section .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 14px;
+}
+
+/* Category Table */
+
+.category_management_section .category-table {
+    width: 100%;
+    min-width: 650px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'Georgia', serif;
+    margin-bottom: 0;
+}
+
+/* Table Header */
+
+.category_management_section .category-table thead th {
+    background: linear-gradient(110deg, #c49b12, #d4af37);
+    color: #ffffff;
+    padding: 19px 17px;
+    font-size: 19px;
+    font-weight: 700;
+    text-align: left;
+    border: none;
+    white-space: nowrap;
+}
+
+.category_management_section .category-table thead th:first-child {
+    border-radius: 13px 0 0 13px;
+}
+
+.category_management_section .category-table thead th:last-child {
+    border-radius: 0 13px 13px 0;
+}
+
+/* Table Body */
+
+.category_management_section .category-table tbody tr {
+    background: #ffffff;
+    transition: background 0.25s ease;
+}
+
+.category_management_section .category-table tbody tr:hover {
+    background: #fffdf7;
+}
+
+.category_management_section .category-table tbody td {
+    padding: 18px 17px;
+    border: none;
+    border-bottom: 1px solid #f0e7da;
+    vertical-align: middle;
+    color: #263247;
+    font-size: 17px;
+}
+
+.category_management_section .category-table tbody td:first-child {
+    font-size: 17px;
+    font-weight: 600;
+    width: 10%;
+}
+
+.category_management_section .category-table tbody td:nth-child(2) {
+    width: 40%;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.category_management_section .category-table tbody td:nth-child(3) {
+    width: 20%;
+}
+
+.category_management_section .category-table tbody td:nth-child(4) {
+    width: 30%;
+}
+
+/* Category Name */
+
+.category_management_section .category-table td strong {
+    color: #263247;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+/* Edit Button */
+
+.category_management_section .category-table .btn-success {
+    background: #168653;
+    border: none;
+    color: #ffffff;
+}
+
+.category_management_section .category-table .btn-success:hover {
+    background: #106b41;
+}
+
+.category_management_section .category-table .btn-sm {
+    min-width: 39px;
+    min-height: 39px;
+    padding: 8px 11px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* Edit Form */
+
+.category_management_section .category-table form.d-flex {
+    flex-wrap: nowrap;
+}
+
+.category_management_section .category-table form .form-control {
+    min-width: 120px;
+    height: 40px;
+    font-size: 15px;
+}
+
+.category_management_section .category-table .btn-primary {
+    background: #2563eb;
+    border: none;
+}
+
+.category_management_section .category-table .btn-secondary {
+    background: #64748b;
+    border: none;
+}
+
+/* Status Badges */
+
+.category-status-active,
+.category-status-inactive {
+    display: inline-block;
+    padding: 7px 16px;
+    border-radius: 30px;
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.category-status-active {
+    color: #059669;
+    background: #d1fae5;
+}
+
+.category-status-inactive {
+    color: #dc2626;
+    background: #fee2e2;
+}
+
+/* Activate / Deactivate Buttons */
+
+.category_management_section .btn-warning {
+    background: #ffbd08;
+    border: none;
+    color: #111111;
+    padding: 9px 13px;
+    border-radius: 6px;
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.category_management_section .btn-warning:hover {
+    background: #e5a900;
+    color: #000;
+}
+
+.category_management_section .category-table td form .btn-success {
+    background: #168653;
+    color: #ffffff;
+    padding: 9px 13px;
+    border-radius: 6px;
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+/* Alert Messages */
+
+.category_management_section .alert {
+    border-radius: 12px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+
+    .category_management_section {
+        padding: 18px;
+        border-radius: 18px;
+    }
+
+    .category_management_section .section-title {
+        font-size: 19px;
+    }
+
+    .category_management_section .category-table {
+        min-width: 650px;
+    }
+
+    .category_management_section .category-table thead th {
+        font-size: 15px;
+        padding: 14px 12px;
+    }
+
+    .category_management_section .category-table tbody td {
+        font-size: 15px;
+        padding: 14px 12px;
+    }
+
+    .category_management_section .category-table tbody td:nth-child(2) {
+        font-size: 16px;
+    }
+
+    .category_management_section .feedback_btn {
+        margin-top: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .category_management_section {
+        padding: 14px;
+    }
+
+    .category_management_section .section-title {
+        font-size: 17px;
+    }
+}
+
+/* CATEGORY ACTION BUTTONS */
+
+.category_management_section .category-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.category_management_section .category-edit-btn {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.category_management_section .category-edit-btn:hover {
+    background: #1d4ed8;
+    color: #fff;
+}
+
+.category_management_section .category-deactivate-btn {
+    background: #ffbd08;
+    color: #111;
+    border: none;
+    padding: 9px 14px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.category_management_section .category-deactivate-btn:hover {
+    background: #e5a900;
+    color: #111;
+}
+
+.category_management_section .category-activate-btn {
+    background: #168653;
+    color: #fff;
+    border: none;
+    padding: 9px 14px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.category_management_section .category-activate-btn:hover {
+    background: #106b41;
+    color: #fff;
+}
+
+.category_management_section .category-edit-form {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    max-width: 450px;
+}
+
+.category_management_section .category-edit-form .form-control {
+    min-width: 150px;
+    height: 40px;
+}
+
+.category_management_section .category-save-btn,
+.category_management_section .category-cancel-btn {
+    min-width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 7px;
+    color: #fff;
+}
+
+.category_management_section .category-save-btn {
+    background: #168653;
+}
+
+.category_management_section .category-cancel-btn {
+    background: #64748b;
+}
+
+.category_management_section .category-save-btn:hover {
+    background: #106b41;
+    color: #fff;
+}
+
+.category_management_section .category-cancel-btn:hover {
+    background: #475569;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .category_management_section .category-action-buttons {
+        gap: 7px;
+    }
+
+    .category_management_section .category-edit-btn,
+    .category_management_section .category-deactivate-btn,
+    .category_management_section .category-activate-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .category_management_section .category-edit-form {
+        flex-wrap: wrap;
+    }
+}
+
+/* DELETE CATEGORY BUTTON */
+
+.category_management_section .category-delete-form {
+    margin: 0;
+}
+
+.category_management_section .category-delete-btn {
+    background: #dc2626;
+    color: #ffffff;
+    border: none;
+    padding: 9px 14px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.category_management_section .category-delete-btn:hover {
+    background: #b91c1c;
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .category_management_section .category-delete-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
+/* COMPACT ADD CATEGORY FORM */
+
+.category_management_section form.mb-4 {
+    max-width: 650px;
+    margin-bottom: 25px !important;
+}
+
+.category_management_section form.mb-4 .row {
+    align-items: end;
+}
+
+.category_management_section form.mb-4 label {
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.category_management_section form.mb-4 .form-control {
+    height: 42px;
+    font-size: 13px;
+    border-radius: 9px;
+}
+
+.category_management_section form.mb-4 .feedback_btn {
+    height: 42px;
+    font-size: 13px;
+    border-radius: 9px;
+}
+
+/* ACTION BUTTONS COMPACT */
+
+.category_management_section .category-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+}
+
+.category_management_section .category-edit-btn,
+.category_management_section .category-deactivate-btn,
+.category_management_section .category-activate-btn,
+.category_management_section .category-delete-btn {
+    padding: 7px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.category_management_section .category-delete-btn {
+    background: #dc2626;
+    color: white;
+}
+
+.category_management_section .category-delete-btn:hover {
+    background: #b91c1c;
+    color: white;
+}
+
+.category_management_section .category-table tbody td {
+    padding: 13px 12px;
+}
+
+@media(max-width: 768px) {
+    .category_management_section form.mb-4 {
+        max-width: 100%;
+    }
+
+    .category_management_section .category-action-buttons {
+        flex-wrap: wrap;
+    }
+}
+
     </style>
 </head>
 
@@ -554,6 +1080,21 @@
                    <p>
                        Track and monitor feedbacks assigned to each MLA. View performance metrics and feedback details.
                    </p>
+ <button type="button"
+        class="btn mt-3"
+        onclick="document.getElementById('categoryManagement').scrollIntoView({behavior:'smooth'})"
+        style="
+            background: white;
+            color: #b8960c;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        ">
+    <i class="fas fa-tags me-2"></i>
+    Manage Feedback Categories
+</button>
                </div>
 
                <div class="header_stats">
@@ -613,6 +1154,220 @@
                </div>
            </div>
        </div>
+      
+<!-- FEEDBACK CATEGORY MANAGEMENT -->
+<div class="category_management_section" id="categoryManagement">
+
+    <div class="section-title">
+        <i class="fas fa-tags me-2"></i>
+        Feedback Category Management
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    <?php if (session()->getFlashdata('success')): ?>
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle me-2"></i>
+            <?= esc(session()->getFlashdata('success')) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php endif; ?>
+
+    <!-- ERROR MESSAGE -->
+    <?php if (session()->getFlashdata('error')): ?>
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <?= esc(session()->getFlashdata('error')) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php endif; ?>
+
+    <!-- ADD CATEGORY FORM -->
+    <form action="<?= base_url('admin/feedback-categories/store') ?>"
+          method="post"
+          class="mb-4">
+
+        <?= csrf_field() ?>
+
+        <div class="row align-items-end">
+          <div class="col-md-8 mb-2">
+                <label>New Feedback Category</label>
+                <input type="text"
+                       name="category_name"
+                       class="form-control"
+                       placeholder="Enter category name"
+                       maxlength="255"
+                       required>
+            </div>
+
+           <div class="col-md-4 mb-2">
+                <button type="submit" class="btn feedback_btn w-100">
+                    <i class="fas fa-plus me-2"></i>
+                    Add Category
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- CATEGORY TABLE -->
+    <div class="table-responsive">
+        <table class="category-table">
+
+            <thead>
+                <tr>
+                    <th style="width:10%;">Sr. No.</th>
+                    <th style="width:40%;">Category Name</th>
+                    <th style="width:20%;">Status</th>
+                    <th style="width:30%;">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <?php if (!empty($categories)): ?>
+
+                    <?php foreach ($categories as $key => $category): ?>
+
+                        <?php $id = (int) $category['id']; ?>
+
+                        <tr>
+                            <!-- SR NO -->
+                            <td><?= $key + 1 ?></td>
+
+                            <!-- CATEGORY NAME -->
+                            <td>
+                                <strong class="category-name-text">
+                                    <?= esc($category['category_name']) ?>
+                                </strong>
+                            </td>
+
+                            <!-- STATUS -->
+                            <td>
+                                <?php if ((int) $category['status'] === 1): ?>
+                                    <span class="category-status-active">
+                                        Active
+                                    </span>
+                                <?php else: ?>
+                                    <span class="category-status-inactive">
+                                        Inactive
+                                    </span>
+                                <?php endif; ?>
+                            </td>
+
+                            <!-- ACTION: EDIT + STATUS -->
+                            <td>
+                                <div class="category-action-buttons">
+
+                                    <!-- EDIT BUTTON -->
+                                    <button type="button"
+                                            class="btn category-edit-btn"
+                                            title="Edit Category"
+                                            onclick="editCategory(<?= $id ?>)">
+
+                                        <i class="fas fa-pen-to-square"></i>
+                                        Edit
+                                    </button>
+
+                                    <!-- STATUS BUTTON -->
+                                    <form action="<?= base_url('admin/feedback-categories/status/' . $id) ?>"
+                                    
+                                          method="post"
+                                          class="category-status-form">
+
+                                        <?= csrf_field() ?>
+
+                                        <?php if ((int) $category['status'] === 1): ?>
+
+                                            <button type="submit"
+                                                    class="btn category-deactivate-btn">
+
+                                                <i class="fas fa-ban me-1"></i>
+                                                Deactivate
+                                            </button>
+
+                                        <?php else: ?>
+
+                                            <button type="submit"
+                                                    class="btn category-activate-btn">
+
+                                                <i class="fas fa-check me-1"></i>
+                                                Activate
+                                            </button>
+
+                                        <?php endif; ?>
+
+                                    </form>
+
+<!-- DELETE BUTTON -->
+<form action="<?= base_url('admin/feedback-categories/delete/' . $id) ?>"
+      method="post"
+      class="category-delete-form"
+      onsubmit="return confirm('Are you sure you want to delete this category?');">
+
+    <?= csrf_field() ?>
+
+    <button type="submit" class="btn category-delete-btn">
+        <i class="fas fa-trash-alt me-1"></i>
+        Delete
+    </button>
+
+</form>
+
+                                </div>
+
+                                <!-- HIDDEN EDIT FORM -->
+                                <form id="category-edit-<?= $id ?>"
+                                      action="<?= base_url('admin/feedback-categories/update/' . $id) ?>"
+                                      method="post"
+                                      class="category-edit-form"
+                                      style="display:none;">
+
+                                    <?= csrf_field() ?>
+
+                                    <input type="text"
+                                           name="category_name"
+                                           class="form-control"
+                                           value="<?= esc($category['category_name']) ?>"
+                                           maxlength="255"
+                                           placeholder="Enter category name"
+                                           required>
+
+                                    <button type="submit"
+                                            class="btn category-save-btn"
+                                            title="Save">
+
+                                        <i class="fas fa-save"></i>
+                                    </button>
+
+                                    <button type="button"
+                                            class="btn category-cancel-btn"
+                                            title="Cancel"
+                                            onclick="cancelCategoryEdit(<?= $id ?>)">
+
+                                        <i class="fas fa-times"></i>
+                                    </button>
+
+                                </form>
+                            </td>
+                        </tr>
+
+                    <?php endforeach; ?>
+
+                <?php else: ?>
+
+                    <tr>
+                        <td colspan="4" class="text-center py-4">
+                            <i class="fas fa-tags fa-2x mb-2"></i>
+                            <br>
+                            No feedback categories added yet.
+                        </td>
+                    </tr>
+
+                <?php endif; ?>
+
+            </tbody>
+        </table>
+    </div>
+</div>
 
        <!-- ===================================================== -->
        <!-- MLA FEEDBACK TRACKING SECTION -->
@@ -841,6 +1596,59 @@
        });
    </script>
    <script src="<?= base_url('assets/admin/js/header.js') ?>"></script>
+   
+<script>
+// EDIT CATEGORY
+function editCategory(id) {
+
+    const actionButtons = document.querySelector(
+        '#categoryManagement .category-action-buttons'
+    );
+
+    const row = document.getElementById('category-edit-' + id);
+
+    if (!row) return;
+
+    const currentRow = row.closest('tr');
+
+    if (!currentRow) return;
+
+    const buttons = currentRow.querySelector('.category-action-buttons');
+
+    if (buttons) {
+        buttons.style.display = 'none';
+    }
+
+    row.style.display = 'flex';
+
+    const input = row.querySelector('input[name="category_name"]');
+
+    if (input) {
+        input.focus();
+        input.select();
+    }
+}
+
+// CANCEL EDIT
+function cancelCategoryEdit(id) {
+
+    const form = document.getElementById('category-edit-' + id);
+
+    if (!form) return;
+
+    const currentRow = form.closest('tr');
+
+    if (!currentRow) return;
+
+    form.style.display = 'none';
+
+    const buttons = currentRow.querySelector('.category-action-buttons');
+
+    if (buttons) {
+        buttons.style.display = 'flex';
+    }
+}
+</script>
 </body>
 
 </html>

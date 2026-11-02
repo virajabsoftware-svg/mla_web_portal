@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\User\FeedbackModel;
+use App\Models\FeedbackCategoryModel;
 
 class FeedbackDashboard extends BaseController
 {
@@ -11,15 +12,24 @@ class FeedbackDashboard extends BaseController
     {
         $feedbackModel = new FeedbackModel();
 
-        // Get statistics
+        $categoryModel = new FeedbackCategoryModel();
+
+        // Get feedback statistics
         $statistics = $feedbackModel->getFeedbackStatistics();
 
         // Get MLA-wise feedback counts
         $mlaFeedback = $feedbackModel->getMLAFeedbackCount();
 
+        // Get all feedback categories
+        $categories = $categoryModel
+            ->orderBy('id', 'DESC')
+            ->findAll();
+
+        // Dashboard data
         $data = [
-            'statistics' => $statistics,
-            'mlaFeedback' => $mlaFeedback
+            'statistics'  => $statistics,
+            'mlaFeedback' => $mlaFeedback,
+            'categories'  => $categories
         ];
 
         return view('admin/feedback-dashboard', $data);
@@ -31,12 +41,13 @@ class FeedbackDashboard extends BaseController
     public function getCount()
     {
         $model = new FeedbackModel();
+
         $statistics = $model->getFeedbackStatistics();
 
         return $this->response->setJSON([
-            'success' => true,
-            'total' => $statistics['total'],
-            'pending' => $statistics['pending'],
+            'success'  => true,
+            'total'    => $statistics['total'],
+            'pending'  => $statistics['pending'],
             'resolved' => $statistics['resolved']
         ]);
     }

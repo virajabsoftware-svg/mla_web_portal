@@ -21,6 +21,7 @@ class FeedbackModel extends Model
         'district',
         'constituency',
         'village',
+        'category_id',
         'category',
         'source',
         'description',
