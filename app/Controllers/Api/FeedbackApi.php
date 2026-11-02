@@ -4,6 +4,8 @@ namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
 use App\Models\User\FeedbackModel;
+use App\Models\Admin\FeedbackModel as AdminFeedbackModel;
+
 use App\Models\User\VoterModel;
 use App\Models\FeedbackCategoryModel;
 use Config\Database;
@@ -11,6 +13,7 @@ use Config\Database;
 class FeedbackApi extends BaseController
 {
     protected $feedbackModel;
+    protected $adminFeedbackModel;
     protected $categoryModel;
     protected $voterModel;
     protected $db;
@@ -18,6 +21,8 @@ class FeedbackApi extends BaseController
     public function __construct()
     {
         $this->feedbackModel = new FeedbackModel();
+         $this->adminFeedbackModel = new AdminFeedbackModel();
+
         $this->categoryModel = new FeedbackCategoryModel();
         $this->voterModel = new VoterModel();
         $this->db = Database::connect();
@@ -669,4 +674,118 @@ class FeedbackApi extends BaseController
             );
         }
     }
+    // =====================================================
+// 7. MLA UPDATE FEEDBACK STATUS
+// PUT: api/mla/feedback/status/{id}
+// =====================================================
+
+public function mlaUpdateStatus($id = null)
+{
+    // MLA authentication from MlaToken filter
+    $mla = $this->request->mla ?? null;
+
+    if (!$mla || empty($mla['id'])) {
+        return $this->jsonResponse(
+            false,
+            'MLA authentication required',
+            null,
+            401
+        );
+    }
+
+    if (!is_numeric($id) || (int) $id <= 0) {
+        return $this->jsonResponse(
+            false,
+            'Invalid feedback ID',
+            null,
+            400
+        );
+    }
+
+    $input = $this->request->getJSON(true);
+
+    if (!is_array($input) || empty($input['status'])) {
+        return $this->jsonResponse(
+            false,
+            'Status is required',
+            null,
+            422
+        );
+    }
+
+    $status = trim($input['status']);
+
+    $allowedStatuses = [
+        'Pending',
+        'Under Review',
+        'Reviewed',
+        'Resolved',
+        'Rejected'
+    ];
+
+    if (!in_array($status, $allowedStatuses, true)) {
+        return $this->jsonResponse(
+            false,
+            'Invalid status',
+            ['allowed_statuses' => $allowedStatuses],
+            422
+        );
+    }
+
+    try {
+
+        $mlaId = $mla['id'];
+
+        // Check feedback belongs to logged-in MLA
+        $feedback = $this->adminFeedbackModel
+            ->where('id', $id)
+            ->where('mla_id', $mlaId)
+            ->first();
+
+        if (!$feedback) {
+            return $this->jsonResponse(
+                false,
+                'Feedback not found for this MLA',
+                null,
+                404
+            );
+        }
+
+        // Update feedback status
+        $updated = $this->adminFeedbackModel
+            ->updateStatusByMla($id, $mlaId, $status);
+
+        if (!$updated) {
+            return $this->jsonResponse(
+                false,
+                'Feedback status update failed',
+                null,
+                500
+            );
+        }
+
+        $updatedFeedback = $this->adminFeedbackModel->find($id);
+
+        return $this->jsonResponse(
+            true,
+            'Feedback status updated successfully',
+            $updatedFeedback,
+            200
+        );
+
+    } catch (\Throwable $e) {
+
+        log_message(
+            'error',
+            'MLA Feedback Status Update API: ' . $e->getMessage()
+        );
+
+        return $this->jsonResponse(
+            false,
+            'Unable to update feedback status',
+            null,
+            500
+        );
+    }
+}
 }

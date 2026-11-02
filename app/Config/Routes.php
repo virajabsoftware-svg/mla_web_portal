@@ -829,6 +829,12 @@ $routes->get('feedback/categories', 'FeedbackApi::categories');
         'FeedbackApi::mlaListing',
         ['filter' => 'mlaToken']
     );
+    // MLA Update Feedback Status
+$routes->put(
+    'mla/feedback/status/(:num)',
+    'FeedbackApi::mlaUpdateStatus/$1',
+    ['filter' => 'mlaToken']
+);
 
 });
 

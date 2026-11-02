@@ -58,7 +58,18 @@ class FeedbackModel extends Model
             'status' => $status
         ]);
     }
-
+/**
+ * Update feedback status by MLA
+ */
+public function updateStatusByMla($id, $mlaId, $status)
+{
+    return $this->where('id', $id)
+                ->where('mla_id', $mlaId)
+                ->set([
+                    'status' => $status
+                ])
+                ->update();
+}
     /**
      * Get feedback statistics
      */
