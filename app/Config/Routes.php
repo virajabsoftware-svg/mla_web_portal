@@ -832,6 +832,10 @@ $routes->get('feedback/categories', 'FeedbackApi::categories');
 
 });
 
+$routes->get(
+    'api/rating-questions',
+    'Api\RatingQuestionApi::index'
+);
 // =====================================================
 // 404 OVERRIDE
 // =====================================================
