@@ -55,6 +55,8 @@ class Dashboard extends BaseController
     $completedWorks = $workModel->getCompletedWorks($mla['id']);
     $inProgressWorks = $workModel->getInProgressWorks($mla['id']);
     $pendingWorks = $workModel->getPendingWorks($mla['id']);
+    $onHoldWorks = $workModel->getOnHoldWorks($mla['id']);
+    $cancelledWorks = $workModel->getCancelledWorks($mla['id']);
 
     $complaintStats = $complaintModel
     ->getMLAComplaintStats($mla['id']);
@@ -92,6 +94,8 @@ class Dashboard extends BaseController
             'completed_works'   => $completedWorks,
             'in_progress_works' => $inProgressWorks,
             'pending_works'     => $pendingWorks,
+            'on_hold_works'     => $onHoldWorks,
+            'cancelled_works'   => $cancelledWorks,
             'total_complaints'  => $totalComplaints,
             'pending_complaints'  => $pendingComplaints,
             'resolved_complaints' => $resolvedComplaints,

@@ -90,6 +90,16 @@ class Voter extends ResourceController
             ->where('status_id', 6)
             ->countAllResults();
 
+        $onHoldWorks = $workModel
+            ->where('mla_id', $voter['mla_id'])
+            ->where('status_id', 7)
+            ->countAllResults();
+
+        $cancelledWorks = $workModel
+            ->where('mla_id', $voter['mla_id'])
+            ->where('status_id', 8)
+            ->countAllResults();    
+
         $complaintModel = new \App\Models\User\ComplaintModel();
 
         $totalComplaints = $complaintModel
@@ -127,6 +137,8 @@ class Voter extends ResourceController
             'completedWorks'       => $completedWorks,
             'inProgressWorks'      => $inProgressWorks,
             'pendingWorks'         => $pendingWorks,
+            'onHoldWorks'         => $onHoldWorks,
+            'cancelledWorks'      => $cancelledWorks,
             'totalComplaints'      => $totalComplaints,
             'pendingComplaints'    => $pendingComplaints,
             'resolvedComplaints'   => $resolvedComplaints,

@@ -124,6 +124,32 @@ class MlaDevelopmentWorkModel extends Model
         ->countAllResults();
 }
 
+public function getOnHoldWorks(int $mlaId): int
+{
+    return $this->select('mla_developmentworks.id')
+        ->join(
+            'mla_work_statuses',
+            'mla_work_statuses.id = mla_developmentworks.status_id',
+            'inner'
+        )
+        ->where('mla_developmentworks.mla_id', $mlaId)
+        ->where('LOWER(mla_work_statuses.status_name)', 'on hold')
+        ->countAllResults();
+}
+
+public function getCancelledWorks(int $mlaId): int
+{
+    return $this->select('mla_developmentworks.id')
+        ->join(
+            'mla_work_statuses',
+            'mla_work_statuses.id = mla_developmentworks.status_id',
+            'inner'
+        )
+        ->where('mla_developmentworks.mla_id', $mlaId)
+        ->where('LOWER(mla_work_statuses.status_name)', 'cancelled')
+        ->countAllResults();
+}
+
     public function getRecentWorks(int $mlaId, int $limit = 5): array
     {
         if ($mlaId <= 0) {
