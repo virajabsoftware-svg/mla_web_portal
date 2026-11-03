@@ -387,15 +387,18 @@ class SurveyManagement extends BaseController
             ];
 
             $id = $db->table('survey_questions')->insert($data);
+            $id = $db->insertID();
 
             // If question type requires options, handle them
             $options = $this->request->getPost('options');
+            $scores = $this->request->getPost('scores');
             if (!empty($options) && is_array($options)) {
                 foreach ($options as $index => $option) {
                     if (!empty($option)) {
                         $db->table('survey_question_options')->insert([
                             'question_id' => $id,
                             'option_text' => $option,
+                            'score' => isset($scores[$index]) ? (int)$scores[$index] : 0,
                             'sort_order' => $index + 1,
                             'is_active' => 1
                         ]);
@@ -460,6 +463,8 @@ class SurveyManagement extends BaseController
 
             // Handle options update
             $options = $this->request->getPost('options');
+            $scores = $this->request->getPost('scores');
+            
             if (!empty($options) && is_array($options)) {
                 // Delete existing options
                 $db->table('survey_question_options')
@@ -472,6 +477,7 @@ class SurveyManagement extends BaseController
                         $db->table('survey_question_options')->insert([
                             'question_id' => $id,
                             'option_text' => $option,
+                            'score' => isset($scores[$index]) ? (int)$scores[$index] : 0,
                             'sort_order' => $index + 1,
                             'is_active' => 1
                         ]);

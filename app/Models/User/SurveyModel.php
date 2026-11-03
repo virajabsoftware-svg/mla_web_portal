@@ -277,4 +277,14 @@ class SurveyModel extends Model
         $count = $this->getResponseCount($surveyId);
         return $this->update($surveyId, ['responses' => $count]);
     }
+
+    public function getSurveyList(): array
+{
+    return $this->select(
+        'id, survey_code, title, status, start_date, end_date'
+    )
+    ->where('status', 'Active')
+    ->orderBy('id', 'DESC')
+    ->findAll();
+}
 }

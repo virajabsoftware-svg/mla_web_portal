@@ -799,6 +799,10 @@ $routes->post(
 );
 
 
+//survey list api
+$routes->get('api/survey-list','Api\Survey::surveyList',['filter' => 'apiToken']);
+
+
 // =====================================================
 // VOTER FEEDBACK API
 // =====================================================

@@ -1017,12 +1017,42 @@
                             </div>
                         </div>
                         <div id="questionOptionsGroup" class="mb-3">
-                            <label class="form-label">Answer Options</label>
-                            <input type="text" class="form-control mb-2" name="options[]" placeholder="Option 1">
-                            <input type="text" class="form-control mb-2" name="options[]" placeholder="Option 2">
-                            <input type="text" class="form-control" name="options[]" placeholder="Option 3">
-                            <small class="text-muted">Options are used for dropdown, radio and checkbox questions.</small>
-                        </div>
+    <label class="form-label">Answer Options</label>
+
+    <div class="row mb-2">
+        <div class="col-md-8">
+            <input type="text" class="form-control" name="options[]" placeholder="Option 1">
+        </div>
+        <div class="col-md-4">
+            <input type="number" class="form-control" name="scores[]" min="1"
+       max="3" placeholder="Score(1 to 3)">
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-8">
+            <input type="text" class="form-control" name="options[]" placeholder="Option 2">
+        </div>
+        <div class="col-md-4">
+            <input type="number" class="form-control" name="scores[]" min="1"
+       max="3" placeholder="Score(1 to 3)">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <input type="text" class="form-control" name="options[]" placeholder="Option 3">
+        </div>
+        <div class="col-md-4">
+            <input type="number" class="form-control" name="scores[]" min=""
+       max="3" placeholder="Score(1 to 3)">
+        </div>
+    </div>
+
+    <small class="text-muted">
+        Enter score for each option (Example: Excellent = 3, Good = 2, Average = 1).
+    </small>
+</div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -1444,6 +1474,7 @@
                 ? question.options[index].option_text
                 : '';
         });
+        
         document.getElementById('questionOptionsGroup').style.display =
             ['select', 'radio', 'checkbox'].includes(question.question_type) ? 'block' : 'none';
 
@@ -1451,12 +1482,16 @@
     }
 
     function editQuestionFromButton(button) {
-        try {
-            editQuestion(JSON.parse(button.dataset.question));
-        } catch (error) {
-            showToast('Unable to load question details', 'danger');
-        }
+    console.log(button.dataset.question);
+
+    try {
+        editQuestion(JSON.parse(button.dataset.question));
+    } catch (error) {
+        console.error(error);
+        console.log(button.dataset.question);
+        showToast('Unable to load question details', 'danger');
     }
+}
 
     const addQuestionFromViewBtn = document.getElementById('addQuestionFromViewBtn');
 
