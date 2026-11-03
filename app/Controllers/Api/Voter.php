@@ -137,13 +137,13 @@ class Voter extends ResourceController
             'completedWorks'       => $completedWorks,
             'inProgressWorks'      => $inProgressWorks,
             'pendingWorks'         => $pendingWorks,
-            'onHoldWorks'         => $onHoldWorks,
-            'cancelledWorks'      => $cancelledWorks,
+            'onHoldWorks'          => $onHoldWorks,
+            'cancelledWorks'       => $cancelledWorks,
             'totalComplaints'      => $totalComplaints,
             'pendingComplaints'    => $pendingComplaints,
             'resolvedComplaints'   => $resolvedComplaints,
             'activeSurveys'        => $activeSurveys,
-            // 'unreadNotifications'  => $unreadNotifications,
+        // 'unreadNotifications'   => $unreadNotifications,
             'mlaRating'            => $mlaRating
         ]);
     }

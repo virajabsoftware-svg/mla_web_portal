@@ -777,6 +777,26 @@ $routes->get(
     'api/voter/development-work-list',
     'Api\DevelopmentWorks::developmentWorkList'
 );
+//update voter profile
+$routes->put(
+    'api/voter/update_profile',
+    'Api\AuthApi::updateProfile',
+    ['filter' => 'apiToken']
+);
+
+//update mla profile
+$routes->put(
+    'api/mla/update_profile',
+    'Api\AuthApi::updateMlaProfile',
+    ['filter' => 'mlaToken']
+);
+
+//MLA Profile Photo Upload API
+$routes->post(
+    'api/mla/profile-photo',
+    'Api\AuthApi::mlaProfilePhoto',
+    ['filter' => 'mlaToken']
+);
 
 
 // =====================================================

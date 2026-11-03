@@ -45,7 +45,7 @@ class MlaToken implements FilterInterface
 
         $mla = $mlaModel
             ->where('api_token', $token)
-            ->where('token_expiry >=', date('Y-m-d H:i:s'))
+            // ->where('token_expiry >=', date('Y-m-d H:i:s'))
             ->first();
 
         if (!$mla) {

@@ -139,6 +139,105 @@ class AuthApi extends ResourceController
             'data'    => $voter
         ], 200);
     }
+
+    // =====================================================
+    // VOTER PROFILE UPDATE API
+    // =====================================================
+      public function updateProfile()
+    {
+        $voter = $this->request->voter;
+
+        $data = $this->request->getJSON(true);
+
+        if (!$data) {
+            return $this->respond([
+                'status' => false,
+                'message' => 'Invalid JSON data.'
+            ], 400);
+        }
+
+        $fullName = trim($data['full_name'] ?? '');
+        $dob = $data['dob'] ?? '';
+        $gender = trim($data['gender'] ?? '');
+        $email = trim($data['email'] ?? '');
+        $mobile = trim($data['mobile'] ?? '');
+        $state = $data['state'] ?? '';
+        $district = $data['district'] ?? '';
+        $constituency = $data['constituency'] ?? '';
+        $locality = trim($data['locality'] ?? '');
+        $pincode = trim($data['pincode'] ?? '');
+
+        if (
+            empty($fullName) ||
+            empty($dob) ||
+            empty($gender) ||
+            empty($email) ||
+            empty($mobile) ||
+            empty($state) ||
+            empty($district) ||
+            empty($constituency) ||
+            empty($locality) ||
+            empty($pincode)
+        ) {
+            return $this->respond([
+                'status' => false,
+                'message' => 'Required fields are missing.'
+            ], 400);
+        }
+
+        $voterModel = new VoterModel();
+
+        $emailExists = $voterModel
+        ->where('email', $email)
+        ->where('id !=', $voter['id'])
+        ->first();
+
+        if ($emailExists) {
+            return $this->respond([
+                'status' => false,
+                'message' => 'Email already exists.'
+            ], 400);
+        }
+
+        $mobileExists = $voterModel
+        ->where('mobile', $mobile)
+        ->where('id !=', $voter['id'])
+        ->first();
+
+        if ($mobileExists) {
+            return $this->respond([
+                'status' => false,
+                'message' => 'Mobile number already exists.'
+            ], 400);
+        }
+
+        $voterModel->update($voter['id'], [
+            'full_name'    => $fullName,
+            'dob'          => $dob,
+            'gender'       => $gender,
+            'email'        => $email,
+            'mobile'       => $mobile,
+            'state'        => $state,
+            'district'     => $district,
+            'constituency' => $constituency,
+            'locality'     => $locality,
+            'pincode'      => $pincode
+        ]);
+
+        $updatedVoter = $voterModel->find($voter['id']);
+
+        unset($updatedVoter['password']);
+        unset($updatedVoter['api_token']);
+        unset($updatedVoter['token_expiry']);
+
+        return $this->respond([
+            'status'  => true,
+            'message' => 'Profile updated successfully.',
+            'data'    => $updatedVoter
+        ], 200);
+    }
+
+
     // =====================================================
     // VOTER LOGOUT API
     // =====================================================
@@ -340,7 +439,7 @@ class AuthApi extends ResourceController
             ], 400);
         }
 
-        $uploadPath = FCPATH . 'uploads/profile/';
+        $uploadPath = ROOTPATH . 'uploads/profile/';
         if (!is_dir($uploadPath)) {
             mkdir($uploadPath, 0777, true);
         }
@@ -622,4 +721,165 @@ $insertData = [
             'message' => 'MLA logout successful'
         ], 200);
     }
+
+    public function updateMlaProfile()
+    {
+         $mla = $this->request->mla;
+
+        if (!$mla) {
+            return $this->respond([
+                'status'  => false,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+          $data = $this->request->getJSON(true);
+        $updateData = [
+
+            'mla_name'      => trim($data['mla_name'] ?? ''),
+            'education'     => trim($data['education'] ?? ''),
+            'profession'    => trim($data['profession'] ?? ''),
+            'dob'           => trim($data['dob'] ?? ''),
+            'first_elected' => trim($data['first_elected'] ?? ''),
+            'current_term'  => trim($data['current_term'] ?? ''),
+            'committees'    => trim($data['committees'] ?? ''),
+            'biography'     => trim($data['biography'] ?? ''),
+            'email'         => trim($data['email'] ?? ''),
+            'mobile'        => trim($data['mobile'] ?? ''),
+            'gender'        => trim($data['gender'] ?? ''),
+            'address'       => trim($data['address'] ?? ''),
+            'pincode'       => trim($data['pincode'])
+
+        ];
+
+        $mlaModel = new \App\Models\MlaModel();
+
+        $updated = $mlaModel->update(
+            $mla['id'],
+            $updateData
+        );
+
+        if (!$updated) {
+            return $this->respond([
+                'status'  => false,
+                'message' => 'Failed to update profile'
+            ], 500);
+        }
+
+        $updatedProfile = $mlaModel->find($mla['id']);
+
+        unset($updatedProfile['password']);
+        unset($updatedProfile['api_token']);
+        unset($updatedProfile['token_expiry']);
+
+        return $this->respond([
+            'status'  => true,
+            'message' => 'Profile updated successfully',
+            'data'    => $updatedProfile
+        ], 200);
+    }
+
+    public function mlaProfilePhoto()
+{
+    $mla = $this->request->mla;
+
+    if (!$mla) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Unauthorized'
+        ], 401);
+    }
+
+    $photo = $this->request->getFile('profile_photo');
+
+    if (!$photo) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Profile photo is required'
+        ], 400);
+    }
+
+    if (!$photo->isValid()) {
+        return $this->respond([
+            'status'  => false,
+            'message' => $photo->getErrorString()
+        ], 400);
+    }
+
+    if ($photo->hasMoved()) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Photo already uploaded'
+        ], 400);
+    }
+
+    $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+
+    $extension = strtolower($photo->getExtension());
+
+    if (!in_array($extension, $allowed, true)) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Only JPG, JPEG, PNG and WEBP images allowed'
+        ], 400);
+    }
+
+    // Store outside public folder
+    $uploadPath = ROOTPATH . 'uploads/mla/';
+
+    if (!is_dir($uploadPath)) {
+        mkdir($uploadPath, 0777, true);
+    }
+
+    // =========================
+    // Delete Old Photo
+    // =========================
+    if (!empty($mla['profile_photo'])) {
+
+        $oldPhoto = $uploadPath . $mla['profile_photo'];
+
+        if (file_exists($oldPhoto)) {
+            unlink($oldPhoto);
+        }
+    }
+
+    // =========================
+    // Upload New Photo
+    // =========================
+    $photoName = $photo->getRandomName();
+
+    $photo->move($uploadPath, $photoName);
+
+    // =========================
+    // Update Database
+    // =========================
+    $mlaModel = new \App\Models\MlaModel();
+
+    $updated = $mlaModel->update(
+        $mla['id'],
+        [
+            'profile_photo' => $photoName
+        ]
+    );
+
+    if (!$updated) {
+
+        // Delete newly uploaded photo
+        if (file_exists($uploadPath . $photoName)) {
+            unlink($uploadPath . $photoName);
+        }
+
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Failed to update profile photo'
+        ], 500);
+    }
+
+    return $this->respond([
+        'status'  => true,
+        'message' => 'Profile photo uploaded successfully',
+        'data'    => [
+            'profile_photo' => $photoName
+        ]
+    ], 200);
+}
 }
