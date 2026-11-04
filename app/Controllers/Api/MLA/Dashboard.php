@@ -8,6 +8,7 @@ use App\Models\MlaDevelopmentWorkModel;
 use App\Models\User\ComplaintModel;
 use App\Models\User\SurveyModel;
 use App\Models\User\VoterModel;
+use App\Models\User\SurveyResponseModel;
 
 class Dashboard extends BaseController
 {
@@ -18,6 +19,7 @@ class Dashboard extends BaseController
       $complaintModel = new ComplaintModel();
       $surveyModel = new SurveyModel();
       $voterModel = new VoterModel();
+      $surveyResponseModel = new SurveyResponseModel();
       
     $token = $this->request->getHeaderLine('Authorization');
 
@@ -69,6 +71,12 @@ class Dashboard extends BaseController
     ->where('mla_id', $mla['id'])
     ->countAllResults();
 
+    $overallPercentage = $surveyResponseModel
+    ->selectAvg('overall_percentage', 'overall_percentage')
+    ->where('mla_id', $mla['id'])
+    ->where('overall_percentage >', 0)
+    ->first();
+
     // $recentWorks = $workModel->getRecentWorks($mla['id']);
 
     $totalVoters = $voterModel
@@ -100,7 +108,10 @@ class Dashboard extends BaseController
             'pending_complaints'  => $pendingComplaints,
             'resolved_complaints' => $resolvedComplaints,
             'total_surveys'     => $totalSurveys,
-            'total_voters'      => $totalVoters
+            'total_voters'      => $totalVoters,
+            'overall_percentage' => !empty($overallPercentage['overall_percentage'])
+    ? round($overallPercentage['overall_percentage'], 2)
+    : 0,
           ],
 
         //   'recent_works' => $recentWorks,
