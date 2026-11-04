@@ -18,6 +18,7 @@ class SurveyResponseModel extends Model
         'village',
         'survey_category',
         'answers',
+        'overall_percentage',
         'status',
         'submitted_at'
     ];
