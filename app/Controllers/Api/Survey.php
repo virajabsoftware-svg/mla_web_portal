@@ -102,6 +102,7 @@ class Survey extends BaseController
 
         $surveyId = (int) ($json['survey_id'] ?? 0);
         $answers  = $json['answers'] ?? [];
+        $village = $json['village'] ?? null;
         $overallPercentage = $json['overall_percentage'] ?? 0;
 
         if ($surveyId <= 0) {
@@ -160,7 +161,7 @@ class Survey extends BaseController
             'mla_id'           => $voter['mla_id'] ?? null,
             'district'         => $voter['district'] ?? null,
             'constituency'     => $voter['constituency'] ?? null,
-            'village'          => $voter['locality'] ?? null,
+            'village'          => $village,
             'survey_category'  => $survey['survey_category'] ?? null,
             'answers'          => json_encode($answerJson),
             'overall_percentage' => $overallPercentage,
