@@ -802,6 +802,10 @@ $routes->post(
 //survey list api
 $routes->get('api/survey-list','Api\Survey::surveyList',['filter' => 'apiToken']);
 
+//survey wise question and option api
+$routes->get('api/survey-questions','Api\Survey::surveyQuestions',['filter' => 'apiToken']);
+
+$routes->post('api/voter/submit-survey','Api\Survey::submitSurvey',['filter' =>'apiToken']);
 
 // =====================================================
 // VOTER FEEDBACK API
