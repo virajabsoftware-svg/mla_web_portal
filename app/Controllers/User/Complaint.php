@@ -160,52 +160,78 @@ class Complaint extends BaseController
         return $this->response->setJSON(['success' => true, 'data' => $complaint]);
     }
 
-    public function update()
-    {
-        $id = $this->request->getPost('id');
-        $complaint = $id ? $this->findUserComplaint($id) : null;
-        if (!$complaint) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Complaint not found']);
-        }
+public function update($id)
+{
+    $complaint = $this->findUserComplaint($id);
 
-        $rules = [
-            'title' => 'required',
-            'location' => 'required',
-            'priority' => 'required|in_list[Low,Medium,High,Critical]',
-            'description' => 'required|min_length[10]'
-        ];
-        if (!$this->validate($rules)) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $this->validator->getErrors()
-            ]);
-        }
+    if (!$complaint) {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Complaint not found'
+        ]);
+    }
 
-        $village = trim((string) $this->request->getPost('village'));
+    $title = trim($this->request->getPost('title') ?? '');
+    $location = trim($this->request->getPost('location') ?? '');
+    $description = trim($this->request->getPost('description') ?? '');
+    $priority = trim($this->request->getPost('priority') ?? 'Medium');
 
-        $data = [
-            'title' => trim((string) $this->request->getPost('title')),
-            'location' => trim((string) $this->request->getPost('location')),
-            'priority' => $this->request->getPost('priority'),
-            'description' => trim((string) $this->request->getPost('description')),
-            'village' => $village,
-        ];
+   if (
+    $title === '' ||
+    $location === '' ||
+    $description === '' ||
+    !in_array($priority, ['Low', 'Medium', 'High', 'Critical'], true)
+) {
+    return $this->response->setJSON([
+        'success' => false,
+        'message' => 'Please enter valid complaint details'
+    ]);
+}
 
-        $attachment = $this->uploadAttachment();
+    
+    $attachment = $this->uploadAttachment();
+
+    $data = [
+        'title'       => $title,
+        'location'    => $location,
+        'description' => $description,
+        'priority'    => $priority
+    ];
+
+    
+    if ($attachment !== '') {
+        $data['attachment'] = $attachment;
+    }
+
+    $complaintModel = new ComplaintModel();
+
+    if ($complaintModel->update($id, $data)) {
+
+        
         if ($attachment !== '') {
-            $data['attachment'] = $attachment;
-            $oldPath = ROOTPATH . 'public/' . ltrim((string) ($complaint['attachment'] ?? ''), '/');
-            if (is_file($oldPath)) {
+
+            $oldFilename = basename(
+                (string) ($complaint['attachment'] ?? '')
+            );
+
+            $oldPath = FCPATH . 'uploads/complaint/' . $oldFilename;
+
+            if ($oldFilename !== '' && is_file($oldPath)) {
                 unlink($oldPath);
             }
         }
 
-        if ((new ComplaintModel())->update($id, $data)) {
-            return $this->response->setJSON(['success' => true, 'message' => 'Complaint updated successfully']);
-        }
-        return $this->response->setJSON(['success' => false, 'message' => 'Update failed']);
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Complaint updated successfully'
+        ]);
     }
+
+    return $this->response->setJSON([
+        'success' => false,
+        'message' => 'Update failed'
+    ]);
+}
 
     public function delete($id)
     {
@@ -215,10 +241,13 @@ class Complaint extends BaseController
         }
 
         if ((new ComplaintModel())->delete($id)) {
-            $filePath = ROOTPATH . 'public/' . ltrim((string) ($complaint['attachment'] ?? ''), '/');
-            if (is_file($filePath)) {
-                unlink($filePath);
-            }
+          $filename = basename((string) ($complaint['attachment'] ?? ''));
+
+     $filePath = FCPATH . 'uploads/complaint/' . $filename;
+
+      if ($filename !== '' && is_file($filePath)) {
+      unlink($filePath);
+     }
             return redirect()->to('/user/complaint')->with('success', 'Complaint deleted successfully');
         }
         return redirect()->back()->with('error', 'Delete failed');
@@ -236,19 +265,47 @@ class Complaint extends BaseController
             ->first();
     }
 
-    private function uploadAttachment(): string
-    {
-        $file = $this->request->getFile('attachment');
-        if (!$file || !$file->isValid() || $file->hasMoved()) {
+ 
+
+private function uploadAttachment(): string
+{
+    $file = $this->request->getFile('attachment');
+
+    if (!$file || $file->getError() === UPLOAD_ERR_NO_FILE) {
+        return '';
+    }
+
+    if (!$file->isValid()) {
+        log_message('error', 'Upload Error: ' . $file->getErrorString());
+        return '';
+    }
+
+    $uploadPath = FCPATH . 'uploads/complaint/';
+
+    if (!is_dir($uploadPath)) {
+        mkdir($uploadPath, 0777, true);
+    }
+
+    $filename = $file->getRandomName();
+
+    try {
+        $file->move($uploadPath, $filename);
+
+        // Check actual file exists
+        if (!file_exists($uploadPath . $filename)) {
+            log_message('error', 'Image not saved: ' . $uploadPath . $filename);
             return '';
         }
 
-        $uploadPath = ROOTPATH . 'public/uploads/complaint';
-        if (!is_dir($uploadPath)) {
-            mkdir($uploadPath, 0777, true);
-        }
-        $filename = $file->getRandomName();
-        $file->move($uploadPath, $filename);
-        return 'uploads/complaint/' . $filename;
+        log_message('info', 'Complaint Image Saved: ' . $uploadPath . $filename);
+
+        return $filename;
+
+    } catch (\Throwable $e) {
+        log_message('error', 'Complaint Upload Failed: ' . $e->getMessage());
+        return '';
     }
+}
+
+
 }

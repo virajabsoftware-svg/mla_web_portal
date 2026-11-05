@@ -876,6 +876,11 @@ $routes->post(
     'Api\MlaRatingApi::store',
     ['filter' => 'apiToken']
 );
+$routes->put(
+    'api/mla-rating/(:num)',
+    'Api\MlaRatingApi::update/$1',
+    ['filter' => 'apiToken']
+);
 // =====================================================
 // 404 OVERRIDE
 // =====================================================

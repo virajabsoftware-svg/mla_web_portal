@@ -970,17 +970,24 @@
                                             </td>
 
                                             <!-- Evidence -->
-                                            <td>
-                                                <?php if (!empty($complaint['attachment'])): ?>
-                                                    <a href="<?= base_url($complaint['attachment']) ?>"
-                                                       target="_blank"
-                                                       class="btn btn-sm btn-secondary-custom">
-                                                        <i class="bi bi-paperclip"></i> View
-                                                    </a>
-                                                <?php else: ?>
-                                                    <span class="text-muted">No file</span>
-                                                <?php endif; ?>
-                                            </td>
+                                            
+<!-- Evidence -->
+<td>
+    <?php if (!empty($complaint['attachment'])): ?>
+        <?php
+            $filename = basename($complaint['attachment']);
+            $imagePath = base_url('uploads/complaint/' . $filename);
+        ?>
+        <a href="<?= esc($imagePath) ?>"
+           target="_blank"
+           class="btn btn-sm btn-secondary-custom">
+            <i class="bi bi-paperclip"></i> View
+        </a>
+    <?php else: ?>
+        <span class="text-muted">No file</span>
+    <?php endif; ?>
+</td>
+
 
                                             <!-- Status -->
                                             <td>
@@ -1194,7 +1201,15 @@
                                 </p>
                             </div>
                             <div class="col-12"><strong>Description</strong><p class="border rounded p-3">${escapeHtml(complaint.description)}</p></div>
-                            ${complaint.attachment ? `<div class="col-12"><a href="<?= base_url() ?>${encodeURI(complaint.attachment)}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-paperclip me-1"></i>View Attachment</a></div>` : ''}
+                           ${complaint.attachment ? `
+<div class="col-12">
+    <a href="<?= base_url('uploads/complaint/') ?>${encodeURIComponent(complaint.attachment.split('/').pop())}"
+       target="_blank"
+       class="btn btn-sm btn-outline-primary">
+       <i class="fas fa-paperclip me-1"></i> View Attachment
+    </a>
+</div>
+` : ''}
                         </div>`;
                     }).catch(() => {
                         viewBody.innerHTML = '<div class="alert alert-danger">Error loading complaint details.</div>';

@@ -70,6 +70,35 @@ class MlaRatingModel extends Model
             return false;
         }
     }
+    
+/**
+ * Update existing MLA rating submission
+ */
+public function updateRating($id, $data)
+{
+    try {
+
+        // Encode question_data into JSON
+        if (isset($data['question_data']) && is_array($data['question_data'])) {
+            $data['question_data'] = json_encode(
+                $data['question_data'],
+                JSON_UNESCAPED_UNICODE
+            );
+        }
+
+        return $this->update($id, $data);
+
+    } catch (\Throwable $e) {
+
+        log_message(
+            'error',
+            'Error updating MLA rating: ' . $e->getMessage()
+        );
+
+        return false;
+    }
+}
+
 
     /**
      * Get all ratings with optional filtering
