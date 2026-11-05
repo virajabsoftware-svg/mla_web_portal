@@ -194,7 +194,7 @@ public function uploadComplaintImage($complaintId)
 
     $fileName = $complaintId . '_' . time() . '.' . $image->getExtension();
 
-    $image->move(FCPATH . 'uploads/complaints', $fileName);
+    $image->move(ROOTPATH . 'uploads/complaints', $fileName);
 
     $complaintModel->update($complaint['id'], [
         'attachment' => $fileName
