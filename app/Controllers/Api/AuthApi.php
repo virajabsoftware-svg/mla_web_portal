@@ -882,4 +882,225 @@ $insertData = [
         ]
     ], 200);
 }
+
+// =====================================================
+// VOTER CHANGE PASSWORD API
+// =====================================================
+
+public function voterChangePassword()
+{
+    // Get authenticated voter from auth filter
+    $voter = $this->request->voter;
+
+    if (!$voter || empty($voter['id'])) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Unauthorized. Please login again.'
+        ], 401);
+    }
+
+    // Get JSON request body
+    $data = $this->request->getJSON(true);
+
+    if (!$data) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Invalid JSON data.'
+        ], 400);
+    }
+
+    $currentPassword = $data['current_password'] ?? '';
+    $newPassword     = $data['new_password'] ?? '';
+    $confirmPassword = $data['confirm_password'] ?? '';
+
+    // =========================
+    // VALIDATION
+    // =========================
+
+    if (
+        $currentPassword === '' ||
+        $newPassword === '' ||
+        $confirmPassword === ''
+    ) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'All password fields are required.'
+        ], 400);
+    }
+
+    if (strlen($newPassword) < 8) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'New password must be at least 8 characters.'
+        ], 400);
+    }
+
+    if ($newPassword === $currentPassword) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'New password must be different from current password.'
+        ], 400);
+    }
+
+    if ($newPassword !== $confirmPassword) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'New password and confirm password do not match.'
+        ], 400);
+    }
+
+    // =========================
+    // VERIFY CURRENT PASSWORD
+    // =========================
+
+    if (!password_verify($currentPassword, $voter['password'])) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Current password is incorrect.'
+        ], 400);
+    }
+
+    // =========================
+    // HASH NEW PASSWORD
+    // =========================
+
+    $hashedPassword = password_hash(
+        $newPassword,
+        PASSWORD_DEFAULT
+    );
+
+    // =========================
+    // UPDATE PASSWORD
+    // =========================
+
+    $updated = $this->voterModel->update(
+        $voter['id'],
+        [
+            'password' => $hashedPassword
+        ]
+    );
+
+    if (!$updated) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Failed to change password. Please try again.'
+        ], 500);
+    }
+
+    return $this->respond([
+        'status'  => true,
+        'message' => 'Password changed successfully.'
+    ], 200);
+}
+
+// =====================================================
+// MLA CHANGE PASSWORD API
+// =====================================================
+
+public function mlaChangePassword()
+{
+    // Get authenticated MLA from auth filter
+    $mla = $this->request->mla;
+
+    if (!$mla || empty($mla['id'])) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Unauthorized. Please login again.'
+        ], 401);
+    }
+
+    // Get JSON request body
+    $data = $this->request->getJSON(true);
+
+    if (!$data) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Invalid JSON data.'
+        ], 400);
+    }
+
+    $currentPassword = $data['current_password'] ?? '';
+    $newPassword     = $data['new_password'] ?? '';
+    $confirmPassword = $data['confirm_password'] ?? '';
+
+    // =========================
+    // VALIDATION
+    // =========================
+
+    if (
+        $currentPassword === '' ||
+        $newPassword === '' ||
+        $confirmPassword === ''
+    ) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'All password fields are required.'
+        ], 400);
+    }
+
+    if (strlen($newPassword) < 8) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'New password must be at least 8 characters.'
+        ], 400);
+    }
+
+    if ($newPassword === $currentPassword) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'New password must be different from current password.'
+        ], 400);
+    }
+
+    if ($newPassword !== $confirmPassword) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'New password and confirm password do not match.'
+        ], 400);
+    }
+
+    // =========================
+    // VERIFY CURRENT PASSWORD
+    // =========================
+
+    if (!password_verify($currentPassword, $mla['password'])) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Current password is incorrect.'
+        ], 400);
+    }
+
+    // =========================
+    // HASH NEW PASSWORD
+    // =========================
+
+    $hashedPassword = password_hash(
+        $newPassword,
+        PASSWORD_DEFAULT
+    );
+
+    // =========================
+    // UPDATE PASSWORD
+    // =========================
+
+    $updated = $this->mlaModel->update(
+        $mla['id'],
+        [
+            'password' => $hashedPassword
+        ]
+    );
+
+    if (!$updated) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Failed to change password. Please try again.'
+        ], 500);
+    }
+
+    return $this->respond([
+        'status'  => true,
+        'message' => 'Password changed successfully.'
+    ], 200);
+}
+
 }

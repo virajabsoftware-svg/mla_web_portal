@@ -41,6 +41,25 @@ $routes->group('api',  ['namespace' => 'App\Controllers\Api'],function ($routes)
         $routes->post('mla/login', 'AuthApi::login');
         $routes->get('profile', 'AuthApi::profile', ['filter' => 'mlaToken']);
         $routes->post('logout', 'AuthApi::logout', ['filter' => 'mlaToken']);
+
+// =====================================================
+// CHANGE PASSWORD APIs
+// =====================================================
+
+// Voter Change Password
+$routes->post(
+    'voter/change-password',
+    'AuthApi::voterChangePassword',
+    ['filter' => 'apiToken']
+);
+
+// MLA Change Password
+$routes->post(
+    'mla/change-password',
+    'AuthApi::mlaChangePassword',
+    ['filter' => 'mlaToken']
+);
+
     }
 );
 // =====================================================
@@ -881,6 +900,10 @@ $routes->put(
     'Api\MlaRatingApi::update/$1',
     ['filter' => 'apiToken']
 );
+
+
+
+
 // =====================================================
 // 404 OVERRIDE
 // =====================================================
