@@ -5,6 +5,7 @@ namespace App\Controllers\Api;
 use App\Controllers\BaseController;
 use App\Models\User\VoterModel;
 use App\Models\User\ComplaintModel;
+use App\Models\NotificationModel;
 
 class Complaints extends BaseController
 {
@@ -38,6 +39,7 @@ class Complaints extends BaseController
         $data = $this->request->getJSON(true);
 
         $complaintModel = new ComplaintModel();
+        $notificationModel = new NotificationModel();
 
         $complaintId = $complaintModel
             ->generateComplaintId($voter['id']);
@@ -63,6 +65,17 @@ class Complaints extends BaseController
 
 
         $complaintModel->insert($complaintData);
+        $complaintDbId = $complaintModel->getInsertID();
+
+        $notificationModel->sendNotification([
+            'user_type'         => 'mla',
+            'user_id'           => $complaintData['mla'],
+            'title'             => 'New Complaint Received',
+            'message'           => 'A new complaint has been submitted in your constituency.',
+            'notification_type' => 'complaint',
+            'reference_type'    => 'complaint',
+            'reference_id'      => $complaintDbId,
+        ]);
 
         return $this->response->setJSON([
             'status' => true,

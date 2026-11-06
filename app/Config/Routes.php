@@ -895,6 +895,7 @@ $routes->post(
     'Api\MlaRatingApi::store',
     ['filter' => 'apiToken']
 );
+
 $routes->put(
     'api/mla-rating/(:num)',
     'Api\MlaRatingApi::update/$1',
@@ -902,7 +903,11 @@ $routes->put(
 );
 
 
-
+//notification api 
+$routes->get('api/mla/notifications', 'Api\MLA\Notification::index');
+$routes->get('api/mla/notifications/unread-count', 'Api\MLA\Notification::unreadCount');
+$routes->put('api/mla/notifications/(:num)/read', 'Api\MLA\Notification::markAsRead/$1');
+$routes->put('api/mla/notifications/read-all', 'Api\MLA\Notification::markAllAsRead');
 
 // =====================================================
 // 404 OVERRIDE
