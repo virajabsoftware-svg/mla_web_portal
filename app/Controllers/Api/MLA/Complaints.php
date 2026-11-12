@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\MlaModel;
 use App\Models\User\ComplaintModel;
 use App\Models\ComplaintReplyModel;
+use App\Models\NotificationModel;
 
 class Complaints extends BaseController
 {
@@ -207,6 +208,7 @@ public function updateStatus($complaintId)
     // =========================
 
     $complaintModel = new ComplaintModel();
+    $notificationModel = new NotificationModel();
 
     $complaint = $complaintModel
         ->where('complaint_id', $complaintId)
@@ -241,6 +243,18 @@ public function updateStatus($complaintId)
             'status' => false,
             'message' => 'Failed to update complaint status.'
         ]);
+    }
+
+    if ($complaint['status'] != $status) {
+    $notificationModel->sendNotification([
+    'user_type'         => 'voter',
+    'user_id'           => $complaint['user_id'],
+    'title'             => 'Complaint Status Updated',
+    'message'           => 'Your complaint ' . $complaint['complaint_id'] . ' status has been updated to ' . $status . '.',
+    'notification_type' => 'complaint_status',
+    'reference_type'    => 'complaint',
+    'reference_id'      => $complaint['id'],
+]);
     }
 
 

@@ -5,6 +5,8 @@ namespace App\Controllers\Api\MLA;
 use App\Controllers\BaseController;
 use App\Models\MlaModel;
 use App\Models\MlaDevelopmentWorkModel;
+use App\Models\User\VoterModel;
+use App\Models\NotificationModel;
 
 class DevelopmentWorks extends BaseController
 {
@@ -78,6 +80,8 @@ class DevelopmentWorks extends BaseController
     }
 
     $workModel = new MlaDevelopmentWorkModel();
+    $voterModel = new VoterModel();
+    $notificationModel = new NotificationModel();
 
     $workCode = $workModel->generateWorkCode($mla['id']);
 
@@ -116,6 +120,23 @@ class DevelopmentWorks extends BaseController
             'message' => 'Failed to add development work.'
         ]);
     }
+
+    $voters = $voterModel
+    ->where('constituency', $constituencyId)
+    ->findAll();
+
+foreach ($voters as $voter) {
+
+    $notificationModel->sendNotification([
+        'user_type'         => 'voter',
+        'user_id'           => $voter['id'],
+        'title'             => 'New Development Work',
+        'message'           => 'A new development work has been added in your constituency.',
+        'notification_type' => 'development_work',
+        'reference_type'    => 'development_work',
+        'reference_id'      => $workId
+    ]);
+}
 
   $work = $workModel
     ->select('

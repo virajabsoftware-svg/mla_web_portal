@@ -903,11 +903,17 @@ $routes->put(
 );
 
 
-//notification api 
+//notification mla api 
 $routes->get('api/mla/notifications', 'Api\MLA\Notification::index');
 $routes->get('api/mla/notifications/unread-count', 'Api\MLA\Notification::unreadCount');
 $routes->put('api/mla/notifications/(:num)/read', 'Api\MLA\Notification::markAsRead/$1');
 $routes->put('api/mla/notifications/read-all', 'Api\MLA\Notification::markAllAsRead');
+
+//notification voter api
+$routes->get('api/voter/notifications', 'Api\Notification::index');
+$routes->get('api/voter/notifications/unread-count', 'Api\Notification::unreadCount');
+$routes->put('api/voter/notifications/(:num)/read', 'Api\Notification::markAsRead/$1');
+$routes->put('api/voter/notifications/read-all', 'Api\Notification::markAllAsRead');
 
 // =====================================================
 // 404 OVERRIDE

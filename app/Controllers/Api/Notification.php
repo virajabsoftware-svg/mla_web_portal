@@ -1,0 +1,213 @@
+<?php
+
+namespace App\Controllers\Api;
+
+use App\Controllers\BaseController;
+use App\Models\User\VoterModel;
+use App\Models\NotificationModel;
+
+class Notification extends BaseController
+{
+   public function index()
+  {
+      $voterModel = new VoterModel();
+      $notificationModel = new NotificationModel();
+
+      $token = $this->request->getHeaderLine('Authorization');
+
+      if (empty($token)) {
+          return $this->response->setJSON([
+              'status' => false,
+              'message' => 'Authorization token is required.'
+          ]);
+      }
+
+      $token = str_replace('Bearer ', '', $token);
+
+      $voter = $voterModel
+          ->where('api_token', $token)
+          ->first();
+
+      if (!$voter) {
+          return $this->response->setJSON([
+              'status' => false,
+              'message' => 'Invalid voter token.'
+          ]);
+      }
+
+      $page = (int) ($this->request->getGet('page') ?? 1);
+      $limit = (int) ($this->request->getGet('limit') ?? 20);
+
+      if ($page < 1) {
+          $page = 1;
+      }
+
+      if ($limit < 1 || $limit > 100) {
+          $limit = 20;
+      }
+
+      $offset = ($page - 1) * $limit;
+
+      $totalNotifications = $notificationModel
+          ->where('user_type', 'voter')
+          ->where('user_id', $voter['id'])
+          ->countAllResults(false);
+
+      $notifications = $notificationModel
+          ->where('user_type', 'voter')
+          ->where('user_id', $voter['id'])
+          ->orderBy('id', 'DESC')
+          ->findAll($limit, $offset);
+
+      return $this->response->setJSON([
+          'status' => true,
+          'message' => 'Notifications fetched successfully.',
+          'pagination' => [
+              'page' => $page,
+              'limit' => $limit,
+              'total' => $totalNotifications,
+              'total_pages' => ceil($totalNotifications / $limit)
+          ],
+          'data' => $notifications
+      ]);
+  }
+
+  public function unreadCount()
+  {
+      $voterModel = new VoterModel();
+      $notificationModel = new NotificationModel();
+
+      $token = $this->request->getHeaderLine('Authorization');
+
+      if (empty($token)) {
+          return $this->response->setJSON([
+              'status' => false,
+              'message' => 'Authorization token is required.'
+          ]);
+      }
+
+      $token = str_replace('Bearer ', '', $token);
+
+      $voter = $voterModel
+          ->where('api_token', $token)
+          ->first();
+
+      if (!$voter) {
+          return $this->response->setJSON([
+              'status' => false,
+              'message' => 'Invalid voter token.'
+          ]);
+      }
+
+      $unreadCount = $notificationModel
+          ->where('user_type', 'voter')
+          ->where('user_id', $voter['id'])
+          ->where('is_read', 0)
+          ->countAllResults();
+
+      return $this->response->setJSON([
+          'status' => true,
+          'message' => 'Unread notification count fetched successfully.',
+          'unread_count' => $unreadCount
+      ]);
+  }
+
+  public function markAsRead($id)
+  {
+      $voterModel = new VoterModel();
+      $notificationModel = new NotificationModel();
+
+      $token = $this->request->getHeaderLine('Authorization');
+
+      if (empty($token)) {
+          return $this->response->setJSON([
+              'status' => false,
+              'message' => 'Authorization token is required.'
+          ]);
+      }
+
+      $token = str_replace('Bearer ', '', $token);
+
+      $voter = $voterModel
+          ->where('api_token', $token)
+          ->first();
+
+      if (!$voter) {
+          return $this->response->setJSON([
+              'status' => false,
+              'message' => 'Invalid voter token.'
+          ]);
+      }
+
+      $notification = $notificationModel
+          ->where('id', $id)
+          ->where('user_type', 'voter')
+          ->where('user_id', $voter['id'])
+          ->first();
+
+      if (!$notification) {
+          return $this->response->setJSON([
+              'status' => false,
+              'message' => 'Notification not found.'
+          ]);
+      }
+
+      // Already read असल्यास पुन्हा update करू नको
+      if ($notification['is_read'] == 1) {
+          return $this->response->setJSON([
+              'status' => true,
+              'message' => 'Notification is already marked as read.'
+          ]);
+      }
+
+      $notificationModel->update($id, [
+          'is_read' => 1
+      ]);
+
+      return $this->response->setJSON([
+          'status' => true,
+          'message' => 'Notification marked as read.'
+      ]);
+  }
+
+  public function markAllAsRead()
+  {
+      $voterModel = new VoterModel();
+      $notificationModel = new NotificationModel();
+
+      $token = $this->request->getHeaderLine('Authorization');
+
+      if (empty($token)) {
+          return $this->response->setJSON([
+              'status' => false,
+              'message' => 'Authorization token is required.'
+          ]);
+      }
+
+      $token = str_replace('Bearer ', '', $token);
+
+      $voter = $voterModel
+          ->where('api_token', $token)
+          ->first();
+
+      if (!$voter) {
+          return $this->response->setJSON([
+              'status' => false,
+              'message' => 'Invalid voter token.'
+          ]);
+      }
+
+      $notificationModel
+          ->where('user_type', 'voter')
+          ->where('user_id', $voter['id'])
+          ->set([
+              'is_read' => 1
+          ])
+          ->update();
+
+      return $this->response->setJSON([
+          'status' => true,
+          'message' => 'All notifications marked as read.'
+      ]);
+  }     
+}
