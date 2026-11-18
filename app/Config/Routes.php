@@ -915,6 +915,14 @@ $routes->get('api/voter/notifications/unread-count', 'Api\Notification::unreadCo
 $routes->put('api/voter/notifications/(:num)/read', 'Api\Notification::markAsRead/$1');
 $routes->put('api/voter/notifications/read-all', 'Api\Notification::markAllAsRead');
 
+//firebase integration
+$routes->get('firebase-test', 'TestController::firebaseTest');
+$routes->get('firebase-send-test', 'TestController::sendTestNotification');
+
+//firebase integration fcm token
+$routes->post('api/voter/update-fcm-token', 'Api\Voter::updateFcmToken');
+$routes->post('api/mla/update-fcm-token', 'Api\AuthApi::updateFcmToken');
+
 // =====================================================
 // 404 OVERRIDE
 // =====================================================

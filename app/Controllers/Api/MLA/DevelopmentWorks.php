@@ -125,6 +125,8 @@ class DevelopmentWorks extends BaseController
     ->where('constituency', $constituencyId)
     ->findAll();
 
+
+ $firebase = new \App\Libraries\FirebaseNotification();
 foreach ($voters as $voter) {
 
     $notificationModel->sendNotification([
@@ -136,6 +138,24 @@ foreach ($voters as $voter) {
         'reference_type'    => 'development_work',
         'reference_id'      => $workId
     ]);
+
+    if (!empty($voter['fcm_token'])) {
+        try {
+
+            $firebase->sendNotification(
+                $voter['fcm_token'],
+                'New Development Work',
+                'A new development work has been added in your constituency.',
+                [
+                    'type'    => 'development_work',
+                    'work_id' => (string) $workId
+                ]
+            );
+
+        } catch (\Throwable $e) {
+            log_message('error', 'Firebase Error: ' . $e->getMessage());
+        }
+    }
 }
 
   $work = $workModel

@@ -30,6 +30,7 @@ class MlaModel extends Model
         'joining_date',
         'status',
         'api_token',
+        'fcm_token',
         'token_expiry',       
         'education',
         'profession',

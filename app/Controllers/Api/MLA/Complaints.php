@@ -255,6 +255,31 @@ public function updateStatus($complaintId)
     'reference_type'    => 'complaint',
     'reference_id'      => $complaint['id'],
 ]);
+
+     $voterModel = new \App\Models\VoterModel();
+     $voter = $voterModel->find($complaint['user_id']);
+
+    if (!empty($voter['fcm_token'])) {
+        try {
+
+            $firebase = new \App\Libraries\FirebaseNotification();
+
+            $firebase->sendNotification(
+                $voter['fcm_token'],
+                'Complaint Status Updated',
+                'Your complaint ' . $complaint['complaint_id'] . ' status has been updated to ' . $status . '.',
+                [
+                    'type'           => 'complaint_status',
+                    'complaint_id'   => (string) $complaint['id'],
+                    'complaint_code' => $complaint['complaint_id'],
+                    'status'         => $status
+                ]
+            );
+
+        } catch (\Throwable $e) {
+            log_message('error', 'Firebase Error: ' . $e->getMessage());
+        }
+     }
     }
 
 

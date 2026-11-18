@@ -77,6 +77,29 @@ class Complaints extends BaseController
             'reference_id'      => $complaintDbId,
         ]);
 
+        $mlaModel = new \App\Models\MlaModel();
+        $mla = $mlaModel->find($complaintData['mla']);
+
+        if (!empty($mla['fcm_token'])) {
+    try {
+
+        $firebase = new \App\Libraries\FirebaseNotification();
+
+        $firebase->sendNotification(
+            $mla['fcm_token'],
+            'New Complaint Received',
+            'A new complaint has been submitted in your constituency.',
+            [
+                'type'         => 'complaint',
+                'complaint_id' => (string) $complaintDbId
+            ]
+        );
+
+    } catch (\Throwable $e) {
+        log_message('error', 'Firebase Error: ' . $e->getMessage());
+    }
+}
+
         return $this->response->setJSON([
             'status' => true,
             'message' => 'Complaint submitted successfully',

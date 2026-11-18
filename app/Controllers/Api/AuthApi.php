@@ -1103,4 +1103,47 @@ public function mlaChangePassword()
     ], 200);
 }
 
+public function updateFcmToken()
+{
+    $headers = $this->request->getHeaderLine('Authorization');
+
+    if (!$headers || !preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Authorization token required.'
+        ], 401);
+    }
+
+    $apiToken = $matches[1];
+
+    $mlaModel = new \App\Models\MlaModel();
+
+    $mla = $mlaModel->where('api_token', $apiToken)->first();
+
+    if (!$mla) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'Invalid token.'
+        ], 401);
+    }
+
+    $data = $this->request->getJSON(true);
+
+    if (empty($data['fcm_token'])) {
+        return $this->respond([
+            'status'  => false,
+            'message' => 'FCM token is required.'
+        ], 400);
+    }
+
+    $mlaModel->update($mla['id'], [
+        'fcm_token' => trim($data['fcm_token'])
+    ]);
+
+    return $this->respond([
+        'status'  => true,
+        'message' => 'FCM token updated successfully.'
+    ]);
+}
+
 }

@@ -286,4 +286,47 @@ class Voter extends ResourceController
             ]
         ]);
     }
+
+    public function updateFcmToken()
+    {
+        $headers = $this->request->getHeaderLine('Authorization');
+
+        if (!$headers || !preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
+            return $this->respond([
+                'status'  => false,
+                'message' => 'Authorization token required.'
+            ], 401);
+        }
+
+        $apiToken = $matches[1];
+
+        $voterModel = new \App\Models\User\VoterModel();
+
+        $voter = $voterModel->where('api_token', $apiToken)->first();
+
+        if (!$voter) {
+            return $this->respond([
+                'status'  => false,
+                'message' => 'Invalid token.'
+            ], 401);
+        }
+
+        $data = $this->request->getJSON(true);
+
+        if (empty($data['fcm_token'])) {
+            return $this->respond([
+                'status'  => false,
+                'message' => 'FCM token is required.'
+            ], 400);
+        }
+
+        $voterModel->update($voter['id'], [
+            'fcm_token' => $data['fcm_token']
+        ]);
+
+        return $this->respond([
+            'status'  => true,
+            'message' => 'FCM token updated successfully.'
+        ]);
+    }
 }
