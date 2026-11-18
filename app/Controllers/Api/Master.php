@@ -146,7 +146,7 @@ public function constituencyMLA()
     ])
     ->join('parties', 'parties.id = mlas.party', 'left')
     ->where('mlas.constituency_id', $constituencyId)
-    ->where('mlas.status', 'Active')
+    ->where('mlas.status', 'Approved')
     ->first();
 
     //if we want profile photo url
