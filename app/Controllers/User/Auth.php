@@ -400,7 +400,11 @@ class Auth extends BaseController
     {
         $mla = (new MlaModel())
             ->select(
-                'mlas.*, states.state_name, districts.district_name, constituencies.constituency_name'
+                'mlas.*, parties.party_name AS party_name, states.state_name, districts.district_name, constituencies.constituency_name'
+            )->join(
+                'parties',
+                'parties.id = mlas.party',
+                'left'
             )
             ->join(
                 'states',
@@ -420,7 +424,7 @@ class Auth extends BaseController
             )
             ->where(
                 'mlas.status',
-                'Active'
+                'Approved'
             )
             ->first();
 

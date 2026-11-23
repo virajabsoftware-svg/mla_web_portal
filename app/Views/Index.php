@@ -1873,8 +1873,8 @@
     { id: 10, text: "तुमच्या भागात कोणती कामे झाली? (तपशील)", type: "textarea", name: "q6_local_works" },
     { id: 11, text: "ही कामे भागाच्या गरजांशी जुळतात का?", type: "select", name: "q7_match_needs", options: ["हो", "अंशतः", "नाही"] },
     { id: 12, text: "आमदार निधी वापर रेटिंग (1-10)", type: "range", name: "q8_fund_rating", min: 1, max: 10 },
-    { id: 13, text: "तुमचे नाव (ऐच्छिक)", type: "text", name: "optional_name" },
-    { id: 14, text: "तुमचा मतदारसंघ (ऐच्छिक)", type: "text", name: "optional_constituency" },
+    { id: 13, text: "तुमचे नाव", type: "text", name: "optional_name" },
+    { id: 14, text: "तुमचा मतदारसंघ ", type: "text", name: "optional_constituency" },
     { id: 15, text: "निधी वापर पारदर्शक आहे का?", type: "select", name: "q10_transparent", options: ["हो", "अंशतः", "नाही"] },
     { id: 16, text: "भ्रष्टाचार / पारदर्शकता मत (तपशील)", type: "textarea", name: "q11_corruption_view" },
     { id: 17, text: "आमदाराने काय चांगले केले? (तपशील)", type: "textarea", name: "q12_good_work" },
@@ -2256,27 +2256,27 @@
         <p class="lekha-err" id="lekha-who-err"></p>
         <div class="lekha-pair">
           <div class="lekha-field">
-            <label for="lekha-locality">तुमचे गाव / शहर आणि प्रभाग (ऐच्छिक)</label>
+            <label for="lekha-locality">तुमचे गाव / शहर आणि प्रभाग </label>
             <input type="text" id="lekha-locality" name="locality" maxlength="120" autocomplete="off">
           </div>
           <div class="lekha-field">
-            <label for="lekha-name">तुमचे नाव (ऐच्छिक)</label>
+            <label for="lekha-name">तुमचे नाव </label>
             <input type="text" id="lekha-name" name="respondent_name" maxlength="120" autocomplete="name">
           </div>
         </div>
         <div class="lekha-pair">
           <div class="lekha-field" id="lekha-mobile-wrap">
-            <label for="lekha-mobile">मोबाईल क्रमांक (ऐच्छिक)</label>
+            <label for="lekha-mobile">मोबाईल क्रमांक </label>
             <input type="tel" id="lekha-mobile" name="mobile_number" maxlength="10" inputmode="numeric" autocomplete="tel-national" aria-describedby="lekha-mobile-err" placeholder="१० अंकी मोबाईल क्रमांक">
             <p class="lekha-err" id="lekha-mobile-err"></p>
           </div>
           <div class="lekha-field" id="lekha-pin-wrap">
-            <label for="lekha-pin">पिन कोड (ऐच्छिक)</label>
+            <label for="lekha-pin">पिन कोड </label>
             <input type="text" id="lekha-pin" name="pin_code" maxlength="6" inputmode="numeric" autocomplete="postal-code" aria-describedby="lekha-pin-err" placeholder="६ अंकी पिन कोड">
             <p class="lekha-err" id="lekha-pin-err"></p>
           </div>
         </div>
-        <p class="lekha-hint">नाव, मोबाईल क्रमांक आणि पिन कोड देणे ऐच्छिक आहे. तुमचे नाव किंवा वैयक्तिक माहिती कुठेही जाहीर केली जाणार नाही.</p>
+        
       </div>
 
       <div class="lekha-q" id="lekha-q1" data-q="1">

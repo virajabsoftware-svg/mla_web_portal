@@ -1972,7 +1972,7 @@ function loadMla(constituencyId) {
                 document.getElementById(
                     'mlaPartyDisplay'
                 ).value =
-                    data.mla.party || '—';
+                    data.mla.party_name || '—';
 
 
                 document.getElementById(
