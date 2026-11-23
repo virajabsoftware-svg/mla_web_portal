@@ -200,8 +200,27 @@ public function update($id)
 
     
     if ($attachment !== '') {
-        $data['attachment'] = $attachment;
+
+    $existingImages = [];
+
+    if (!empty($complaint['attachment'])) {
+        $existingImages = json_decode($complaint['attachment'], true);
+
+        if (!is_array($existingImages)) {
+            $existingImages = [];
+        }
     }
+
+    $newImages = json_decode($attachment, true);
+
+    if (!is_array($newImages)) {
+        $newImages = [];
+    }
+
+    $data['attachment'] = json_encode(
+        array_merge($existingImages, $newImages)
+    );
+}
 
     $complaintModel = new ComplaintModel();
 
@@ -241,13 +260,27 @@ public function update($id)
         }
 
         if ((new ComplaintModel())->delete($id)) {
-          $filename = basename((string) ($complaint['attachment'] ?? ''));
+    $images = json_decode($complaint['attachment'] ?? '', true);
 
-     $filePath = FCPATH . 'uploads/complaint/' . $filename;
+if (is_array($images)) {
 
-      if ($filename !== '' && is_file($filePath)) {
-      unlink($filePath);
-     }
+    foreach ($images as $image) {
+
+        $filePath = FCPATH . 'uploads/complaint/' . $image;
+
+        if (is_file($filePath)) {
+            unlink($filePath);
+        }
+    }
+
+} elseif (!empty($complaint['attachment'])) {
+
+    $filePath = FCPATH . 'uploads/complaint/' . basename($complaint['attachment']);
+
+    if (is_file($filePath)) {
+        unlink($filePath);
+    }
+}
             return redirect()->to('/user/complaint')->with('success', 'Complaint deleted successfully');
         }
         return redirect()->back()->with('error', 'Delete failed');
@@ -269,14 +302,9 @@ public function update($id)
 
 private function uploadAttachment(): string
 {
-    $file = $this->request->getFile('attachment');
+    $files = $this->request->getFileMultiple('attachment');
 
-    if (!$file || $file->getError() === UPLOAD_ERR_NO_FILE) {
-        return '';
-    }
-
-    if (!$file->isValid()) {
-        log_message('error', 'Upload Error: ' . $file->getErrorString());
+    if (empty($files)) {
         return '';
     }
 
@@ -286,26 +314,84 @@ private function uploadAttachment(): string
         mkdir($uploadPath, 0777, true);
     }
 
-    $filename = $file->getRandomName();
+    $uploadedImages = [];
 
-    try {
-        $file->move($uploadPath, $filename);
+    foreach ($files as $file) {
 
-        // Check actual file exists
-        if (!file_exists($uploadPath . $filename)) {
-            log_message('error', 'Image not saved: ' . $uploadPath . $filename);
-            return '';
-        }
-
-        log_message('info', 'Complaint Image Saved: ' . $uploadPath . $filename);
-
-        return $filename;
-
-    } catch (\Throwable $e) {
-        log_message('error', 'Complaint Upload Failed: ' . $e->getMessage());
-        return '';
+    if (!$file || !$file->isValid() || $file->hasMoved()) {
+        continue;
     }
+
+    $fileName = $file->getRandomName();
+
+    $file->move($uploadPath, $fileName);
+
+    $uploadedImages[] = $fileName;
 }
 
+if (empty($uploadedImages)) {
+    return '';
+}
 
+    return json_encode($uploadedImages);
+}
+
+public function removeImage($id)
+{
+    $complaint = $this->findUserComplaint($id);
+
+    if (!$complaint) {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Complaint not found'
+        ]);
+    }
+
+    $image = $this->request->getPost('image');
+
+    if (empty($image)) {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Image name required'
+        ]);
+    }
+
+
+    $images = [];
+
+    if (!empty($complaint['attachment'])) {
+        $images = json_decode($complaint['attachment'], true);
+
+        if (!is_array($images)) {
+            $images = [];
+        }
+    }
+
+
+    if (($key = array_search($image, $images)) !== false) {
+
+        unset($images[$key]);
+
+        $filePath = FCPATH . 'uploads/complaint/' . $image;
+
+        if (is_file($filePath)) {
+            unlink($filePath);
+        }
+    }
+
+
+    $images = array_values($images);
+
+
+    (new ComplaintModel())->update($id, [
+        'attachment' => json_encode($images)
+    ]);
+
+
+    return $this->response->setJSON([
+        'success' => true,
+        'message' => 'Image removed successfully',
+        'images' => $images
+    ]);
+}
 }

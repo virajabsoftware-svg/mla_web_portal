@@ -220,7 +220,7 @@
             min-height: 100px;
         }
 
-        /* Complaint edit modal */
+        /* Complaint  */
         #editComplaintModal .modal-dialog {
             max-width: 920px;
         }
@@ -741,6 +741,34 @@
                 line-height: 1.6;
             }
         }
+
+        .complaint-image-wrapper {
+    width: 90px;
+    height: 90px;
+}
+
+.image-delete-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(220,53,69,0.9);
+    color: white;
+    display: none;
+    cursor: pointer;
+}
+
+.complaint-image-wrapper:hover .image-delete-btn {
+    display: block;
+}
+
+.complaint-image-wrapper:hover .complaint-image {
+    opacity: 0.5;
+}
     </style>
 </head>
 
@@ -808,14 +836,21 @@
                     <form id="complaintForm" method="post" action="<?= site_url('user/complaint/save') ?>" enctype="multipart/form-data">
                         <?= csrf_field() ?>
                         <div class="row g-3">
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-person-badge"></i> Voter ID</label>
                                 <input type="text" class="form-control" value="<?= esc($voter_id ?? '') ?>" readonly>
-                            </div>
-                            <div class="col-md-3">
+                            </div> -->
+                            <!-- <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-building"></i> MLA</label>
                                 <input type="text" class="form-control" value="<?= esc($mla_name ?? '') ?>" readonly>
+                            </div> -->
+
+                            <div class="col-md-3">
+                                <label class="form-label"><i class="bi bi-card-heading"></i> Complaint Title</label>
+                                <input type="text" class="form-control" id="complaintTitle" name="title"
+                                    placeholder="Enter complaint title" required>
                             </div>
+
                             <div class="col-md-3">
                                 <label class="form-label"><i class="bi bi-flag-fill"></i> Priority</label>
                                 <select class="form-select" id="prioritySelect" name="priority">
@@ -826,27 +861,21 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-3">
-                                <label class="form-label"><i class="bi bi-card-heading"></i> Complaint Title</label>
-                                <input type="text" class="form-control" id="complaintTitle" name="title"
-                                    placeholder="Enter complaint title" required>
-                            </div>
-
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-geo-alt-fill"></i> District</label>
                                 <input type="text" class="form-control" value="<?= esc($district ?? '') ?>" readonly>
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-pin-map-fill"></i> Constituency</label>
                                 <input type="text" class="form-control" value="<?= esc($constituency ?? '') ?>" readonly>
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label class="form-label"><i class="bi bi-house-heart"></i> Village</label>
                                 <input type="text" class="form-control" id="villageInput" name="village"
                                     placeholder="Enter Village Name" required>
-                            </div>
+                            </div> -->
 
                             <div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-geo-alt"></i> Location / Landmark</label>
@@ -863,7 +892,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-paperclip"></i> Supporting Evidence</label>
-                                <input type="file" class="form-control" id="evidenceFile" name="attachment" multiple
+                                <input type="file" class="form-control" id="evidenceFile" name="attachment[]" multiple
                                     accept="image/*,application/pdf">
                                 <small class="text-muted">Max file size: 5MB (Images, PDF)</small>
                             </div>
@@ -891,15 +920,11 @@
                             <thead>
                                 <tr>
                                     <th>Complaint ID</th>
-                                    <th>Voter ID</th>
-                                    <th>MLA</th>
-                                    <th>Priority</th>
                                     <th>Complaint Title</th>
-                                    <th>Village</th>
-                                    <th>Location / Landmark</th>
-                                    <th>Submission Date</th>
                                     <th>Description</th>
-                                    <th>Evidence</th>
+                                    <th>Location / Landmark</th>
+                                    <th>Priority</th>
+                                    <th>Submission Date</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -916,13 +941,20 @@
                                                 </strong>
                                             </td>
 
-                                            <!-- Voter ID -->
+                                            <!-- Complaint Title -->
                                             <td>
-                                                <?= esc($complaint['voter_id'] ?? '-') ?>
+                                                <?= esc($complaint['title'] ?? '-') ?>
                                             </td>
 
-                                            <!-- MLA name is resolved once in the controller. -->
-                                            <td><?= esc($complaint['mla_display'] ?? '-') ?></td>
+                                            <!-- Description -->
+                                            <td style="min-width:250px;">
+                                                <?= esc($complaint['description'] ?? '-') ?>
+                                            </td>
+
+                                            <!-- Location -->
+                                            <td>
+                                                <?= esc($complaint['location'] ?? '-') ?>
+                                            </td>
 
                                             <!-- Priority -->
                                             <td>
@@ -943,51 +975,11 @@
                                                 </span>
                                             </td>
 
-                                            <!-- Complaint Title -->
-                                            <td>
-                                                <?= esc($complaint['title'] ?? '-') ?>
-                                            </td>
-
-                                            <!-- Village -->
-                                            <td>
-                                                <?= esc($complaint['village'] ?? '-') ?>
-                                            </td>
-
-                                            <!-- Location -->
-                                            <td>
-                                                <?= esc($complaint['location'] ?? '-') ?>
-                                            </td>
-
                                             <!-- Submission Date -->
                                             <td>
                                                 <?= date('d-M-Y', strtotime($complaint['created_at'])) ?><br>
                                                 <small class="text-muted"><?= date('h:i A', strtotime($complaint['created_at'])) ?></small>
                                             </td>
-
-                                            <!-- Description -->
-                                            <td style="min-width:250px;">
-                                                <?= esc($complaint['description'] ?? '-') ?>
-                                            </td>
-
-                                            <!-- Evidence -->
-                                            
-<!-- Evidence -->
-<td>
-    <?php if (!empty($complaint['attachment'])): ?>
-        <?php
-            $filename = basename($complaint['attachment']);
-            $imagePath = base_url('uploads/complaint/' . $filename);
-        ?>
-        <a href="<?= esc($imagePath) ?>"
-           target="_blank"
-           class="btn btn-sm btn-secondary-custom">
-            <i class="bi bi-paperclip"></i> View
-        </a>
-    <?php else: ?>
-        <span class="text-muted">No file</span>
-    <?php endif; ?>
-</td>
-
 
                                             <!-- Status -->
                                             <td>
@@ -1178,7 +1170,7 @@
                             <div class="col-md-6"><strong>Status</strong><p><span class="badge bg-warning text-dark">${escapeHtml(complaint.status)}</span></p></div>
                             <div class="col-md-6"><strong>Title</strong><p>${escapeHtml(complaint.title)}</p></div>
                             <div class="col-md-6"><strong>Priority</strong><p>${escapeHtml(complaint.priority)}</p></div>
-                            <div class="col-md-6"><strong>Village</strong><p>${escapeHtml(complaint.village)}</p></div>
+                            
                             <div class="col-md-6"><strong>Location</strong><p>${escapeHtml(complaint.location)}</p></div>
                             <div class="col-md-6">
                                 <strong>Submitted</strong>
@@ -1201,15 +1193,32 @@
                                 </p>
                             </div>
                             <div class="col-12"><strong>Description</strong><p class="border rounded p-3">${escapeHtml(complaint.description)}</p></div>
-                           ${complaint.attachment ? `
-<div class="col-12">
-    <a href="<?= base_url('uploads/complaint/') ?>${encodeURIComponent(complaint.attachment.split('/').pop())}"
-       target="_blank"
-       class="btn btn-sm btn-outline-primary">
-       <i class="fas fa-paperclip me-1"></i> View Attachment
-    </a>
-</div>
-` : ''}
+
+                           ${(() => {
+                        if (!complaint.attachment) return '';
+
+                        let images = [];
+
+                        try {
+                            images = JSON.parse(complaint.attachment);
+                        } catch (e) {
+                            images = [complaint.attachment];
+                        }
+
+                        return `
+                        <div class="col-12">
+                            <strong>Attachments</strong>
+                            <div class="d-flex flex-wrap gap-2 mt-2">
+                                ${images.map(image => `
+                                    <a href="<?= base_url('uploads/complaint/') ?>${encodeURIComponent(image)}"
+                                    target="_blank">
+                                        <img src="<?= base_url('uploads/complaint/') ?>${encodeURIComponent(image)}"
+                                            style="width:100px;height:100px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">
+                                    </a>
+                                `).join('')}
+                            </div>
+                        </div>`;
+                    })()}
                         </div>`;
                     }).catch(() => {
                         viewBody.innerHTML = '<div class="alert alert-danger">Error loading complaint details.</div>';
@@ -1221,6 +1230,8 @@
             document.querySelectorAll('.edit-complaint').forEach(button => {
                 button.addEventListener('click', function () {
                     editId.value = this.dataset.id;
+                    document.getElementById('editComplaintForm').action =
+    "<?= site_url('user/complaint/update') ?>/" + this.dataset.id;
                     editFooter.style.display = 'none';
                     editBody.innerHTML = '<div class="text-center py-4"><div class="spinner-border text-primary"></div><p class="mt-2">Loading complaint data...</p></div>';
                     editModal.show();
@@ -1245,10 +1256,45 @@
                                         `).join('')}
                                 </select>
                             </div>
-                            <div class="col-md-6"><label class="form-label">Village</label><input name="village" class="form-control" value="${escapeHtml(complaint.village)}" required></div>
+                            
                             <div class="col-md-6"><label class="form-label">Location / Landmark</label><input name="location" class="form-control" value="${escapeHtml(complaint.location)}" required></div>
                             <div class="col-12"><label class="form-label">Description</label><textarea name="description" class="form-control" rows="4" required>${escapeHtml(complaint.description)}</textarea></div>
-                            <div class="col-12"><label class="form-label">Replace Attachment</label><input type="file" name="attachment" class="form-control"><small class="text-muted">Leave empty to keep the current attachment.</small></div>
+
+                            <div class="col-12">
+    <label class="form-label">Existing Attachments</label>
+    <div class="d-flex flex-wrap gap-2">
+        ${
+            (() => {
+                let images = [];
+
+                try {
+                    images = JSON.parse(complaint.attachment || '[]');
+                } catch(e) {
+                    images = [];
+                }
+
+                return images.map(image => `
+    <div class="complaint-image-wrapper position-relative">
+
+        <img src="<?= base_url('uploads/complaint/') ?>${image}"
+             class="complaint-image"
+             style="width:90px;height:90px;object-fit:cover;border-radius:8px;">
+
+        <button type="button"
+                class="image-delete-btn remove-complaint-image"
+                data-id="${complaint.id}"
+                data-image="${image}">
+            <i class="fas fa-trash"></i>
+        </button>
+
+    </div>
+`).join('');
+            })()
+        }
+    </div>
+</div>
+
+                            <div class="col-12"><label class="form-label">Add More Attachments</label><input type="file" name="attachment[]" class="form-control" multiple accept="image/*"><small class="text-muted">Leave empty to keep the current attachment.</small></div>
                         </div>`;
                         editFooter.style.display = 'flex';
                     }).catch(() => {
@@ -1287,12 +1333,72 @@
                     alert(result.message);
                     window.location.reload();
                 })
-                .catch(() => alert('Error updating complaint.'));
+                .catch((error) => {
+    console.error(error);
+    alert('Error updating complaint. Check console.');
+});
+
             });
 
             // Animate counters
             setTimeout(animateCounters, 200);
         });
+    </script>
+
+    <script>
+        document.addEventListener('click', function (e) {
+
+    if (e.target.closest('.remove-complaint-image')) {
+
+        const button = e.target.closest('.remove-complaint-image');
+
+        const complaintId = button.dataset.id;
+        const image = button.dataset.image;
+
+
+        if (!confirm('Are you sure you want to delete this image?')) {
+            return;
+        }
+
+
+        const formData = new FormData();
+
+        formData.append('image', image);
+
+
+        fetch(
+            "<?= site_url('user/complaint/remove-image/') ?>" + complaintId,
+            {
+                method: "POST",
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }
+        )
+        .then(response => response.json())
+        .then(result => {
+
+            if (result.success) {
+
+                // remove image from UI immediately
+                button.closest('.complaint-image-wrapper').remove();
+
+            } else {
+
+                alert(result.message || 'Image delete failed');
+
+            }
+
+        })
+        .catch(error => {
+            console.error(error);
+            alert('Something went wrong');
+        });
+
+    }
+
+});
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <?php if (session()->getFlashdata('success')): ?>

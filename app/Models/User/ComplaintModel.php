@@ -31,19 +31,15 @@ class ComplaintModel extends Model
     /**
      * Generate Complaint ID
      */
-    public function generateComplaintId($userId)
-    {
-        $count = $this
-            ->where('user_id', $userId)
-            ->countAllResults();
+    public function generateComplaintId()
+{
+    $nextNumber = $this->countAllResults() + 1;
 
-        $nextNumber = $count + 1;
-
-        return 'CMP-' .
-            $userId .
-            '-' .
-            str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
-    }
+    return 'LT/' .
+        str_pad($nextNumber, 2, '0', STR_PAD_LEFT) .
+        '/' .
+        date('Y');
+}
 
     /**
      * =========================================================

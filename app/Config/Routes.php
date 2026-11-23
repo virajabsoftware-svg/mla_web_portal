@@ -759,6 +759,12 @@ $routes->get('api/mla/complaint-list', 'Api\MLA\Complaints::complaintList');
 // VOTER COMPLAINT API'S
 // =====================================================
 
+$routes->post('user/complaint/update/(:num)', 'User\Complaint::update/$1');
+$routes->post(
+    'user/complaint/remove-image/(:num)',
+    'User\Complaint::removeImage/$1'
+);
+
 $routes->post('api/addComplaints', 'Api\Complaints::addComplaint');
 $routes->get('api/voter/complaint-list', 'Api\Complaints::complaintList');
 $routes->post('api/complaints/(:segment)/images', 'Api\Complaints::uploadComplaintImage/$1');

@@ -41,8 +41,8 @@ class Complaints extends BaseController
         $complaintModel = new ComplaintModel();
         $notificationModel = new NotificationModel();
 
-        $complaintId = $complaintModel
-            ->generateComplaintId($voter['id']);
+
+        $complaintId = $complaintModel->generateComplaintId();
 
 
         $complaintData = [
