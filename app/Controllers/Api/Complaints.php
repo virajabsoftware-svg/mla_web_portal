@@ -58,8 +58,8 @@ class Complaints extends BaseController
             'district'     => $voter['district'],
             'constituency' => $voter['constituency'],
             'mla'          => $voter['mla_id'],
-            'latitude'  => trim((string) $this->request->getPost('latitude')),
-            'longitude' => trim((string) $this->request->getPost('longitude')),
+            'latitude'  => $data['latitude'] ?? null,
+            'longitude' => $data['longitude'] ?? null,
 
             'status'       => 'Pending',
             'created_at'   => date('Y-m-d H:i:s')
@@ -169,6 +169,12 @@ $complaints = $complaintModel->getComplaintListByVoter(
     $search
 );
 
+foreach ($complaints as &$complaint) {
+
+    $complaint['attachment'] = !empty($complaint['attachment'])
+        ? json_decode($complaint['attachment'], true)
+        : [];
+}
 
     return $this->response->setJSON([
     'status' => true,
@@ -221,28 +227,51 @@ public function uploadComplaintImage($complaintId)
         ]);
     }
 
-    $image = $this->request->getFile('image');
+    $files = $this->request->getFileMultiple('image');
 
-    if (!$image || !$image->isValid()) {
-        return $this->response->setJSON([
-            'status' => false,
-            'message' => 'Please select a valid image.'
-        ]);
-    }
-
-    $fileName = $complaintId . '_' . time() . '.' . $image->getExtension();
-
-    $image->move(ROOTPATH . 'uploads/complaints', $fileName);
-
-    $complaintModel->update($complaint['id'], [
-        'attachment' => $fileName
-    ]);
-
+    if (empty($files)) {
     return $this->response->setJSON([
-        'status' => true,
-        'message' => 'Image uploaded successfully',
-        'complaint_id' => $complaintId,
-        'attachment' => $fileName
+        'status' => false,
+        'message' => 'Please select at least one image.'
     ]);
+}
+
+    $uploadedImages = [];
+
+foreach ($files as $file) {
+
+    if ($file->isValid() && !$file->hasMoved()) {
+
+        $newName = $file->getRandomName();
+
+        $file->move(ROOTPATH . 'uploads/complaints', $newName);
+
+        $uploadedImages[] = $newName;
+    }
+}
+
+$existingImages = [];
+
+if (!empty($complaint['attachment'])) {
+
+    $existingImages = json_decode($complaint['attachment'], true);
+
+    if (!is_array($existingImages)) {
+        $existingImages = [];
+    }
+}
+
+$allImages = array_merge($existingImages, $uploadedImages);
+
+$complaintModel->update($complaint['id'], [
+    'attachment' => json_encode($allImages)
+]);
+
+return $this->response->setJSON([
+    'status' => true,
+    'message' => 'Images uploaded successfully.',
+    'complaint_id' => $complaintId,
+    'attachment' => $allImages
+]);
 }
 }
