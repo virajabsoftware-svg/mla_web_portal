@@ -93,7 +93,18 @@ class AuthApi extends ResourceController
                 'message' => 'Your account is not approved.'
             ], 403);
         }
+          
+        // Generate API token only if not available
+        if (empty($voter['api_token'])) {
 
+            $token = bin2hex(random_bytes(32));
+
+            $this->voterModel->update($voter['id'], [
+                'api_token' => $token
+            ]);
+
+            $voter['api_token'] = $token;
+        }
         // Generate token
         // $token = bin2hex(random_bytes(32));
 
@@ -613,6 +624,18 @@ $insertData = [
                 'status'  => false,
                 'message' => 'Your registration is pending admin approval.'
             ], 403);
+        }
+
+        // Generate API token only if not available
+        if (empty($mla['api_token'])) {
+
+            $token = bin2hex(random_bytes(32));
+
+            $this->mlaModel->update($mla['id'], [
+                'api_token' => $token
+            ]);
+
+            $mla['api_token'] = $token;
         }
 
         // Generate token

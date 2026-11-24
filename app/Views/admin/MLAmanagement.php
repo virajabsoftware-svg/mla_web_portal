@@ -1710,8 +1710,8 @@
                                         <div class="col-md-6">
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
                                             <select class="form-select" name="status">
-                                                <option value="Active">Active</option>
-                                                <option value="Inactive">Inactive</option>
+                                                <option value="Pending">Pending</option>
+        
                                             </select>
                                         </div>
                                     </div>

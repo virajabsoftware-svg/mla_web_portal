@@ -245,7 +245,7 @@ foreach ($files as $file) {
 
         $newName = $file->getRandomName();
 
-        $file->move(ROOTPATH . 'uploads/complaints', $newName);
+        $file->move(ROOTPATH . 'uploads/complaint', $newName);
 
         $uploadedImages[] = $newName;
     }

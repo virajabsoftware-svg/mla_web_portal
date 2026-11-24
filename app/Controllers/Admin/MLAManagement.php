@@ -181,7 +181,7 @@ class MLAManagement extends BaseController
             'joining_date'    => $this->request->getPost('joining_date') ?: null,
 
             // Status
-            'status'          => $this->request->getPost('status') ?: 'Active'
+            'status'          => $this->request->getPost('status') ?: 'Pending'
         ];
 
         // -----------------------------
