@@ -1711,7 +1711,8 @@
                                             <label class="fw-bold" style="color:#876b42;"><i class="fas fa-toggle-on me-1"></i> Status</label>
                                             <select class="form-select" name="status">
                                                 <option value="Pending">Pending</option>
-        
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
                                             </select>
                                         </div>
                                     </div>
