@@ -58,6 +58,8 @@ class Complaints extends BaseController
             'district'     => $voter['district'],
             'constituency' => $voter['constituency'],
             'mla'          => $voter['mla_id'],
+            'latitude'  => trim((string) $this->request->getPost('latitude')),
+            'longitude' => trim((string) $this->request->getPost('longitude')),
 
             'status'       => 'Pending',
             'created_at'   => date('Y-m-d H:i:s')

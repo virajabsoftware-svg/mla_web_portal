@@ -26,6 +26,8 @@ class ComplaintModel extends Model
         'resolution_date',
         'village',
         'voter_id',
+        'latitude',
+        'longitude',
     ];
 
     /**
