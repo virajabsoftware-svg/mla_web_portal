@@ -24,8 +24,12 @@ class MLAWorks extends BaseController
         $works = $model->getFilteredWorks($mlaId, $filters)->paginate(10, 'works');
 
         
-        $images = (new MlaDevelopmentWorkImageModel())->getImagesByWorkIds(array_column($works, 'id'));
-        foreach ($works as &$work) $work['images'] = $images[$work['id']] ?? [];
+        foreach ($works as &$work) {
+
+            $work['images'] = !empty($work['images'])
+                ? json_decode($work['images'], true)
+                : [];
+        }
         unset($work);
 
         $statuses = $model->getStatusOptions();

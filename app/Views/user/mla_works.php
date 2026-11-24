@@ -433,7 +433,12 @@
 
     // ===== DATA =====
     const projectsData = <?= json_encode(array_map(static function ($work) {
-      $images = array_map(static fn($image) => filter_var($image, FILTER_VALIDATE_URL) ? $image : base_url('uploads/developmentworks/' . ltrim($image, '/')), $work['images'] ?? []);
+      $images = array_map(static fn($image) => 
+    filter_var($image, FILTER_VALIDATE_URL) 
+    ? $image 
+    : base_url('uploads/development-works/' . ltrim($image, '/')), 
+    $work['images'] ?? []
+);
       if ($images === []) $images = [base_url('assets/user/images/placeholder-work.jpg')];
       return ['id'=>(int)$work['id'],'title'=>$work['work_title'],'dept'=>$work['department_name'],
       'desc'=>$work['work_description'],'category'=>$work['category_name'],
@@ -454,6 +459,7 @@
       'fundUsed'=>(float)$work['used_amount'],'fundRemain'=>(float)$work['remaining_amount'],
       'gallery'=>$images,'timeline'=>[],'documents'=>[],'reviews'=>[]];
     }, $works), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+    console.log(projectsData);
 
     const feedbackStore = {};
 

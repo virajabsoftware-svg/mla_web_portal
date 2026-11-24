@@ -244,6 +244,12 @@ if ($files === null || empty($files)) {
 
 $uploadedImages = [];
 
+$uploadPath = ROOTPATH . 'uploads/development-works/';
+
+if (!is_dir($uploadPath)) {
+    mkdir($uploadPath, 0777, true);
+}
+
 foreach ($files as $file) {
 
     if ($file->isValid() && !$file->hasMoved()) {
@@ -251,7 +257,7 @@ foreach ($files as $file) {
         $newName = $file->getRandomName();
 
         $file->move(
-            FCPATH . 'uploads/development-works/',
+            $uploadPath,
             $newName
         );
 
