@@ -767,7 +767,10 @@ $routes->post(
 
 $routes->post('api/addComplaints', 'Api\Complaints::addComplaint');
 $routes->get('api/voter/complaint-list', 'Api\Complaints::complaintList');
-$routes->post('api/complaints/(:any)/images', 'Api\Complaints::uploadComplaintImage/$1');
+$routes->post(
+    'api/complaints/(:segment)/(:segment)/(:segment)/images',
+    'Api\Complaints::uploadComplaintImage/$1/$2/$3'
+);
 
 
 $routes->get('api/master/constituencyMLA', 'Api\Master::constituencyMLA');

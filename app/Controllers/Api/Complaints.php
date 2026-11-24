@@ -187,8 +187,9 @@ foreach ($complaints as &$complaint) {
 ]);
 }
 
-public function uploadComplaintImage($complaintId)
+public function uploadComplaintImage($part1, $part2, $part3)
 {
+    $complaintId = $part1 . '/' . $part2 . '/' . $part3;
     $voterModel = new VoterModel();
 
     $token = $this->request->getHeaderLine('Authorization');

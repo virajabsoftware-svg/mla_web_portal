@@ -303,6 +303,8 @@ public function getComplaintListByVoter($userId, $limit, $offset, $status = '',$
         complaints.description,
         complaints.attachment,
         complaints.location,
+        complaints.latitude,
+        complaints.longitude,
         complaints.priority,
         complaints.status,
         complaints.mla,
