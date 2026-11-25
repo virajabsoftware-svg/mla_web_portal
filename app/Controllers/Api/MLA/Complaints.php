@@ -7,6 +7,7 @@ use App\Models\MlaModel;
 use App\Models\User\ComplaintModel;
 use App\Models\ComplaintReplyModel;
 use App\Models\NotificationModel;
+use App\Models\User\VoterModel;
 
 class Complaints extends BaseController
 {
@@ -137,8 +138,9 @@ public function reply($complaintId)
     ]);
 }
 
-public function updateStatus($complaintId)
+public function updateStatus($part1, $part2, $part3)
 {
+    $complaintId = $part1 . '/' . $part2 . '/' . $part3;
     $mlaModel = new MlaModel();
 
     // =========================

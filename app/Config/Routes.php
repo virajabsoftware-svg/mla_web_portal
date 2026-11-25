@@ -784,8 +784,8 @@ $routes->post('api/mla/complaints/(:segment)/reply', 'Api\MLA\Complaints::reply/
 $routes->post('api/mla/register', 'Api\AuthApi::mlaRegister');
 
 $routes->put(
-    'api/mla/complaints/(:segment)/update-status',
-    'Api\MLA\Complaints::updateStatus/$1'
+    'api/mla/complaints/(:segment)/(:segment)/(:segment)/update-status',
+    'Api\MLA\Complaints::updateStatus/$1/$2/$3'
 );
 
 // =====================================================
