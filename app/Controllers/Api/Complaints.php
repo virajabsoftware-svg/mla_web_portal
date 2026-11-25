@@ -73,7 +73,7 @@ class Complaints extends BaseController
             'user_type'         => 'mla',
             'user_id'           => $complaintData['mla'],
             'title'             => 'New Complaint Received',
-            'message'           => 'A new complaint has been submitted in your constituency.',
+            'message'           => $complaintData['title'],
             'notification_type' => 'complaint',
             'reference_type'    => 'complaint',
             'reference_id'      => $complaintDbId,
@@ -87,15 +87,17 @@ class Complaints extends BaseController
 
         $firebase = new \App\Libraries\FirebaseNotification();
 
-        $firebase->sendNotification(
-            $mla['fcm_token'],
-            'New Complaint Received',
-            'A new complaint has been submitted in your constituency.',
-            [
-                'type'         => 'complaint',
-                'complaint_id' => (string) $complaintDbId
-            ]
-        );
+        $result = $firebase->sendNotification(
+    $mla['fcm_token'],
+    'New Complaint Received',
+    $complaintData['title'],
+    [
+        'type' => 'complaint',
+        'complaint_id' => (string) $complaintDbId
+    ]
+);
+
+log_message('info', 'Firebase Notification Sent: ' . json_encode($result));
 
     } catch (\Throwable $e) {
         log_message('error', 'Firebase Error: ' . $e->getMessage());

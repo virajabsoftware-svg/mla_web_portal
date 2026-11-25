@@ -18,14 +18,25 @@ class FirebaseNotification
         $this->messaging = $factory->createMessaging();
     }
 
-    public function sendNotification($fcmToken, $title, $body, array $data = [])
-    {
-        $message = CloudMessage::withTarget('token', $fcmToken)
-            ->withNotification(
-                Notification::create($title, $body)
-            )
-            ->withData($data);
+    // public function sendNotification($fcmToken, $title, $body, array $data = [])
+    // {
+    //     $message = CloudMessage::withTarget('token', $fcmToken)
+    //         ->withNotification(
+    //             Notification::create($title, $body)
+    //         )
+    //         ->withData($data);
 
-        return $this->messaging->send($message);
-    }
+    //     return $this->messaging->send($message);
+    // }
+
+    public function sendNotification($fcmToken, $title, $body, array $data = [])
+{
+    $message = CloudMessage::withTarget('token', $fcmToken)
+        ->withNotification(
+            Notification::create($title, $body)
+        )
+        ->withData($data);
+
+    return $this->messaging->send($message);
+}
 }
