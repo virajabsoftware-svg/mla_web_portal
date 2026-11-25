@@ -99,12 +99,16 @@ class MlaModel extends Model
             ->select('(SELECT COUNT(*) FROM mla_developmentworks dw WHERE dw.mla_id = mlas.id) AS total_works', false)
             ->select('(SELECT COUNT(*) FROM mla_developmentworks dw INNER JOIN mla_work_statuses ws ON ws.id = dw.status_id 
              WHERE dw.mla_id = mlas.id AND LOWER(ws.status_name) = "completed") AS completed_works', false)
-            ->select('(SELECT COUNT(*) FROM mla_ratings mr WHERE mr.mla_id = mlas.id) AS ratings', false)
-            ->select('(SELECT AVG(mr.overall_rating) FROM mla_ratings mr WHERE mr.mla_id = mlas.id) AS rating_score', false)
+          ->select('(SELECT COUNT(*) FROM mla_rating_submissions mrs WHERE mrs.mla_id = mlas.id) AS ratings', false)
+
+->select('(SELECT AVG(mrs.overall_rating) FROM mla_rating_submissions mrs WHERE mrs.mla_id = mlas.id) AS rating_score', false)
+
+->select('(SELECT AVG(CAST(mrs.manifesto_fulfilled AS DECIMAL(10,2))) FROM mla_rating_submissions mrs WHERE mrs.mla_id = mlas.id) AS manifesto_percentage', false)
             ->join('districts', 'districts.id = mlas.district_id', 'left')
             ->join('constituencies', 'constituencies.id = mlas.constituency_id', 'left')
             ->join('parties', 'parties.id = mlas.party', 'left')
-            ->where('mlas.status', 'Active')
+            // ->where('mlas.status', 'Active')
+            ->whereIn('mlas.status', ['Approved', 'Active'])
             ->orderBy('mlas.mla_name', 'ASC')
             ->get()
             ->getResultArray();
@@ -112,14 +116,24 @@ class MlaModel extends Model
         foreach ($mlas as &$mla) {
             $totalWorks = (int) ($mla['total_works'] ?? 0);
             $completedWorks = (int) ($mla['completed_works'] ?? 0);
-            $mla['rating_score'] = round((float) ($mla['rating_score'] ?? 0), 1);
-            $mla['party'] = $mla['party_name'] ?? 'Independent';
-            $mla['approval'] = $totalWorks > 0
-                ? round(($completedWorks / $totalWorks) * 100) . '%'
-                : '0%';
-            $mla['manifesto_fulfilled'] = $totalWorks > 0
-                ? (int) round(($completedWorks / $totalWorks) * 100)
-                : 0;
+            $mla['ratings'] = (int) ($mla['ratings'] ?? 0);
+
+$mla['rating_score'] = round(
+    (float) ($mla['rating_score'] ?? 0),
+    1
+);
+
+$mla['manifesto_percentage'] = (int) round(
+    (float) ($mla['manifesto_percentage'] ?? 0)
+);
+
+$mla['manifesto_fulfilled'] = $mla['manifesto_percentage'];
+
+$mla['party'] = $mla['party_name'] ?? 'Independent';
+
+$mla['approval'] = $totalWorks > 0
+    ? round(($completedWorks / $totalWorks) * 100) . '%'
+    : '0%';
 
             // Calculate age from DOB
             if (!empty($mla['dob'])) 
@@ -132,6 +146,7 @@ class MlaModel extends Model
                 $mla['age'] = null;
             }
 
+            
         }
          
         
@@ -139,5 +154,107 @@ class MlaModel extends Model
         //var_dump($mlas[0]); // Debugging line to check the calculated age
            
         return $mlas;
+        
     }
+    
+public function getAllMlasForHome(): array
+{
+    $mlas = $this->db
+        ->table('mlas')
+
+        ->select('
+            mlas.*,
+            districts.district_name,
+            constituencies.constituency_name,
+            parties.party_name,
+            parties.party_logo
+        ')
+
+        // Total ratings from MLA rating submissions
+        ->select('(
+            SELECT COUNT(*)
+            FROM mla_rating_submissions mrs
+            WHERE mrs.mla_id = mlas.id
+        ) AS ratings', false)
+
+        // Average rating out of 5
+        ->select('(
+            SELECT AVG(mrs.overall_rating)
+            FROM mla_rating_submissions mrs
+            WHERE mrs.mla_id = mlas.id
+        ) AS rating_score', false)
+
+        // Manifesto fulfilled percentage
+        ->select('(
+            SELECT AVG(
+                CAST(mrs.manifesto_fulfilled AS DECIMAL(10,2))
+            )
+            FROM mla_rating_submissions mrs
+            WHERE mrs.mla_id = mlas.id
+        ) AS manifesto_percentage', false)
+
+        ->join(
+            'districts',
+            'districts.id = mlas.district_id',
+            'left'
+        )
+
+        ->join(
+            'constituencies',
+            'constituencies.id = mlas.constituency_id',
+            'left'
+        )
+
+        ->join(
+            'parties',
+            'parties.id = mlas.party',
+            'left'
+        )
+
+        ->whereIn('mlas.status', ['Approved', 'Active'])
+
+        ->orderBy('mlas.mla_name', 'ASC')
+
+        ->get()
+        ->getResultArray();
+
+    // Format calculated values
+    foreach ($mlas as &$mla) {
+
+        $mla['ratings'] = (int) ($mla['ratings'] ?? 0);
+
+        $mla['rating_score'] = round(
+            (float) ($mla['rating_score'] ?? 0),
+            1
+        );
+
+        $mla['manifesto_percentage'] = (int) round(
+            (float) ($mla['manifesto_percentage'] ?? 0)
+        );
+
+        $mla['manifesto_fulfilled'] =
+            $mla['manifesto_percentage'];
+
+        $mla['party'] = $mla['party_name'] ?? 'Independent';
+
+        // Calculate age
+        if (!empty($mla['dob'])) {
+
+            $dob = new \DateTime($mla['dob']);
+            $today = new \DateTime();
+
+            $mla['age'] = $today->diff($dob)->y;
+
+        } else {
+
+            $mla['age'] = null;
+        }
+    }
+
+    unset($mla);
+
+    return $mlas;
+}
+
+
 }

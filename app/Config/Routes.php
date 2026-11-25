@@ -935,7 +935,10 @@ $routes->post('api/mla/update-fcm-token', 'Api\AuthApi::updateFcmToken');
 // =====================================================
 // 404 OVERRIDE
 // =====================================================
-
+$routes->post(
+    'mla-rating-submit',
+    'MlaRatingSubmission::store'
+);
 
 $routes->set404Override(function () {
     return view('errors/html/error_404');

@@ -1256,6 +1256,7 @@
         <div class="hero-buttons">
           <button class="btn-hero-orange" onclick="document.getElementById('allMlasSection').scrollIntoView({behavior:'smooth'})">
             Rate Your MLA
+
             <i class="bi bi-arrow-right-short"></i>
           </button>
           <button class="btn-hero-outline" onclick="document.getElementById('topMlaContainer').scrollIntoView({behavior:'smooth'})">
@@ -1291,11 +1292,11 @@
         <div class="number counter" data-target="9">0</div>
         <div class="label">Districts Covered</div>
       </div>
-      <div class="hero-stat">
+      <!-- <div class="hero-stat">
         <i class="bi bi-file-earmark-text-fill stat-icon"></i>
         <div class="number counter" data-target="5">0</div>
         <div class="label">Report Cards</div>
-      </div>
+      </div> -->
     </div>
   </div>
 </section>
@@ -1542,75 +1543,54 @@
   };
 
   // MLA data with unique profile images for each
-  const mlaAssembly = [
-    { id: 1, name: "Eknath Shinde", marathiName: "एकनाथ शिंदे", district: "Thane", constituency: "Kopri-Pachpakhadi", party: "Shiv Sena (ES)",
-      mobile: "+91 98765 43210", email: "eknath.shinde@maharashtra.gov", totalWorks: 124, approval: "96%",
-      ranking: 1, ratings: 3, ratingScore: 2.7, manifestoFulfilled: 13,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1NGljE8Ngab0V6mQkSMycyNgBuQ8jKzUhV-lEJbcUiw&s=10",
-      education: "B.E. Civil", profession: "Politician, Social Worker", age: "58", firstElected: "2004",
-      currentTerm: "5th", committees: "Public Works, Energy", contact: "+91 98765 43210",
-      social: "Twitter: @EknathShinde",
-      bio: "Eknath Shinde is a senior leader of Shiv Sena (ES) and currently serves as the Chief Minister of Maharashtra." },
-    { id: 2, name: "Devendra Fadnavis", marathiName: "देवेंद्र फडणवीस", district: "Nagpur", constituency: "Nagpur South West", party: "BJP",
-      mobile: "+91 99887 76655", email: "devendra.fadnavis@mla.in", totalWorks: 140, approval: "98%",
-      ranking: 2, ratings: 3, ratingScore: 2.7, manifestoFulfilled: 13,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStvxUGPAClLVGXg8r5U1Cxl7VuSn5KswQO6unnzhdIxQ&s=10",
-      education: "LL.B.", profession: "Politician, Lawyer", age: "52", firstElected: "1999", currentTerm: "7th",
-      committees: "Finance, Planning", contact: "+91 99887 76655", social: "Twitter: @Dev_Fadnavis",
-      bio: "Devendra Fadnavis is a senior BJP leader and former Chief Minister of Maharashtra." },
-    { id: 3, name: "Chh Shivendra Raje Bhosale", marathiName: "शिवेंद्र राजे भोसले", district: "Satara", constituency: "Jaoli", party: "BJP",
-      mobile: "+91 90909 09090", email: "shivendra@mla.com", totalWorks: 110, approval: "92%",
-      ranking: 3, ratings: 3, ratingScore: 2.7, manifestoFulfilled: 13,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq9MdbQ5p9mCdUedqffaq4_dJD_TKSJ64CtpvzEEnMcg&s=10",
-      education: "B.A. History", profession: "Politician, Agriculturist", age: "48", firstElected: "2009",
-      currentTerm: "4th", committees: "Agriculture, Environment", contact: "+91 90909 09090",
-      social: "Twitter: @ShivendraBhosale",
-      bio: "Shivendra Raje Bhosale is a BJP leader from Satara district." },
-    { id: 4, name: "Makarand Patil", marathiName: "मकरंद पाटील", district: "Satara", constituency: "Khandala", party: "NCP",
-      mobile: "+91 88888 81111", email: "Makarandpatil@ncp.in", totalWorks: 130, approval: "94%",
-      ranking: 4, ratings: 3, ratingScore: 2.7, manifestoFulfilled: 13,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTksDnHBv0qgkjvbIwYhetTmC4Gg3HAGcot8CdfeZ-XNw&s=10",
-      education: "B.Com.", profession: "Politician, Businessman", age: "55", firstElected: "2009",
-      currentTerm: "4th", committees: "Co-operation, Animal Husbandry", contact: "+91 88888 81111",
-      social: "Twitter: @MakarandPatil", bio: "Makarand Patil is an NCP leader from Satara." },
-    { id: 5, name: "Uddhav Thackeray", marathiName: "उद्धव ठाकरे", district: "Mumbai", constituency: "Mahim", party: "Shiv Sena (UBT)",
-      mobile: "+91 77777 72222", email: "uddhav@ssubt.org", totalWorks: 95, approval: "89%",
-      ranking: 5, ratings: 3, ratingScore: 1.7, manifestoFulfilled: 27,
-      image: "https://i.pinimg.com/736x/e0/6f/94/e06f94cbb20b2e52068c6f4b942d725b.jpg", education: "B.Sc.",
-      profession: "Politician, Photographer", age: "64", firstElected: "2009", currentTerm: "4th",
-      committees: "Urban Development, Housing", contact: "+91 77777 72222",
-      social: "Twitter: @UddhavThackeray",
-      bio: "Uddhav Thackeray is the chief of Shiv Sena (UBT) and former Chief Minister." },
-    { id: 6, name: "Jayant Patil", marathiName: "जयंत पाटील", district: "Pune", constituency: "Indapur", party: "NCP (Sharad Pawar)",
-      mobile: "+91 9876543210", email: "jayant@ncp.com", totalWorks: 88, approval: "91%",
-      ranking: 6, ratings: 3, ratingScore: 1.7, manifestoFulfilled: 27,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgW4DmOIsgWr_MlVFaIBQwr0GBxHJzq4MDA1YWpdi0wQ&s=10",
-      education: "B.E. Mechanical", profession: "Politician, Engineer", age: "50", firstElected: "2004",
-      currentTerm: "5th", committees: "Public Works, Irrigation", contact: "+91 9876543210",
-      social: "Twitter: @JayantPatil", bio: "Jayant Patil is a senior NCP (Sharad Pawar) leader." },
-    { id: 7, name: "Aaditya Thackeray", marathiName: "आदित्य ठाकरे", district: "Mumbai", constituency: "Worli", party: "Shiv Sena (UBT)",
-      mobile: "+91 9988001122", email: "aaditya@ssubt.org", totalWorks: 112, approval: "93%",
-      ranking: 7, ratings: 3, ratingScore: 1.7, manifestoFulfilled: 27,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSD5KDMvesC9Rpe98zFUTPxU38cgR9pQSbAbsoz-1lvXg&s=10",
-      education: "B.A. Law", profession: "Politician, Social Activist", age: "34", firstElected: "2019",
-      currentTerm: "2nd", committees: "Environment, Tourism", contact: "+91 9988001122",
-      social: "Twitter: @AadityaThackeray",
-      bio: "Aaditya Thackeray is a young leader of Shiv Sena (UBT)." },
-    { id: 8, name: "Amit Kadam", marathiName: "अमित कदम", district: "Satara", constituency: "Jaoli", party: "Shiv Sena (UBT)",
-      mobile: "+91 90390 09090", email: "amitkadam@mla.com", totalWorks: 110, approval: "92%",
-      ranking: 8, ratings: 3, ratingScore: 1.7, manifestoFulfilled: 27,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVsYF2Sfv60e4N3RTNPDbmvIH2xGdbTn9D5WdQfGa6pw&s=10",
-      education: "B.A. Political Science", profession: "Politician, Farmer", age: "42", firstElected: "2014",
-      currentTerm: "3rd", committees: "Agriculture, Co-operation", contact: "+91 90390 09090",
-      social: "Twitter: @AmitKadam", bio: "Amit Kadam is a Shiv Sena (UBT) leader from Satara." },
-    { id: 9, name: "Kedar Dighe", marathiName: "केदार दिघे", district: "Thane", constituency: "Kopri-Pachpakhadi", party: "Shiv Sena (UBT)",
-      mobile: "+91 98767 43210", email: "kedardighe@maharashtra.gov", totalWorks: 30, approval: "66%",
-      ranking: 9, ratings: 3, ratingScore: 1.7, manifestoFulfilled: 27,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWvvLHD_KEEToCjzzaVXJAbczt1cKLuTldAXrFWmGYwsLple0zQY5saPeE&s=10",
-      education: "B.Sc. IT", profession: "Politician, Social Worker", age: "38", firstElected: "2019",
-      currentTerm: "2nd", committees: "Urban Development, IT", contact: "+91 98767 43210",
-      social: "Twitter: @KedarDighe", bio: "Kedar Dighe is a young Shiv Sena (UBT) leader from Thane." }
-  ];
+ // Dynamic MLA data from database
+const mlaAssembly = <?= json_encode(array_map(function ($mla) {
+
+    $profilePhoto = $mla['profile_photo'] ?? '';
+    $image = '';
+
+    if (!empty($profilePhoto)) {
+        $image = filter_var($profilePhoto, FILTER_VALIDATE_URL)
+            ? $profilePhoto
+            : base_url('uploads/mla/' . rawurlencode(
+                basename(str_replace('\\', '/', $profilePhoto))
+            ));
+    }
+
+    $joiningYear = '';
+    if (!empty($mla['joining_date'])) {
+        $timestamp = strtotime($mla['joining_date']);
+        if ($timestamp) {
+            $joiningYear = date('Y', $timestamp);
+        }
+    }
+
+    return [
+        'id' => (int) ($mla['id'] ?? 0),
+        'name' => $mla['mla_name'] ?? '',
+        'marathiName' => $mla['marathi_name'] ?? $mla['mla_name'] ?? '',
+        'district' => $mla['district_name'] ?? '',
+        'constituency' => $mla['constituency_name'] ?? '',
+        'party' => $mla['party_name'] ?? $mla['party'] ?? 'Independent',
+        'image' => $image,
+        'firstElected' => $joiningYear ?: ($mla['first_elected'] ?? 'N/A'),
+        'ratings' => (int) ($mla['ratings'] ?? 0),
+        'ratingScore' => (float) ($mla['rating_score'] ?? 0),
+        // 'manifestoFulfilled' => (int) ($mla['manifesto_fulfilled'] ?? 0), 
+        'manifestoFulfilled' => (int) round((float) ($mla['manifesto_percentage'] ?? 0)),
+        'education' => $mla['education'] ?? 'N/A',
+        'profession' => $mla['profession'] ?? 'Politician',
+        'age' => $mla['age'] ?? 'N/A',
+        'currentTerm' => $mla['current_term'] ?? 'N/A',
+        'committees' => $mla['committees'] ?? 'N/A',
+        'contact' => $mla['mobile'] ?? 'N/A',
+        'bio' => $mla['biography'] ?? 'N/A',
+        'mobile' => $mla['mobile'] ?? 'N/A',
+        'email' => $mla['email'] ?? '',
+    ];
+
+}, 
+$all_mlas ?? []), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
 
   function getInitials(name) {
     return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
@@ -1750,11 +1730,25 @@
   // ============================================================
   //  FILTER FUNCTIONS
   // ============================================================
-  function populateDistricts() {
+function populateDistricts() {
     let select = document.getElementById("district");
+
     select.innerHTML = '<option value="">All Districts</option>';
-    Object.keys(geography).sort().forEach(d => select.innerHTML += `<option value="${d}">${d}</option>`);
-  }
+
+    let districts = [
+        ...new Set(
+            mlaAssembly
+                .map(mla => mla.district)
+                .filter(district => district && district.trim() !== '')
+        )
+    ].sort();
+
+    districts.forEach(district => {
+        select.innerHTML += `
+            <option value="${district}">${district}</option>
+        `;
+    });
+}
 
   function populatePartyFilter() {
     let parties = [...new Set(mlaAssembly.map(m => m.party))];
@@ -2208,7 +2202,7 @@
 
     container.innerHTML = `
         <div class="lekha" id="lekha-root" lang="mr"
-     data-endpoint=""
+     data-endpoint="<?= site_url('mla-rating-submit') ?>"
      data-constituency=""
      data-mla=""
      data-require-all="true">
@@ -2239,17 +2233,24 @@
     <div class="lekha-sheet">
 
       <div class="lekha-who" id="lekha-who">
+      <input type="hidden" id="lekha-mla-id" name="mla_id">
         <h2 class="lekha-section-title">तुमची माहिती</h2>
         <div class="lekha-pair">
           <div class="lekha-field">
             <label for="lekha-constituency">विधानसभा मतदारसंघ</label>
-            <input type="text" id="lekha-constituency" name="constituency" maxlength="120" autocomplete="off" list="lekha-constituency-list">
+           <input type="text" id="lekha-constituency"
+       name="constituency"
+       maxlength="120"
+       readonly>
             <!-- Developers: fill this list with the 288 constituency names from your database to get clean, uniform data. -->
             <datalist id="lekha-constituency-list"></datalist>
           </div>
           <div class="lekha-field">
             <label for="lekha-mla">आमदारांचे नाव</label>
-            <input type="text" id="lekha-mla" name="mla_name" maxlength="120" autocomplete="off">
+           <input type="text" id="lekha-mla"
+       name="mla_name"
+       maxlength="120"
+       readonly>
           </div>
         </div>
         <p class="lekha-hint">मतदारसंघ किंवा आमदारांचे नाव, यांपैकी किमान एक लिहा.</p>
@@ -2289,10 +2290,19 @@
           <label class="lekha-opt"><input type="radio" name="q1" value="E"><span class="lekha-opt-body"><span class="lekha-opt-letter" aria-hidden="true">इ</span><span class="lekha-opt-text">आश्वासने काय होती हेच माहीत नाही</span></span></label>
           <p class="lekha-err" id="lekha-q1-err"></p>
         </fieldset>
-        <div class="lekha-note">
-          <label for="lekha-q1-note">या प्रश्नाबद्दल तुमचे मत किंवा अनुभव (ऐच्छिक)</label>
-          <textarea id="lekha-q1-note" name="q1_comment" rows="2" maxlength="1000"></textarea>
-        </div>
+       <div class="lekha-note">
+    <label for="lekha-q1-note">
+        वरील पर्याय योग्य वाटत नसल्यास तुमचे उत्तर / संदेश लिहा (ऐच्छिक)
+    </label>
+
+    <textarea
+        id="lekha-q1-note"
+        name="q1_comment"
+        rows="3"
+        maxlength="1000"
+        placeholder="तुमचे स्वतःचे उत्तर किंवा मत येथे लिहा...">
+    </textarea>
+</div>
       </div>
 
       <div class="lekha-q" id="lekha-q2" data-q="2">
@@ -2525,10 +2535,7 @@
     </div>
 
     <div class="lekha-end">
-      <div id="lekha-consent-wrap">
-        <label class="lekha-consent"><input type="checkbox" id="lekha-consent" name="consent" value="yes"><span>माझी उत्तरे या सर्वेक्षणासाठी वापरण्यास माझी संमती आहे.</span></label>
-        <p class="lekha-err" id="lekha-consent-err"></p>
-      </div>
+     
       <div class="lekha-hp" aria-hidden="true"><label>ही जागा रिकामी ठेवा <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
       <p class="lekha-err" id="lekha-form-err" role="alert"></p>
       <button type="button" class="lekha-submit" id="lekha-submit">उत्तरे नोंदवा</button>
@@ -2539,17 +2546,57 @@
     <div class="lekha-stamp" aria-hidden="true">नोंद झाली</div>
     <h2>तुमची उत्तरे नोंदवली गेली</h2>
     <p>तुमचा वेळ दिल्याबद्दल आणि मोकळेपणाने मत मांडल्याबद्दल मनःपूर्वक आभार.</p>
-    <details class="lekha-sent" id="lekha-sent" hidden>
+    <details class="lekha-sent" id="lekha-sent" 
+    
+    >
       <summary>चाचणी: सर्व्हरकडे जाणारी माहिती</summary>
       <div class="lekha-sent-scroll"><table><tbody id="lekha-sent-body"></tbody></table></div>
     </details>
   </div>
 </div>
-    `;
+       `;
 
+    // =====================================
+    // 1. Selected MLA Find
+    // =====================================
+    const selectedMla = mlaAssembly.find(
+        item => item && Number(item.id) === Number(id)
+    );
+
+    if (!selectedMla) {
+        console.error("MLA not found. ID:", id);
+        console.log("Available MLA Data:", mlaAssembly);
+
+        alert("MLA details not found!");
+        return;
+    }
+
+    // =====================================
+    // 2. Set MLA Details
+    // =====================================
+    currentRatingMlaId = selectedMla.id;
+
+    document.getElementById("lekha-mla-id").value =
+        selectedMla.id;
+
+    document.getElementById("lekha-mla").value =
+        selectedMla.name || "";
+
+    document.getElementById("lekha-constituency").value =
+        selectedMla.constituency || "";
+
+    // =====================================
+    // 3. Initialize Rating Form
+    // =====================================
     initLekhaForm();
 
-    new bootstrap.Modal(document.getElementById("ratingModal")).show();
+    // =====================================
+    // 4. Open Modal
+    // =====================================
+    new bootstrap.Modal(
+        document.getElementById("ratingModal")
+    ).show();
+
 };
 
   // ============================================================
@@ -2604,12 +2651,14 @@
   // ============================================================
   //  INIT
   // ============================================================
-  document.addEventListener('DOMContentLoaded', function() {
-    renderTopMLAs();
-    filterMLAs();
+document.addEventListener('DOMContentLoaded', function() {
     populateDistricts();
     populatePartyFilter();
-  });
+    filterMLAs();
+
+    // Top 5 section सध्या जसा आहे तसाच
+    renderTopMLAs();
+});
 </script>
 <!-- viraj js start -->
 <script>
@@ -2651,7 +2700,76 @@ var FORM_VERSION = "v1-2026-09";
   function field(name) { return form.querySelector('[name="' + name + '"]'); }
   function optName(n) { return n === MULTI_Q ? "q" + n + "_opt" : "q" + n; }
   function picked(n) { return all('input[name="' + optName(n) + '"]:checked', form); }
-  function isAnswered(n) { var c = picked(n).length; return n === MULTI_Q ? c === MULTI_PICK : c === 1; }
+  var questionScores = {
+    q1:  { A:100, B:50, C:15, D:0, E:null },
+    q2:  { A:100, B:50, C:0, D:null },
+    q3:  { A:100, B:50, C:0, D:null },
+    q4:  { A:100, B:50, C:0, D:0, E:null },
+    q5:  { A:100, B:50, C:0, D:null },
+    q6:  { A:100, B:50, C:0, D:0, E:null },
+    q7:  { A:100, B:50, C:25, D:null, E:null },
+    q9:  { A:100, B:50, C:0, D:0 },
+    q10: { A:100, B:75, C:25, D:0, E:null },
+    q11: { A:100, B:50, C:0, D:null },
+    q12: { A:100, B:50, C:0, D:null }
+};
+
+function collectAnswers() {
+    var answers = {};
+
+    for (var n = 1; n <= 12; n++) {
+        var selected = picked(n);
+        answers["q" + n] = selected.length ? selected[0].value : null;
+    }
+
+    answers.q13_opt = picked(13).map(function(el) {
+        return el.value;
+    });
+
+    return answers;
+}
+
+function calculateRating(answers) {
+    var total = 0;
+    var count = 0;
+
+    Object.keys(questionScores).forEach(function(question) {
+        var answer = answers[question];
+
+        if (!answer) return;
+
+        var score = questionScores[question][answer];
+
+        if (score === null || score === undefined) return;
+
+        total += score;
+        count++;
+    });
+
+    var percentage = count ? total / count : 0;
+
+    return {
+        percentage: Math.round(percentage),
+        stars: Math.round(percentage / 20 * 10) / 10,
+        answeredQuestions: count
+    };
+}
+
+
+function isAnswered(n) {
+
+    var count = picked(n).length;
+
+    // Q13 मध्ये नेमके 3 पर्याय आवश्यक
+    if (n === MULTI_Q) {
+        return count === MULTI_PICK;
+    }
+
+    // Q1 ते Q12 मध्ये एक पर्याय आवश्यक
+    return count === 1;
+}
+
+
   function urlParam(key) {
     try {
       var m = new RegExp("[?&]" + key + "=([^&#]*)").exec(window.location.search);
@@ -2719,91 +2837,337 @@ var FORM_VERSION = "v1-2026-09";
         clearQuestionError(n);
       }
     }
-    if (t.id === "lekha-consent" && t.checked) { setError(byId("lekha-consent-wrap"), byId("lekha-consent-err"), ""); }
+    // if (t.id === "lekha-consent" && t.checked) { setError(byId("lekha-consent-wrap"), byId("lekha-consent-err"), ""); }
     updateProgress();
     formErr.textContent = "";
   });
 
-  form.addEventListener("input", function (ev) {
+ 
+form.addEventListener("input", function (ev) {
+
+    // First get the event target
     var t = ev.target;
-    if (t.tagName === "TEXTAREA") { grow(t); }
-    if (t.name === "constituency" || t.name === "mla_name") { setError(byId("lekha-who"), byId("lekha-who-err"), ""); }
-    if (t === otherInput && trim(t.value) && isAnswered(MULTI_Q)) { clearQuestionError(MULTI_Q); }
-  });
+
+    // Question comment textarea validation
+    if (t.name && /^q\d+_comment$/.test(t.name)) {
+
+        var questionNumber = parseInt(
+            t.name.replace("q", "").replace("_comment", ""),
+            10
+        );
+
+        if (isAnswered(questionNumber)) {
+            clearQuestionError(questionNumber);
+        }
+    }
+
+    // Textarea auto resize
+    if (t.tagName === "TEXTAREA") {
+        grow(t);
+    }
+
+    // MLA / constituency validation
+    if (
+        t.name === "constituency" ||
+        t.name === "mla_name"
+    ) {
+        setError(
+            byId("lekha-who"),
+            byId("lekha-who-err"),
+            ""
+        );
+    }
+
+    // Other answer validation
+    if (
+        t === otherInput &&
+        trim(t.value) &&
+        isAnswered(MULTI_Q)
+    ) {
+        clearQuestionError(MULTI_Q);
+    }
+
+    updateProgress();
+});
+
 
   /* ---------- validation ---------- */
-  function validate() {
-    var firstBad = null, missing = [];
-    function bad(el) { if (!firstBad) { firstBad = el; } }
+  
+function validate() {
 
-    if (!trim(field("constituency").value) && !trim(field("mla_name").value)) {
-      setError(byId("lekha-who"), byId("lekha-who-err"), "कृपया तुमचा मतदारसंघ किंवा आमदारांचे नाव, यांपैकी किमान एक लिहा.");
-      bad(field("constituency"));
+    var firstBad = null;
+    var missing = [];
+
+    function bad(el) {
+        if (!firstBad) {
+            firstBad = el;
+        }
     }
 
+    // Constituency / MLA validation
+    if (
+        !trim(field("constituency").value) &&
+        !trim(field("mla_name").value)
+    ) {
+        setError(
+            byId("lekha-who"),
+            byId("lekha-who-err"),
+            "कृपया तुमचा मतदारसंघ किंवा आमदारांचे नाव, यांपैकी किमान एक लिहा."
+        );
+
+        bad(field("constituency"));
+    } else {
+        setError(
+            byId("lekha-who"),
+            byId("lekha-who-err"),
+            ""
+        );
+    }
+
+    // All 13 questions validation
     for (var n = 1; n <= TOTAL; n++) {
-      var block = byId("lekha-q" + n), err = byId("lekha-q" + n + "-err");
-      var count = picked(n).length, msg = "";
-      if (n === MULTI_Q) {
-        var otherOn = !!form.querySelector('input[name="' + optName(n) + '"][value="' + OTHER + '"]:checked');
-        if ((requireAll || count > 0) && count !== MULTI_PICK) { msg = "कृपया तीन गुण निवडा."; }
-        else if (otherOn && !trim(otherInput.value)) { msg = "तुम्ही ‘इतर’ निवडले आहे. तो गुण कोणता, ते थोडक्यात लिहा."; }
-      } else if (requireAll && count !== 1) {
-        msg = "कृपया एक पर्याय निवडा.";
-      }
-      setError(block, err, msg);
-      if (msg) {
-        missing.push(n);
-        if (segs[n - 1]) { segs[n - 1].classList.add("is-missing"); }
-        bad(msg.indexOf("इतर") > -1 ? otherInput : block.querySelector("input:not(:disabled)"));
-      }
+
+        var block = byId("lekha-q" + n);
+        var err = byId("lekha-q" + n + "-err");
+
+        var count = picked(n).length;
+        var msg = "";
+
+        var commentField = field("q" + n + "_comment");
+
+        var customAnswer = commentField
+            ? trim(commentField.value)
+            : "";
+
+        // Question 13: Three options OR own answer
+        if (n === MULTI_Q) {
+
+            var otherOn = !!form.querySelector(
+                'input[name="' + optName(n) + '"][value="' + OTHER + '"]:checked'
+            );
+
+            if (
+                !customAnswer &&
+                (requireAll || count > 0) &&
+                count !== MULTI_PICK
+            ) {
+                msg = "कृपया तीन पर्याय निवडा किंवा खाली तुमचे उत्तर लिहा.";
+            }
+
+            else if (
+                !customAnswer &&
+                otherOn &&
+                !trim(otherInput.value)
+            ) {
+                msg = "तुम्ही ‘इतर’ निवडले आहे. कृपया त्याबद्दल लिहा.";
+            }
+
+        } else {
+
+            // Questions 1 to 12: One option OR own answer
+            if (
+                requireAll &&
+                count !== 1 &&
+                !customAnswer
+            ) {
+                msg = "कृपया एक पर्याय निवडा किंवा खाली तुमचे उत्तर लिहा.";
+            }
+        }
+
+        // Apply / clear question error
+        setError(block, err, msg);
+
+        if (msg) {
+            missing.push(n);
+
+            var questionInput = block.querySelector("input");
+
+            bad(
+                questionInput ||
+                (commentField ? commentField : block)
+            );
+        }
     }
 
-    var consent = byId("lekha-consent");
-    if (!consent.checked) {
-      setError(byId("lekha-consent-wrap"), byId("lekha-consent-err"), "उत्तरे नोंदवण्यासाठी तुमची संमती आवश्यक आहे.");
-      bad(consent);
-    }
+    // Consent validation
+    // var consent = byId("lekha-consent");
 
+    // if (!consent.checked) {
+
+    //     setError(
+    //         byId("lekha-consent-wrap"),
+    //         byId("lekha-consent-err"),
+    //         "उत्तरे नोंदवण्यासाठी तुमची संमती आवश्यक आहे."
+    //     );
+
+    //     bad(consent);
+
+    // } else {
+
+    //     setError(
+    //         byId("lekha-consent-wrap"),
+    //         byId("lekha-consent-err"),
+    //         ""
+    //     );
+    // }
+
+    // Final validation result
     if (firstBad) {
-      var parts = [];
-      if (missing.length) {
-        var nums = [];
-        for (var i = 0; i < missing.length; i++) { nums.push(mr(missing[i])); }
-        parts.push("हे प्रश्न राहिले आहेत: " + nums.join(", ") + ".");
-      }
-      parts.push("लाल रंगात दाखवलेल्या जागा पूर्ण करून पुन्हा ‘उत्तरे नोंदवा’ दाबा.");
-      formErr.textContent = parts.join(" ");
-      var target = firstBad.closest ? (firstBad.closest(".lekha-q") || firstBad.closest(".lekha-who") || firstBad) : firstBad;
-      try { target.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) { target.scrollIntoView(true); }
-      try { firstBad.focus({ preventScroll: true }); } catch (e2) { firstBad.focus(); }
-      return false;
+
+        var parts = [];
+
+        if (missing.length) {
+
+            var nums = [];
+
+            for (var i = 0; i < missing.length; i++) {
+                nums.push(mr(missing[i]));
+            }
+
+            parts.push(
+                "हे प्रश्न राहिले आहेत: " + nums.join(", ") + "."
+            );
+        }
+
+        parts.push(
+            "लाल रंगात दाखवलेल्या जागा पूर्ण करून पुन्हा ‘उत्तरे नोंदवा’ दाबा."
+        );
+
+        formErr.textContent = parts.join(" ");
+
+        var target = firstBad.closest
+            ? (
+                firstBad.closest(".lekha-q") ||
+                firstBad.closest(".lekha-who") ||
+                firstBad
+            )
+            : firstBad;
+
+        try {
+            target.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        } catch (e) {
+            target.scrollIntoView(true);
+        }
+
+        try {
+            firstBad.focus({
+                preventScroll: true
+            });
+        } catch (e2) {
+            firstBad.focus();
+        }
+
+        return false;
     }
+
     formErr.textContent = "";
+
     return true;
-  }
+}
 
   /* ---------- collect + send ---------- */
-  function collect() {
+
+function collect() {
     var d = {};
+
     d.form_version = FORM_VERSION;
     d.submitted_at = new Date().toISOString();
     d.page_url = window.location.href;
-    d.elapsed_seconds = Math.round((new Date().getTime() - startedAt) / 1000);
+    d.elapsed_seconds = Math.round(
+        (new Date().getTime() - startedAt) / 1000
+    );
+d.mla_id = trim(field("mla_id").value);
     d.constituency = trim(field("constituency").value);
     d.mla_name = trim(field("mla_name").value);
     d.locality = trim(field("locality").value);
     d.respondent_name = trim(field("respondent_name").value);
+    d.mobile_number = trim(field("mobile_number").value);
+    d.pin_code = trim(field("pin_code").value);
+
+    var questionData = [];
+
     for (var n = 1; n <= TOTAL; n++) {
-      var vals = [], p = picked(n);
-      for (var i = 0; i < p.length; i++) { vals.push(p[i].value); }
-      d["q" + n] = vals.join(",");
-      if (n === MULTI_Q) { d["q" + n + "_other"] = trim(otherInput.value); }
-      d["q" + n + "_comment"] = trim(field("q" + n + "_comment").value);
+
+        var block = byId("lekha-q" + n);
+
+        var topicElement = block.querySelector(".lekha-q-topic");
+        var questionElement = block.querySelector(".lekha-q-text");
+
+        var selectedOptions = [];
+        var p = picked(n);
+
+        for (var i = 0; i < p.length; i++) {
+
+            var label = p[i].closest(".lekha-opt");
+
+            var optionText = label
+                ? label.querySelector(".lekha-opt-text")
+                : null;
+
+            selectedOptions.push({
+                value: p[i].value,
+                answer: optionText
+                    ? trim(optionText.textContent)
+                    : ""
+            });
+        }
+
+        // User's own answer from textarea
+        var commentField = field("q" + n + "_comment");
+
+        var comment = commentField
+            ? trim(commentField.value)
+            : "";
+
+        var otherAnswer = "";
+
+        if (n === MULTI_Q) {
+            otherAnswer = trim(otherInput.value);
+        }
+
+        questionData.push({
+            question_number: n,
+
+            topic: topicElement
+                ? trim(topicElement.textContent)
+                : "",
+
+            question: questionElement
+                ? trim(questionElement.textContent)
+                : "",
+
+            selected_answers: selectedOptions,
+
+            other_answer: otherAnswer,
+
+            custom_message: comment
+        });
+
+        var vals = [];
+
+        for (var j = 0; j < p.length; j++) {
+            vals.push(p[j].value);
+        }
+
+        d["q" + n] = vals.join(",");
+
+        // Save textarea answer for each question
+        d["q" + n + "_comment"] = comment;
+
+        if (n === MULTI_Q) {
+            d["q" + n + "_other"] = otherAnswer;
+        }
     }
-    d.consent = "yes";
+
+    d.question_data = JSON.stringify(questionData);
+   d.consent = "yes";
+
     return d;
-  }
+}
+
 
   function finish(data, showData) {
     sending = false;
@@ -2843,15 +3207,53 @@ var FORM_VERSION = "v1-2026-09";
     submitBtn.disabled = true;
     submitBtn.textContent = "नोंदवत आहे…";
 
-    var fd = new FormData();
-    for (var k in data) { if (Object.prototype.hasOwnProperty.call(data, k)) { fd.append(k, data[k]); } }
-    fd.append("website", "");
+   var fd = new FormData();
 
+for (var k in data) {
+    if (Object.prototype.hasOwnProperty.call(data, k)) {
+        fd.append(k, data[k]);
+    }
+}
+
+fd.append("website", "");
+
+// CodeIgniter CSRF token
+fd.append("<?= csrf_token() ?>", "<?= csrf_hash() ?>");
     var xhr = new XMLHttpRequest();
     xhr.open("POST", endpoint, true);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.timeout = 25000;
-    xhr.onload = function () { if (xhr.status >= 200 && xhr.status < 300) { finish(data, false); } else { fail(); } };
+   xhr.onload = function () {
+
+    if (xhr.status >= 200 && xhr.status < 300) {
+
+        try {
+            var response = JSON.parse(xhr.responseText);
+
+            if (response.status === "success") {
+
+            if (response.csrfHash) {
+    var csrfInput = form.querySelector(
+        'input[name="<?= csrf_token() ?>"]'
+    );
+
+    if (csrfInput) {
+        csrfInput.value = response.csrfHash;
+    }
+}
+                finish(data, false);
+            } else {
+                fail();
+            }
+
+        } catch (e) {
+            fail();
+        }
+
+    } else {
+        fail();
+    }
+};
     xhr.onerror = fail;
     xhr.ontimeout = fail;
     xhr.send(fd);

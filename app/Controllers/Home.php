@@ -3,21 +3,27 @@ namespace App\Controllers;
 use App\Models\MlaModel;
 class Home extends BaseController
 {
-    public function index()
-    {
-        $mlaModel = new MlaModel();
-        $mlas = $mlaModel->getPublicMlas();
-        
+  
+public function index()
+{
+    $mlaModel = new MlaModel();
 
-        //Top Rated MLAs Sort Data on the basis of rating_score in descending order
-        usort($mlas, static function (array $first, array $second): int {
-            return ($second['rating_score'] ?? 0) <=> ($first['rating_score'] ?? 0);
-        });
+    // Top 5 Rated MLAs - Existing logic unchanged
+    $mlas = $mlaModel->getPublicMlas();
 
-        return view('index', [
-            'top_rated_mlas' => array_slice($mlas, 0, 5),
-        ]);
-    }
+    usort($mlas, static function (array $first, array $second): int {
+        return ($second['rating_score'] ?? 0) <=> ($first['rating_score'] ?? 0);
+    });
+
+    // All MLAs - Separate dynamic data
+    $allMlas = $mlaModel->getAllMlasForHome();
+
+    return view('index', [
+        'top_rated_mlas' => array_slice($mlas, 0, 5),
+        'all_mlas'       => $allMlas,
+    ]);
+}
+
 
     public function leadership()
     {
