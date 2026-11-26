@@ -32,7 +32,7 @@ class MlaRatingSubmissionModel extends Model
         'pin_code',
 
         'question_data',
-        // 'consent'
+        'consent'
     ];
 
     protected $useTimestamps = true;

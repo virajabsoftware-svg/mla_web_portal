@@ -932,6 +932,17 @@ $routes->get('firebase-send-test', 'TestController::sendTestNotification');
 $routes->post('api/voter/update-fcm-token', 'Api\Voter::updateFcmToken');
 $routes->post('api/mla/update-fcm-token', 'Api\AuthApi::updateFcmToken');
 
+//mla rating submission api
+$routes->get(
+    'api/mla-rating-submission/(:num)',
+    'Api\MlaRatingSubmissionApi::getRatingSubmission/$1'
+);
+
+$routes->post(
+    'api/mla-rating-submission',
+    'Api\MlaRatingSubmissionApi::saveRatingSubmission'
+);
+
 // =====================================================
 // 404 OVERRIDE
 // =====================================================
