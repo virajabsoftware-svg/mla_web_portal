@@ -939,7 +939,11 @@ $routes->post(
     'mla-rating-submit',
     'MlaRatingSubmission::store'
 );
-
+// Shared Rating Form - Unique Database ID
+$routes->get(
+    'app/form/(:num)',
+    'MlaRatingSubmission::show/$1'
+);
 $routes->set404Override(function () {
     return view('errors/html/error_404');
 });

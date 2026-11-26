@@ -183,35 +183,73 @@ class MlaRatingSubmission extends BaseController
         // ----------------------------------
         // 8. SAVE DATABASE
         // ----------------------------------
+       // ----------------------------------
+//    8. SAVE DATABASE + GENERATE SHARE LINK
+//     ----------------------------------
         $model = new MlaRatingSubmissionModel();
 
-        try {
+try {
 
-            $model->insert($data);
+   $model->insert($data);
+$submissionId = $model->getInsertID();
 
-            return $this->response
-                ->setStatusCode(200)
-                ->setJSON([
-                    'status' => 'success',
-                    'message' => 'तुमची उत्तरे यशस्वीरित्या नोंदवली गेली.',
-                    'overall_rating' => $overallRating,
-                    'manifesto_fulfilled' => $manifestoFulfilled,
-                    'csrfHash' => csrf_hash()
-                ]);
-
-        } catch (\Throwable $e) {
-
-            log_message(
-                'error',
-                'MLA Rating Save Error: ' . $e->getMessage()
-            );
-
-            return $this->response
-                ->setStatusCode(500)
-                ->setJSON([
-                    'status' => 'error',
-                    'message' => 'उत्तरे save करता आली नाहीत.'
-                ]);
-        }
+    if (!$submissionId) {
+        throw new \RuntimeException('Rating submission could not be saved.');
     }
+
+    $shareUrl = site_url('app/form/' . $submissionId);
+
+    return $this->response
+        ->setStatusCode(200)
+        ->setJSON([
+            'status' => 'success',
+            'message' => 'तुमची उत्तरे यशस्वीरित्या नोंदवली गेली.',
+            'submission_id' => $submissionId,
+            'share_url' => $shareUrl,
+            'overall_rating' => $overallRating,
+            'manifesto_fulfilled' => $manifestoFulfilled,
+            'csrfHash' => csrf_hash()
+        ]);
+
+} catch (\Throwable $e) {
+
+    log_message(
+        'error',
+        'MLA Rating Save Error: ' . $e->getMessage()
+    );
+
+    return $this->response
+        ->setStatusCode(500)
+        ->setJSON([
+            'status' => 'error',
+            'message' => 'उत्तरे save करता आली नाहीत.'
+        ]);
+}
+    }
+    // ----------------------------------
+// SHOW SHARED RATING FORM
+// ----------------------------------
+public function show($id)
+{
+    $model = new MlaRatingSubmissionModel();
+
+    // Find submission using unique database ID
+    $submission = $model->find($id);
+
+    if (!$submission) {
+        return $this->response
+            ->setStatusCode(404)
+            ->setBody('Rating submission not found.');
+    }
+
+    // Decode saved question answers
+    $submission['question_data'] = json_decode(
+        $submission['question_data'] ?? '[]',
+        true
+    );
+
+    return view('shared_rating_form', [
+        'submission' => $submission
+    ]);
+}
 }

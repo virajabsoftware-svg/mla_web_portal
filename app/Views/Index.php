@@ -1173,6 +1173,74 @@
 @media (prefers-reduced-motion: reduce) {
   .lekha *, .lekha *::before, .lekha *::after { transition: none !important; animation: none !important; }
 }
+/* Rating Form Social Share */
+
+.lekha-share-section {
+    margin-top: 28px;
+    padding: 22px;
+    background: #f5f7fb;
+    border: 1px solid #dce3ef;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.lekha-share-section h3 {
+    font-size: 22px;
+    margin-bottom: 8px;
+    color: #1B2437;
+}
+
+.lekha-share-section p {
+    color: #566079;
+    margin-bottom: 18px;
+}
+
+.lekha-share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.lekha-share-buttons button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 17px;
+    color: #fff;
+    background: #1B2437;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.lekha-share-buttons button:hover {
+    transform: translateY(-3px);
+    opacity: 0.9;
+}
+
+.lekha-share-buttons button:nth-child(1) {
+    background: #25D366;
+}
+
+.lekha-share-buttons button:nth-child(2) {
+    background: #1877F2;
+}
+
+.lekha-share-buttons button:nth-child(3) {
+    background: #000;
+}
+
+.lekha-share-buttons button:nth-child(4) {
+    background: #229ED9;
+}
+
+.lekha-share-buttons button:nth-child(5) {
+    background: #6c63ff;
+}
+
+.lekha-share-buttons button:nth-child(6) {
+    background: #566079;
+}
     /* viraj css end */
   </style>
 </head>
@@ -1274,32 +1342,58 @@
 <!-- ==============================
      HERO STATS - WITH ICONS
 ============================== -->
+
 <section class="hero-stats-wrapper">
-  <div class="container">
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <i class="bi bi-people-fill stat-icon"></i>
-        <div class="number counter" data-target="12">0</div>
-        <div class="label">MLAs Listed</div>
-      </div>
-      <div class="hero-stat">
-        <i class="bi bi-star-fill stat-icon"></i>
-        <div class="number counter" data-target="10">0</div>
-        <div class="label">Total Ratings</div>
-      </div>
-      <div class="hero-stat">
-        <i class="bi bi-geo-alt-fill stat-icon"></i>
-        <div class="number counter" data-target="9">0</div>
-        <div class="label">Districts Covered</div>
-      </div>
-      <!-- <div class="hero-stat">
-        <i class="bi bi-file-earmark-text-fill stat-icon"></i>
-        <div class="number counter" data-target="5">0</div>
-        <div class="label">Report Cards</div>
-      </div> -->
+    <div class="container">
+
+        <div class="hero-stats">
+
+            <!-- Approved MLAs -->
+            <div class="hero-stat">
+                <i class="bi bi-people-fill stat-icon"></i>
+
+                <div
+                    class="number counter"
+                    data-target="<?= (int) ($approved_mla_count ?? 0) ?>">
+                    0
+                </div>
+
+                <div class="label">MLAs Listed</div>
+            </div>
+
+
+            <!-- Total Ratings -->
+            <div class="hero-stat">
+                <i class="bi bi-star-fill stat-icon"></i>
+
+                <div
+                    class="number counter"
+                    data-target="<?= (int) ($total_ratings ?? 0) ?>">
+                    0
+                </div>
+
+                <div class="label">Total Ratings</div>
+            </div>
+
+
+            <!-- Districts Covered -->
+            <div class="hero-stat">
+                <i class="bi bi-geo-alt-fill stat-icon"></i>
+
+                <div
+                    class="number counter"
+                    data-target="<?= (int) ($districts_covered ?? 0) ?>">
+                    0
+                </div>
+
+                <div class="label">Districts Covered</div>
+            </div>
+
+        </div>
+
     </div>
-  </div>
 </section>
+
 
 <!-- ===== TOP 5 RATED MLAs (with numbering) ===== -->
 <section class="section-padding">
@@ -2536,7 +2630,8 @@ function populateDistricts() {
 
     <div class="lekha-end">
      
-      <div class="lekha-hp" aria-hidden="true"><label>ही जागा रिकामी ठेवा <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <div class="lekha-hp" aria-hidden="true"><label>ही जागा रिका
+      मी ठेवा <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
       <p class="lekha-err" id="lekha-form-err" role="alert"></p>
       <button type="button" class="lekha-submit" id="lekha-submit">उत्तरे नोंदवा</button>
     </div>
@@ -2552,6 +2647,43 @@ function populateDistricts() {
       <summary>चाचणी: सर्व्हरकडे जाणारी माहिती</summary>
       <div class="lekha-sent-scroll"><table><tbody id="lekha-sent-body"></tbody></table></div>
     </details>
+    <div class="lekha-share-section" id="lekha-share-section" hidden>
+    <a id="lekha-report-link"
+   href="#"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="display:none;">
+    अहवाल पाहण्यासाठी येथे क्लिक करा
+</a>
+    <h3>तुमचा अभिप्राय Share करा</h3>
+    <p>तुमचा आवाज इतर मतदारांपर्यंत पोहोचवा.</p>
+
+    <div class="lekha-share-buttons">
+        <button type="button" onclick="shareLekhaReport('whatsapp')">
+            <i class="bi bi-whatsapp"></i> WhatsApp
+        </button>
+
+        <button type="button" onclick="shareLekhaReport('facebook')">
+            <i class="bi bi-facebook"></i> Facebook
+        </button>
+
+        <button type="button" onclick="shareLekhaReport('twitter')">
+            <i class="bi bi-twitter-x"></i> X / Twitter
+        </button>
+
+        <button type="button" onclick="shareLekhaReport('telegram')">
+            <i class="bi bi-telegram"></i> Telegram
+        </button>
+
+        <button type="button" onclick="shareLekhaReport('native')">
+            <i class="bi bi-share-fill"></i> More
+        </button>
+
+        <button type="button" onclick="copyLekhaReport()">
+            <i class="bi bi-link-45deg"></i> Copy
+        </button>
+    </div>
+</div>
   </div>
 </div>
        `;
@@ -3107,6 +3239,7 @@ d.mla_id = trim(field("mla_id").value);
                 ? label.querySelector(".lekha-opt-text")
                 : null;
 
+
             selectedOptions.push({
                 value: p[i].value,
                 answer: optionText
@@ -3169,7 +3302,163 @@ d.mla_id = trim(field("mla_id").value);
 }
 
 
-  function finish(data, showData) {
+// Store the latest submitted report for sharing
+var latestLekhaShareData = null;
+
+// Create report text
+
+
+function getLekhaShareText() {
+    if (!latestLekhaShareData) return "";
+
+    var report = latestLekhaShareData;
+    var reportUrl = String(report.pageUrl || "").trim();
+
+    return [
+        "📊 आमदारांच्या कामाचा लेखाजोखा",
+        "",
+        "👤 आमदार: " + (report.mlaName || "N/A"),
+        "📍 मतदारसंघ: " + (report.constituency || "N/A"),
+        "⭐ माझा अभिप्राय: " + report.rating + " / 5",
+        "",
+        "लोकशाहीमध्ये आपला अभिप्राय महत्त्वाचा आहे.",
+        "तुम्हीसुद्धा आपला अभिप्राय नोंदवा:",
+        "",
+        reportUrl
+    ].join("\n");
+}
+
+
+// Share report on social platforms
+
+
+window.shareLekhaReport = function(platform) {
+
+    if (!latestLekhaShareData || !latestLekhaShareData.pageUrl) {
+        alert("Report link उपलब्ध नाही. कृपया पुन्हा Submit करा.");
+        return;
+    }
+
+    var reportUrl = String(latestLekhaShareData.pageUrl).trim();
+
+    var text = [
+        "📊 आमदारांच्या कामाचा लेखाजोखा",
+        "",
+        "👤 आमदार: " + (latestLekhaShareData.mlaName || "N/A"),
+        "📍 मतदारसंघ: " + (latestLekhaShareData.constituency || "N/A"),
+        "⭐ माझा अभिप्राय: " + latestLekhaShareData.rating + " / 5",
+        "",
+        "लोकशाहीमध्ये आपला अभिप्राय महत्त्वाचा आहे.",
+        "तुम्हीसुद्धा आपला अभिप्राय नोंदवा:"
+    ].join("\n");
+
+    var encodedText = encodeURIComponent(text);
+    var encodedUrl = encodeURIComponent(reportUrl);
+
+    var url = "";
+
+    switch (platform) {
+
+        case "whatsapp":
+            // Message + clickable URL
+            url = "https://wa.me/?text=" +
+                encodeURIComponent(text + "\n\n" + reportUrl);
+            break;
+
+        case "facebook":
+            url = "https://www.facebook.com/sharer/sharer.php?u=" +
+                encodedUrl;
+            break;
+
+        case "twitter":
+            url = "https://twitter.com/intent/tweet?text=" +
+                encodeURIComponent(text + "\n" + reportUrl);
+            break;
+
+        case "telegram":
+            url = "https://t.me/share/url?url=" +
+                encodedUrl + "&text=" + encodedText;
+            break;
+
+        case "native":
+
+            if (navigator.share) {
+                navigator.share({
+                    title: "आमदारांच्या कामाचा लेखाजोखा",
+                    text: text,
+                    url: reportUrl
+                }).catch(function(error) {
+                    if (error.name !== "AbortError") {
+                        console.error(error);
+                    }
+                });
+            } else {
+                window.shareLekhaReport("whatsapp");
+            }
+
+            return;
+
+        default:
+            return;
+    }
+
+    window.open(url, "_blank", "noopener,noreferrer");
+};
+
+
+
+// Copy report
+window.copyLekhaReport = function() {
+
+    if (!latestLekhaShareData) return;
+
+    var text = getLekhaShareText();
+
+    if (navigator.clipboard && window.isSecureContext) {
+
+        navigator.clipboard.writeText(text).then(function() {
+            alert("Report copied successfully!");
+        }).catch(function() {
+            alert("Unable to copy report.");
+        });
+
+    } else {
+
+        var textarea = document.createElement("textarea");
+        textarea.value = text;
+
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+
+        alert("Report copied successfully!");
+    }
+};
+
+ function finish(data, showData)  {
+    // Prepare share data only after successful submission
+latestLekhaShareData = {
+    mlaName: data.mla_name || "",
+    constituency: data.constituency || "",
+    rating: data.overall_rating || "0",
+    pageUrl: data.share_url || ""
+};
+    // Show clickable report link
+    var shareLink = document.getElementById("lekha-report-link");
+
+    if (shareLink && data.share_url) {
+        shareLink.href = data.share_url;
+        shareLink.textContent = "अहवाल पाहण्यासाठी येथे क्लिक करा";
+        shareLink.style.display = "inline-block";
+    }
+// Show social share buttons after successful submission
+var shareSection = byId("lekha-share-section");
+
+if (shareSection) {
+    show(shareSection, true);
+}
     sending = false;
     show(form, false);
     show(byId("lekha-demo"), false);
@@ -3241,6 +3530,9 @@ fd.append("<?= csrf_token() ?>", "<?= csrf_hash() ?>");
         csrfInput.value = response.csrfHash;
     }
 }
+data.share_url = response.share_url;
+data.overall_rating = response.overall_rating;
+data._savedSuccessfully = true;
                 finish(data, false);
             } else {
                 fail();
