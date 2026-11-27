@@ -8,7 +8,7 @@ class Home extends BaseController
 public function index()
 {
     $mlaModel = new MlaModel();
-
+$db = \Config\Database::connect();
     // Top 5 Rated MLAs - Existing logic
     $mlas = $mlaModel->getPublicMlas();
 
@@ -18,9 +18,27 @@ public function index()
 
     // All MLAs
     $allMlas = $mlaModel->getAllMlasForHome();
+    
+// $db = \Config\Database::connect();
+
+// District Dropdown Data
+$districts = $db->table('districts')
+    ->orderBy('district_name', 'ASC')
+    ->get()
+    ->getResultArray();
+
+    // Party Dropdown Data
+// Get All Parties from Database
+$parties = $db->table('parties')
+    ->orderBy('party_name', 'ASC')
+    ->get()
+    ->getResultArray();
+    // Temporary Debug
+$partyCount = count($parties);
+$databaseName = $db->getDatabase();
 
     // Database connection
-    $db = \Config\Database::connect();
+    // $db = \Config\Database::connect();
 
     // 1. Approved MLA Count
     $approvedMlaCount = $db->table('mlas')
@@ -45,8 +63,11 @@ public function index()
     return view('index', [
         'top_rated_mlas'    => array_slice($mlas, 0, 5),
         'all_mlas'          => $allMlas,
-
-        'approved_mla_count' => $approvedMlaCount,
+        'districts' => $districts,
+'parties' => $parties,
+ 'party_count' => $partyCount,
+    'database_name' => $databaseName,
+ 'approved_mla_count' => $approvedMlaCount,
         'total_ratings'      => $totalRatings,
         'districts_covered'  => $districtsCovered,
     ]);

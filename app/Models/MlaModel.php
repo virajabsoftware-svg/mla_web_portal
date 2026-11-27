@@ -236,6 +236,7 @@ public function getAllMlasForHome(): array
             $mla['manifesto_percentage'];
 
         $mla['party'] = $mla['party_name'] ?? 'Independent';
+        $mla['district'] = $mla['district_name'] ?? '';
 
         // Calculate age
         if (!empty($mla['dob'])) {

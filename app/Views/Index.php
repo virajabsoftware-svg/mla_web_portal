@@ -1268,9 +1268,9 @@
       </nav>
 
       <div class="header-actions">
-        <button class="theme-btn">
+        <!-- <button class="theme-btn">
           <i class="bi bi-moon"></i>
-        </button>
+        </button> -->
         <button class="hamburger d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
           <span></span>
           <span></span>
@@ -1349,7 +1349,7 @@
         <div class="hero-stats">
 
             <!-- Approved MLAs -->
-            <div class="hero-stat">
+            <div class="hero-stat ms-5">
                 <i class="bi bi-people-fill stat-icon"></i>
 
                 <div
@@ -1363,7 +1363,7 @@
 
 
             <!-- Total Ratings -->
-            <div class="hero-stat">
+            <div class="hero-stat ms-5">
                 <i class="bi bi-star-fill stat-icon"></i>
 
                 <div
@@ -1377,7 +1377,7 @@
 
 
             <!-- Districts Covered -->
-            <div class="hero-stat">
+            <div class="hero-stat ms-5">
                 <i class="bi bi-geo-alt-fill stat-icon"></i>
 
                 <div
@@ -1457,24 +1457,46 @@
 
     <!-- Filter Bar -->
     <div class="filter-bar reveal">
-      <input type="text" id="mlaName" placeholder="Search by name..." class="form-control" style="border-radius:var(--radius-full);">
-      <select id="party" class="form-select" style="border-radius:var(--radius-full);">
-        <option value="">All Parties</option>
-      </select>
-      <select id="district" class="form-select" style="border-radius:var(--radius-full);">
-        <option value="">All Districts</option>
-      </select>
-      <select id="sortOrder" class="form-select" style="border-radius:var(--radius-full);">
+    <input type="text" id="mlaName" placeholder="Search by name..." class="form-control" style="border-radius:var(--radius-full);">
+
+  <!-- Temporary debug — remove after checking -->
+<!-- <div style="background:#fff3cd; padding:6px 12px; border-radius:8px; font-size:12px; margin-bottom:6px;">
+    <b>Debug:</b> Parties in PHP = <?= count($parties ?? []) ?> |
+    Parties in MLAs = <?= count(array_unique(array_filter(array_column($all_mlas ?? [], 'party_name')))) ?>
+</div> -->
+
+<select id="party" class="form-select" style="border-radius:var(--radius-full);">
+    <option value="">All Parties</option>
+    <?php foreach ($parties as $party): ?>
+        <option value="<?= esc($party['party_name']) ?>">
+            <?= esc($party['party_name']) ?>
+        </option>
+    <?php endforeach; ?>
+</select>
+
+   <select id="district" class="form-select" style="border-radius:var(--radius-full);">
+    <option value="">All Districts</option>
+
+    <?php foreach ($districts as $district): ?>
+        <option value="<?= esc($district['district_name']) ?>">
+            <?= esc($district['district_name']) ?>
+        </option>
+    <?php endforeach; ?>
+</select>
+
+    <select id="sortOrder" class="form-select" style="border-radius:var(--radius-full);">
         <option value="asc">A → Z</option>
         <option value="desc">Z → A</option>
-      </select>
-      <button class="btn-orange" onclick="filterMLAs()" style="padding:8px 24px;font-size:0.8rem;">
+    </select>
+
+    <button class="btn-orange" onclick="filterMLAs()" style="padding:8px 24px;font-size:0.8rem;">
         <i class="bi bi-search"></i> Filter
-      </button>
-      <button class="btn-outline-orange" onclick="resetAllFilters()" style="padding:8px 20px;font-size:0.8rem;">
+    </button>
+
+    <button class="btn-outline-orange" onclick="resetAllFilters()" style="padding:8px 20px;font-size:0.8rem;">
         Reset
-      </button>
-    </div>
+    </button>
+</div>
 
     <div class="row g-4" id="mlaResult"></div>
   </div>
@@ -1483,49 +1505,57 @@
 <!-- ==============================
      FOOTER
 ============================== -->
-<footer class="footer-premium">
-  <div class="footer-flag-strip"></div>
-  
-  <div class="container footer-content">
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="brand">Leader<span> Tracker</span></div>
-        <p style="max-width:300px;margin-top:8px;color:var(--gray-600);">
-          A citizen-powered accountability platform tracking work done and manifesto fulfillment by Maharashtra MLAs.
-        </p>
-        <p style="font-size:0.7rem;color:var(--gray-400);">
-          All ratings are citizen-submitted. Data is crowdsourced and reflects public opinion.
-        </p>
-      </div>
-      <div class="col-6 col-md-2">
-        <h6>Quick Links</h6>
-        <ul class="list-unstyled">
-          <li><a href="#">Home</a></li>
-          <li><a href="#" onclick="document.getElementById('allMlasSection').scrollIntoView({behavior:'smooth'})">MLAs</a></li>
-          <li><a href="#" onclick="document.getElementById('topMlaContainer').scrollIntoView({behavior:'smooth'})">Leaderboard</a></li>
-        </ul>
-      </div>
-      <div class="col-6 col-md-2">
-        <h6>Resources</h6>
-        <ul class="list-unstyled">
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-        </ul>
-      </div>
-      <div class="col-md-4">
-        <h6>Stay Updated</h6>
-        <div class="d-flex gap-2">
-          <input type="email" class="form-control" placeholder="Your email" style="border-radius:var(--radius-full);border:1px solid var(--gray-200);padding:8px 14px;font-size:0.8rem;">
-          <button class="btn-orange" style="padding:8px 18px;font-size:0.75rem;">Subscribe</button>
+ <footer class="footer-premium">
+        <div class="footer-flag-strip"></div>
+        <div class="container footer-content">
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <div class="brand">Leader<span> Tracker</span></div>
+                    <p style="max-width:300px;margin-top:8px;color:var(--gray-600);">
+                        A citizen-powered accountability platform tracking
+                        work done and manifesto fulfillment by Maharashtra MLAs.
+                    </p>
+                    <p style="font-size:0.7rem;color:var(--gray-400);">
+                        All ratings are citizen-submitted.
+                        Data is crowdsourced and reflects public opinion.
+                    </p>
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="<?= base_url('/') ?>">Home</a></li>
+                        <li><a href="<?= base_url('mla') ?>">MLAs</a></li>
+                        <li><a href="<?= base_url('leadership') ?>">Leaderboard</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <h6>Resources</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h6>Stay Updated</h6>
+                    <div class="d-flex gap-2">
+                        <input type="email" class="form-control" placeholder="Your email"
+                            style="border-radius:var(--radius-full);border:1px solid var(--gray-200);padding:8px 14px;font-size:0.8rem;">
+                        <button class="btn-orange" style="padding:8px 18px;font-size:0.75rem;">Subscribe</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bottom">
+                <p>&copy; <script>document.write(new Date().getFullYear());</script> Leader Tracker. All rights reserved.</p>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="bottom">
-      <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
-    </div>
-  </div>
-</footer>
+    </footer>
 
 <!-- ===== MODALS ===== -->
 <div class="modal fade modal-premium" id="premiumModal" tabindex="-1">
@@ -1851,27 +1881,55 @@ function populateDistricts() {
     parties.forEach(p => partySelect.innerHTML += `<option value="${p}">${p}</option>`);
   }
 
-  function filterMLAs() {
-    let name = document.getElementById("mlaName").value.toLowerCase();
-    let party = document.getElementById("party").value;
-    let district = document.getElementById("district").value;
+ function filterMLAs() {
+
+    let name = document.getElementById("mlaName").value.trim().toLowerCase();
+    let party = document.getElementById("party").value.trim().toLowerCase();
+    let district = document.getElementById("district").value.trim().toLowerCase();
     let sort = document.getElementById("sortOrder").value;
 
-    let filtered = mlaAssembly.filter(m =>
-      (!name || m.name.toLowerCase().includes(name)) &&
-      (!party || m.party === party) &&
-      (!district || m.district === district)
+    let filtered = mlaAssembly.filter(m => {
+
+        let mlaName = String(m.name || "").trim().toLowerCase();
+        let mlaParty = String(m.party || "").trim().toLowerCase();
+        let mlaDistrict = String(m.district || "").trim().toLowerCase();
+
+        return (
+            (!name || mlaName.includes(name)) &&
+            (!party || mlaParty === party) &&
+            (!district || mlaDistrict === district)
+        );
+    });
+
+    // Sorting
+    filtered.sort((a, b) =>
+        sort === 'asc'
+            ? a.name.localeCompare(b.name)
+            : b.name.localeCompare(a.name)
     );
 
-    filtered.sort((a, b) => sort === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
-
+    // Display Results
     let container = document.getElementById("mlaResult");
+
     if (filtered.length === 0) {
-      container.innerHTML = `<div class="col-12 text-center p-5"><i class="bi bi-search" style="font-size:3rem;color:var(--gray-300);"></i><h5 class="mt-3" style="color:var(--gray-500);">No representatives match</h5></div>`;
+
+        container.innerHTML = `
+            <div class="col-12 text-center p-5">
+                <i class="bi bi-search" style="font-size:3rem;color:var(--gray-300);"></i>
+                <h5 class="mt-3" style="color:var(--gray-500);">
+                    No representatives match
+                </h5>
+            </div>
+        `;
+
     } else {
-      container.innerHTML = filtered.map((m, idx) => buildGridMLACard(m, idx)).join('');
+
+        container.innerHTML = filtered
+            .map((m, idx) => buildGridMLACard(m, idx))
+            .join('');
+
     }
-  }
+}
 
   function resetAllFilters() {
     document.getElementById("mlaName").value = "";
@@ -2784,8 +2842,8 @@ function populateDistricts() {
   //  INIT
   // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-    populateDistricts();
-    populatePartyFilter();
+    // populateDistricts();
+    // populatePartyFilter();
     filterMLAs();
 
     // Top 5 section सध्या जसा आहे तसाच
@@ -3260,7 +3318,22 @@ d.mla_id = trim(field("mla_id").value);
         if (n === MULTI_Q) {
             otherAnswer = trim(otherInput.value);
         }
+// Q13 - Select any 3 options out of 8
+if (n === 13) {
 
+    selectedOptions = Array.from(
+        document.querySelectorAll(
+            '#lekha-q13 input[name="q13_opt"]:checked'
+        )
+    ).map(function (input) {
+        return input.value;
+    });
+
+    if (selectedOptions.length !== 3) {
+        alert("प्रश्न क्रमांक १३ साठी कोणतेही ३ पर्याय निवडा.");
+        return;
+    }
+}
         questionData.push({
             question_number: n,
 

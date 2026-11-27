@@ -752,7 +752,7 @@
         <a href="<?= base_url('leadership') ?>" class="active">Leaderboard</a>
       </nav>
       <div class="header-actions">
-        <button class="theme-btn"><i class="bi bi-moon"></i></button>
+        <!-- <button class="theme-btn"><i class="bi bi-moon"></i></button> -->
         <button class="hamburger d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
           <span></span><span></span><span></span>
         </button>
@@ -816,25 +816,57 @@
 </section>
 
 <!-- ===== FOOTER ===== -->
-<footer class="footer-premium">
-  <div class="footer-flag-strip"></div>
-  <div class="container footer-content">
-    <div class="row g-4">
-      <div class="col-md-4">
-          <div class="brand">Leader<span> Tracker</span></div>
-        <p style="max-width:300px;margin-top:8px;">A citizen-powered accountability platform tracking work done and manifesto fulfillment by Maharashtra MLAs.</p>
-        <p style="font-size:0.7rem;color:#A8A29A;">All ratings are citizen-submitted. Data is crowdsourced and reflects public opinion.</p>
-      </div>
-      <div class="col-6 col-md-2">
-        <h6>Quick Links</h6>
-        <ul><li><a href="#">Home</a></li><li><a href="#">MLAs</a></li><li><a href="#">Leaderboard</a></li></ul>
-      </div>
-    </div>
-    <div class="bottom">
-      <p>&copy; <script>document.write(new Date().getFullYear())</script> Leader Tracker. All rights reserved.</p>
-    </div>
-  </div>
-</footer>
+ <footer class="footer-premium">
+        <div class="footer-flag-strip"></div>
+        <div class="container footer-content">
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <div class="brand">Leader<span> Tracker</span></div>
+                    <p style="max-width:300px;margin-top:8px;color:var(--gray-600);">
+                        A citizen-powered accountability platform tracking
+                        work done and manifesto fulfillment by Maharashtra MLAs.
+                    </p>
+                    <p style="font-size:0.7rem;color:var(--gray-400);">
+                        All ratings are citizen-submitted.
+                        Data is crowdsourced and reflects public opinion.
+                    </p>
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="<?= base_url('/') ?>">Home</a></li>
+                        <li><a href="<?= base_url('mla') ?>">MLAs</a></li>
+                        <li><a href="<?= base_url('leadership') ?>">Leaderboard</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <h6>Resources</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h6>Stay Updated</h6>
+                    <div class="d-flex gap-2">
+                        <input type="email" class="form-control" placeholder="Your email"
+                            style="border-radius:var(--radius-full);border:1px solid var(--gray-200);padding:8px 14px;font-size:0.8rem;">
+                        <button class="btn-orange" style="padding:8px 18px;font-size:0.75rem;">Subscribe</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bottom">
+                <p>&copy; <script>document.write(new Date().getFullYear());</script> Leader Tracker. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
 <!-- ===== MODAL: Attractive Performance Profile ===== -->
 <div class="modal fade modal-premium" id="profileModal" tabindex="-1" aria-hidden="true">

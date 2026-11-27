@@ -14,6 +14,7 @@ class MlaRatingSubmission extends BaseController
         // ----------------------------------
         // 1. SPAM PROTECTION
         // ----------------------------------
+
         if (!empty($request->getPost('website'))) {
             return $this->response
                 ->setStatusCode(200)
@@ -27,6 +28,7 @@ class MlaRatingSubmission extends BaseController
         // ----------------------------------
         // 2. GET QUESTION DATA
         // ----------------------------------
+
         $questionData = $request->getPost('question_data');
 
         if (empty($questionData) || !is_string($questionData)) {
@@ -38,7 +40,6 @@ class MlaRatingSubmission extends BaseController
                 ]);
         }
 
-        // Decode JSON
         $decodedQuestions = json_decode($questionData, true);
 
         if (
@@ -54,89 +55,245 @@ class MlaRatingSubmission extends BaseController
         }
 
         // ----------------------------------
-        // 3. QUESTION SCORE MAPPING
+        // 3. QUESTION OPTION SCORE MAPPING
         // ----------------------------------
-        $questionScores = [
-            'q1'  => ['A' => 100, 'B' => 50, 'C' => 15, 'D' => 0, 'E' => null],
-            'q2'  => ['A' => 100, 'B' => 50, 'C' => 0, 'D' => null],
-            'q3'  => ['A' => 100, 'B' => 50, 'C' => 0, 'D' => null],
-            'q4'  => ['A' => 100, 'B' => 50, 'C' => 0, 'D' => 0, 'E' => null],
-            'q5'  => ['A' => 100, 'B' => 50, 'C' => 0, 'D' => null],
-            'q6'  => ['A' => 100, 'B' => 50, 'C' => 0, 'D' => 0, 'E' => null],
-            'q7'  => ['A' => 100, 'B' => 50, 'C' => 25, 'D' => null, 'E' => null],
-            'q9'  => ['A' => 100, 'B' => 50, 'C' => 0, 'D' => 0],
-            'q10' => ['A' => 100, 'B' => 75, 'C' => 25, 'D' => 0, 'E' => null],
-            'q11' => ['A' => 100, 'B' => 50, 'C' => 0, 'D' => null],
-            'q12' => ['A' => 100, 'B' => 50, 'C' => 0, 'D' => null],
+
+        $questionOptions = [
+            1  => ['A', 'B', 'C', 'D', 'E'],
+            2  => ['A', 'B', 'C', 'D'],
+            3  => ['A', 'B', 'C', 'D'],
+            4  => ['A', 'B', 'C', 'D', 'E'],
+            5  => ['A', 'B', 'C', 'D'],
+            6  => ['A', 'B', 'C', 'D', 'E'],
+            7  => ['A', 'B', 'C', 'D', 'E'],
+            8  => ['A', 'B', 'C', 'D'],
+            9  => ['A', 'B', 'C', 'D'],
+            10 => ['A', 'B', 'C', 'D', 'E'],
+            11 => ['A', 'B', 'C', 'D'],
+            12 => ['A', 'B', 'C', 'D']
         ];
 
+        // Generate option-wise scores
+        $questionScores = [];
+
+        foreach ($questionOptions as $number => $options) {
+
+            $totalOptions = count($options);
+
+            foreach ($options as $index => $option) {
+
+                $questionScores['q' . $number][$option] =
+                    round(
+                        100 - ($index * (100 / $totalOptions)),
+                        2
+                    );
+            }
+        }
+
         // ----------------------------------
-        // 4. CALCULATE OVERALL RATING
+        // 4. NORMALIZE SELECTED ANSWERS
         // ----------------------------------
+
+        // Handles normal and nested answer arrays safely.
+        $extractAnswers = function ($value) use (&$extractAnswers) {
+
+            $result = [];
+
+            if (is_array($value)) {
+
+                // If answer is stored inside a named field
+                foreach (['value', 'answer', 'option', 'code', 'selected_value'] as $key) {
+
+                    if (isset($value[$key])) {
+                        return $extractAnswers($value[$key]);
+                    }
+                }
+
+                // Otherwise process nested values
+                foreach ($value as $item) {
+                    $result = array_merge(
+                        $result,
+                        $extractAnswers($item)
+                    );
+                }
+
+                return $result;
+            }
+
+            if (is_scalar($value)) {
+
+                $answer = strtoupper(trim((string) $value));
+
+                if ($answer !== '') {
+                    $result[] = $answer;
+                }
+            }
+
+            return $result;
+        };
+
+        // ----------------------------------
+        // 5. CALCULATE Q1 TO Q13 SCORE
+        // ----------------------------------
+
         $totalScore = 0;
         $answeredCount = 0;
 
-        foreach ($questionScores as $question => $options) {
+        $answersByQuestion = [];
 
-            // Get selected answer from POST
-            $answer = $request->getPost($question);
+        $q13Found = false;
 
-            if (is_array($answer)) {
-                $answer = reset($answer);
+        foreach ($decodedQuestions as $questionRow) {
+
+            if (!is_array($questionRow)) {
+                continue;
             }
 
-            $answer = strtoupper(trim((string) $answer));
+            $questionNumber = (int) (
+                $questionRow['question_number'] ?? 0
+            );
+
+            $selectedAnswers = $questionRow['selected_answers'] ?? [];
+
+            // Extract and normalize answers
+            $selectedAnswers = array_values(array_unique(
+                $extractAnswers($selectedAnswers)
+            ));
+
+            // ----------------------------------
+            // Q13 - ANY 3 OPTIONS OUT OF 8
+            // ----------------------------------
+
+            if ($questionNumber === 13) {
+
+                if ($q13Found) {
+
+                    return $this->response
+                        ->setStatusCode(422)
+                        ->setJSON([
+                            'status' => 'error',
+                            'message' => 'Q13 duplicate question data.'
+                        ]);
+                }
+
+                $q13Found = true;
+
+                $validQ13Options = [
+                    'A', 'B', 'C', 'D',
+                    'E', 'F', 'G', 'H'
+                ];
+
+                $q13Selected = array_values(
+                    array_intersect(
+                        $validQ13Options,
+                        $selectedAnswers
+                    )
+                );
+
+                // Exactly 3 unique options required
+                if (count($q13Selected) !== 3) {
+
+                    return $this->response
+                        ->setStatusCode(422)
+                        ->setJSON([
+                            'status' => 'error',
+                            'message' => 'प्रश्न क्रमांक १३ साठी नेमके ३ पर्याय निवडणे आवश्यक आहे.'
+                        ]);
+                }
+
+                // Q13 gets 100 marks
+                $totalScore += 100;
+                $answeredCount++;
+
+                $answersByQuestion[13] = $q13Selected;
+
+                continue;
+            }
+
+            // ----------------------------------
+            // Q1 TO Q12 SCORING
+            // ----------------------------------
+
+            if (!isset($questionOptions[$questionNumber])) {
+                continue;
+            }
+
+            // Radio questions - one answer
+            $validAnswers = array_values(
+                array_intersect(
+                    $questionOptions[$questionNumber],
+                    $selectedAnswers
+                )
+            );
+
+            $answer = $validAnswers[0] ?? '';
 
             if ($answer === '') {
                 continue;
             }
 
-            // Handle comma-separated values
-            $answerParts = explode(',', $answer);
-            $answer = trim($answerParts[0]);
+            $questionKey = 'q' . $questionNumber;
 
-            if (
-                array_key_exists($answer, $options) &&
-                $options[$answer] !== null
-            ) {
-                $totalScore += $options[$answer];
-                $answeredCount++;
+            if (!isset($questionScores[$questionKey][$answer])) {
+                continue;
             }
+
+            $score = $questionScores[$questionKey][$answer];
+
+            $totalScore += $score;
+            $answeredCount++;
+
+            $answersByQuestion[$questionNumber] = $answer;
         }
 
-        // Calculate percentage
+        // ----------------------------------
+        // Q13 REQUIRED VALIDATION
+        // ----------------------------------
+
+        if (!$q13Found) {
+
+            return $this->response
+                ->setStatusCode(422)
+                ->setJSON([
+                    'status' => 'error',
+                    'message' => 'प्रश्न क्रमांक १३ चे उत्तर देणे आवश्यक आहे.'
+                ]);
+        }
+
+        // ----------------------------------
+        // 6. FINAL OVERALL RATING
+        // ----------------------------------
+
         $overallPercentage = $answeredCount > 0
             ? $totalScore / $answeredCount
             : 0;
 
-        // Convert percentage into 0-5 rating
-        $overallRating = round($overallPercentage / 20, 1);
+        $overallRating = round(
+            $overallPercentage / 20,
+            1
+        );
 
         // ----------------------------------
-        // 5. MANIFESTO FULFILLED
+        // 7. MANIFESTO FULFILLED
         // Based on Q1 answer
         // ----------------------------------
+
         $manifestoFulfilled = null;
 
-        $q1Answer = $request->getPost('q1');
-
-        if (is_array($q1Answer)) {
-            $q1Answer = reset($q1Answer);
-        }
-
-        $q1Answer = strtoupper(trim((string) $q1Answer));
+        $q1Answer = $answersByQuestion[1] ?? null;
 
         if (
-            $q1Answer !== '' &&
-            array_key_exists($q1Answer, $questionScores['q1']) &&
-            $questionScores['q1'][$q1Answer] !== null
+            $q1Answer !== null &&
+            isset($questionScores['q1'][$q1Answer])
         ) {
-            $manifestoFulfilled = $questionScores['q1'][$q1Answer];
+            $manifestoFulfilled =
+                $questionScores['q1'][$q1Answer];
         }
 
         // ----------------------------------
-        // 6. GET MLA ID
+        // 8. GET MLA ID
         // ----------------------------------
+
         $mlaId = $request->getPost('mla_id');
 
         $mlaId = !empty($mlaId) && is_numeric($mlaId)
@@ -144,8 +301,9 @@ class MlaRatingSubmission extends BaseController
             : null;
 
         // ----------------------------------
-        // 7. PREPARE DATABASE DATA
+        // 9. PREPARE DATABASE DATA
         // ----------------------------------
+
         $data = [
 
             'form_version' => $request->getPost('form_version'),
@@ -181,75 +339,92 @@ class MlaRatingSubmission extends BaseController
         ];
 
         // ----------------------------------
-        // 8. SAVE DATABASE
+        // 10. SAVE DATABASE + SHARE LINK
         // ----------------------------------
-       // ----------------------------------
-//    8. SAVE DATABASE + GENERATE SHARE LINK
-//     ----------------------------------
+
         $model = new MlaRatingSubmissionModel();
 
-try {
+        try {
 
-   $model->insert($data);
-$submissionId = $model->getInsertID();
+            $model->insert($data);
 
-    if (!$submissionId) {
-        throw new \RuntimeException('Rating submission could not be saved.');
+            $submissionId = $model->getInsertID();
+
+            if (!$submissionId) {
+
+                throw new \RuntimeException(
+                    'Rating submission could not be saved.'
+                );
+            }
+
+            // Generate share URL
+            $shareUrl = site_url(
+                'app/form/' . $submissionId
+            );
+
+            return $this->response
+                ->setStatusCode(200)
+                ->setJSON([
+
+                    'status' => 'success',
+
+                    'message' => 'तुमची उत्तरे यशस्वीरित्या नोंदवली गेली.',
+
+                    'submission_id' => $submissionId,
+
+                    'share_url' => $shareUrl,
+
+                    'overall_rating' => $overallRating,
+
+                    'manifesto_fulfilled' => $manifestoFulfilled,
+
+                    'total_score' => round($totalScore, 2),
+
+                    'answered_count' => $answeredCount,
+
+                    'csrfHash' => csrf_hash()
+                ]);
+
+        } catch (\Throwable $e) {
+
+            log_message(
+                'error',
+                'MLA Rating Save Error: ' . $e->getMessage()
+            );
+
+            return $this->response
+                ->setStatusCode(500)
+                ->setJSON([
+                    'status' => 'error',
+                    'message' => 'उत्तरे save करता आली नाहीत.'
+                ]);
+        }
     }
 
-    $shareUrl = site_url('app/form/' . $submissionId);
-
-    return $this->response
-        ->setStatusCode(200)
-        ->setJSON([
-            'status' => 'success',
-            'message' => 'तुमची उत्तरे यशस्वीरित्या नोंदवली गेली.',
-            'submission_id' => $submissionId,
-            'share_url' => $shareUrl,
-            'overall_rating' => $overallRating,
-            'manifesto_fulfilled' => $manifestoFulfilled,
-            'csrfHash' => csrf_hash()
-        ]);
-
-} catch (\Throwable $e) {
-
-    log_message(
-        'error',
-        'MLA Rating Save Error: ' . $e->getMessage()
-    );
-
-    return $this->response
-        ->setStatusCode(500)
-        ->setJSON([
-            'status' => 'error',
-            'message' => 'उत्तरे save करता आली नाहीत.'
-        ]);
-}
-    }
     // ----------------------------------
-// SHOW SHARED RATING FORM
-// ----------------------------------
-public function show($id)
-{
-    $model = new MlaRatingSubmissionModel();
+    // SHOW SHARED RATING FORM
+    // ----------------------------------
 
-    // Find submission using unique database ID
-    $submission = $model->find($id);
+    public function show($id)
+    {
+        $model = new MlaRatingSubmissionModel();
 
-    if (!$submission) {
-        return $this->response
-            ->setStatusCode(404)
-            ->setBody('Rating submission not found.');
+        $submission = $model->find($id);
+
+        if (!$submission) {
+
+            return $this->response
+                ->setStatusCode(404)
+                ->setBody('Rating submission not found.');
+        }
+
+        $submission['question_data'] = json_decode(
+            $submission['question_data'] ?? '[]',
+            true
+        );
+
+        return view('shared_rating_form', [
+            'submission' => $submission
+        ]);
     }
-
-    // Decode saved question answers
-    $submission['question_data'] = json_decode(
-        $submission['question_data'] ?? '[]',
-        true
-    );
-
-    return view('shared_rating_form', [
-        'submission' => $submission
-    ]);
-}
 }
