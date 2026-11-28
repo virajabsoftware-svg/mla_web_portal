@@ -65,7 +65,7 @@ class Complaint extends BaseController
                 $mlaName = $mla['mla_name'] ?? '';
             }
         }
-
+$sharedComplaintId = session()->getFlashdata('complaint_share_id');
         return view('user/Complaint', [
             'voter_id' => $voter['voter_id'] ?? '',
             'mla_id' => $voter['mla_id'] ?? '',
@@ -76,7 +76,8 @@ class Complaint extends BaseController
             'totalComplaints' => $total,
             'pendingComplaints' => $pending,
             'resolvedComplaints' => $resolved,
-            'escalatedComplaints' => $escalated
+            'escalatedComplaints' => $escalated,
+            'sharedComplaintId' => $sharedComplaintId
         ]);
     }
 
@@ -144,9 +145,15 @@ class Complaint extends BaseController
             'voter_id' => $voter['voter_id'] ?? '',
         ];
 
-        if ($model->insert($data)) {
-            return redirect()->to(base_url('user/complaint'))->with('success', 'Complaint submitted successfully');
-        }
+       if ($model->insert($data)) {
+
+    $newComplaintId = $model->getInsertID();
+
+    return redirect()
+        ->to(base_url('user/complaint'))
+        ->with('success', 'Complaint submitted successfully')
+        ->with('complaint_share_id', $newComplaintId);
+}
 
         return redirect()->back()->withInput()->with('error', implode('<br>', $model->errors()));
     }
@@ -338,6 +345,7 @@ if (empty($uploadedImages)) {
 
 public function removeImage($id)
 {
+
     $complaint = $this->findUserComplaint($id);
 
     if (!$complaint) {
@@ -393,5 +401,55 @@ public function removeImage($id)
         'message' => 'Image removed successfully',
         'images' => $images
     ]);
+    
+}
+public function share($id)
+{
+    $model = new ComplaintModel();
+
+    $complaint = $model
+        ->select('complaints.*, districts.district_name, constituencies.constituency_name')
+        ->join('districts', 'districts.id = complaints.district', 'left')
+        ->join('constituencies', 'constituencies.id = complaints.constituency', 'left')
+        ->where('complaints.id', $id)
+        ->first();
+
+    if (!$complaint) {
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound(
+            'Complaint not found'
+        );
+    }
+
+    // Get MLA name
+    $mlaName = '-';
+
+    if (!empty($complaint['mla'])) {
+
+        $mlaModel = new \App\Models\MlaModel();
+
+        $mla = $mlaModel->find($complaint['mla']);
+
+        if (!empty($mla['mla_name'])) {
+            $mlaName = $mla['mla_name'];
+        }
+    }
+
+    // Get attachments
+    $attachments = [];
+
+    if (!empty($complaint['attachment'])) {
+
+        $attachments = json_decode($complaint['attachment'], true);
+
+        if (!is_array($attachments)) {
+            $attachments = [$complaint['attachment']];
+        }
+    }
+
+return view('shared_complaint_form', [
+    'complaint'   => $complaint,
+    'mlaName'     => $mlaName,
+    'attachments' => $attachments
+]);
 }
 }

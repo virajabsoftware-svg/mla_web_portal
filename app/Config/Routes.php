@@ -955,6 +955,14 @@ $routes->get(
     'app/form/(:num)',
     'MlaRatingSubmission::show/$1'
 );
+// =====================================================
+// PUBLIC SHARED COMPLAINT REPORT
+// =====================================================
+
+$routes->get(
+    'complaint/share/(:num)',
+    '\App\Controllers\User\Complaint::share/$1'
+);
 $routes->set404Override(function () {
     return view('errors/html/error_404');
 });

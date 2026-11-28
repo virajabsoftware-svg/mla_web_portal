@@ -1097,7 +1097,12 @@
         // =====================================================
         document.getElementById('resetBtn').addEventListener('click', function () {
             document.getElementById('complaintTitle').value = '';
-            document.getElementById('villageInput').value = '';
+            // document.getElementById('villageInput').value = ''; 
+            if (!village) {
+    e.preventDefault();
+    alert('Please enter village name.');
+    return false;
+}
             document.getElementById('locationInput').value = '';
             document.getElementById('complaintDesc').value = '';
             document.getElementById('prioritySelect').value = 'Medium';
@@ -1401,16 +1406,39 @@
 });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <?php if (session()->getFlashdata('success')): ?>
-        <script>
+   <?php if (session()->getFlashdata('success')): ?>
+
+    <?php
+        $successMessage = session()->getFlashdata('success');
+        $complaintShareUrl = !empty($sharedComplaintId)
+            ? site_url('complaint/share/' . $sharedComplaintId)
+            : null;
+    ?>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const complaintShareUrl = <?= json_encode($complaintShareUrl) ?>;
+
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
-                text: <?= json_encode(session()->getFlashdata('success')) ?>,
-                confirmButtonColor: '#6B8A22'
+                text: <?= json_encode($successMessage) ?>,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#6B8A22',
+                allowOutsideClick: false
+            }).then((result) => {
+
+                if (result.isConfirmed && complaintShareUrl) {
+                    window.location.href = complaintShareUrl;
+                }
+
             });
-        </script>
-    <?php endif; ?>
+
+        });
+    </script>
+
+<?php endif; ?>
     <?php if (session()->getFlashdata('error')): ?>
         <script>
             Swal.fire({
