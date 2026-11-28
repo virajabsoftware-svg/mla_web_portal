@@ -91,6 +91,34 @@ class MlaModel extends Model
             ->first();
     }
 
+    // ==========================================
+// CALCULATE MLA GRADE
+// ==========================================
+
+private function getRatingGrade(float $average, int $totalRatings): string
+{
+    if ($totalRatings <= 0) {
+        return 'Not Rated';
+    }
+
+    if ($average >= 4.5) {
+        return 'A+';
+    } elseif ($average >= 4.0) {
+        return 'A';
+    } elseif ($average >= 3.5) {
+        return 'B+';
+    } elseif ($average >= 3.0) {
+        return 'B';
+    } elseif ($average >= 2.5) {
+        return 'C+';
+    } elseif ($average >= 2.0) {
+        return 'C';
+    } elseif ($average >= 1.0) {
+        return 'D';
+    }
+
+    return 'Not Rated';
+}
     public function getPublicMlas(): array
     {
         $mlas = $this->db
@@ -116,12 +144,22 @@ class MlaModel extends Model
         foreach ($mlas as &$mla) {
             $totalWorks = (int) ($mla['total_works'] ?? 0);
             $completedWorks = (int) ($mla['completed_works'] ?? 0);
-            $mla['ratings'] = (int) ($mla['ratings'] ?? 0);
+           // Total ratings
+$mla['ratings'] = (int) ($mla['ratings'] ?? 0);
 
-$mla['rating_score'] = round(
-    (float) ($mla['rating_score'] ?? 0),
-    1
+// Actual Grand Average
+$averageRating = (float) ($mla['rating_score'] ?? 0);
+
+// Calculate Grade
+$mla['rating_grade'] = $this->getRatingGrade(
+    $averageRating,
+    $mla['ratings']
 );
+
+// Display Grand Average up to 2 decimals
+$mla['rating_score'] = $mla['ratings'] > 0
+    ? round($averageRating, 2)
+    : 0;
 
 $mla['manifesto_percentage'] = (int) round(
     (float) ($mla['manifesto_percentage'] ?? 0)
@@ -221,12 +259,22 @@ public function getAllMlasForHome(): array
     // Format calculated values
     foreach ($mlas as &$mla) {
 
-        $mla['ratings'] = (int) ($mla['ratings'] ?? 0);
+      // Total ratings
+$mla['ratings'] = (int) ($mla['ratings'] ?? 0);
 
-        $mla['rating_score'] = round(
-            (float) ($mla['rating_score'] ?? 0),
-            1
-        );
+// Actual Grand Average
+$averageRating = (float) ($mla['rating_score'] ?? 0);
+
+// Calculate Grade
+$mla['rating_grade'] = $this->getRatingGrade(
+    $averageRating,
+    $mla['ratings']
+);
+
+// Display Grand Average up to 2 decimals
+$mla['rating_score'] = $mla['ratings'] > 0
+    ? round($averageRating, 2)
+    : 0;
 
         $mla['manifesto_percentage'] = (int) round(
             (float) ($mla['manifesto_percentage'] ?? 0)

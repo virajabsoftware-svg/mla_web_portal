@@ -75,10 +75,73 @@ $databaseName = $db->getDatabase();
 
 
 
-    public function leadership()
-    {
-        return view('leadership');
-    }
+   public function leadership()
+{
+    $mlaModel = new MlaModel();
+
+    // Database मधून Approved / Active MLAs आणि त्यांचे rating data
+    $mlas = $mlaModel->getAllMlasForHome();
+
+    // PHP data JavaScript साठी तयार करणे
+    $leaderboardMlas = array_map(static function ($mla) {
+
+        return [
+            'id' => (int) ($mla['id'] ?? 0),
+
+            'name' => $mla['mla_name'] ?? '',
+
+            'marathiName' => $mla['marathi_name']
+                ?? $mla['mla_name']
+                ?? '',
+
+            'initials' => strtoupper(
+                substr($mla['mla_name'] ?? 'MLA', 0, 2)
+            ),
+
+            'district' => $mla['district_name']
+                ?? $mla['district']
+                ?? '',
+
+            'constituency' => $mla['constituency_name'] ?? '',
+
+            'party' => $mla['party_name']
+                ?? $mla['party']
+                ?? '',
+
+            // Rating Grade
+            'grade' => $mla['rating_grade'] ?? 'Not Rated',
+
+            // Average Rating
+            'ratingScore' => (float) ($mla['rating_score'] ?? 0),
+
+            // Total Rating Submissions
+            'ratings' => (int) ($mla['ratings'] ?? 0),
+
+            // Manifesto Fulfilled
+            'manifestoFulfilled' => (float) (
+                $mla['manifesto_percentage'] ?? 0
+            ),
+
+            // MLA Profile
+            'image' => $mla['profile_photo'] ?? '',
+
+            'firstElected' => $mla['first_elected'] ?? '',
+
+            'age' => $mla['age'] ?? '',
+
+            'education' => $mla['education'] ?? '',
+
+            'profession' => $mla['profession'] ?? '',
+
+            'bio' => $mla['biography'] ?? '',
+        ];
+
+    }, $mlas);
+
+    return view('leadership', [
+        'leaderboard_mlas' => $leaderboardMlas
+    ]);
+}
 
     public function mla()
     {

@@ -798,10 +798,12 @@
       <select id="district" class="form-select">
         <option value="">All Districts</option>
       </select>
-      <select id="sortOrder" class="form-select">
-        <option value="asc">A → Z</option>
-        <option value="desc">Z → A</option>
-      </select>
+     <select id="sortOrder" class="form-select">
+  <option value="rating_desc">Highest Rating</option>
+  <option value="rating_asc">Lowest Rating</option>
+  <option value="asc">A → Z</option>
+  <option value="desc">Z → A</option>
+</select>
       <button class="btn-orange" onclick="filterMLAs()">
         <i class="bi bi-search"></i> Filter
       </button>
@@ -917,75 +919,23 @@ const geography = {
   "Nashik": ["Nashik East", "Nashik West", "Deolali"]
 };
 
-const mlaAssembly = [
-  { id: 1, name: "Devendra Fadnavis", marathiName: "देवेंद्र फडणवीस", initials: "DF", district: "Nagpur", constituency: "Nagpur South West", party: "BJP", grade: "A+", ratingScore: 2.7, ratings: 3, manifestoFulfilled: 13, firstElected: "2024", 
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStvxUGPAClLVGXg8r5U1Cxl7VuSn5KswQO6unnzhdIxQ&s=10",
-    age: 52, education: "LL.B.", profession: "Politician, Lawyer", bio: "Devendra Fadnavis is a senior BJP leader and former Chief Minister of Maharashtra.",
-    infra: 98, womenSafety: 90, healthcare: 94, education: 92, transparency: 92, accessibility: 90, employment: 88, road: 97, water: 94, digital: 92, environment: 82, lawOrder: 93, youth: 88, farmer: 78, publicSat: 98,
-    completed: 72, running: 30, pending: 6, complaintsResolved: 2100, responseTime: 1.8, fundUtil: 92, schemeSuccess: 90, attendance: 95,
-    timeline: ['Elected 1999', 'Became CM 2014', 'Urban Development Project', 'Smart City Initiative', 'IT Park Launch'] },
-  { id: 2, name: "Eknath Shinde", marathiName: "एकनाथ शिंदे", initials: "ES", district: "Thane", constituency: "Kopri-Pachpakhadi", party: "Shiv Sena (ES)", grade: "A+", ratingScore: 2.7, ratings: 3, manifestoFulfilled: 13, firstElected: "2024",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1NGljE8Ngab0V6mQkSMycyNgBuQ8jKzUhV-lEJbcUiw&s=10",
-    age: 58, education: "B.E. Civil", profession: "Politician, Social Worker", bio: "Eknath Shinde is a senior leader of Shiv Sena (ES) and currently serves as the Chief Minister of Maharashtra.",
-    infra: 95, womenSafety: 88, healthcare: 92, education: 90, transparency: 85, accessibility: 94, employment: 82, road: 96, water: 92, digital: 80, environment: 78, lawOrder: 90, youth: 85, farmer: 75, publicSat: 96,
-    completed: 65, running: 28, pending: 8, complaintsResolved: 1850, responseTime: 2.5, fundUtil: 88, schemeSuccess: 85, attendance: 92,
-    timeline: ['Elected 2004', 'Became CM 2022', 'Major Road Project', 'School Renovation', 'Hospital Expansion'] },
-  { id: 3, name: "Chh Shivendra Raje Bhosale", marathiName: "शिवेंद्र राजे भोसले", initials: "SRB", district: "Satara", constituency: "Jaoli", party: "BJP", grade: "A-", ratingScore: 2.7, ratings: 3, manifestoFulfilled: 13, firstElected: "2024",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq9MdbQ5p9mCdUedqffaq4_dJD_TKSJ64CtpvzEEnMcg&s=10",
-    age: 48, education: "B.A. History", profession: "Politician, Agriculturist", bio: "Shivendra Raje Bhosale is a BJP leader from Satara district.",
-    infra: 88, womenSafety: 82, healthcare: 86, education: 85, transparency: 84, accessibility: 88, employment: 80, road: 90, water: 92, digital: 76, environment: 80, lawOrder: 84, youth: 82, farmer: 92, publicSat: 92,
-    completed: 55, running: 25, pending: 10, complaintsResolved: 1400, responseTime: 3.2, fundUtil: 84, schemeSuccess: 82, attendance: 88,
-    timeline: ['Elected 2009', 'Water Pipeline Project', 'Solar Plant Initiative'] },
-  { id: 4, name: "Makarand Patil", marathiName: "मकरंद पाटील", initials: "MP", district: "Satara", constituency: "Khandala", party: "NCP", grade: "B+", ratingScore: 2.7, ratings: 3, manifestoFulfilled: 13, firstElected: "2024",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTksDnHBv0qgkjvbIwYhetTmC4Gg3HAGcot8CdfeZ-XNw&s=10",
-    age: 55, education: "B.Com.", profession: "Politician, Businessman", bio: "Makarand Patil is an NCP leader from Satara.",
-    infra: 82, womenSafety: 75, healthcare: 80, education: 78, transparency: 76, accessibility: 82, employment: 84, road: 80, water: 78, digital: 72, environment: 70, lawOrder: 76, youth: 78, farmer: 80, publicSat: 84,
-    completed: 50, running: 22, pending: 14, complaintsResolved: 1200, responseTime: 4.0, fundUtil: 78, schemeSuccess: 76, attendance: 82,
-    timeline: ['Elected 2009', 'Industrial Park Project'] },
-  { id: 5, name: "Uddhav Thackeray", marathiName: "उद्धव ठाकरे", initials: "UT", district: "Mumbai", constituency: "Mahim", party: "Shiv Sena (UBT)", grade: "A-", ratingScore: 1.7, ratings: 3, manifestoFulfilled: 27, firstElected: "2019",
-    image: "https://i.pinimg.com/736x/f8/c4/68/f8c46840bee48df1157ae44b44dd25ef.jpg",
-    age: 64, education: "B.Sc.", profession: "Politician, Photographer", bio: "Uddhav Thackeray is the chief of Shiv Sena (UBT) and former Chief Minister.",
-    infra: 90, womenSafety: 85, healthcare: 88, education: 86, transparency: 82, accessibility: 86, employment: 80, road: 88, water: 84, digital: 78, environment: 82, lawOrder: 85, youth: 80, farmer: 72, publicSat: 89,
-    completed: 48, running: 26, pending: 12, complaintsResolved: 1600, responseTime: 3.0, fundUtil: 82, schemeSuccess: 80, attendance: 86,
-    timeline: ['Elected 2009', 'Became CM 2019', 'Housing Project', 'Metro Initiative'] },
-  { id: 6, name: "Jayant Patil", marathiName: "जयंत पाटील", initials: "JP", district: "Pune", constituency: "Indapur", party: "NCP (Sharad Pawar)", grade: "B+", ratingScore: 1.7, ratings: 3, manifestoFulfilled: 27, firstElected: "2019",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgW4DmOIsgWr_MlVFaIBQwr0GBxHJzq4MDA1YWpdi0wQ&s=10",
-    age: 50, education: "B.E. Mechanical", profession: "Politician, Engineer", bio: "Jayant Patil is a senior NCP (Sharad Pawar) leader.",
-    infra: 80, womenSafety: 72, healthcare: 78, education: 76, transparency: 74, accessibility: 80, employment: 78, road: 76, water: 80, digital: 70, environment: 68, lawOrder: 74, youth: 76, farmer: 78, publicSat: 82,
-    completed: 45, running: 20, pending: 15, complaintsResolved: 1100, responseTime: 4.5, fundUtil: 76, schemeSuccess: 74, attendance: 80,
-    timeline: ['Elected 2004', 'Irrigation Project'] },
-  { id: 7, name: "Aaditya Thackeray", marathiName: "आदित्य ठाकरे", initials: "AT", district: "Mumbai", constituency: "Worli", party: "Shiv Sena (UBT)", grade: "B+", ratingScore: 1.7, ratings: 3, manifestoFulfilled: 27, firstElected: "2019",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpOBJk4aw0Id3PwJnySMln-nJYdR3vJsTgINJAs3FBtg&s=10",
-    age: 34, education: "B.A. Law", profession: "Politician, Social Activist", bio: "Aaditya Thackeray is a young leader of Shiv Sena (UBT).",
-    infra: 78, womenSafety: 80, healthcare: 76, education: 82, transparency: 80, accessibility: 88, employment: 72, road: 76, water: 74, digital: 78, environment: 90, lawOrder: 78, youth: 92, farmer: 65, publicSat: 84,
-    completed: 42, running: 28, pending: 10, complaintsResolved: 1500, responseTime: 2.8, fundUtil: 80, schemeSuccess: 78, attendance: 84,
-    timeline: ['Elected 2019', 'Beach Cleanup Initiative', 'Tree Plantation Drive'] },
-  { id: 8, name: "Amit Kadam", marathiName: "अमित कदम", initials: "AK", district: "Satara", constituency: "Jaoli", party: "Shiv Sena (UBT)", grade: "B-", ratingScore: 1.7, ratings: 3, manifestoFulfilled: 27, firstElected: "2014",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVsYF2Sfv60e4N3RTNPDbmvIH2xGdbTn9D5WdQfGa6pw&s=10",
-    age: 42, education: "B.A. Political Science", profession: "Politician, Farmer", bio: "Amit Kadam is a Shiv Sena (UBT) leader from Satara.",
-    infra: 74, womenSafety: 70, healthcare: 72, education: 70, transparency: 72, accessibility: 78, employment: 74, road: 72, water: 76, digital: 68, environment: 72, lawOrder: 70, youth: 72, farmer: 82, publicSat: 76,
-    completed: 38, running: 18, pending: 18, complaintsResolved: 900, responseTime: 5.0, fundUtil: 72, schemeSuccess: 70, attendance: 74,
-    timeline: ['Elected 2014', 'Agriculture Development'] },
-  { id: 9, name: "Kedar Dighe", marathiName: "केदार दिघे", initials: "KD", district: "Thane", constituency: "Kopri-Pachpakhadi", party: "Shiv Sena (UBT)", grade: "C-", ratingScore: 1.7, ratings: 3, manifestoFulfilled: 27, firstElected: "2019",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWvvLHD_KEEToCjzzaVXJAbczt1cKLuTldAXrFWmGYwsLple0zQY5saPeE&s=10",
-    age: 38, education: "B.Sc. IT", profession: "Politician, Social Worker", bio: "Kedar Dighe is a young Shiv Sena (UBT) leader from Thane.",
-    infra: 68, womenSafety: 65, healthcare: 66, education: 70, transparency: 68, accessibility: 72, employment: 66, road: 68, water: 66, digital: 74, environment: 64, lawOrder: 66, youth: 70, farmer: 60, publicSat: 66,
-    completed: 28, running: 15, pending: 20, complaintsResolved: 700, responseTime: 6.0, fundUtil: 66, schemeSuccess: 64, attendance: 68,
-    timeline: ['Elected 2019', 'IT Initiatives'] }
-];
+const mlaAssembly = <?= json_encode(
+    $leaderboard_mlas ?? [],
+    JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+); ?>;
 
 // ============================================================
 //  GRADE META - 8 Grades
 // ============================================================
 const gradesMeta = [
-  {label:'A+', desc:'Outstanding', icon:'bi-star-fill', color:'#10B981'},
-  {label:'A-', desc:'Excellent', icon:'bi-star', color:'#34D399'},
-  {label:'B+', desc:'Very Good', icon:'bi-star-half', color:'#FBBF24'},
-  {label:'B-', desc:'Good', icon:'bi-star', color:'#F59E0B'},
-  {label:'C+', desc:'Average', icon:'bi-arrow-right-circle', color:'#F97316'},
-  {label:'C-', desc:'Below Average', icon:'bi-arrow-down-circle', color:'#EF4444'},
-  {label:'D+', desc:'Poor', icon:'bi-exclamation-circle', color:'#DC2626'},
-  {label:'D-', desc:'Critical', icon:'bi-exclamation-circle', color:'#B91C1C'}
+  { label: 'A+', desc: 'Outstanding', icon: 'bi-star-fill', color: '#10B981' },
+  { label: 'A', desc: 'Excellent', icon: 'bi-star', color: '#34D399' },
+  { label: 'B+', desc: 'Very Good', icon: 'bi-star-half', color: '#FBBF24' },
+  { label: 'B', desc: 'Good', icon: 'bi-star', color: '#F59E0B' },
+  { label: 'C+', desc: 'Average', icon: 'bi-arrow-right-circle', color: '#F97316' },
+  { label: 'C', desc: 'Below Average', icon: 'bi-arrow-down-circle', color: '#EF4444' },
+  { label: 'D', desc: 'Poor', icon: 'bi-exclamation-circle', color: '#DC2626' },
+  { label: 'Not Rated', desc: 'No Ratings Yet', icon: 'bi-hourglass', color: '#94A3B8' }
 ];
 
 // ============================================================
@@ -1041,7 +991,13 @@ function filterByGrade(grade) {
 //  BUILD MLA CARD
 // ============================================================
 function getInitials(name) {
-  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  return String(name || 'MLA')
+    .trim()
+    .split(/\s+/)
+    .map(w => w[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
 }
 
 function getPartyClass(party) {
@@ -1079,38 +1035,61 @@ function buildGridMLACard(mla) {
   const color = getAvatarColor(mla.party);
   const initials = mla.initials || getInitials(mla.name);
   const partyClass = getPartyClass(mla.party);
-  const stars = renderStars(mla.ratingScore || 0);
-
+ const hasRatings = Number(mla.ratings) > 0;
+const ratingScore = Number(mla.ratingScore || 0);
+const stars = hasRatings ? renderStars(ratingScore) : '☆☆☆☆☆';
+const hasManifesto =
+  mla.manifestoFulfilled !== null &&
+  mla.manifestoFulfilled !== undefined &&
+  mla.manifestoFulfilled !== '';
+const avatarHtml = mla.image
+  ? `<img src="${mla.image}" alt="${mla.name}"
+       onerror="this.style.display='none';this.parentElement.textContent='${initials}';">`
+  : initials;
   return `
     <div class="col-md-6 col-lg-4">
       <div class="mla-card">
         <div class="d-flex align-items-start gap-3">
           <div class="avatar" style="background:${color};">
-            <img src="${mla.image}" alt="${mla.name}" onerror="this.style.display='none';this.parentElement.textContent='${initials}';">
-          </div>
+  ${avatarHtml}
+</div>
           <div>
             <div class="mla-name">${mla.name}</div>
             <div class="mla-name-mr">${mla.marathiName || mla.name}</div>
             <div class="mla-constituency"><i class="bi bi-geo-alt"></i> ${mla.constituency}, ${mla.district}</div>
             <div>
               <span class="party-badge ${partyClass}">${mla.party}</span>
-              <span class="elected-year ms-2">Elected ${mla.firstElected || '2024'}</span>
+              <span class="elected-year ms-2">Elected ${mla.firstElected || 'N/A'}</span>
             </div>
           </div>
         </div>
         
-        <div class="info-row">
-          <span><i class="bi bi-person"></i> ${mla.ratings || 0} ratings</span>
-          <span class="rating-value"><span class="stars">${stars}</span> ${mla.ratingScore || 0}/5</span>
-        </div>
+       <div class="info-row">
+  <span>
+    <i class="bi bi-person"></i> ${Number(mla.ratings || 0)} ratings
+  </span>
+
+  <span class="rating-value">
+    <span class="stars">${stars}</span>
+    ${hasRatings ? ratingScore.toFixed(2) + '/5' : 'Not Rated'}
+  </span>
+</div>
         
-        <div class="manifesto-row">
-          <span class="manifesto-text">Manifesto Fulfilled</span>
-          <div class="progress-bar-custom">
-            <div class="fill" style="width:${mla.manifestoFulfilled || 0}%;"></div>
-          </div>
-          <span class="manifesto-percent">${mla.manifestoFulfilled || 0}%</span>
-        </div>
+       ${hasManifesto ? `
+  <div class="manifesto-row">
+    <span class="manifesto-text">Manifesto Fulfilled</span>
+    <div class="progress-bar-custom">
+      <div class="fill" style="width:${Math.min(100, Math.max(0, Number(mla.manifestoFulfilled || 0)))}%;"></div>
+    </div>
+    <span class="manifesto-percent">
+      ${Number(mla.manifestoFulfilled || 0).toFixed(2)}%
+    </span>
+  </div>
+` : `
+  <div class="manifesto-row">
+    <span class="manifesto-text">Manifesto Fulfilled: Not Available</span>
+  </div>
+`}
         
         <div class="card-actions">
           <button class="btn-view-profile" onclick="openProfile(${mla.id})">
@@ -1125,172 +1104,188 @@ function buildGridMLACard(mla) {
 // ============================================================
 //  PROFILE MODAL - Complete Attractive Performance Dashboard
 // ============================================================
-function openProfile(id) {
-  const m = mlaAssembly.find(d => d.id === id);
-  if (!m) return;
-  
-  document.getElementById('profileName').innerHTML = `<i class="bi bi-person-badge me-2"></i>${m.name} · MLA Profile`;
-  const body = document.getElementById('profileBody');
-  
-  const style = partyColorMap[m.party] || { primary: "#546E7A", lightBg: "#F5F8FA" };
-  const stars = renderStars(m.ratingScore || 0);
-  
-  // All performance ratings - 15 parameters
-  const ratings = [
-    {label:'Infrastructure', val:m.infra || 0, icon:'bi-building', color:'#10B981'},
-    {label:'Women Safety', val:m.womenSafety || 0, icon:'bi-person-hearts', color:'#8B5CF6'},
-    {label:'Healthcare', val:m.healthcare || 0, icon:'bi-heart-pulse', color:'#EF4444'},
-    {label:'Education', val:m.education || 0, icon:'bi-mortarboard', color:'#3B82F6'},
-    {label:'Transparency', val:m.transparency || 0, icon:'bi-shield-check', color:'#8B5CF6'},
-    {label:'Accessibility', val:m.accessibility || 0, icon:'bi-door-open', color:'#10B981'},
-    {label:'Employment', val:m.employment || 0, icon:'bi-briefcase', color:'#F59E0B'},
-    {label:'Road Development', val:m.road || 0, icon:'bi-signpost-2', color:'#8B5CF6'},
-    {label:'Water Supply', val:m.water || 0, icon:'bi-droplet', color:'#3B82F6'},
-    {label:'Digital Governance', val:m.digital || 0, icon:'bi-wifi', color:'#8B5CF6'},
-    {label:'Environment', val:m.environment || 0, icon:'bi-tree', color:'#10B981'},
-    {label:'Law & Order', val:m.lawOrder || 0, icon:'bi-gavel', color:'#EF4444'},
-    {label:'Youth Development', val:m.youth || 0, icon:'bi-people', color:'#F59E0B'},
-    {label:'Farmer Support', val:m.farmer || 0, icon:'bi-seedling', color:'#10B981'},
-    {label:'Public Satisfaction', val:m.publicSat || 0, icon:'bi-emoji-smile', color:'#3B82F6'}
-  ];
 
-  let html = `
-    <!-- Profile Header -->
+function openProfile(id) {
+  const m = mlaAssembly.find(d => Number(d.id) === Number(id));
+  if (!m) return;
+
+  const hasRatings = Number(m.ratings) > 0;
+  const ratingScore = Number(m.ratingScore || 0);
+  const manifesto = m.manifestoFulfilled;
+
+  document.getElementById('profileName').innerHTML =
+    `<i class="bi bi-person-badge me-2"></i>${m.name} · MLA Profile`;
+
+  const body = document.getElementById('profileBody');
+
+  const style = partyColorMap[m.party] || {
+    primary: "#546E7A",
+    lightBg: "#F5F8FA"
+  };
+
+  const initials = m.initials || getInitials(m.name || 'MLA');
+
+  const imageHtml = m.image
+    ? `<img src="${m.image}" alt="${m.name}"
+         onerror="this.style.display='none';this.parentElement.textContent='${initials}';">`
+    : initials;
+
+  body.innerHTML = `
     <div class="profile-header">
       <div class="row align-items-center g-3">
         <div class="col-auto">
-          <div class="avatar-lg" style="background:${style.lightBg}; border-color:${style.primary}; color:${style.primary};">
-            <img src="${m.image}" alt="${m.name}" onerror="this.style.display='none';this.parentElement.textContent='${m.initials}';">
+          <div class="avatar-lg"
+               style="background:${style.lightBg};border-color:${style.primary};color:${style.primary};">
+            ${imageHtml}
           </div>
         </div>
+
         <div class="col">
-          <div class="name-lg">${m.name}</div>
-          <div class="name-mr-lg">${m.marathiName || m.name}</div>
-          <div class="constituency-lg"><i class="bi bi-geo-alt"></i> ${m.constituency}, ${m.district}</div>
+          <div class="name-lg">${m.name || 'N/A'}</div>
+          <div class="name-mr-lg">${m.marathiName || m.name || ''}</div>
+          <div class="constituency-lg">
+            <i class="bi bi-geo-alt"></i>
+            ${m.constituency || 'N/A'}, ${m.district || 'N/A'}
+          </div>
+
           <div class="d-flex flex-wrap gap-2 mt-2">
-            <span class="party-badge-lg">${m.party}</span>
-            <span class="grade-badge-lg">Grade ${m.grade}</span>
+            <span class="party-badge-lg">${m.party || 'N/A'}</span>
+            <span class="grade-badge-lg">
+              ${m.grade || 'Not Rated'}
+            </span>
           </div>
         </div>
+
         <div class="col-auto text-end">
-          <div class="rating-stars-lg">${stars}</div>
-          <div class="rating-text-lg">${m.ratingScore} · ${m.ratings || 0} reviews</div>
-          <button class="btn-rate-lg mt-2" onclick="alert('Rate MLA: ${m.name}')">
-            <i class="bi bi-star-fill"></i> Rate MLA
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Personal Info -->
-    <div class="section-card">
-      <div class="section-title"><i class="bi bi-person"></i> Personal Information</div>
-      <div class="row g-2">
-        <div class="col-6 col-md-3"><strong>Age</strong> <span class="text-muted">${m.age || 'N/A'}</span></div>
-        <div class="col-6 col-md-3"><strong>Education</strong> <span class="text-muted">${m.education || 'N/A'}</span></div>
-        <div class="col-6 col-md-3"><strong>Profession</strong> <span class="text-muted">${m.profession || 'N/A'}</span></div>
-        <div class="col-6 col-md-3"><strong>Elected</strong> <span class="text-muted">${m.firstElected || 'N/A'}</span></div>
-      </div>
-      <div class="mt-2">
-        <strong>Biography</strong>
-        <p class="text-muted mb-0" style="font-size:0.85rem;">${m.bio || 'No biography available.'}</p>
-      </div>
-    </div>
-
-    <!-- Performance Ratings - 15 Parameters -->
-    <div class="section-card">
-      <div class="section-title"><i class="bi bi-star-fill text-warning"></i> Performance Ratings</div>
-      <div class="row g-2">`;
-  
-  ratings.forEach(r => {
-    const color = r.val > 80 ? '#10B981' : r.val > 60 ? '#F59E0B' : '#EF4444';
-    html += `
-      <div class="col-md-6">
-        <div class="d-flex align-items-center">
-          <i class="bi ${r.icon} me-2" style="font-size:0.9rem;color:#6B655D;"></i>
-          <span style="width:115px;font-size:0.75rem;">${r.label}</span>
-          <div class="progress-bar-custom-lg flex-grow-1">
-            <div class="fill" style="width:${r.val}%; background:${color};"></div>
+          <div class="rating-stars-lg">
+            ${hasRatings ? renderStars(ratingScore) : '☆☆☆☆☆'}
           </div>
-          <span class="ms-2 small fw-bold" style="font-size:0.7rem;min-width:32px;">${r.val}%</span>
+          <div class="rating-text-lg">
+            ${hasRatings ? ratingScore.toFixed(2) + '/5' : 'Not Rated'}
+            · ${Number(m.ratings || 0)} ratings
+          </div>
         </div>
-      </div>`;
-  });
-  
-  html += `
       </div>
     </div>
 
-    <!-- Leadership Statistics -->
     <div class="section-card">
-      <div class="section-title"><i class="bi bi-clipboard-data"></i> Leadership Statistics</div>
+      <div class="section-title">
+        <i class="bi bi-person"></i> Personal Information
+      </div>
+
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <strong>Age</strong>
+          <div class="text-muted">${m.age || 'N/A'}</div>
+        </div>
+
+        <div class="col-6 col-md-3">
+          <strong>Education</strong>
+          <div class="text-muted">${m.education || 'N/A'}</div>
+        </div>
+
+        <div class="col-6 col-md-3">
+          <strong>Profession</strong>
+          <div class="text-muted">${m.profession || 'N/A'}</div>
+        </div>
+
+        <div class="col-6 col-md-3">
+          <strong>Elected</strong>
+          <div class="text-muted">${m.firstElected || 'N/A'}</div>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <strong>Biography</strong>
+        <p class="text-muted mb-0" style="font-size:0.85rem;">
+          ${m.bio || 'No biography available.'}
+        </p>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">
+        <i class="bi bi-clipboard-data"></i> Rating Statistics
+      </div>
+
       <div class="row g-2">
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${Math.round(m.ratingScore * 10)}</div><div class="stat-label">Score</div></div>
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${m.ratings || 0}</div><div class="stat-label">Ratings</div></div>
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${m.manifestoFulfilled || 0}%</div><div class="stat-label">Manifesto</div></div>
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${m.grade}</div><div class="stat-label">Grade</div></div>
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${m.schemeSuccess || 0}%</div><div class="stat-label">Scheme Success</div></div>
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${m.attendance || 0}%</div><div class="stat-label">Attendance</div></div>
-      </div>
-    </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-value">
+              ${hasRatings ? ratingScore.toFixed(2) + '/5' : 'N/A'}
+            </div>
+            <div class="stat-label">Average Rating</div>
+          </div>
+        </div>
 
-    <!-- Project Statistics -->
-    <div class="section-card">
-      <div class="section-title"><i class="bi bi-diagram-3"></i> Project Statistics</div>
-      <div class="row g-2">
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${m.completed || 0}</div><div class="stat-label">Completed</div></div>
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${m.running || 0}</div><div class="stat-label">Running</div></div>
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${m.pending || 0}</div><div class="stat-label">Pending</div></div>
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${m.complaintsResolved || 0}</div><div class="stat-label">Resolved</div></div>
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${m.responseTime || 0}h</div><div class="stat-label">Response Time</div></div>
-        <div class="col-4 col-md-2 stat-box"><div class="stat-value">${m.fundUtil || 0}%</div><div class="stat-label">Fund Util.</div></div>
-      </div>
-    </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-value">${Number(m.ratings || 0)}</div>
+            <div class="stat-label">Total Ratings</div>
+          </div>
+        </div>
 
-    <!-- Leadership Timeline -->
-    <div class="section-card">
-      <div class="section-title"><i class="bi bi-clock-history"></i> Leadership Timeline</div>
-      <div>`;
-  
-  if (m.timeline && m.timeline.length > 0) {
-    m.timeline.forEach((ev, idx) => {
-      html += `
-        <div class="timeline-item">
-          <span class="timeline-num">#${idx+1}</span>
-          <span class="timeline-dot"></span>
-          <span class="timeline-text">${ev}</span>
-        </div>`;
-    });
-  } else {
-    html += `<p class="text-muted small">No timeline data available.</p>`;
-  }
-  
-  html += `
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-value">${m.grade || 'Not Rated'}</div>
+            <div class="stat-label">Grade</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-value">
+              ${manifesto !== null && manifesto !== '' && manifesto !== undefined
+                ? Number(manifesto).toFixed(2) + '%'
+                : 'N/A'}
+            </div>
+            <div class="stat-label">Manifesto Fulfilled</div>
+          </div>
+        </div>
       </div>
     </div>
   `;
-  
-  body.innerHTML = html;
-  const modal = new bootstrap.Modal(document.getElementById('profileModal'));
-  modal.show();
+
+  const modalElement = document.getElementById('profileModal');
+  bootstrap.Modal.getOrCreateInstance(modalElement).show();
 }
+
 
 // ============================================================
 //  FILTER FUNCTIONS
 // ============================================================
 function populateDistricts() {
-  let select = document.getElementById("district");
+  const select = document.getElementById("district");
   if (!select) return;
+
+  const districts = [
+    ...new Set(
+      mlaAssembly.map(m => m.district).filter(Boolean)
+    )
+  ].sort();
+
   select.innerHTML = '<option value="">All Districts</option>';
-  Object.keys(geography).sort().forEach(d => select.innerHTML += `<option value="${d}">${d}</option>`);
+
+  districts.forEach(d => {
+    select.innerHTML += `<option value="${d}">${d}</option>`;
+  });
 }
 
 function populatePartyFilter() {
-  let parties = [...new Set(mlaAssembly.map(m => m.party))];
-  let partySelect = document.getElementById("party");
+  const partySelect = document.getElementById("party");
   if (!partySelect) return;
+
+  const parties = [
+    ...new Set(
+      mlaAssembly.map(m => m.party).filter(Boolean)
+    )
+  ].sort();
+
   partySelect.innerHTML = '<option value="">All Parties</option>';
-  parties.forEach(p => { partySelect.innerHTML += `<option value="${p}">${p}</option>`; });
+
+  parties.forEach(p => {
+    partySelect.innerHTML += `<option value="${p}">${p}</option>`;
+  });
 }
 
 function applyFiltersToCurrentData() {
@@ -1300,12 +1295,36 @@ function applyFiltersToCurrentData() {
   let sort = document.getElementById("sortOrder").value;
 
   let filtered = currentFilteredData.filter(m =>
-    (!name || m.name.toLowerCase().includes(name) || (m.marathiName && m.marathiName.includes(name))) &&
+   (!name ||
+  (m.name || '').toLowerCase().includes(name) ||
+  (m.marathiName || '').includes(name)) &&
     (!party || m.party === party) &&
     (!district || m.district === district)
   );
 
-  filtered.sort((a, b) => sort === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
+ filtered.sort((a, b) => {
+  const ratingA = Number(a.ratingScore || 0);
+  const ratingB = Number(b.ratingScore || 0);
+
+  const hasA = Number(a.ratings || 0) > 0;
+  const hasB = Number(b.ratings || 0) > 0;
+
+  if (sort === 'rating_desc') {
+    if (hasA !== hasB) return hasA ? -1 : 1;
+    return ratingB - ratingA;
+  }
+
+  if (sort === 'rating_asc') {
+    if (hasA !== hasB) return hasA ? -1 : 1;
+    return ratingA - ratingB;
+  }
+
+  if (sort === 'asc') {
+    return (a.name || '').localeCompare(b.name || '');
+  }
+
+  return (b.name || '').localeCompare(a.name || '');
+});
 
   let container = document.getElementById("mlaResult");
   if (!container) return;
@@ -1325,7 +1344,7 @@ function resetAllFilters() {
   document.getElementById("mlaName").value = "";
   document.getElementById("party").value = "";
   document.getElementById("district").value = "";
-  document.getElementById("sortOrder").value = "asc";
+document.getElementById("sortOrder").value = "rating_desc";
   
   currentGrade = 'All';
   currentFilteredData = [...mlaAssembly];
@@ -1342,6 +1361,8 @@ window.addEventListener('scroll', () => {
     if (window.scrollY > 60) premiumHeader.classList.add('scrolled');
     else premiumHeader.classList.remove('scrolled');
   }
+
+
 });
 
 // ============================================================
@@ -1356,10 +1377,13 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("district").addEventListener("change", filterMLAs);
   document.getElementById("sortOrder").addEventListener("change", filterMLAs);
   
-  currentGrade = 'All';
-  currentFilteredData = [...mlaAssembly];
-  renderCategories('All');
-  applyFiltersToCurrentData();
+ currentGrade = 'All';
+currentFilteredData = [...mlaAssembly];
+
+document.getElementById("sortOrder").value = "rating_desc";
+
+renderCategories('All');
+applyFiltersToCurrentData();
 });
 </script>
 </body>
